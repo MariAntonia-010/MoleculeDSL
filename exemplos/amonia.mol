@@ -1,0 +1,6 @@
+molecule "Ammonia" {
+    atom N
+    3x atom H
+
+    bond N-H x3
+}
