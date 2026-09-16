@@ -34,3 +34,8 @@ Também foi definido que a linguagem descreve principalmente a topologia da mol�
 - Adaptação da documentação inicial para o formato de especificação solicitado na E2.
 - Organização do arquivo `especificacao.md` seguindo os requisitos da atividade.
 
+### Configuração do ANTLR
+
+Durante a configuração do ANTLR no Windows, a ferramenta inicialmente não conseguiu
+identificar automaticamente a versão disponível. Foi definida manualmente a versão
+4.13.2, compatível com o runtime Python instalado.
