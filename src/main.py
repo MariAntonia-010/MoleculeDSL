@@ -66,12 +66,13 @@ def compilar(caminho, opcoes):
     if "--ast" in opcoes:
         print(formatar(molecula))
 
-    modelo_molecula, erros_semanticos = semantico.analisar(molecula)
+    modelo_molecula, mensagens = semantico.analisar(molecula)
 
-    for erro in erros_semanticos:
-        print(erro)
+    # Avisos são mostrados, mas não impedem a compilação
+    for mensagem in mensagens:
+        print(mensagem)
 
-    if erros_semanticos:
+    if any(m.severidade == semantico.ERRO for m in mensagens):
         return ERRO_SEMANTICO
 
     if "--modelo" in opcoes:

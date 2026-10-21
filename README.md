@@ -73,7 +73,12 @@ As análises léxica e sintática estão implementadas:
 - O parser confere a estrutura do programa e informa os erros em português, com linha e coluna.
 - A AST guarda a posição de cada comando, para ser usada pela análise semântica.
 
-A análise semântica está em andamento (ver [docs/plano_semantico.md](docs/plano_semantico.md)). Ela já monta o modelo da molécula e confere as regras estruturais: elemento desconhecido, átomo ou nome inexistente, nome duplicado, átomo sem ligação, ligação de um átomo com ele mesmo e ligação repetida. As regras químicas (valência, carga formal e octeto) ainda não são conferidas.
+A análise semântica está em andamento (ver [docs/plano_semantico.md](docs/plano_semantico.md)). Ela já monta o modelo da molécula e confere:
+
+- as regras estruturais: elemento desconhecido, átomo ou nome inexistente, nome duplicado, átomo sem ligação, ligação de um átomo com ele mesmo, ligação repetida e anéis;
+- as regras químicas que têm fonte no [levantamento de química](docs/levantamento_quimica.md): valência, carga formal e elementos que só fazem ligação simples. Os dados estão em `regras/valencias.json`, e elemento sem dado não é conferido.
+
+Erros semânticos impedem a compilação. Avisos, como uma valência incompleta, só são mostrados.
 
 ## Testes
 
@@ -88,6 +93,7 @@ O script analisa todos os arquivos de:
 - `exemplos/`: programas válidos, que devem passar sem erros;
 - `invalidos/`: programas com erros léxicos;
 - `invalidos_sintaticos/`: programas com erros sintáticos;
-- `invalidos_semanticos/`: programas com erros semânticos.
+- `invalidos_semanticos/`: programas com erros semânticos;
+- `avisos_semanticos/`: programas válidos que geram avisos.
 
-Cada arquivo inválido começa com uma ou mais linhas `// esperado: ...`, com o início da mensagem de erro esperada, incluindo a linha e a coluna. O script confere se aparecem exatamente esses erros, na ordem.
+Cada arquivo inválido ou com aviso começa com uma ou mais linhas `// esperado: ...`, com o início da mensagem esperada, incluindo a linha e a coluna. O script confere se aparecem exatamente essas mensagens, na ordem, e o código de saída.

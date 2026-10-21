@@ -8,6 +8,10 @@ from modelo import Atomo, Ligacao, Modelo
 
 PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ARQUIVO_ELEMENTOS = os.path.join(PASTA_RAIZ, "regras", "elementos.json")
+ARQUIVO_VALENCIAS = os.path.join(PASTA_RAIZ, "regras", "valencias.json")
+
+ERRO = "erro"
+AVISO = "aviso"
 
 
 def carregar_elementos():
@@ -15,28 +19,38 @@ def carregar_elementos():
         return set(json.load(arquivo)["elementos"])
 
 
+def carregar_valencias():
+    with open(ARQUIVO_VALENCIAS, encoding="utf-8") as arquivo:
+        return json.load(arquivo)
+
+
 @dataclass
-class ErroSemantico:
+class MensagemSemantica:
+    # Erros impedem a compilação; avisos só informam
+    severidade: str
     id: str
     linha: int
     coluna: int
     mensagem: str
 
     def __str__(self):
+        tipo = "Erro" if self.severidade == ERRO else "Aviso"
         return (
-            f"Erro semântico [{self.id}] na linha {self.linha}, "
+            f"{tipo} semântico [{self.id}] na linha {self.linha}, "
             f"coluna {self.coluna}: {self.mensagem}"
         )
 
 
 class AnalisadorSemantico:
     # Monta o modelo (grafo) a partir da AST e confere as regras
-    # estruturais. Os IDs das regras estão em docs/plano_semantico.md.
+    # estruturais e de valência. Os IDs das regras estão em
+    # docs/plano_semantico.md.
 
-    def __init__(self, molecula, elementos):
+    def __init__(self, molecula, elementos, valencias):
         self.molecula = molecula
         self.elementos = elementos
-        self.erros = []
+        self.valencias = valencias
+        self.mensagens = []
         self.modelo = Modelo(molecula.nome)
 
         self.por_nome = {}
@@ -50,7 +64,13 @@ class AnalisadorSemantico:
         self.elementos_invalidos = set()
 
     def erro(self, id_regra, no, mensagem):
-        self.erros.append(ErroSemantico(id_regra, no.linha, no.coluna, mensagem))
+        self.mensagens.append(MensagemSemantica(ERRO, id_regra, no.linha, no.coluna, mensagem))
+
+    def aviso(self, id_regra, no, mensagem):
+        self.mensagens.append(MensagemSemantica(AVISO, id_regra, no.linha, no.coluna, mensagem))
+
+    def tem_erro(self):
+        return any(m.severidade == ERRO for m in self.mensagens)
 
     def analisar(self):
         # Os átomos são coletados antes das ligações, então a ordem dos
@@ -69,12 +89,16 @@ class AnalisadorSemantico:
             if isinstance(c, AnelDecl):
                 self.declarar_anel(c)
 
-        # Com outros erros, átomos sem ligação seriam só consequência deles
-        if not self.erros:
+        # Com outros erros, átomos sem ligação e problemas de valência
+        # seriam só consequência deles
+        if not self.tem_erro():
             self.conferir_conexoes()
 
-        self.erros.sort(key=lambda e: (e.linha, e.coluna))
-        return self.modelo, self.erros
+        if not self.tem_erro():
+            self.conferir_valencias()
+
+        self.mensagens.sort(key=lambda m: (m.linha, m.coluna))
+        return self.modelo, self.mensagens
 
     # ---------- átomos ----------
 
@@ -296,6 +320,133 @@ class AnalisadorSemantico:
             self.erro("STRUCT-003", atomos[0], mensagem)
 
 
+    # ---------- valência e carga ----------
+
+    def conferir_valencias(self):
+        # Só usa os dados de regras/valencias.json: elemento ou carga sem
+        # dado não é conferido
+        regras = self.valencias
+        ordem = regras["ordem_ligacao"]
+        por_id = {a.id: a for a in self.modelo.atomos}
+
+        # BOND-001 primeiro: com ela, os erros de valência seriam consequência
+        avisados = set()
+        for lig in self.modelo.ligacoes:
+            if lig.operador.name not in ("DUPLA", "TRIPLA"):
+                continue
+            for atomo in (por_id[lig.origem], por_id[lig.destino]):
+                if atomo.elemento in regras["somente_ligacao_simples"] and (lig.linha, lig.coluna) not in avisados:
+                    avisados.add((lig.linha, lig.coluna))
+                    tipo = "dupla" if lig.operador.name == "DUPLA" else "tripla"
+                    self.erro(
+                        "BOND-001",
+                        lig,
+                        f"{atomo.elemento} só faz ligação simples, mas {atomo.rotulo()} "
+                        f"está numa ligação {tipo}",
+                    )
+        if self.tem_erro():
+            return
+
+        soma = {a.id: 0 for a in self.modelo.atomos}
+        vizinhos = {a.id: [] for a in self.modelo.atomos}
+        metalicos = set()
+        for lig in self.modelo.ligacoes:
+            if lig.operador.name == "METALICA":
+                metalicos.update((lig.origem, lig.destino))
+                continue
+            for a, b in ((lig.origem, lig.destino), (lig.destino, lig.origem)):
+                soma[a] += ordem[lig.operador.name]
+                vizinhos[a].append(por_id[b].elemento)
+
+        for atomo in self.modelo.atomos:
+            if atomo.id in metalicos:
+                continue
+            self.conferir_atomo(atomo, soma[atomo.id], vizinhos[atomo.id])
+
+    def valencias_neutras(self, atomo, vizinhos):
+        regras = self.valencias
+        aceitas = regras["valencias"].get(atomo.elemento)
+        if aceitas is None:
+            return None
+
+        expandidas = regras["valencias_expandidas"].get(atomo.elemento)
+        if expandidas and vizinhos and all(v in expandidas["vizinhos"] for v in vizinhos):
+            return expandidas["valencias"]
+
+        return aceitas
+
+    def valencias_carregadas(self, elemento):
+        # Devolve {carga: [valências]} do elemento, com a carga como inteiro
+        tabela = self.valencias["valencias_com_carga"].get(elemento, {})
+        return {int(carga): aceitas for carga, aceitas in tabela.items()}
+
+    def conferir_atomo(self, atomo, total, vizinhos):
+        el = atomo.elemento
+        com_carga = self.valencias_carregadas(el)
+
+        if atomo.carga != 0:
+            aceitas = com_carga.get(atomo.carga)
+            if aceitas is not None and total not in aceitas:
+                self.erro(
+                    "CARGA-001",
+                    atomo,
+                    f"{atomo.rotulo()} com carga {atomo.carga:+d} deveria ter soma das "
+                    f"ordens de ligação {self.listar(aceitas)}, mas tem {total}",
+                )
+            return
+
+        aceitas = self.valencias_neutras(atomo, vizinhos)
+        if aceitas is None:
+            return
+
+        if total in aceitas:
+            return
+
+        # Carga conhecida em que essa soma seria válida, se houver
+        carga_possivel = next(
+            (carga for carga, valencias in com_carga.items() if total in valencias),
+            None,
+        )
+
+        if total > max(aceitas):
+            # Acima da valência neutra, a carga é a única saída (ex.: N com 4)
+            if carga_possivel is not None:
+                self.erro(
+                    "CARGA-001",
+                    atomo,
+                    f"a soma das ordens de ligação de {atomo.rotulo()} é {total}, o que "
+                    f"só é possível com carga {carga_possivel:+d}: "
+                    f"declare atom {el}({carga_possivel:+d})",
+                )
+            else:
+                self.erro(
+                    "VAL-001",
+                    atomo,
+                    f"a soma das ordens de ligação de {atomo.rotulo()} é {total}; "
+                    f"o máximo para {el} é {max(aceitas)}",
+                )
+            return
+
+        # Abaixo da valência pode ser um radical, então é só aviso
+        mensagem = (
+            f"a soma das ordens de ligação de {atomo.rotulo()} é {total}; "
+            f"o esperado para {el} é {self.listar(aceitas)}"
+        )
+        if carga_possivel is not None:
+            mensagem += f" (se for um íon, declare atom {el}({carga_possivel:+d}))"
+        self.aviso("VAL-002", atomo, mensagem)
+
+    @staticmethod
+    def listar(valores):
+        # [4] vira "4"; [2, 4, 6] vira "2, 4 ou 6"
+        textos = [str(v) for v in valores]
+        if len(textos) == 1:
+            return textos[0]
+        return ", ".join(textos[:-1]) + " ou " + textos[-1]
+
+
 def analisar(molecula):
-    # Devolve o modelo e a lista de erros semânticos (vazia se não houver)
-    return AnalisadorSemantico(molecula, carregar_elementos()).analisar()
+    # Devolve o modelo e a lista de mensagens semânticas (erros e avisos)
+    return AnalisadorSemantico(
+        molecula, carregar_elementos(), carregar_valencias()
+    ).analisar()

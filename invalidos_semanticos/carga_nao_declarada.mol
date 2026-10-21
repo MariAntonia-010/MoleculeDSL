@@ -1,0 +1,6 @@
+// esperado: Erro semântico [CARGA-001] na linha 3, coluna 4: a soma das ordens de ligação de N#1 é 4, o que só é possível com carga +1: declare atom N(+1)
+molecule "Ammonium" {
+    atom N
+    4x atom H
+    bond N-H x4
+}

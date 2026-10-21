@@ -5,21 +5,23 @@ import sys
 
 
 # Roda o src/main.py em todos os exemplos e confere o resultado:
-# - exemplos/: devem passar sem erro (código de saída 0)
-# - invalidos/, invalidos_sintaticos/ e invalidos_semanticos/: cada
-#   arquivo diz, em linhas "// esperado: <início da mensagem>", os erros
-#   que devem aparecer, na ordem. A saída deve ter exatamente esses
-#   erros e o código de saída da pasta (1 ou 2).
+# - exemplos/: devem passar sem erros nem avisos (código de saída 0)
+# - invalidos/, invalidos_sintaticos/, invalidos_semanticos/ e
+#   avisos_semanticos/: cada arquivo diz, em linhas
+#   "// esperado: <início da mensagem>", os erros e avisos que devem
+#   aparecer, na ordem. A saída deve ter exatamente essas mensagens e o
+#   código de saída da pasta (0, 1 ou 2).
 
 PASTA_RAIZ = os.path.dirname(os.path.abspath(__file__))
 MAIN = os.path.join(PASTA_RAIZ, "src", "main.py")
 
 PASTAS_VALIDOS = ["exemplos"]
 # Pasta e código de saída esperado
-PASTAS_INVALIDOS = {
+PASTAS_COM_MENSAGENS = {
     "invalidos": 1,
     "invalidos_sintaticos": 1,
     "invalidos_semanticos": 2,
+    "avisos_semanticos": 0,
 }
 
 MARCA_ESPERADO = "// esperado:"
@@ -38,8 +40,11 @@ def rodar(caminho):
         env=ambiente,
     )
     saida = (resultado.stdout + resultado.stderr).decode("utf-8")
-    erros = [linha for linha in saida.splitlines() if linha.startswith("Erro ")]
-    return resultado.returncode, saida, erros
+    mensagens = [
+        linha for linha in saida.splitlines()
+        if linha.startswith("Erro ") or linha.startswith("Aviso ")
+    ]
+    return resultado.returncode, saida, mensagens
 
 
 def erros_esperados(caminho):
@@ -60,14 +65,14 @@ def testar_valido(caminho):
     if codigo != 0:
         problemas.append(f"código de saída {codigo}, esperado 0")
     if erros:
-        problemas.extend(f"erro inesperado: {e}" for e in erros)
+        problemas.extend(f"mensagem inesperada: {e}" for e in erros)
     if codigo != 0 and not erros:
         problemas.append(f"saída: {saida.strip()}")
 
     return problemas
 
 
-def testar_invalido(caminho, codigo_esperado):
+def testar_com_mensagens(caminho, codigo_esperado):
     esperados = erros_esperados(caminho)
 
     if not esperados:
@@ -84,9 +89,9 @@ def testar_invalido(caminho, codigo_esperado):
         obtido = erros[i] if i < len(erros) else None
 
         if esperado is None:
-            problemas.append(f"erro a mais: {obtido}")
+            problemas.append(f"mensagem a mais: {obtido}")
         elif obtido is None:
-            problemas.append(f"faltou o erro: {esperado}")
+            problemas.append(f"faltou a mensagem: {esperado}")
         elif not obtido.startswith(esperado):
             problemas.append(f"esperado: {esperado}")
             problemas.append(f"obtido:   {obtido}")
@@ -96,9 +101,9 @@ def testar_invalido(caminho, codigo_esperado):
 
 def main():
     casos = [(c, testar_valido) for p in PASTAS_VALIDOS for c in arquivos(p)]
-    for pasta, codigo in PASTAS_INVALIDOS.items():
+    for pasta, codigo in PASTAS_COM_MENSAGENS.items():
         casos += [
-            (c, lambda c, codigo=codigo: testar_invalido(c, codigo))
+            (c, lambda c, codigo=codigo: testar_com_mensagens(c, codigo))
             for c in arquivos(pasta)
         ]
 

@@ -139,3 +139,25 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - Valência, ordem de ligação, carga formal e octeto (M2, resto do M4 e M5), que dependem das pendências do levantamento de química.
 - ~~Validar se a lista do `ring` forma um ciclo (M6).~~ Feito no mesmo dia: regras RING-001 (átomo repetido), RING-002 (átomos vizinhos sem ligação, inclusive o fechamento do anel) e RING-003 (anel declarado duas vezes), com 4 casos novos em `invalidos_semanticos/`.
 - Decidir se um ciclo que existe no grafo, mas não foi declarado com `ring`, deve gerar aviso.
+
+---
+
+## 21/10/2026 — Valência e carga formal
+
+### O que foi feito
+
+- `regras/valencias.json`, só com as regras do levantamento de química marcadas como FONTE ou DERIVADA (marco M2, em parte).
+- Regras BOND-001, VAL-001, VAL-002 e CARGA-001 (resto do M4, menos OCT-001).
+- Suporte a avisos: aparecem na saída como `Aviso semântico [...]`, mas não mudam o código de saída.
+- 5 casos novos em `invalidos_semanticos/`, a pasta `avisos_semanticos/` com 2 casos e os exemplos do trifluoreto de cloro e do pentacloreto de fósforo.
+
+### Decisões tomadas
+
+- Elemento ou carga sem dado confirmado não é conferido, nem com erro nem com aviso.
+- Átomo neutro com valência acima do máximo: se a soma bate com uma carga conhecida (ex.: N com 4 ligações), o erro sugere declarar a carga.
+- Átomo neutro com valência abaixo do esperado gera só aviso, porque pode ser um radical. Na primeira versão isso dava erro sugerindo a carga, o que estava errado: um C com 3 ligações pode ser um radical ou um carbocátion, não só C(-1).
+
+### Pendências
+
+- OCT-001 e M5 (tipos de ligação), que dependem dos limites de eletronegatividade (F1) e de decisões do grupo.
+- Valências de Br, I e dos demais elementos (B7), ligações múltiplas de S e P (E6) e ligação metálica (H3).

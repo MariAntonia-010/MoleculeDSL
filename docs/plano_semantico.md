@@ -40,6 +40,8 @@ molecule "Ciclohexano" {
 - Elementos: número atômico, elétrons de valência, valências múltiplas (N: 3 e 5; S: 2, 4 e 6), eletronegatividade e tipo (metal, ametal, semimetal).
 - Arquivos separados para ordens de ligação aceitas e cargas comuns.
 
+Feito em parte: `regras/valencias.json` tem só o que o `levantamento_quimica.md` marca como FONTE ou DERIVADA. São as valências de H, B, C, N, O, F, P, S e Cl (B2 a B4 e B6), a valência expandida de Cl ligado só a F ou O (B5), as cargas da tabela C3, os elementos que só fazem ligação simples (E4) e a ordem de cada tipo de ligação (G4). Elemento ou carga fora desse arquivo não é conferido. Br, I, S e P em ligações múltiplas, metais de transição e ligação metálica continuam pendentes.
+
 ### M3: Modelo interno
 Grafo molecular: átomos (id, elemento, carga) e arestas (ordem ou tipo, e direção quando coordenada). Anéis ficam como ciclos marcados.
 
@@ -65,7 +67,16 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
 
-Situação: ELEM-001 e STRUCT-001 a STRUCT-007 estão implementadas. As demais dependem dos dados do M2 e das pendências do `levantamento_quimica.md`. STRUCT-003 só é conferida quando não há outros erros, para não aparecerem erros em cascata.
+Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002 e CARGA-001 estão implementadas. OCT-001 não foi feita: para os elementos com valência conhecida, o octeto já é coberto pela valência, e os demais dependem das pendências do `levantamento_quimica.md`.
+
+Detalhes da implementação:
+- As regras são conferidas em etapas, e cada etapa só roda se a anterior não deu erro, para não aparecerem erros em cascata: estrutura, depois STRUCT-003, depois BOND-001, depois valência e carga.
+- BOND-001 vale só para H e halogênios (E4). As ligações múltiplas de outros elementos não são conferidas (E6 pendente).
+- A coordenada conta como ordem 1. Átomos com ligação metálica não são conferidos (H3).
+- Átomo neutro acima da valência: se a soma bate com uma carga da tabela C3, é CARGA-001 com a sugestão da carga (ex.: N com 4 ligações → `N(+1)`); senão, VAL-001.
+- Átomo neutro abaixo da valência: é só aviso (VAL-002), porque pode ser um radical (D5). Se a soma bate com uma carga conhecida, o aviso sugere a carga.
+- Átomo com carga: CARGA-001 se a soma não bate com a tabela C3. Carga fora da tabela não é conferida.
+- A soma das cargas (C2) não é conferida, porque a linguagem não declara a carga total da molécula.
 
 ### M5: Tipos de ligação
 - Classificar pela diferença de eletronegatividade: covalente apolar, polar ou iônica. Não usar a regra "metal + ametal = sempre iônica".
