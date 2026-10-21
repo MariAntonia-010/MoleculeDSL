@@ -12,7 +12,7 @@ PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PASTA_GERADO = os.path.join(PASTA_RAIZ, "gerado")
 sys.path.insert(0, PASTA_GERADO)
 
-from MoleculeDSL import MoleculeDSL
+from MoleculeDSLLexer import MoleculeDSLLexer
 
 
 class ErroLexico(ErrorListener):
@@ -28,7 +28,7 @@ class ErroLexico(ErrorListener):
 def analisar(caminho):
     entrada = FileStream(caminho, encoding="utf-8")
 
-    lexer = MoleculeDSL(entrada)
+    lexer = MoleculeDSLLexer(entrada)
 
     # Substitui a mensagem padrão de erro do ANTLR
     lexer.removeErrorListeners()
