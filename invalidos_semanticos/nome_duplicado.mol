@@ -1,0 +1,9 @@
+// esperado: Erro semântico [STRUCT-002] na linha 5, coluna 4: o nome 'c1' já foi usado na linha 4
+// esperado: Erro semântico [STRUCT-002] na linha 7, coluna 4: o nome 'h2' já foi usado na linha 6
+molecule "Duplicates" {
+    atom C as c1
+    atom O as c1
+    2x atom H as h
+    atom H as h2
+    bond c1-h1
+}

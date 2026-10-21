@@ -6,15 +6,21 @@ import sys
 
 # Roda o src/main.py em todos os exemplos e confere o resultado:
 # - exemplos/: devem passar sem erro (código de saída 0)
-# - invalidos/ e invalidos_sintaticos/: cada arquivo diz, em linhas
-#   "// esperado: <início da mensagem>", os erros que devem aparecer,
-#   na ordem. A saída deve ter exatamente esses erros e código 1.
+# - invalidos/, invalidos_sintaticos/ e invalidos_semanticos/: cada
+#   arquivo diz, em linhas "// esperado: <início da mensagem>", os erros
+#   que devem aparecer, na ordem. A saída deve ter exatamente esses
+#   erros e o código de saída da pasta (1 ou 2).
 
 PASTA_RAIZ = os.path.dirname(os.path.abspath(__file__))
 MAIN = os.path.join(PASTA_RAIZ, "src", "main.py")
 
 PASTAS_VALIDOS = ["exemplos"]
-PASTAS_INVALIDOS = ["invalidos", "invalidos_sintaticos"]
+# Pasta e código de saída esperado
+PASTAS_INVALIDOS = {
+    "invalidos": 1,
+    "invalidos_sintaticos": 1,
+    "invalidos_semanticos": 2,
+}
 
 MARCA_ESPERADO = "// esperado:"
 
@@ -61,7 +67,7 @@ def testar_valido(caminho):
     return problemas
 
 
-def testar_invalido(caminho):
+def testar_invalido(caminho, codigo_esperado):
     esperados = erros_esperados(caminho)
 
     if not esperados:
@@ -70,8 +76,8 @@ def testar_invalido(caminho):
     codigo, saida, erros = rodar(caminho)
     problemas = []
 
-    if codigo != 1:
-        problemas.append(f"código de saída {codigo}, esperado 1")
+    if codigo != codigo_esperado:
+        problemas.append(f"código de saída {codigo}, esperado {codigo_esperado}")
 
     for i in range(max(len(esperados), len(erros))):
         esperado = esperados[i] if i < len(esperados) else None
@@ -90,7 +96,11 @@ def testar_invalido(caminho):
 
 def main():
     casos = [(c, testar_valido) for p in PASTAS_VALIDOS for c in arquivos(p)]
-    casos += [(c, testar_invalido) for p in PASTAS_INVALIDOS for c in arquivos(p)]
+    for pasta, codigo in PASTAS_INVALIDOS.items():
+        casos += [
+            (c, lambda c, codigo=codigo: testar_invalido(c, codigo))
+            for c in arquivos(pasta)
+        ]
 
     falhas = 0
 

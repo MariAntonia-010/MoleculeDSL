@@ -113,3 +113,28 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - Combinar com o grupo a ampliação da linguagem antes de abrir o pull request.
 - Implementar a análise semântica (`plano_semantico.md`), incluindo a expansão de `4x atom H as h` em `h1` a `h4`, que os exemplos novos já usam.
 - Fazer os novos slides.
+
+---
+
+## 21/10/2026 — Início da análise semântica
+
+### O que foi feito
+
+- Modelo interno da molécula em grafo (`src/modelo.py`), marco M3 do `plano_semantico.md`.
+- Análise semântica estrutural (`src/semantico.py`), parte do marco M4: ELEM-001 e STRUCT-001 a STRUCT-007.
+- O `main.py` passou a rodar a semântica, sai com código 2 em erro semântico e ganhou a opção `--modelo`.
+- 13 casos em `invalidos_semanticos/`, um exemplo de molécula de um átomo só (`exemplos/helio.mol`) e o `testar.py` passou a conferir o código de saída de cada pasta.
+- Trabalho feito na branch `feat/semantico`, criada a partir da `feat/sintatico-s1-s2`.
+
+### Decisões tomadas
+
+- Símbolo de elemento numa ligação: se há um só átomo do elemento, é ele; se há vários, cada citação usa o próximo átomo ainda não citado, na ordem de declaração. Assim os exemplos da água, do metano e da amônia continuam válidos.
+- Regras novas, além das do plano: STRUCT-004 (todos os átomos do elemento já citados), STRUCT-005 (átomo ligado a ele mesmo), STRUCT-006 (ligação repetida entre os mesmos átomos) e STRUCT-007 (quantidade ou repetição zero).
+- Uma molécula de um átomo só, como o hélio, não precisa de ligação.
+- Os erros semânticos não geram erros em cascata: citar um átomo cuja declaração já deu erro não gera outro erro, e o átomo sem ligação só é conferido quando não há outros erros.
+- O exemplo do aminoborano passou a declarar `N(+1)` e `B(-1)`, como indica o levantamento de química (C3 e G4).
+
+### Pendências
+
+- Valência, ordem de ligação, carga formal e octeto (M2, resto do M4 e M5), que dependem das pendências do levantamento de química.
+- Validar se a lista do `ring` forma um ciclo (M6).

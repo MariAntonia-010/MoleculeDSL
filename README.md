@@ -49,12 +49,13 @@ Opções:
 
 - `--tokens`: mostra os tokens reconhecidos.
 - `--ast`: mostra a AST (árvore sintática abstrata) construída.
+- `--modelo`: mostra o modelo da molécula, com cada átomo e cada ligação já resolvidos.
 
 ```bash
 python src/main.py --tokens --ast exemplos/agua.mol
 ```
 
-O programa sai com código 0 se não houver erros e 1 se houver erro léxico ou sintático. O código 2 fica reservado para os erros semânticos.
+O programa sai com código 0 se não houver erros, 1 se houver erro léxico ou sintático e 2 se houver erro semântico.
 
 Cada etapa também pode ser executada sozinha:
 
@@ -72,7 +73,7 @@ As análises léxica e sintática estão implementadas:
 - O parser confere a estrutura do programa e informa os erros em português, com linha e coluna.
 - A AST guarda a posição de cada comando, para ser usada pela análise semântica.
 
-A análise semântica, que confere se a molécula é quimicamente válida, será desenvolvida na próxima etapa (ver [docs/plano_semantico.md](docs/plano_semantico.md)).
+A análise semântica está em andamento (ver [docs/plano_semantico.md](docs/plano_semantico.md)). Ela já monta o modelo da molécula e confere as regras estruturais: elemento desconhecido, átomo ou nome inexistente, nome duplicado, átomo sem ligação, ligação de um átomo com ele mesmo e ligação repetida. As regras químicas (valência, carga formal e octeto) ainda não são conferidas.
 
 ## Testes
 
@@ -86,6 +87,7 @@ O script analisa todos os arquivos de:
 
 - `exemplos/`: programas válidos, que devem passar sem erros;
 - `invalidos/`: programas com erros léxicos;
-- `invalidos_sintaticos/`: programas com erros sintáticos.
+- `invalidos_sintaticos/`: programas com erros sintáticos;
+- `invalidos_semanticos/`: programas com erros semânticos.
 
 Cada arquivo inválido começa com uma ou mais linhas `// esperado: ...`, com o início da mensagem de erro esperada, incluindo a linha e a coluna. O script confere se aparecem exatamente esses erros, na ordem.

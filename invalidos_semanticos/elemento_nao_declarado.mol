@@ -1,0 +1,5 @@
+// esperado: Erro semântico [STRUCT-001] na linha 4, coluna 11: nenhum átomo de H foi declarado
+molecule "Hydroxyl" {
+    atom O
+    bond O-H
+}

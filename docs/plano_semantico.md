@@ -43,6 +43,8 @@ molecule "Ciclohexano" {
 ### M3: Modelo interno
 Grafo molecular: átomos (id, elemento, carga) e arestas (ordem ou tipo, e direção quando coordenada). Anéis ficam como ciclos marcados.
 
+Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de elemento numa ligação (decisão do grupo): se a molécula tem um só átomo do elemento, a ligação usa esse átomo; se tem vários, cada citação usa o próximo átomo do elemento ainda não citado, na ordem de declaração. Quando todos já foram citados, é erro (STRUCT-004) e é preciso usar nomes.
+
 ### M4: Semântica estrutural e de valência
 
 | ID | Regra | Severidade |
@@ -50,7 +52,11 @@ Grafo molecular: átomos (id, elemento, carga) e arestas (ordem ou tipo, e dire�
 | ELEM-001 | Símbolo de elemento desconhecido | erro |
 | STRUCT-001 | `bond` cita átomo inexistente | erro |
 | STRUCT-002 | Nomes de átomo duplicados | erro |
-| STRUCT-003 | Molécula vazia ou átomo sem ligação | erro |
+| STRUCT-003 | Molécula vazia ou átomo sem ligação (uma molécula de um átomo só não precisa de ligação) | erro |
+| STRUCT-004 | Todos os átomos do elemento citado já foram usados em outras ligações | erro |
+| STRUCT-005 | Átomo ligado a ele mesmo | erro |
+| STRUCT-006 | Mais de uma ligação entre os mesmos dois átomos (inclusive por repetição, como `bond c1-c2 x2`) | erro |
+| STRUCT-007 | Quantidade ou repetição igual a zero (`0x`, `x0`) | erro |
 | BOND-001 | Elemento não aceita essa ordem de ligação (`H=O`) | erro |
 | VAL-001 | Soma das ordens de ligação acima da valência permitida | erro |
 | VAL-002 | Valência incompleta | aviso |
@@ -58,6 +64,8 @@ Grafo molecular: átomos (id, elemento, carga) e arestas (ordem ou tipo, e dire�
 | OCT-001 | Octeto ou dueto não atendido (exceções conhecidas) | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
+
+Situação: ELEM-001 e STRUCT-001 a STRUCT-007 estão implementadas. As demais dependem dos dados do M2 e das pendências do `levantamento_quimica.md`. STRUCT-003 só é conferida quando não há outros erros, para não aparecerem erros em cascata.
 
 ### M5: Tipos de ligação
 - Classificar pela diferença de eletronegatividade: covalente apolar, polar ou iônica. Não usar a regra "metal + ametal = sempre iônica".
