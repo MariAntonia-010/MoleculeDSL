@@ -75,6 +75,16 @@ Situação: ELEM-001 e STRUCT-001 a STRUCT-007 estão implementadas. As demais d
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.
 
+Implementado em `src/semantico.py`:
+
+| ID | Regra | Severidade |
+|---|---|---|
+| RING-001 | Átomo repetido na lista do `ring` | erro |
+| RING-002 | Dois átomos vizinhos na lista (ou o último e o primeiro) não estão ligados | erro |
+| RING-003 | O mesmo anel declarado mais de uma vez, mesmo começando de outro átomo ou na ordem inversa | erro |
+
+Um ciclo que existe no grafo mas não foi declarado com `ring` não gera erro nem aviso. Avisar sobre isso fica como decisão do grupo.
+
 ### M7: Solver
 Para uma entrada só com átomos, montar a estrutura: distribuir ligações, recalcular carga e valência, aceitar ou rejeitar. Casos de teste: H₂O, CO₂, N₂, NH₄⁺ e ciclohexano.
 

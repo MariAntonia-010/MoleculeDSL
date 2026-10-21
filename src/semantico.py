@@ -43,6 +43,7 @@ class AnalisadorSemantico:
         self.por_elemento = {}
         self.citados = set()
         self.pares = set()
+        self.aneis_vistos = {}
 
         # Declarações que já deram erro: citá-las não gera outro erro
         self.nomes_invalidos = set()
@@ -220,11 +221,50 @@ class AnalisadorSemantico:
     # ---------- anéis ----------
 
     def declarar_anel(self, decl):
-        # Por enquanto só confere se os nomes existem; a validação do
-        # ciclo é o marco M6
+        # A lista do ring precisa formar um ciclo: sem átomo repetido e
+        # com cada átomo ligado ao seguinte, e o último ligado ao primeiro
         atomos = [self.resolver(ref) for ref in decl.nomes]
-        if None not in atomos:
-            self.modelo.aneis.append([a.id for a in atomos])
+        if None in atomos:
+            return
+
+        vistos = set()
+        for atomo, ref in zip(atomos, decl.nomes):
+            if atomo.id in vistos:
+                self.erro("RING-001", ref, f"o átomo {ref.texto} aparece mais de uma vez no anel")
+                return
+            vistos.add(atomo.id)
+
+        quantidade = len(atomos)
+        for i in range(quantidade):
+            atual = atomos[i]
+            seguinte = atomos[(i + 1) % quantidade]
+
+            if frozenset((atual.id, seguinte.id)) not in self.pares:
+                fecha = i == quantidade - 1
+                # O erro aponta para o segundo átomo do par; no fechamento,
+                # para o último átomo da lista
+                ref = decl.nomes[i] if fecha else decl.nomes[i + 1]
+                texto = (
+                    f"o anel não fecha: {atual.nome} e {seguinte.nome} não estão ligados"
+                    if fecha
+                    else f"os átomos {atual.nome} e {seguinte.nome} do anel não estão ligados"
+                )
+                self.erro("RING-002", ref, texto)
+                return
+
+        # O mesmo ciclo pode ser escrito começando de outro átomo ou ao
+        # contrário; o conjunto de ligações identifica o anel
+        arestas = frozenset(
+            frozenset((atomos[i].id, atomos[(i + 1) % quantidade].id))
+            for i in range(quantidade)
+        )
+        if arestas in self.aneis_vistos:
+            anterior = self.aneis_vistos[arestas]
+            self.erro("RING-003", decl, f"o mesmo anel já foi declarado na linha {anterior.linha}")
+            return
+        self.aneis_vistos[arestas] = decl
+
+        self.modelo.aneis.append([a.id for a in atomos])
 
     # ---------- conexões ----------
 

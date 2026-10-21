@@ -125,6 +125,8 @@ Na repetição, pelo menos um dos lados precisa ser um elemento com vários áto
 
 Marca que os átomos citados, pelo nome, formam um anel. Um anel tem pelo menos três átomos.
 
+Os átomos são citados na ordem em que aparecem no anel: cada um precisa estar ligado ao seguinte, e o último ao primeiro. Um átomo não pode aparecer duas vezes, e o mesmo anel não pode ser declarado duas vezes.
+
 ```text
 ring c1 c2 c3
 ```

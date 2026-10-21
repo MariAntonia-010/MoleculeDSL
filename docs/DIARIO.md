@@ -137,4 +137,5 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 ### Pendências
 
 - Valência, ordem de ligação, carga formal e octeto (M2, resto do M4 e M5), que dependem das pendências do levantamento de química.
-- Validar se a lista do `ring` forma um ciclo (M6).
+- ~~Validar se a lista do `ring` forma um ciclo (M6).~~ Feito no mesmo dia: regras RING-001 (átomo repetido), RING-002 (átomos vizinhos sem ligação, inclusive o fechamento do anel) e RING-003 (anel declarado duas vezes), com 4 casos novos em `invalidos_semanticos/`.
+- Decidir se um ciclo que existe no grafo, mas não foi declarado com `ring`, deve gerar aviso.

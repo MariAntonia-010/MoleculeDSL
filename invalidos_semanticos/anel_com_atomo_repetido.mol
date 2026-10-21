@@ -1,0 +1,10 @@
+// esperado: Erro semântico [RING-001] na linha 9, coluna 15: o átomo c1 aparece mais de uma vez no anel
+molecule "Ring" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    bond c1-c2
+    bond c2-c3
+    bond c3-c1
+    ring c1 c2 c1
+}
