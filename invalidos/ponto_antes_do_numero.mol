@@ -1,0 +1,3 @@
+molecule "Test" {
+    .5 atom H
+}

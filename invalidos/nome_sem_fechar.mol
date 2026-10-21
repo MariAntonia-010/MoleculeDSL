@@ -1,0 +1,3 @@
+molecule "Water {
+    atom O
+}
