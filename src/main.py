@@ -6,20 +6,23 @@ from lexico import imprimir_tokens
 from sintatico import tokenizar, analisar_fluxo
 from construtor_ast import construir
 from ast_nos import formatar
+import modelo
+import semantico
 
 
 # Códigos de saída
 SUCESSO = 0
 ERRO_LEXICO_OU_SINTATICO = 1
-ERRO_SEMANTICO = 2  # reservado para a análise semântica
+ERRO_SEMANTICO = 2
 
 USO = (
-    "Uso: python src/main.py [--tokens] [--ast] <arquivo>\n"
+    "Uso: python src/main.py [--tokens] [--ast] [--modelo] <arquivo>\n"
     "  --tokens  mostra os tokens reconhecidos\n"
-    "  --ast     mostra a AST construída"
+    "  --ast     mostra a AST construída\n"
+    "  --modelo  mostra o modelo da molécula (átomos e ligações)"
 )
 
-OPCOES = {"--tokens", "--ast"}
+OPCOES = {"--tokens", "--ast", "--modelo"}
 
 
 def ler_argumentos(argumentos):
@@ -63,9 +66,19 @@ def compilar(caminho, opcoes):
     if "--ast" in opcoes:
         print(formatar(molecula))
 
-    # A análise semântica entra aqui e devolve ERRO_SEMANTICO se falhar
+    modelo_molecula, mensagens = semantico.analisar(molecula)
 
-    print(f"Molécula {molecula.nome!r}: análise léxica e sintática concluída sem erros")
+    # Avisos são mostrados, mas não impedem a compilação
+    for mensagem in mensagens:
+        print(mensagem)
+
+    if any(m.severidade == semantico.ERRO for m in mensagens):
+        return ERRO_SEMANTICO
+
+    if "--modelo" in opcoes:
+        print(modelo.formatar(modelo_molecula))
+
+    print(f"Molécula {molecula.nome!r}: análise concluída sem erros")
     return SUCESSO
 
 

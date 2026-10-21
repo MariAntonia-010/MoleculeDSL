@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-001] na linha 5, coluna 12: nenhum átomo se chama 'c3'
+molecule "Ethene" {
+    atom C as c1
+    atom C as c2
+    bond c1=c3
+}

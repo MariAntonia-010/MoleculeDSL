@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de S#1 é 3; o esperado para S é 2, 4 ou 6
+molecule "Sulfur" {
+    atom S
+    3x atom H
+    bond S-H x3
+}

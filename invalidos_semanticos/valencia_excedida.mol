@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de C#1 é 5; o máximo para C é 4
+molecule "Methane" {
+    atom C
+    5x atom H
+    bond C-H x5
+}

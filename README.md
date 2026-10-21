@@ -49,6 +49,7 @@ Opções:
 
 - `--tokens`: mostra os tokens reconhecidos.
 - `--ast`: mostra a AST (árvore sintática abstrata) construída.
+- `--modelo`: mostra o modelo da molécula, com cada átomo e cada ligação já resolvidos.
 
 ```bash
 python src/main.py --tokens --ast exemplos/agua.mol
@@ -56,7 +57,7 @@ python src/main.py --tokens --ast exemplos/agua.mol
 
 Se a pasta `gerado/` não existir, o programa pede para rodar o `sh gerar.sh`.
 
-O programa sai com código 0 se não houver erros e 1 se houver erro léxico ou sintático. O código 2 fica reservado para os erros semânticos.
+O programa sai com código 0 se não houver erros, 1 se houver erro léxico ou sintático e 2 se houver erro semântico.
 
 Cada etapa também pode ser executada sozinha:
 
@@ -75,7 +76,12 @@ As análises léxica e sintática estão implementadas:
 - O arquivo deve estar em UTF-8 (com ou sem BOM).
 - A AST guarda a posição de cada comando, para ser usada pela análise semântica.
 
-A análise semântica, que confere se a molécula é quimicamente válida, será desenvolvida na próxima etapa (ver [docs/plano_semantico.md](docs/plano_semantico.md)).
+A análise semântica está em andamento (ver [docs/plano_semantico.md](docs/plano_semantico.md)). Ela já monta o modelo da molécula e confere:
+
+- as regras estruturais: elemento desconhecido, átomo ou nome inexistente, nome duplicado, átomo sem ligação, ligação de um átomo com ele mesmo, ligação repetida e anéis;
+- as regras químicas que têm fonte no [levantamento de química](docs/levantamento_quimica.md): valência, carga formal e elementos que só fazem ligação simples. Os dados estão em `regras/valencias.json`, e elemento sem dado não é conferido.
+
+Erros semânticos impedem a compilação. Avisos, como uma valência incompleta, só são mostrados.
 
 ## Testes
 
@@ -89,6 +95,8 @@ O script analisa todos os arquivos de:
 
 - `exemplos/`: programas válidos, que devem passar sem erros;
 - `invalidos/`: programas com erros léxicos;
-- `invalidos_sintaticos/`: programas com erros sintáticos.
+- `invalidos_sintaticos/`: programas com erros sintáticos;
+- `invalidos_semanticos/`: programas com erros semânticos;
+- `avisos_semanticos/`: programas válidos que geram avisos.
 
-Cada arquivo inválido começa com uma ou mais linhas `// esperado: ...`, com o início da mensagem de erro esperada, incluindo a linha e a coluna. O script confere se aparecem exatamente esses erros, na ordem.
+Cada arquivo inválido ou com aviso começa com uma ou mais linhas `// esperado: ...`, com o início da mensagem esperada, incluindo a linha e a coluna. O script confere se aparecem exatamente essas mensagens, na ordem, e o código de saída.

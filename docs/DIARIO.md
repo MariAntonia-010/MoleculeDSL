@@ -116,6 +116,54 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 
 ---
 
+## 21/10/2026 — Início da análise semântica
+
+### O que foi feito
+
+- Modelo interno da molécula em grafo (`src/modelo.py`), marco M3 do `plano_semantico.md`.
+- Análise semântica estrutural (`src/semantico.py`), parte do marco M4: ELEM-001 e STRUCT-001 a STRUCT-007.
+- O `main.py` passou a rodar a semântica, sai com código 2 em erro semântico e ganhou a opção `--modelo`.
+- 13 casos em `invalidos_semanticos/`, um exemplo de molécula de um átomo só (`exemplos/helio.mol`) e o `testar.py` passou a conferir o código de saída de cada pasta.
+- Trabalho feito na branch `feat/semantico`, criada a partir da `feat/sintatico-s1-s2`.
+
+### Decisões tomadas
+
+- Símbolo de elemento numa ligação: se há um só átomo do elemento, é ele; se há vários, cada citação usa o próximo átomo ainda não citado, na ordem de declaração. Assim os exemplos da água, do metano e da amônia continuam válidos.
+- Regras novas, além das do plano: STRUCT-004 (todos os átomos do elemento já citados), STRUCT-005 (átomo ligado a ele mesmo), STRUCT-006 (ligação repetida entre os mesmos átomos) e STRUCT-007 (quantidade ou repetição zero).
+- Uma molécula de um átomo só, como o hélio, não precisa de ligação.
+- Os erros semânticos não geram erros em cascata: citar um átomo cuja declaração já deu erro não gera outro erro, e o átomo sem ligação só é conferido quando não há outros erros.
+- O exemplo do aminoborano passou a declarar `N(+1)` e `B(-1)`, como indica o levantamento de química (C3 e G4).
+
+### Pendências
+
+- Valência, ordem de ligação, carga formal e octeto (M2, resto do M4 e M5), que dependem das pendências do levantamento de química.
+- ~~Validar se a lista do `ring` forma um ciclo (M6).~~ Feito no mesmo dia: regras RING-001 (átomo repetido), RING-002 (átomos vizinhos sem ligação, inclusive o fechamento do anel) e RING-003 (anel declarado duas vezes), com 4 casos novos em `invalidos_semanticos/`.
+- Decidir se um ciclo que existe no grafo, mas não foi declarado com `ring`, deve gerar aviso.
+
+---
+
+## 21/10/2026 — Valência e carga formal
+
+### O que foi feito
+
+- `regras/valencias.json`, só com as regras do levantamento de química marcadas como FONTE ou DERIVADA (marco M2, em parte).
+- Regras BOND-001, VAL-001, VAL-002 e CARGA-001 (resto do M4, menos OCT-001).
+- Suporte a avisos: aparecem na saída como `Aviso semântico [...]`, mas não mudam o código de saída.
+- 5 casos novos em `invalidos_semanticos/`, a pasta `avisos_semanticos/` com 2 casos e os exemplos do trifluoreto de cloro e do pentacloreto de fósforo.
+
+### Decisões tomadas
+
+- Elemento ou carga sem dado confirmado não é conferido, nem com erro nem com aviso.
+- Átomo neutro com valência acima do máximo: se a soma bate com uma carga conhecida (ex.: N com 4 ligações), o erro sugere declarar a carga.
+- Átomo neutro com valência abaixo do esperado gera só aviso, porque pode ser um radical. Na primeira versão isso dava erro sugerindo a carga, o que estava errado: um C com 3 ligações pode ser um radical ou um carbocátion, não só C(-1).
+
+### Pendências
+
+- OCT-001 e M5 (tipos de ligação), que dependem dos limites de eletronegatividade (F1) e de decisões do grupo.
+- Valências de Br, I e dos demais elementos (B7), ligações múltiplas de S e P (E6) e ligação metálica (H3).
+
+---
+
 ## 21/10/2026 — Revisão da análise sintática
 
 ### O que foi feito

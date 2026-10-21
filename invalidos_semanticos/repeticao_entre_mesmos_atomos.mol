@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-006] na linha 5, coluna 4: a repetição x2 ligaria os mesmos dois átomos 2 vezes
+molecule "Ethene" {
+    atom C as c1
+    atom C as c2
+    bond c1-c2 x2
+}

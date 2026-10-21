@@ -106,6 +106,8 @@ Com quantidade, o nome vira um prefixo numerado: `4x atom H as h` cria os átomo
 
 Declara uma ligação entre dois átomos, citados pelo símbolo do elemento ou pelo nome.
 
+Quando a molécula tem um só átomo do elemento citado, a ligação usa esse átomo. Quando tem vários, cada citação usa o próximo átomo desse elemento que ainda não foi citado, na ordem de declaração. Na água, `bond H-O` usa o primeiro H e `bond O-H` usa o segundo. Se todos já foram citados, é preciso usar nomes.
+
 ```text
 bond H-O
 bond c1=c2
@@ -117,9 +119,13 @@ Uma ligação também pode ser repetida. A repetição precisa estar separada po
 bond C-H x4
 ```
 
+Na repetição, pelo menos um dos lados precisa ser um elemento com vários átomos, para cada repetição ligar átomos diferentes. Por isso `bond c1-c2 x2` é um erro: para uma ligação dupla, use `bond c1=c2`.
+
 ### `ring`
 
 Marca que os átomos citados, pelo nome, formam um anel. Um anel tem pelo menos três átomos.
+
+Os átomos são citados na ordem em que aparecem no anel: cada um precisa estar ligado ao seguinte, e o último ao primeiro. Um átomo não pode aparecer duas vezes, e o mesmo anel não pode ser declarado duas vezes.
 
 ```text
 ring c1 c2 c3
