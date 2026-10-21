@@ -111,7 +111,7 @@ bond H-O
 bond c1=c2
 ```
 
-Uma ligação também pode ser repetida. A repetição precisa estar separada por espaço: em `bond C-Hx4`, o texto `Hx` seria lido como símbolo de elemento.
+Uma ligação também pode ser repetida. A repetição precisa estar separada por espaço: em `bond C-Hx4`, o texto `Hx` seria lido como símbolo de elemento. Esse e os outros erros comuns de escrita do multiplicador e da repetição (`4 x`, `4 atom`, `x 4`, `x` sem número, `X` maiúsculo) têm mensagem própria, que mostra como escrever.
 
 ```text
 bond C-H x4
@@ -202,6 +202,8 @@ minuscula     = "a" | "b" | ... | "z" ;
 ```
 
 Espaços, tabulações, quebras de linha e comentários podem aparecer entre quaisquer dois tokens e são ignorados.
+
+O arquivo deve estar salvo em UTF-8. O BOM que alguns editores colocam no início do arquivo é ignorado, e um arquivo em outra codificação, como latin-1, gera um erro léxico na posição do primeiro caractere inválido.
 
 A gramática só define se o programa está bem formado. Se a molécula é quimicamente válida, por exemplo se `Xx` é um elemento que existe ou se `c1` foi declarado, é decidido pela análise semântica (ver `plano_semantico.md`).
 

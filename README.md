@@ -54,6 +54,8 @@ Opções:
 python src/main.py --tokens --ast exemplos/agua.mol
 ```
 
+Se a pasta `gerado/` não existir, o programa pede para rodar o `sh gerar.sh`.
+
 O programa sai com código 0 se não houver erros e 1 se houver erro léxico ou sintático. O código 2 fica reservado para os erros semânticos.
 
 Cada etapa também pode ser executada sozinha:
@@ -69,7 +71,8 @@ python src/construtor_ast.py exemplos/agua.mol  # AST
 As análises léxica e sintática estão implementadas:
 
 - O lexer reconhece palavras-chave, símbolos de elementos, nomes de átomos, textos, números inteiros e reais, quantificadores, operadores de ligação, sinais de carga, delimitadores e comentários.
-- O parser confere a estrutura do programa e informa os erros em português, com linha e coluna.
+- O lexer e o parser informam os erros em português, com linha e coluna. Os erros de espaço mais comuns, como `bond C-Hx4`, têm mensagem própria.
+- O arquivo deve estar em UTF-8 (com ou sem BOM).
 - A AST guarda a posição de cada comando, para ser usada pela análise semântica.
 
 A análise semântica, que confere se a molécula é quimicamente válida, será desenvolvida na próxima etapa (ver [docs/plano_semantico.md](docs/plano_semantico.md)).
