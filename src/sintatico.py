@@ -3,6 +3,7 @@ import sys
 
 from antlr4 import CommonTokenStream, Token
 from antlr4.error.ErrorListener import ErrorListener
+from antlr4.error.ErrorStrategy import DefaultErrorStrategy
 
 # lexico.py adiciona a pasta "gerado" ao caminho de importação
 from lexico import ErroLexico, ler_arquivo
@@ -38,6 +39,74 @@ def descrever_encontrado(token):
     if token.type == Token.EOF:
         return "fim do arquivo"
     return f"'{token.text}'"
+
+
+def fim_de_ligacao(fluxo, indice):
+    # Diz se o token na posição indice é a segunda referência de um bond,
+    # como o 'H' de "bond C-H", onde a repetição (como 'x4') pode entrar
+    if indice < 1:
+        return False
+    return fluxo.get(indice).type in REFERENCIAS and fluxo.get(indice - 1).type in OPERADORES
+
+
+def explicar_quantificador(fluxo, token):
+    # Mensagens para os erros de espaço mais comuns em "4x" e "x4", que
+    # sem isso apareceriam como "comando inválido". Devolve None se o
+    # token não for um desses casos.
+    i = token.tokenIndex
+    anterior = fluxo.get(i - 1) if i > 0 else None
+    seguinte = fluxo.get(i + 1)
+    depois_de_ligacao = fim_de_ligacao(fluxo, i - 1)
+
+    if token.type == P.INTEIRO:
+        n = token.text
+        if seguinte.type == P.NOME and seguinte.text == "x":
+            return f"multiplicador com espaço: escreva '{n}x', sem espaço entre o número e o x"
+        if seguinte.type == P.IDENT and seguinte.text == "X":
+            return f"multiplicador com X maiúsculo: escreva '{n}x'"
+        if seguinte.type == P.ATOM:
+            return f"multiplicador sem x: escreva '{n}x atom'"
+        if depois_de_ligacao and anterior.type == P.IDENT and anterior.text.endswith("x"):
+            elemento = anterior.text[:-1]
+            return (
+                f"repetição sem espaço: escreva '{elemento} x{n}' em vez de "
+                f"'{anterior.text}{n}' ('{anterior.text}' seria lido como elemento)"
+            )
+        if depois_de_ligacao:
+            return f"repetição sem x: escreva 'x{n}'"
+
+    if token.type == P.NOME and token.text == "x":
+        if seguinte.type == P.INTEIRO:
+            return f"repetição com espaço: escreva 'x{seguinte.text}', sem espaço entre o x e o número"
+        if depois_de_ligacao:
+            return "repetição sem número: escreva o x junto do número, como 'x4'"
+
+    if token.type == P.IDENT and token.text == "X" and seguinte.type == P.INTEIRO and depois_de_ligacao:
+        return f"repetição com X maiúsculo: escreva 'x{seguinte.text}'"
+
+    if token.type == P.REPETICAO_LIGACAO:
+        n = token.text[1:]
+        return (
+            f"a repetição '{token.text}' só pode vir no fim de um 'bond'; "
+            f"para vários átomos iguais use '{n}x atom'"
+        )
+
+    return None
+
+
+class RecuperacaoPorComando(DefaultErrorStrategy):
+    # Na recuperação, o ANTLR pode apagar um token para "consertar" o
+    # comando com erro. Se esse token começa outro comando (como o 'bond'
+    # da linha seguinte), apagá-lo estraga também o comando seguinte, e
+    # o erro dele sai com uma mensagem errada. Por isso esses tokens
+    # nunca são apagados.
+
+    INICIO_DE_COMANDO = {P.ATOM, P.BOND, P.RING, P.MULTIPLICADOR_ATOMO, P.FECHA_CHAVE}
+
+    def singleTokenDeletion(self, recognizer):
+        if recognizer.getCurrentToken().type in self.INICIO_DE_COMANDO:
+            return None
+        return super().singleTokenDeletion(recognizer)
 
 
 class ErroSintatico(ErrorListener):
@@ -85,6 +154,9 @@ class ErroSintatico(ErrorListener):
             if P.FECHA_CHAVE in esperados:
                 if token.type == Token.EOF:
                     return "esperado '}' para fechar a molécula", True
+                dica = explicar_quantificador(recognizer.getTokenStream(), token)
+                if dica is not None:
+                    return dica, False
                 return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring' ou '}}'", False
 
         if regra == P.RULE_atomo:
@@ -152,6 +224,7 @@ def analisar(caminho):
 def analisar_fluxo(fluxo):
     # Devolve a árvore sintática, ou None se houver erro sintático
     parser = MoleculeDSLParser(fluxo)
+    parser._errHandler = RecuperacaoPorComando()
     parser.removeErrorListeners()
     erros_sintaticos = ErroSintatico()
     parser.addErrorListener(erros_sintaticos)
