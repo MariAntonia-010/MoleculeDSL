@@ -1,0 +1,2188 @@
+{
+  "nodes": [
+    {
+      "id": "g0",
+      "type": "group",
+      "label": "Community 0",
+      "x": 0,
+      "y": 0,
+      "width": 1100,
+      "height": 620,
+      "color": "1"
+    },
+    {
+      "id": "n_src_arvore_pos_str",
+      "type": "file",
+      "file": "dot-__str__().md",
+      "x": 20,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitanel",
+      "type": "file",
+      "file": "dot-visitAnel().md",
+      "x": 220,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitatomo",
+      "type": "file",
+      "file": "dot-visitAtomo().md",
+      "x": 420,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitcarga",
+      "type": "file",
+      "file": "dot-visitCarga().md",
+      "x": 620,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitcomando",
+      "type": "file",
+      "file": "dot-visitComando().md",
+      "x": 820,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitligacao",
+      "type": "file",
+      "file": "dot-visitLigacao().md",
+      "x": 20,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitmolecula",
+      "type": "file",
+      "file": "dot-visitMolecula().md",
+      "x": 220,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitprograma",
+      "type": "file",
+      "file": "dot-visitPrograma().md",
+      "x": 420,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast_visitreferencia",
+      "type": "file",
+      "file": "dot-visitReferencia().md",
+      "x": 620,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_aneldecl",
+      "type": "file",
+      "file": "AnelDecl.md",
+      "x": 820,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_atomodecl",
+      "type": "file",
+      "file": "AtomoDecl.md",
+      "x": 20,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_construtorast",
+      "type": "file",
+      "file": "ConstrutorAST.md",
+      "x": 220,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_rationale_35",
+      "type": "file",
+      "file": "Imprime a AST em texto simples (mesmo formato que a vers\u00e3o anterior)..md",
+      "x": 420,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_ligacaodecl",
+      "type": "file",
+      "file": "LigacaoDecl.md",
+      "x": 620,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_molecula",
+      "type": "file",
+      "file": "Molecula.md",
+      "x": 820,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_moleculedslvisitor",
+      "type": "file",
+      "file": "MoleculeDSLVisitor.md",
+      "x": 20,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_pos",
+      "type": "file",
+      "file": "Pos.md",
+      "x": 220,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_referencia",
+      "type": "file",
+      "file": "Referencia.md",
+      "x": 420,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_rationale_1",
+      "type": "file",
+      "file": "Visitor que converte a parse tree do ANTLR em AST tipada, com normaliza\u00e7\u00f5es..md",
+      "x": 620,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast_pos",
+      "type": "file",
+      "file": "_pos().md",
+      "x": 820,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_construtor_ast",
+      "type": "file",
+      "file": "construtor_ast.py.md",
+      "x": 20,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_imprimir_arvore",
+      "type": "file",
+      "file": "imprimir_arvore().md",
+      "x": 220,
+      "y": 400,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g1",
+      "type": "group",
+      "label": "Community 1",
+      "x": 1180,
+      "y": 0,
+      "width": 1100,
+      "height": 520,
+      "color": "2"
+    },
+    {
+      "id": "n_src_erros_coletorlexico_init",
+      "type": "file",
+      "file": "dot-__init__().md",
+      "x": 1200,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_coletorsintatico_init",
+      "type": "file",
+      "file": "dot-__init__()_1.md",
+      "x": 1400,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_erro_str",
+      "type": "file",
+      "file": "dot-__str__()_1.md",
+      "x": 1600,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_coletorlexico_syntaxerror",
+      "type": "file",
+      "file": "dot-syntaxError().md",
+      "x": 1800,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_coletorsintatico_syntaxerror",
+      "type": "file",
+      "file": "dot-syntaxError()_1.md",
+      "x": 2000,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_rationale_1",
+      "type": "file",
+      "file": "Coleta e tradu\u00e7\u00e3o (para portugu\u00eas) dos erros l\u00e9xicos e sint\u00e1ticos..md",
+      "x": 1200,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_coletorlexico",
+      "type": "file",
+      "file": "ColetorLexico.md",
+      "x": 1400,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_coletorsintatico",
+      "type": "file",
+      "file": "ColetorSintatico.md",
+      "x": 1600,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_erro",
+      "type": "file",
+      "file": "Erro.md",
+      "x": 1800,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_errorlistener",
+      "type": "file",
+      "file": "ErrorListener.md",
+      "x": 2000,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_rationale_114",
+      "type": "file",
+      "file": "Erros de reconhecimento de token (caractere inv\u00e1lido, texto sem fechar, n\u00famero\u2026.md",
+      "x": 1200,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_rationale_139",
+      "type": "file",
+      "file": "Erros do parser, com mensagens em portugu\u00eas (esperado X, encontrado Y)..md",
+      "x": 1400,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_rationale_94",
+      "type": "file",
+      "file": "Hx4' \u00e9 lido como o elemento 'Hx' seguido de 4 (IDENT aceita A-Za-z). Avisa\u2026.md",
+      "x": 1600,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_dica_elemento_colado",
+      "type": "file",
+      "file": "_dica_elemento_colado().md",
+      "x": 1800,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_lista_ou",
+      "type": "file",
+      "file": "_lista_ou().md",
+      "x": 2000,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_antlr4_error_errorlistener",
+      "type": "file",
+      "file": "antlr4_error_errorlistener.md",
+      "x": 1200,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_descrever_token_encontrado",
+      "type": "file",
+      "file": "descrever_token_encontrado().md",
+      "x": 1400,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros_descrever_token_tipo",
+      "type": "file",
+      "file": "descrever_token_tipo().md",
+      "x": 1600,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_erros",
+      "type": "file",
+      "file": "erros.py.md",
+      "x": 1800,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_re",
+      "type": "file",
+      "file": "re.md",
+      "x": 2000,
+      "y": 320,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g2",
+      "type": "group",
+      "label": "Community 2",
+      "x": 2360,
+      "y": 0,
+      "width": 880,
+      "height": 420,
+      "color": "3"
+    },
+    {
+      "id": "n_testes_rodar_testes_rationale_1",
+      "type": "file",
+      "file": "Roda todos os exemplos e confere o resultado esperado (testesesperados.json).\u2026.md",
+      "x": 2380,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_arvore",
+      "type": "file",
+      "file": "arvore.md",
+      "x": 2580,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_comum",
+      "type": "file",
+      "file": "comum.md",
+      "x": 2780,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_testes_rodar_testes_confere",
+      "type": "file",
+      "file": "confere().md",
+      "x": 2980,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_testes_rodar_testes_falha",
+      "type": "file",
+      "file": "falha().md",
+      "x": 2380,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_glob",
+      "type": "file",
+      "file": "glob.md",
+      "x": 2580,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_json",
+      "type": "file",
+      "file": "json.md",
+      "x": 2780,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_main",
+      "type": "file",
+      "file": "main.md",
+      "x": 2980,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_testes_rodar_testes_ok",
+      "type": "file",
+      "file": "ok().md",
+      "x": 2380,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_testes_rodar_testes",
+      "type": "file",
+      "file": "rodar_testes.py.md",
+      "x": 2580,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_testes_rodar_testes_saida",
+      "type": "file",
+      "file": "saida().md",
+      "x": 2780,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_subprocess",
+      "type": "file",
+      "file": "subprocess.md",
+      "x": 2980,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g3",
+      "type": "group",
+      "label": "Community 3",
+      "x": 3320,
+      "y": 0,
+      "width": 880,
+      "height": 420,
+      "color": "4"
+    },
+    {
+      "id": "n_src_arvore_operador_ordem",
+      "type": "file",
+      "file": "dot-ordem().md",
+      "x": 3340,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_rationale_1",
+      "type": "file",
+      "file": "AST da MoleculeDSL. Todo n\u00f3 guarda a posi\u00e7\u00e3o (linhacoluna, base 0) para a\u2026.md",
+      "x": 3540,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_enum",
+      "type": "file",
+      "file": "Enum.md",
+      "x": 3740,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_operador",
+      "type": "file",
+      "file": "Operador.md",
+      "x": 3940,
+      "y": 80,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_rationale_25",
+      "type": "file",
+      "file": "Ordem de liga\u00e7\u00e3o formal; None para coordenadamet\u00e1lica (tratadas \u00e0 parte)..md",
+      "x": 3340,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_rationale_68",
+      "type": "file",
+      "file": "Texto indentado da AST, para a op\u00e7\u00e3o --ast..md",
+      "x": 3540,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore",
+      "type": "file",
+      "file": "arvore.py.md",
+      "x": 3740,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_dataclasses",
+      "type": "file",
+      "file": "dataclasses.md",
+      "x": 3940,
+      "y": 160,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_arvore_formatar",
+      "type": "file",
+      "file": "formatar().md",
+      "x": 3340,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_typing",
+      "type": "file",
+      "file": "typing.md",
+      "x": 3540,
+      "y": 240,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g4",
+      "type": "group",
+      "label": "Community 4",
+      "x": 0,
+      "y": 700,
+      "width": 660,
+      "height": 420,
+      "color": "5"
+    },
+    {
+      "id": "n_src_sintatico_rationale_1",
+      "type": "file",
+      "file": "An\u00e1lise sint\u00e1tica da MoleculeDSL. Uso isolado python srcsintatico.py\u2026.md",
+      "x": 20,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_rationale_22",
+      "type": "file",
+      "file": "Devolve (arvore, parser, erros_sintaticos). Assume que o l\u00e9xico j\u00e1 passou..md",
+      "x": 220,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_rationale_65",
+      "type": "file",
+      "file": "L\u00e9xico + sint\u00e1tico. Imprime os erros e devolve a AST, ou None se houver erro..md",
+      "x": 420,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_analisar",
+      "type": "file",
+      "file": "analisar().md",
+      "x": 20,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_main",
+      "type": "file",
+      "file": "main().md",
+      "x": 220,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico_parsear",
+      "type": "file",
+      "file": "parsear().md",
+      "x": 420,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_sintatico",
+      "type": "file",
+      "file": "sintatico.py.md",
+      "x": 20,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_sys",
+      "type": "file",
+      "file": "sys.md",
+      "x": 220,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g5",
+      "type": "group",
+      "label": "Community 5",
+      "x": 1180,
+      "y": 700,
+      "width": 660,
+      "height": 420,
+      "color": "6"
+    },
+    {
+      "id": "n_src_lexico_rationale_1",
+      "type": "file",
+      "file": "An\u00e1lise l\u00e9xica da MoleculeDSL. Uso isolado python srclexico.py arquivo\u2026.md",
+      "x": 1200,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico_rationale_16",
+      "type": "file",
+      "file": "Devolve (lexer, tokens, erros). Tokens ignorados (espa\u00e7o, coment\u00e1rio) n\u00e3o\u2026.md",
+      "x": 1400,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico_analisar",
+      "type": "file",
+      "file": "analisar()_1.md",
+      "x": 1600,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_antlr4",
+      "type": "file",
+      "file": "antlr4.md",
+      "x": 1200,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico",
+      "type": "file",
+      "file": "lexico.py.md",
+      "x": 1400,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico_main",
+      "type": "file",
+      "file": "main()_1.md",
+      "x": 1600,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico_tokenizar",
+      "type": "file",
+      "file": "tokenizar().md",
+      "x": 1200,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g6",
+      "type": "group",
+      "label": "Community 6",
+      "x": 2360,
+      "y": 700,
+      "width": 660,
+      "height": 420,
+      "color": "1"
+    },
+    {
+      "id": "n_src_main_rationale_1",
+      "type": "file",
+      "file": "Compilador da MoleculeDSL l\u00e9xico - sint\u00e1tico (- sem\u00e2ntico, em breve). Uso\u2026.md",
+      "x": 2380,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_comum_rationale_23",
+      "type": "file",
+      "file": "L\u00ea o programa. 'utf-8-sig' descarta o BOM que alguns editores do Windows gravam..md",
+      "x": 2580,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico_imprimir_tokens",
+      "type": "file",
+      "file": "imprimir_tokens().md",
+      "x": 2780,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_comum_ler_arquivo",
+      "type": "file",
+      "file": "ler_arquivo().md",
+      "x": 2380,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_main_main",
+      "type": "file",
+      "file": "main()_2.md",
+      "x": 2580,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_main",
+      "type": "file",
+      "file": "main.py.md",
+      "x": 2780,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_lexico_nome_do_token",
+      "type": "file",
+      "file": "nome_do_token().md",
+      "x": 2380,
+      "y": 940,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g7",
+      "type": "group",
+      "label": "Community 7",
+      "x": 3320,
+      "y": 700,
+      "width": 660,
+      "height": 400,
+      "color": "2"
+    },
+    {
+      "id": "n_src_comum_rationale_1",
+      "type": "file",
+      "file": "Utilidades compartilhadas pelas etapas do compilador da MoleculeDSL..md",
+      "x": 3340,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_comum",
+      "type": "file",
+      "file": "comum.py.md",
+      "x": 3540,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_moleculedsllexer",
+      "type": "file",
+      "file": "moleculedsllexer.md",
+      "x": 3740,
+      "y": 780,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_moleculedslparser",
+      "type": "file",
+      "file": "moleculedslparser.md",
+      "x": 3340,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_os",
+      "type": "file",
+      "file": "os.md",
+      "x": 3540,
+      "y": 860,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g8",
+      "type": "group",
+      "label": "Community 8",
+      "x": 0,
+      "y": 1200,
+      "width": 660,
+      "height": 400,
+      "color": "3"
+    },
+    {
+      "id": "n_src_main_resultado_ok",
+      "type": "file",
+      "file": "dot-ok().md",
+      "x": 20,
+      "y": 1280,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_main_rationale_36",
+      "type": "file",
+      "file": "Executa as etapas em cadeia. Para na primeira etapa com erro (sem erros em\u2026.md",
+      "x": 220,
+      "y": 1280,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_main_resultado",
+      "type": "file",
+      "file": "Resultado.md",
+      "x": 420,
+      "y": 1280,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_testes_rodar_testes_ast_de",
+      "type": "file",
+      "file": "ast_de().md",
+      "x": 20,
+      "y": 1360,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_src_main_processar",
+      "type": "file",
+      "file": "processar().md",
+      "x": 220,
+      "y": 1360,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "g9",
+      "type": "group",
+      "label": "Community 9",
+      "x": 1180,
+      "y": 1200,
+      "width": 600,
+      "height": 400,
+      "color": "4"
+    },
+    {
+      "id": "n_gerar",
+      "type": "file",
+      "file": "gerar.sh.md",
+      "x": 1200,
+      "y": 1280,
+      "width": 180,
+      "height": 60
+    },
+    {
+      "id": "n_gerar_sh__entry",
+      "type": "file",
+      "file": "gerar.sh script.md",
+      "x": 1400,
+      "y": 1280,
+      "width": 180,
+      "height": 60
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_src_construtor_ast_construtorast_visitanel_src_arvore_aneldecl",
+      "fromNode": "n_src_construtor_ast_construtorast_visitanel",
+      "toNode": "n_src_arvore_aneldecl",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_aneldecl",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_aneldecl",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_arvore_aneldecl",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_arvore_aneldecl",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_aneldecl",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_aneldecl",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitatomo_src_arvore_atomodecl",
+      "fromNode": "n_src_construtor_ast_construtorast_visitatomo",
+      "toNode": "n_src_arvore_atomodecl",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_atomodecl",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_atomodecl",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_arvore_atomodecl",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_arvore_atomodecl",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_atomodecl",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_atomodecl",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitligacao_src_arvore_ligacaodecl",
+      "fromNode": "n_src_construtor_ast_construtorast_visitligacao",
+      "toNode": "n_src_arvore_ligacaodecl",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_ligacaodecl",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_ligacaodecl",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_arvore_ligacaodecl",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_arvore_ligacaodecl",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_ligacaodecl",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_ligacaodecl",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitmolecula_src_arvore_molecula",
+      "fromNode": "n_src_construtor_ast_construtorast_visitmolecula",
+      "toNode": "n_src_arvore_molecula",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_molecula",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_molecula",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_arvore_molecula",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_arvore_molecula",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_arvore_molecula",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_arvore_molecula",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_molecula",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_molecula",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_pos_src_arvore_pos",
+      "fromNode": "n_src_construtor_ast_pos",
+      "toNode": "n_src_arvore_pos",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_pos",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_pos",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_pos",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_pos",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_pos_src_arvore_pos_str",
+      "fromNode": "n_src_arvore_pos",
+      "toNode": "n_src_arvore_pos_str",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitreferencia_src_arvore_referencia",
+      "fromNode": "n_src_construtor_ast_construtorast_visitreferencia",
+      "toNode": "n_src_arvore_referencia",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_referencia",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_referencia",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_referencia",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_referencia",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_processar_src_construtor_ast_construtorast",
+      "fromNode": "n_src_main_processar",
+      "toNode": "n_src_construtor_ast_construtorast",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_analisar_src_construtor_ast_construtorast",
+      "fromNode": "n_src_sintatico_analisar",
+      "toNode": "n_src_construtor_ast_construtorast",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_construtor_ast_construtorast",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_construtor_ast_construtorast",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_construtor_ast_construtorast",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_construtor_ast_construtorast",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_construtor_ast_construtorast",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_construtor_ast_construtorast",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_moleculedslvisitor",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_moleculedslvisitor",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitprograma",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitprograma",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitmolecula",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitmolecula",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitcomando",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitcomando",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitatomo",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitatomo",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitcarga",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitcarga",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitligacao",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitligacao",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitreferencia",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitreferencia",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_construtor_ast_construtorast_visitanel",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_construtor_ast_construtorast_visitanel",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_tokenizar_src_erros_coletorlexico",
+      "fromNode": "n_src_lexico_tokenizar",
+      "toNode": "n_src_erros_coletorlexico",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_erros_coletorlexico",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_erros_coletorlexico",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_coletorlexico",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_coletorlexico",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorlexico_errorlistener",
+      "fromNode": "n_src_erros_coletorlexico",
+      "toNode": "n_errorlistener",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorlexico_src_erros_coletorlexico_init",
+      "fromNode": "n_src_erros_coletorlexico",
+      "toNode": "n_src_erros_coletorlexico_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorlexico_src_erros_coletorlexico_syntaxerror",
+      "fromNode": "n_src_erros_coletorlexico",
+      "toNode": "n_src_erros_coletorlexico_syntaxerror",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_rationale_114_src_erros_coletorlexico",
+      "fromNode": "n_src_erros_rationale_114",
+      "toNode": "n_src_erros_coletorlexico",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_parsear_src_erros_coletorsintatico",
+      "fromNode": "n_src_sintatico_parsear",
+      "toNode": "n_src_erros_coletorsintatico",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_erros_coletorsintatico",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_erros_coletorsintatico",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_coletorsintatico",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_coletorsintatico",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_errorlistener",
+      "fromNode": "n_src_erros_coletorsintatico",
+      "toNode": "n_errorlistener",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_src_erros_coletorsintatico_init",
+      "fromNode": "n_src_erros_coletorsintatico",
+      "toNode": "n_src_erros_coletorsintatico_init",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_src_erros_coletorsintatico_syntaxerror",
+      "fromNode": "n_src_erros_coletorsintatico",
+      "toNode": "n_src_erros_coletorsintatico_syntaxerror",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_rationale_139_src_erros_coletorsintatico",
+      "fromNode": "n_src_erros_rationale_139",
+      "toNode": "n_src_erros_coletorsintatico",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorlexico_syntaxerror_src_erros_erro",
+      "fromNode": "n_src_erros_coletorlexico_syntaxerror",
+      "toNode": "n_src_erros_erro",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_syntaxerror_src_erros_erro",
+      "fromNode": "n_src_erros_coletorsintatico_syntaxerror",
+      "toNode": "n_src_erros_erro",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_erros_erro",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_erros_erro",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_erro",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_erro",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_erro_src_erros_erro_str",
+      "fromNode": "n_src_erros_erro",
+      "toNode": "n_src_erros_erro_str",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore_operador",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore_operador",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_operador",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_operador",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_operador_enum",
+      "fromNode": "n_src_arvore_operador",
+      "toNode": "n_enum",
+      "label": "inherits [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_operador_src_arvore_operador_ordem",
+      "fromNode": "n_src_arvore_operador",
+      "toNode": "n_src_arvore_operador_ordem",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_processar_src_main_resultado",
+      "fromNode": "n_src_main_processar",
+      "toNode": "n_src_main_resultado",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_main_resultado",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_main_resultado",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_resultado_src_main_resultado_ok",
+      "fromNode": "n_src_main_resultado",
+      "toNode": "n_src_main_resultado_ok",
+      "label": "method [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_rationale_25_src_arvore_operador_ordem",
+      "fromNode": "n_src_arvore_rationale_25",
+      "toNode": "n_src_arvore_operador_ordem",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitanel_src_construtor_ast_pos",
+      "fromNode": "n_src_construtor_ast_construtorast_visitanel",
+      "toNode": "n_src_construtor_ast_pos",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitatomo_src_construtor_ast_pos",
+      "fromNode": "n_src_construtor_ast_construtorast_visitatomo",
+      "toNode": "n_src_construtor_ast_pos",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitligacao_src_construtor_ast_pos",
+      "fromNode": "n_src_construtor_ast_construtorast_visitligacao",
+      "toNode": "n_src_construtor_ast_pos",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitmolecula_src_construtor_ast_pos",
+      "fromNode": "n_src_construtor_ast_construtorast_visitmolecula",
+      "toNode": "n_src_construtor_ast_pos",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_visitreferencia_src_construtor_ast_pos",
+      "fromNode": "n_src_construtor_ast_construtorast_visitreferencia",
+      "toNode": "n_src_construtor_ast_pos",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_construtor_ast_pos",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_construtor_ast_pos",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_imprimir_arvore_src_sintatico_imprimir_arvore",
+      "fromNode": "n_src_sintatico_imprimir_arvore",
+      "toNode": "n_src_sintatico_imprimir_arvore",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_main_src_sintatico_imprimir_arvore",
+      "fromNode": "n_src_sintatico_main",
+      "toNode": "n_src_sintatico_imprimir_arvore",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_sintatico_imprimir_arvore",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_sintatico_imprimir_arvore",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_rationale_35_src_sintatico_imprimir_arvore",
+      "fromNode": "n_src_sintatico_rationale_35",
+      "toNode": "n_src_sintatico_imprimir_arvore",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_syntaxerror_src_erros_descrever_token_tipo",
+      "fromNode": "n_src_erros_coletorsintatico_syntaxerror",
+      "toNode": "n_src_erros_descrever_token_tipo",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_syntaxerror_src_erros_descrever_token_encontrado",
+      "fromNode": "n_src_erros_coletorsintatico_syntaxerror",
+      "toNode": "n_src_erros_descrever_token_encontrado",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_syntaxerror_src_erros_lista_ou",
+      "fromNode": "n_src_erros_coletorsintatico_syntaxerror",
+      "toNode": "n_src_erros_lista_ou",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_coletorsintatico_syntaxerror_src_erros_dica_elemento_colado",
+      "fromNode": "n_src_erros_coletorsintatico_syntaxerror",
+      "toNode": "n_src_erros_dica_elemento_colado",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_descrever_token_encontrado",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_descrever_token_encontrado",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_descrever_token_tipo",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_descrever_token_tipo",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_dica_elemento_colado",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_dica_elemento_colado",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_rationale_94_src_erros_dica_elemento_colado",
+      "fromNode": "n_src_erros_rationale_94",
+      "toNode": "n_src_erros_dica_elemento_colado",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_erros_lista_ou",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_erros_lista_ou",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_confere_testes_rodar_testes_falha",
+      "fromNode": "n_testes_rodar_testes_confere",
+      "toNode": "n_testes_rodar_testes_falha",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_confere_testes_rodar_testes_ok",
+      "fromNode": "n_testes_rodar_testes_confere",
+      "toNode": "n_testes_rodar_testes_ok",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_testes_rodar_testes_confere",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_testes_rodar_testes_confere",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_testes_rodar_testes_falha",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_testes_rodar_testes_falha",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_testes_rodar_testes_ok",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_testes_rodar_testes_ok",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_testes_rodar_testes_saida",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_testes_rodar_testes_saida",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_formatar_src_arvore_formatar",
+      "fromNode": "n_src_arvore_formatar",
+      "toNode": "n_src_arvore_formatar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_main_src_arvore_formatar",
+      "fromNode": "n_src_main_main",
+      "toNode": "n_src_arvore_formatar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_arvore_formatar",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_arvore_formatar",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_src_arvore_formatar",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_src_arvore_formatar",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_rationale_68_src_arvore_formatar",
+      "fromNode": "n_src_arvore_rationale_68",
+      "toNode": "n_src_arvore_formatar",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_analisar_src_comum_ler_arquivo",
+      "fromNode": "n_src_sintatico_analisar",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_analisar_src_lexico_tokenizar",
+      "fromNode": "n_src_sintatico_analisar",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_analisar_src_sintatico_parsear",
+      "fromNode": "n_src_sintatico_analisar",
+      "toNode": "n_src_sintatico_parsear",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_main_src_sintatico_analisar",
+      "fromNode": "n_src_sintatico_main",
+      "toNode": "n_src_sintatico_analisar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_sintatico_analisar",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_sintatico_analisar",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_rationale_65_src_sintatico_analisar",
+      "fromNode": "n_src_sintatico_rationale_65",
+      "toNode": "n_src_sintatico_analisar",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_main_sys",
+      "fromNode": "n_src_sintatico_main",
+      "toNode": "n_sys",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_sintatico_main",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_sintatico_main",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_processar_src_sintatico_parsear",
+      "fromNode": "n_src_main_processar",
+      "toNode": "n_src_sintatico_parsear",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_sintatico_parsear",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_sintatico_parsear",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_sintatico_parsear",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_sintatico_parsear",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_rationale_22_src_sintatico_parsear",
+      "fromNode": "n_src_sintatico_rationale_22",
+      "toNode": "n_src_sintatico_parsear",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_analisar_src_comum_ler_arquivo",
+      "fromNode": "n_src_lexico_analisar",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_analisar_src_lexico_tokenizar",
+      "fromNode": "n_src_lexico_analisar",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_analisar_src_lexico_imprimir_tokens",
+      "fromNode": "n_src_lexico_analisar",
+      "toNode": "n_src_lexico_imprimir_tokens",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_main_src_lexico_analisar",
+      "fromNode": "n_src_lexico_main",
+      "toNode": "n_src_lexico_analisar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_lexico_analisar",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_lexico_analisar",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_main_sys",
+      "fromNode": "n_src_lexico_main",
+      "toNode": "n_sys",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_lexico_main",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_lexico_main",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_processar_src_lexico_tokenizar",
+      "fromNode": "n_src_main_processar",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_lexico_tokenizar",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_lexico_tokenizar",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_lexico_tokenizar",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_rationale_16_src_lexico_tokenizar",
+      "fromNode": "n_src_lexico_rationale_16",
+      "toNode": "n_src_lexico_tokenizar",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_main_src_comum_ler_arquivo",
+      "fromNode": "n_src_main_main",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_comum_ler_arquivo",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_comum_ler_arquivo",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_comum_ler_arquivo",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_src_comum_ler_arquivo",
+      "fromNode": "n_src_comum",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_rationale_23_src_comum_ler_arquivo",
+      "fromNode": "n_src_comum_rationale_23",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_ast_de_src_comum_ler_arquivo",
+      "fromNode": "n_testes_rodar_testes_ast_de",
+      "toNode": "n_src_comum_ler_arquivo",
+      "label": "calls [INFERRED]"
+    },
+    {
+      "id": "e_src_lexico_imprimir_tokens_src_lexico_nome_do_token",
+      "fromNode": "n_src_lexico_imprimir_tokens",
+      "toNode": "n_src_lexico_nome_do_token",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_main_src_lexico_imprimir_tokens",
+      "fromNode": "n_src_main_main",
+      "toNode": "n_src_lexico_imprimir_tokens",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_lexico_imprimir_tokens",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_lexico_imprimir_tokens",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_lexico_imprimir_tokens",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_lexico_imprimir_tokens",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_lexico_nome_do_token",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_lexico_nome_do_token",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_main_sys",
+      "fromNode": "n_src_main_main",
+      "toNode": "n_sys",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_main_src_main_processar",
+      "fromNode": "n_src_main_main",
+      "toNode": "n_src_main_processar",
+      "label": "calls [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_main_main",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_main_main",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_main_processar",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_main_processar",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_rationale_36_src_main_processar",
+      "fromNode": "n_src_main_rationale_36",
+      "toNode": "n_src_main_processar",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_ast_de_src_main_processar",
+      "fromNode": "n_testes_rodar_testes_ast_de",
+      "toNode": "n_src_main_processar",
+      "label": "calls [INFERRED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_testes_rodar_testes_ast_de",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_testes_rodar_testes_ast_de",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_moleculedslvisitor",
+      "fromNode": "n_src_comum",
+      "toNode": "n_moleculedslvisitor",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_arvore",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_arvore",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_src_comum",
+      "fromNode": "n_src_construtor_ast",
+      "toNode": "n_src_comum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_construtor_ast",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_construtor_ast",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_construtor_ast",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_construtor_ast",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_rationale_1_src_construtor_ast",
+      "fromNode": "n_src_construtor_ast_rationale_1",
+      "toNode": "n_src_construtor_ast",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_re",
+      "fromNode": "n_src_erros",
+      "toNode": "n_re",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_dataclasses",
+      "fromNode": "n_src_erros",
+      "toNode": "n_dataclasses",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_antlr4",
+      "fromNode": "n_src_erros",
+      "toNode": "n_antlr4",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_antlr4_error_errorlistener",
+      "fromNode": "n_src_erros",
+      "toNode": "n_antlr4_error_errorlistener",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_src_comum",
+      "fromNode": "n_src_erros",
+      "toNode": "n_src_comum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_erros",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_erros",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_erros",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_erros",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_erros",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_erros",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_erros_rationale_1_src_erros",
+      "fromNode": "n_src_erros_rationale_1",
+      "toNode": "n_src_erros",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_os",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_os",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_subprocess",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_subprocess",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_sys",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_sys",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_glob",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_glob",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_json",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_json",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_arvore",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_arvore",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_comum",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_comum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_main",
+      "fromNode": "n_testes_rodar_testes",
+      "toNode": "n_main",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_testes_rodar_testes_rationale_1_testes_rodar_testes",
+      "fromNode": "n_testes_rodar_testes_rationale_1",
+      "toNode": "n_testes_rodar_testes",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_enum",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_enum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_dataclasses",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_dataclasses",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_typing",
+      "fromNode": "n_src_arvore",
+      "toNode": "n_typing",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_arvore",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_arvore",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_arvore",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_arvore",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_arvore_rationale_1_src_arvore",
+      "fromNode": "n_src_arvore_rationale_1",
+      "toNode": "n_src_arvore",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_sys",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_sys",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_os",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_os",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_sintatico",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_sintatico",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_antlr4",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_antlr4",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_comum",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_comum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_src_lexico",
+      "fromNode": "n_src_sintatico",
+      "toNode": "n_src_lexico",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_sintatico_rationale_1_src_sintatico",
+      "fromNode": "n_src_sintatico_rationale_1",
+      "toNode": "n_src_sintatico",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_os",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_os",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_sys",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_sys",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_src_comum",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_src_comum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_antlr4",
+      "fromNode": "n_src_lexico",
+      "toNode": "n_antlr4",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_lexico",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_lexico",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_lexico_rationale_1_src_lexico",
+      "fromNode": "n_src_lexico_rationale_1",
+      "toNode": "n_src_lexico",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_os",
+      "fromNode": "n_src_main",
+      "toNode": "n_os",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_sys",
+      "fromNode": "n_src_main",
+      "toNode": "n_sys",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_dataclasses",
+      "fromNode": "n_src_main",
+      "toNode": "n_dataclasses",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_typing",
+      "fromNode": "n_src_main",
+      "toNode": "n_typing",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_src_comum",
+      "fromNode": "n_src_main",
+      "toNode": "n_src_comum",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_main_rationale_1_src_main",
+      "fromNode": "n_src_main_rationale_1",
+      "toNode": "n_src_main",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_os",
+      "fromNode": "n_src_comum",
+      "toNode": "n_os",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_sys",
+      "fromNode": "n_src_comum",
+      "toNode": "n_sys",
+      "label": "imports [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_moleculedsllexer",
+      "fromNode": "n_src_comum",
+      "toNode": "n_moleculedsllexer",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_moleculedslparser",
+      "fromNode": "n_src_comum",
+      "toNode": "n_moleculedslparser",
+      "label": "imports_from [EXTRACTED]"
+    },
+    {
+      "id": "e_src_comum_rationale_1_src_comum",
+      "fromNode": "n_src_comum_rationale_1",
+      "toNode": "n_src_comum",
+      "label": "rationale_for [EXTRACTED]"
+    },
+    {
+      "id": "e_gerar_gerar_sh__entry",
+      "fromNode": "n_gerar",
+      "toNode": "n_gerar_sh__entry",
+      "label": "contains [EXTRACTED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_arvore_aneldecl",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_arvore_aneldecl",
+      "label": "uses [INFERRED]"
+    },
+    {
+      "id": "e_src_sintatico_imprimir_arvore_src_arvore_aneldecl",
+      "fromNode": "n_src_sintatico_imprimir_arvore",
+      "toNode": "n_src_arvore_aneldecl",
+      "label": "uses [INFERRED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_arvore_atomodecl",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_arvore_atomodecl",
+      "label": "uses [INFERRED]"
+    },
+    {
+      "id": "e_src_sintatico_imprimir_arvore_src_arvore_atomodecl",
+      "fromNode": "n_src_sintatico_imprimir_arvore",
+      "toNode": "n_src_arvore_atomodecl",
+      "label": "uses [INFERRED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_arvore_ligacaodecl",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_arvore_ligacaodecl",
+      "label": "uses [INFERRED]"
+    },
+    {
+      "id": "e_src_sintatico_imprimir_arvore_src_arvore_ligacaodecl",
+      "fromNode": "n_src_sintatico_imprimir_arvore",
+      "toNode": "n_src_arvore_ligacaodecl",
+      "label": "uses [INFERRED]"
+    },
+    {
+      "id": "e_src_construtor_ast_construtorast_src_arvore_molecula",
+      "fromNode": "n_src_construtor_ast_construtorast",
+      "toNode": "n_src_arvore_molecula",
+      "label": "uses [INFERRED]"
+    }
+  ]
+}

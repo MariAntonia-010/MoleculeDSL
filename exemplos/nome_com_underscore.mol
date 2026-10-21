@@ -1,0 +1,6 @@
+molecule "Methanol" {
+    atom C as carbono_1
+    atom O as oxigenio_1
+
+    bond carbono_1-oxigenio_1
+}

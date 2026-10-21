@@ -1,0 +1,6 @@
+// esperado: Erro semântico
+molecule "Test" {
+    atom C as c1
+    atom C as c2
+    ring c1 c2 c1
+}

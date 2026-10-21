@@ -1,0 +1,7 @@
+// esperado: Erro sintático
+molecule "A" {
+    atom H
+}
+molecule "B" {
+    atom O
+}

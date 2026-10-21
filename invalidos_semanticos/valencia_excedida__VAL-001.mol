@@ -1,0 +1,6 @@
+// esperado: Erro semântico
+molecule "Test" {
+    atom C
+    5x atom H
+    bond C-H x5
+}

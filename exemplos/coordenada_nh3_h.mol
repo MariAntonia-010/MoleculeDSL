@@ -1,0 +1,12 @@
+molecule "AmmoniaProton" {
+    atom N as n1
+    atom H as h1
+    atom H as h2
+    atom H as h3
+    atom H(+1) as hp
+
+    bond n1-h1
+    bond n1-h2
+    bond n1-h3
+    bond n1->hp      // N doa o par livre para H+
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico [STRUCT-005] na linha 4, coluna 4: o átomo O#1 não pode se ligar a ele mesmo
+molecule "Oxygen" {
+    atom O
+    bond O-O
+}

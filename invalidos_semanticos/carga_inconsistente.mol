@@ -1,0 +1,6 @@
+// esperado: Erro semântico [CARGA-001] na linha 3, coluna 4: O#1 com carga -1 deveria ter soma das ordens de ligação 1, mas tem 2
+molecule "Water" {
+    atom O(-1)
+    2x atom H
+    bond O-H x2
+}

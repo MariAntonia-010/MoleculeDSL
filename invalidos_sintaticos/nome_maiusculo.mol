@@ -1,0 +1,4 @@
+// esperado: Erro sintático
+molecule "Water" {
+    atom O as O1
+}

@@ -1,0 +1,5 @@
+molecule "Water" {
+    atom O
+    2x atom H
+    bond O-H x2
+}

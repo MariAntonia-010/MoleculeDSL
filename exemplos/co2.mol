@@ -1,0 +1,6 @@
+molecule "CarbonDioxide" {
+    atom C
+    2x atom O
+
+    bond C=O x2
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico
+molecule "Test" {
+    atom C as c1
+    bond c1-c9
+}

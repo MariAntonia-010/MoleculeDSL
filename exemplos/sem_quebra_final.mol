@@ -1,0 +1,4 @@
+molecule "Hydrogen" {
+    2x atom H
+    bond H-H
+}

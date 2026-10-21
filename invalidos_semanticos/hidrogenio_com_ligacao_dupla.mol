@@ -1,0 +1,7 @@
+// esperado: Erro semântico [BOND-001] na linha 5, coluna 4: H só faz ligação simples, mas H#1 está numa ligação dupla
+molecule "Water" {
+    atom O
+    2x atom H
+    bond O=H
+    bond O-H
+}

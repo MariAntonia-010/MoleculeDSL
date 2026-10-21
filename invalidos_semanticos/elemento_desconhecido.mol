@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ELEM-001] na linha 3, coluna 4: elemento desconhecido 'Xx'
+molecule "Unknown" {
+    atom Xx
+    atom O
+    bond Xx-O
+}

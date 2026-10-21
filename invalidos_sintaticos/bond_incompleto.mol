@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 3, coluna 11: esperado elemento ou nome de átomo na ligação
+molecule "Water" {
+    bond H-
+}

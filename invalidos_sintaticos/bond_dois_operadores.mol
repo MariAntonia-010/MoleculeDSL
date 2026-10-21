@@ -1,0 +1,4 @@
+// esperado: Erro sintático
+molecule "Water" {
+    bond H--O
+}

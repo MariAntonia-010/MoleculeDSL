@@ -1,0 +1,6 @@
+molecule "TableSalt" {
+    atom Na
+    atom Cl
+
+    bond Na-Cl
+}

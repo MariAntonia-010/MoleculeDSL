@@ -1,0 +1,3 @@
+// esperado: Erro semântico
+molecule "Vazia" {
+}

@@ -1,0 +1,8 @@
+// cabecalho
+molecule "Water" { // abre
+    atom O // oxigenio
+    2x atom H
+    // linha so de comentario
+    bond O-H x2
+}
+// fim

@@ -1,0 +1,4 @@
+// esperado: Erro semântico
+molecule "Test" {
+    atom Xx
+}

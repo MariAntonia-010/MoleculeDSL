@@ -1,0 +1,16 @@
+// Ligação coordenada (->), do doador (N) para o receptor (B).
+// Com 4 ligações cada, N fica com carga +1 e B com -1.
+molecule "Ammonia borane" {
+    atom N(+1)
+    atom B(-1)
+    3x atom H as hn
+    3x atom H as hb
+
+    bond N-hn1
+    bond N-hn2
+    bond N-hn3
+    bond B-hb1
+    bond B-hb2
+    bond B-hb3
+    bond N->B
+}

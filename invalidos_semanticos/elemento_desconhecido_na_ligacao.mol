@@ -1,0 +1,7 @@
+// esperado: Erro semântico [ELEM-001] na linha 6, coluna 11: elemento desconhecido 'Hx'
+molecule "Water" {
+    atom O
+    atom H
+    bond H-O
+    bond O-Hx
+}

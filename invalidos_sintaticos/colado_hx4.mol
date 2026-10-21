@@ -1,0 +1,6 @@
+// esperado: Erro sintático
+molecule "Methane" {
+    atom C
+    4x atom H
+    bond C-Hx4
+}
