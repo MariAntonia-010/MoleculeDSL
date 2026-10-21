@@ -1,0 +1,7 @@
+// Ligação dupla (=)
+molecule "Carbon dioxide" {
+    atom C
+    2x atom O
+
+    bond C=O x2
+}

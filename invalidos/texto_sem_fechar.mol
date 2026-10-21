@@ -1,3 +1,4 @@
+// esperado: Erro léxico na linha 4, coluna 4
 molecule "Water" {
     atom O
     "

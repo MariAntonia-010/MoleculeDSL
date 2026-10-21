@@ -1,0 +1,5 @@
+// esperado: Erro sintático na linha 3, coluna 8: esperado símbolo de elemento depois de 'atom'
+molecule "Water" {
+    atom
+    atom H
+}

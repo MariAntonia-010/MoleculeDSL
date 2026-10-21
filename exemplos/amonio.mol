@@ -1,0 +1,7 @@
+// Carga formal positiva
+molecule "Ammonium" {
+    atom N(+1)
+    4x atom H
+
+    bond N-H x4
+}

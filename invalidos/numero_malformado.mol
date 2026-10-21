@@ -1,3 +1,4 @@
+// esperado: Erro léxico na linha 3, coluna 5
 molecule "Test" {
     3. atom H
 }

@@ -1,0 +1,9 @@
+// esperado: Erro sintático na linha 5, coluna 11: a carga precisa de sinal
+// esperado: Erro sintático na linha 6, coluna 11: esperado operador de ligação
+// esperado: Erro sintático na linha 7, coluna 14: um anel precisa de pelo menos três nomes de átomos
+molecule "Errors" {
+    atom N(1)
+    bond H O
+    ring c1 c2
+    atom O
+}
