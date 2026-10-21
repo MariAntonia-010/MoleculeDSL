@@ -34,7 +34,7 @@ sh gerar.sh
 No Windows, o mesmo comando de geração pode ser executado diretamente:
 
 ```powershell
-antlr4 -Dlanguage=Python3 -Xexact-output-dir -o gerado gramatica/MoleculeDSL.g4
+antlr4 -Dlanguage=Python3 -visitor -Xexact-output-dir -o gerado gramatica/MoleculeDSL.g4
 ```
 
 Para analisar um programa:
