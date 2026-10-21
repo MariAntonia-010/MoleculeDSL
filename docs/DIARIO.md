@@ -77,3 +77,39 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - Confirmar as valências e as regras marcadas como PENDENTE no levantamento de química.
 - Decidir se S e P podem fazer ligação dupla e tripla, como tratar ligação metálica e o que fazer com metais de transição.
 - Aprovar ou ajustar a ampliação da linguagem proposta nos planos.
+
+---
+
+## 21/10/2026 — Implementação da análise sintática
+
+### O que foi feito
+
+- Implementação dos marcos S1 a S8 do `plano_sintatico.md`, na branch `feat/sintatico-s1-s2`.
+- S1 e S2: a gramática passou a ser combinada (lexer e parser no mesmo `MoleculeDSL.g4`), com os tokens e as regras de ligações dupla, tripla, coordenada e metálica, carga formal, átomos com nome e anéis.
+- S3: o `gerar.sh` passou a gerar também o Visitor (`-visitor`).
+- S4: `src/sintatico.py`, com mensagens de erro sintático em português para cada regra, com linha e coluna.
+- S5: AST com a posição de cada nó (`src/ast_nos.py`), construída por um Visitor (`src/construtor_ast.py`).
+- S6: `src/main.py`, que encadeia as etapas, com as opções `--tokens` e `--ast`.
+- S7: um exemplo válido por construção nova em `exemplos/`, 14 casos em `invalidos_sintaticos/` e o script `testar.py`.
+- S8: gramática em EBNF na especificação e README atualizado.
+
+### Decisões tomadas
+
+- As decisões 1 a 6 do `plano_sintatico.md` foram implementadas como estavam propostas.
+- Se houver erro léxico, a análise sintática não roda, para não aparecerem erros em cascata.
+- Só é mostrado um erro sintático por linha. Os outros erros da mesma linha quase sempre eram consequência da recuperação de erros do ANTLR.
+- Quando falta algo no fim de uma linha, o erro aponta para logo depois do último token dessa linha, e não para o começo da linha seguinte, como o ANTLR faria.
+- Na AST, os dois lados de uma ligação e os átomos de um anel guardam a própria posição e se são um elemento ou um nome. Isso vai permitir apontar a coluna exata nos erros semânticos.
+- Códigos de saída: 0 sucesso, 1 erro léxico ou sintático e 2 reservado para erro semântico. O `main.py` lê as opções sem o `argparse`, porque ele sai com código 2 quando os argumentos estão errados.
+- Cada arquivo inválido diz o erro esperado em linhas `// esperado: ...`, e o `testar.py` confere a mensagem, a linha e a coluna.
+
+### Dificuldades encontradas
+
+- Com a gramática combinada, o ANTLR passou a gerar a classe `MoleculeDSLLexer` em vez de `MoleculeDSL`, e foi preciso ajustar o `lexico.py`.
+- A recuperação de erros do ANTLR às vezes "conserta" o programa de um jeito inesperado. Por exemplo, um `atom` sem elemento seguido de `bond H O` na linha de baixo faz o `H` virar o elemento do `atom`, e o erro da segunda linha aparece como comando inválido.
+
+### Pendências
+
+- Combinar com o grupo a ampliação da linguagem antes de abrir o pull request.
+- Implementar a análise semântica (`plano_semantico.md`), incluindo a expansão de `4x atom H as h` em `h1` a `h4`, que os exemplos novos já usam.
+- Fazer os novos slides.

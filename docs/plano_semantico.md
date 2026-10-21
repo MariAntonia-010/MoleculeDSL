@@ -11,7 +11,7 @@ Base das regras: separar a gramática (a estrutura é válida?) da semântica (a
 |---|---|
 | Ligação simples, dupla, tripla | `-`, `=`, `#` |
 | Ligação coordenada (dativa) | `->` (do doador para o receptor) |
-| Ligação metálica | `~` ou bloco `metal { ... }` |
+| Ligação metálica | `~` (o bloco `metal { ... }` ficou de fora, ver decisão 3 do `plano_sintatico.md`) |
 | Carga formal | `atom N(+1)`, `atom O(-1)` |
 | Átomos com nome | `atom O as o1` |
 | Anel | `ring c1 c2 c3 ...` |
