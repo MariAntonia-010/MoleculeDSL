@@ -120,6 +120,7 @@ class ErroSintatico(ErrorListener):
 
 
 def analisar(caminho):
+    # Devolve a árvore sintática, ou None se houver erro léxico ou sintático
     entrada = FileStream(caminho, encoding="utf-8")
 
     lexer = MoleculeDSLLexer(entrada)
@@ -132,7 +133,7 @@ def analisar(caminho):
 
     # Com erro léxico, a análise sintática só geraria erros em cascata
     if erros_lexicos.erros:
-        return False
+        return None
 
     parser = MoleculeDSLParser(fluxo)
     parser.removeErrorListeners()
@@ -142,12 +143,9 @@ def analisar(caminho):
     arvore = parser.programa()
 
     if erros_sintaticos.erros:
-        return False
+        return None
 
-    print(arvore.toStringTree(recog=parser))
-    print("\nAnálise sintática concluída sem erros")
-
-    return True
+    return arvore
 
 
 def main():
@@ -161,10 +159,13 @@ def main():
         print(f"Arquivo não encontrado: {caminho}")
         sys.exit(1)
 
-    sucesso = analisar(caminho)
+    arvore = analisar(caminho)
 
-    if not sucesso:
+    if arvore is None:
         sys.exit(1)
+
+    print(arvore.toStringTree(recog=arvore.parser))
+    print("\nAnálise sintática concluída sem erros")
 
 
 if __name__ == "__main__":
