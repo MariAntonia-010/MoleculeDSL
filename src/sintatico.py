@@ -119,8 +119,8 @@ class ErroSintatico(ErrorListener):
         return f"esperado {lista}, encontrado {encontrado}", True
 
 
-def analisar(caminho):
-    # Devolve a árvore sintática, ou None se houver erro léxico ou sintático
+def tokenizar(caminho):
+    # Devolve o lexer, o fluxo de tokens já lido e se não houve erro léxico
     entrada = FileStream(caminho, encoding="utf-8")
 
     lexer = MoleculeDSLLexer(entrada)
@@ -131,10 +131,22 @@ def analisar(caminho):
     fluxo = CommonTokenStream(lexer)
     fluxo.fill()
 
+    return lexer, fluxo, not erros_lexicos.erros
+
+
+def analisar(caminho):
+    # Devolve a árvore sintática, ou None se houver erro léxico ou sintático
+    lexer, fluxo, sem_erro_lexico = tokenizar(caminho)
+
     # Com erro léxico, a análise sintática só geraria erros em cascata
-    if erros_lexicos.erros:
+    if not sem_erro_lexico:
         return None
 
+    return analisar_fluxo(fluxo)
+
+
+def analisar_fluxo(fluxo):
+    # Devolve a árvore sintática, ou None se houver erro sintático
     parser = MoleculeDSLParser(fluxo)
     parser.removeErrorListeners()
     erros_sintaticos = ErroSintatico()

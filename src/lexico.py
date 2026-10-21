@@ -38,6 +38,15 @@ def analisar(caminho):
     fluxo = CommonTokenStream(lexer)
     fluxo.fill()
 
+    imprimir_tokens(lexer, fluxo)
+
+    if erros.erros:
+        return False
+
+    return True
+
+
+def imprimir_tokens(lexer, fluxo):
     quantidade = 0
 
     for token in fluxo.tokens:
@@ -54,11 +63,6 @@ def analisar(caminho):
         quantidade += 1
 
     print(f"\n{quantidade} tokens reconhecidos")
-
-    if erros.erros:
-        return False
-
-    return True
 
 
 def main():
