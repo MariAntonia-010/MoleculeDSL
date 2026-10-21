@@ -1,0 +1,7 @@
+// esperado: Erro sintático na linha 5, coluna 4: multiplicador com X maiúsculo: escreva '4x'
+// esperado: Erro sintático na linha 6, coluna 13: repetição com X maiúsculo: escreva 'x4'
+molecule "Methane" {
+    atom C
+    4X atom H
+    bond C-H X4
+}

@@ -1,7 +1,7 @@
 import os
 import sys
 
-from antlr4 import FileStream, CommonTokenStream, Token
+from antlr4 import InputStream, CommonTokenStream, Token
 from antlr4.error.ErrorListener import ErrorListener
 
 
@@ -12,7 +12,11 @@ PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PASTA_GERADO = os.path.join(PASTA_RAIZ, "gerado")
 sys.path.insert(0, PASTA_GERADO)
 
-from MoleculeDSL import MoleculeDSL
+try:
+    from MoleculeDSLLexer import MoleculeDSLLexer
+except ModuleNotFoundError:
+    print("Código do ANTLR não encontrado em gerado/. Gere com: sh gerar.sh")
+    sys.exit(1)
 
 
 class ErroLexico(ErrorListener):
@@ -21,14 +25,55 @@ class ErroLexico(ErrorListener):
         self.erros = []
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        self.erros.append((line, column, msg))
-        print(f"Erro léxico na linha {line}, coluna {column}: {msg}")
+        # Substitui a mensagem do ANTLR ("token recognition error") por
+        # uma em português, a partir do primeiro caractere não reconhecido
+        caractere = recognizer._input.getText(e.startIndex, e.startIndex)
+        mensagem = traduzir_erro_lexico(caractere)
+
+        self.erros.append((line, column, mensagem))
+        print(f"Erro léxico na linha {line}, coluna {column}: {mensagem}")
+
+
+def traduzir_erro_lexico(caractere):
+    if not caractere:
+        return "fim do arquivo inesperado"
+    if caractere == '"':
+        return "texto sem aspas de fechamento: o texto precisa terminar na mesma linha"
+    if caractere == ".":
+        return "'.' fora de um número real (um número real é escrito como 3.5)"
+    if caractere.isprintable() and not caractere.isspace():
+        return f"caractere inválido '{caractere}'"
+    return f"caractere invisível inválido (U+{ord(caractere):04X})"
+
+
+def ler_arquivo(caminho):
+    # Devolve o conteúdo pronto para o lexer, ou None se o arquivo não
+    # estiver em UTF-8. O BOM que alguns editores do Windows colocam no
+    # início do arquivo é ignorado.
+    with open(caminho, "rb") as arquivo:
+        dados = arquivo.read()
+
+    try:
+        return InputStream(dados.decode("utf-8-sig"))
+    except UnicodeDecodeError as e:
+        # Coluna em caracteres, como nos outros erros, e não em bytes
+        linha = dados.count(b"\n", 0, e.start) + 1
+        inicio_linha = dados.rfind(b"\n", 0, e.start) + 1
+        coluna = len(dados[inicio_linha:e.start].decode("utf-8-sig"))
+        print(
+            f"Erro léxico na linha {linha}, coluna {coluna}: o arquivo precisa "
+            "estar salvo em UTF-8"
+        )
+        return None
 
 
 def analisar(caminho):
-    entrada = FileStream(caminho, encoding="utf-8")
+    entrada = ler_arquivo(caminho)
 
-    lexer = MoleculeDSL(entrada)
+    if entrada is None:
+        return False
+
+    lexer = MoleculeDSLLexer(entrada)
 
     # Substitui a mensagem padrão de erro do ANTLR
     lexer.removeErrorListeners()
@@ -38,6 +83,15 @@ def analisar(caminho):
     fluxo = CommonTokenStream(lexer)
     fluxo.fill()
 
+    imprimir_tokens(lexer, fluxo)
+
+    if erros.erros:
+        return False
+
+    return True
+
+
+def imprimir_tokens(lexer, fluxo):
     quantidade = 0
 
     for token in fluxo.tokens:
@@ -54,11 +108,6 @@ def analisar(caminho):
         quantidade += 1
 
     print(f"\n{quantidade} tokens reconhecidos")
-
-    if erros.erros:
-        return False
-
-    return True
 
 
 def main():

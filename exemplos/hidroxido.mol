@@ -1,0 +1,7 @@
+// Carga formal negativa
+molecule "Hydroxide" {
+    atom O(-1)
+    atom H
+
+    bond O-H
+}
