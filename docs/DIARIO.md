@@ -161,3 +161,27 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 
 - OCT-001 e M5 (tipos de ligação), que dependem dos limites de eletronegatividade (F1) e de decisões do grupo.
 - Valências de Br, I e dos demais elementos (B7), ligações múltiplas de S e P (E6) e ligação metálica (H3).
+
+---
+
+## 21/10/2026 — Revisão da análise sintática
+
+### O que foi feito
+
+- Revisão do código da branch `feat/sintatico-s1-s2` antes do pull request, com testes de casos que ainda não estavam cobertos: arquivo com BOM, arquivo fora de UTF-8, acentos no nome da molécula, tabulação e variações de espaço no multiplicador e na repetição.
+- O BOM no início do arquivo passou a ser ignorado. Antes ele gerava um erro léxico na coluna 0 com um caractere invisível.
+- Um arquivo fora de UTF-8 passou a gerar um erro léxico com linha e coluna, em vez de um traceback do Python. A coluna é contada em caracteres, como nos outros erros.
+- Sem a pasta `gerado/`, o programa pede para rodar o `sh gerar.sh`, em vez de mostrar um traceback.
+- As mensagens de erro léxico passaram a ser em português, como `caractere inválido '@'`, em vez do `token recognition error` do ANTLR.
+- Os erros de espaço mais comuns no multiplicador e na repetição (`bond C-Hx4`, `x 4`, `4 x atom`, `4 atom`, `x` sem número, `X` maiúsculo e `x4` fora de um `bond`) ganharam mensagens próprias, em vez de "comando inválido".
+- A recuperação de erros do ANTLR não apaga mais o token que começa o comando seguinte (`atom`, `bond`, `ring`, multiplicador ou `}`). Isso resolve o caso registrado na entrada anterior, em que um erro estragava a mensagem da linha de baixo.
+- Novos casos de teste: 2 em `exemplos/`, 2 em `invalidos/` e 9 em `invalidos_sintaticos/`. Os casos léxicos antigos passaram a conferir também a mensagem.
+
+### Decisões tomadas
+
+- As mensagens de espaço só aparecem quando o contexto deixa claro o que se queria escrever, por exemplo um número logo depois da segunda referência de um `bond`. Nos outros casos continua a mensagem de comando inválido.
+- O `testar.py` lê as linhas `// esperado` ignorando o BOM e os bytes fora de UTF-8, para poder testar esses casos.
+
+### Pendências
+
+- Não há teste automático para a falta da pasta `gerado/`, porque o `testar.py` roda sempre com ela. O caso foi conferido à mão.

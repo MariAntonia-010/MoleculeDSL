@@ -1,4 +1,4 @@
-// esperado: Erro léxico na linha 4, coluna 4
+// esperado: Erro léxico na linha 4, coluna 4: caractere inválido '@'
 molecule "Water" {
     atom O
     @

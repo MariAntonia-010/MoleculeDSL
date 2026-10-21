@@ -48,7 +48,8 @@ def rodar(caminho):
 
 
 def erros_esperados(caminho):
-    with open(caminho, encoding="utf-8") as arquivo:
+    # Os casos de BOM e de arquivo fora de UTF-8 também precisam ser lidos
+    with open(caminho, encoding="utf-8-sig", errors="replace") as arquivo:
         linhas = arquivo.read().splitlines()
     return [
         linha[len(MARCA_ESPERADO):].strip()

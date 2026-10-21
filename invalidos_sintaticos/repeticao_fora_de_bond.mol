@@ -1,0 +1,6 @@
+// esperado: Erro sintático na linha 4, coluna 4: a repetição 'x4' só pode vir no fim de um 'bond'
+molecule "Methane" {
+    atom C
+    x4 atom H
+    bond C-H x4
+}
