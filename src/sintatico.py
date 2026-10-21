@@ -1,11 +1,11 @@
 import os
 import sys
 
-from antlr4 import FileStream, CommonTokenStream, Token
+from antlr4 import CommonTokenStream, Token
 from antlr4.error.ErrorListener import ErrorListener
 
 # lexico.py adiciona a pasta "gerado" ao caminho de importação
-from lexico import ErroLexico
+from lexico import ErroLexico, ler_arquivo
 from MoleculeDSLLexer import MoleculeDSLLexer
 from MoleculeDSLParser import MoleculeDSLParser
 
@@ -120,8 +120,12 @@ class ErroSintatico(ErrorListener):
 
 
 def tokenizar(caminho):
-    # Devolve o lexer, o fluxo de tokens já lido e se não houve erro léxico
-    entrada = FileStream(caminho, encoding="utf-8")
+    # Devolve o lexer, o fluxo de tokens já lido e se não houve erro léxico.
+    # Se o arquivo não puder ser lido, o lexer e o fluxo são None.
+    entrada = ler_arquivo(caminho)
+
+    if entrada is None:
+        return None, None, False
 
     lexer = MoleculeDSLLexer(entrada)
     lexer.removeErrorListeners()

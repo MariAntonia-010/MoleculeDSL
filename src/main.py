@@ -47,7 +47,7 @@ def compilar(caminho, opcoes):
     # Etapas encadeadas: cada uma só roda se a anterior não teve erro
     lexer, fluxo, sem_erro_lexico = tokenizar(caminho)
 
-    if "--tokens" in opcoes:
+    if "--tokens" in opcoes and lexer is not None:
         imprimir_tokens(lexer, fluxo)
 
     if not sem_erro_lexico:
