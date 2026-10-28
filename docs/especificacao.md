@@ -81,7 +81,7 @@ Declara um átomo dentro da molécula.
 atom O
 ```
 
-Também é possível indicar uma quantidade:
+Também é possível indicar uma quantidade, de 1 a 1000:
 
 ```text
 4x atom H
@@ -113,7 +113,7 @@ bond H-O
 bond c1=c2
 ```
 
-Uma ligação também pode ser repetida. A repetição precisa estar separada por espaço: em `bond C-Hx4`, o texto `Hx` seria lido como símbolo de elemento. Esse e os outros erros comuns de escrita do multiplicador e da repetição (`4 x`, `4 atom`, `x 4`, `x` sem número, `X` maiúsculo) têm mensagem própria, que mostra como escrever.
+Uma ligação também pode ser repetida, de 1 a 1000 vezes. A repetição precisa estar separada por espaço: em `bond C-Hx4`, o texto `Hx` seria lido como símbolo de elemento. Esse e os outros erros comuns de escrita do multiplicador e da repetição (`4 x`, `4 atom`, `x 4`, `x` sem número, `X` maiúsculo) têm mensagem própria, que mostra como escrever.
 
 ```text
 bond C-H x4

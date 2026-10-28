@@ -67,6 +67,17 @@ python src/sintatico.py exemplos/agua.mol       # árvore sintática do ANTLR
 python src/construtor_ast.py exemplos/agua.mol  # AST
 ```
 
+## Desenho das árvores
+
+O `src/desenhar_arvore.py` gera um desenho em SVG da árvore sintática do ANTLR ou da AST, sem precisar de nenhuma biblioteca de desenho:
+
+```bash
+python src/desenhar_arvore.py exemplos/agua.mol --tipo sintatica
+python src/desenhar_arvore.py exemplos/agua.mol --tipo ast
+```
+
+Por padrão, o SVG é salvo ao lado do arquivo `.mol`, como `exemplos/agua.sintatica.svg`, e pode ser aberto no navegador. A opção `-o` escolhe outro caminho. Esses arquivos estão no `.gitignore`. Se o programa tiver erro léxico ou sintático, o desenho não é gerado.
+
 ## Fase atual do projeto
 
 As análises léxica e sintática estão implementadas:
