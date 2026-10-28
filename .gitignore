@@ -2,3 +2,6 @@ gerado/
 *.tokens
 *.interp
 __pycache__/
+# Desenhos gerados pelo src/desenhar_arvore.py
+*.sintatica.svg
+*.ast.svg

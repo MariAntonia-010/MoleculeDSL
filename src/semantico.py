@@ -13,6 +13,11 @@ ARQUIVO_VALENCIAS = os.path.join(PASTA_RAIZ, "regras", "valencias.json")
 ERRO = "erro"
 AVISO = "aviso"
 
+# Maior quantidade aceita em "4x atom" e "x4". A linguagem é para moléculas
+# simples, e cada átomo vira um objeto no modelo: sem limite, um número
+# muito grande faria o programa travar.
+LIMITE_QUANTIDADE = 1000
+
 
 def carregar_elementos():
     with open(ARQUIVO_ELEMENTOS, encoding="utf-8") as arquivo:
@@ -61,6 +66,7 @@ class AnalisadorSemantico:
 
         # Declarações que já deram erro: citá-las não gera outro erro
         self.nomes_invalidos = set()
+        self.prefixos_invalidos = set()
         self.elementos_invalidos = set()
 
     def erro(self, id_regra, no, mensagem):
@@ -108,6 +114,15 @@ class AnalisadorSemantico:
             self.marcar_invalido(decl)
             return
 
+        if decl.multiplicador > LIMITE_QUANTIDADE:
+            self.erro(
+                "STRUCT-007",
+                decl,
+                f"a quantidade de átomos pode ser no máximo {LIMITE_QUANTIDADE}",
+            )
+            self.marcar_invalido(decl)
+            return
+
         if decl.elemento not in self.elementos:
             self.erro("ELEM-001", decl, f"elemento desconhecido '{decl.elemento}'")
             self.marcar_invalido(decl)
@@ -147,8 +162,18 @@ class AnalisadorSemantico:
         self.elementos_invalidos.add(decl.elemento)
         if decl.nome is not None:
             self.nomes_invalidos.add(decl.nome)
-            for i in range(max(decl.multiplicador, 0)):
-                self.nomes_invalidos.add(f"{decl.nome}{i + 1}")
+            # Com quantidade, os nomes seriam prefixo + número (h1, h2...).
+            # Guarda só o prefixo, para não percorrer uma quantidade enorme.
+            if decl.multiplicador != 1:
+                self.prefixos_invalidos.add(decl.nome)
+
+    def nome_invalido(self, texto):
+        if texto in self.nomes_invalidos:
+            return True
+        return any(
+            texto.startswith(prefixo) and texto[len(prefixo):].isdigit()
+            for prefixo in self.prefixos_invalidos
+        )
 
     # ---------- ligações ----------
 
@@ -164,7 +189,7 @@ class AnalisadorSemantico:
             if ref.texto in self.por_nome:
                 atomo = self.por_nome[ref.texto]
             else:
-                if ref.texto not in self.nomes_invalidos:
+                if not self.nome_invalido(ref.texto):
                     self.erro("STRUCT-001", ref, f"nenhum átomo se chama '{ref.texto}'")
                 return None
         else:
@@ -200,6 +225,14 @@ class AnalisadorSemantico:
     def declarar_ligacao(self, decl):
         if decl.repeticoes < 1:
             self.erro("STRUCT-007", decl, "a repetição da ligação precisa ser pelo menos 1")
+            return
+
+        if decl.repeticoes > LIMITE_QUANTIDADE:
+            self.erro(
+                "STRUCT-007",
+                decl,
+                f"a repetição da ligação pode ser no máximo {LIMITE_QUANTIDADE}",
+            )
             return
 
         if decl.repeticoes > 1 and self.fixo(decl.origem) and self.fixo(decl.destino):

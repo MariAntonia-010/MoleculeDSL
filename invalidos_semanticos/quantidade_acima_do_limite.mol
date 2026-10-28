@@ -1,0 +1,8 @@
+// esperado: Erro semântico [STRUCT-007] na linha 4, coluna 4: a quantidade de átomos pode ser no máximo 1000
+// esperado: Erro semântico [STRUCT-007] na linha 6, coluna 4: a repetição da ligação pode ser no máximo 1000
+molecule "Big" {
+    99999999999x atom H as h
+    bond C-h7
+    bond C-H x5000
+    atom C
+}

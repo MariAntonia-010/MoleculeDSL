@@ -185,3 +185,23 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 ### Pendências
 
 - Não há teste automático para a falta da pasta `gerado/`, porque o `testar.py` roda sempre com ela. O caso foi conferido à mão.
+
+---
+
+## 28/10/2026 — Pendências pequenas
+
+### O que foi feito
+
+- O `src/desenhar_arvore.py`, que tinha entrado no repositório sem documentação, foi descrito no README.
+- Os SVGs gerados por ele ao lado dos `.mol` (`*.sintatica.svg` e `*.ast.svg`) foram colocados no `.gitignore`.
+- A quantidade de átomos e a repetição de ligações passaram a ter limite de 1000 (STRUCT-007). Antes, um número muito grande, como `99999999999x atom H`, fazia a semântica criar um átomo por unidade e o programa travava.
+- Caso novo em `invalidos_semanticos/quantidade_acima_do_limite.mol`.
+
+### Decisões tomadas
+
+- O limite é 1000 por declaração, porque a linguagem é para moléculas simples. Ele está na constante `LIMITE_QUANTIDADE` do `src/semantico.py`.
+- Uma declaração inválida com quantidade guarda só o prefixo do nome (`h`), e não a lista `h1`, `h2`..., para não precisar percorrer a quantidade inteira.
+
+### Pendências
+
+- Os avisos de valência saem um por átomo. Com `1000x atom O` sem ligações suficientes, são 1000 linhas de aviso. Vale agrupar por declaração, como já é feito no STRUCT-003.
