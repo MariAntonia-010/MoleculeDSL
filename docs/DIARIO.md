@@ -205,3 +205,33 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 ### Pendências
 
 - Os avisos de valência saem um por átomo. Com `1000x atom O` sem ligações suficientes, são 1000 linhas de aviso. Vale agrupar por declaração, como já é feito no STRUCT-003.
+
+---
+
+## 28/10/2026 — Consolidação de erros, AST e tipos de ligação
+
+### O que foi feito
+
+- Erros léxicos e sintáticos passaram a usar objetos estruturados, IDs
+  (`LEX-*` e `SIN-*`) e limite de dez mensagens por fase.
+- Testes automáticos para arquivo inexistente, pasta `gerado/` ausente e
+  limite de erros. A variável `MOLECULEDSL_GERADO` permite testar uma pasta
+  alternativa sem apagar o parser local.
+- AST tipada com `TipoReferencia`, união `Comando`, snapshots de quatro
+  exemplos e geração de SVG validada para todos os exemplos.
+- Classificação informativa de ligações por diferença de eletronegatividade,
+  com limites configuráveis em `regras/classificacao_ligacoes.json`.
+- Conferência do par livre do doador em ligações coordenadas. A validação do
+  orbital vazio no receptor continua pendente por falta de dados.
+- Avisos `VAL-002` de átomos equivalentes passaram a ser agrupados por
+  declaração e resultado.
+- Snapshots de `--modelo` cobrem ligações apolar, polar, iônica e metálica.
+
+### Decisões preservadas
+
+- Nenhum dado químico novo foi inventado; `elementos.json` e
+  `valencias.json` continuam limitados ao levantamento.
+- A classificação por eletronegatividade é informativa e não usa a regra
+  simplificada "metal + ametal".
+- OCT-001, ciclo sem `ring`, modelo químico de ligação metálica e solver não
+  foram decididos nesta etapa.

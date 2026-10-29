@@ -121,5 +121,5 @@ S1 a S5 cobrem o M1 e alimentam o M3 do `plano_semantico.md`, porque a AST com p
 
 ## Riscos
 - Colisões entre `NOME`, palavras-chave e `x4`: coberto por testes específicos.
-- A mudança de linguagem altera o contrato do projeto, então combine com a Maria antes de abrir PR.
+- Mudanças de sintaxe alteram o contrato do projeto e precisam de decisão do grupo.
 - Enunciado e prazo da disciplina ainda não foram conferidos.

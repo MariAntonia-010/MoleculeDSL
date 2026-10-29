@@ -34,7 +34,7 @@ molecule "Ciclohexano" {
 - Lexer com tokens novos para `= # -> ~`, carga, `as` e `ring`.
 - Trocar `lexer grammar` por `grammar` combinada, com regras de parser em minúsculas.
 - Gerar com `-visitor`.
-- Atualizar `especificacao.md` e `DIARIO.md`, registrando a reversão da exclusão de ligações duplas e triplas. Combinar com a Maria antes de abrir PR.
+- Atualizar `especificacao.md` e `DIARIO.md`, registrando a reversão da exclusão de ligações duplas e triplas. Alterações futuras no contrato da linguagem exigem decisão do grupo.
 
 ### M2: Dados químicos (`regras/*.json`)
 - Elementos: número atômico, elétrons de valência, valências múltiplas (N: 3 e 5; S: 2, 4 e 6), eletronegatividade e tipo (metal, ametal, semimetal).
@@ -118,7 +118,7 @@ M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8, fechando M1 a M5 antes de t
 ## Riscos e pendências
 - Ligação metálica e solver são as partes mais abertas.
 - O enunciado e o prazo da disciplina ainda não foram conferidos contra este plano.
-- A mudança de linguagem altera o contrato do projeto, então precisa ser combinada com a Maria.
+- Mudanças de sintaxe alteram o contrato do projeto e precisam de decisão do grupo.
 
 ## Fora do escopo
 Aromaticidade e visualização 3D.
