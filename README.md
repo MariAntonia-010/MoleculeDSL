@@ -146,8 +146,7 @@ O catálogo de códigos, causas e correções está em
 | `VAL-001` | valência excedida | erro |
 | `VAL-002` | valência incompleta | aviso |
 | `CARGA-001` | carga inconsistente com a valência | erro |
-| `COORD-001` | doador coordenado sem par livre | aviso |
-| `COORD-002` | dados insuficientes para conferir o doador | aviso |
+| `COORD-001` a `COORD-004` | par livre do doador e espaço eletrônico do receptor | aviso |
 | `METAL-001` | ligação `~` envolve participante não metálico | aviso |
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
 | `RING-004` | ciclo independente sem declaração `ring` | aviso |
@@ -216,7 +215,6 @@ estão implementados e testados.
 
 Continuam pendentes:
 
-- validação do orbital vazio no receptor coordenado;
 - valências ainda sem fonte e ligações múltiplas de S/P;
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
   `METAL-001` já avisa quando `~` envolve participante não metálico;

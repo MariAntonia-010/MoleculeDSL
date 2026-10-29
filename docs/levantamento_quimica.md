@@ -91,6 +91,7 @@ Arquivo gerado: `regras/elementos.json`, com os 118 elementos.
 | G2 | A IUPAC marca "ligação dativa" como obsoleto. Uma página afirma que "coordinate bond" é o termo preferido. Não consegui confirmar isso no Gold Book | PENDENTE | [Wikipedia](https://en.wikipedia.org/wiki/Coordinate_covalent_bond), não confirmado |
 | G3 | A imagem de "doador com par livre e receptor com orbital vazio" vem de livros didáticos, não da IUPAC. Exemplo clássico: NH₃ doando para BF₃ | FONTE (didática) | [Science Notes](https://sciencenotes.org/coordinate-covalent-bond-dative-bond/) |
 | G4 | Consequência para o compilador: o `->` conta como uma ligação de 2 elétrons na valência e na carga formal. Em NH₃→BF₃, isso dá N com 4 ligações (N⁺) e B com 4 ligações (B⁻), coerente com C3 | DERIVADA | G1 + C1 + C3 |
+| G5 | Para H, He e segundo período, espaço no receptor pode ser conferido pela quantidade de elétrons antes da doação contra dueto/octeto. Períodos posteriores ficam sem conclusão por causa de expansão de valência | DERIVADA | G3 + D1 a D4 |
 
 ## H. Ligação metálica
 

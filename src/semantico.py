@@ -478,7 +478,7 @@ class AnalisadorSemantico:
                 lig.classificacao = "iônica"
 
     def conferir_coordenadas(self):
-        """Confere se o doador tinha um par livre antes da ligação."""
+        """Confere o par livre do doador e o espaço eletrônico do receptor."""
         por_id = {a.id: a for a in self.modelo.atomos}
         ordem = self.valencias["ordem_ligacao"]
         totais = {a.id: 0 for a in self.modelo.atomos}
@@ -504,21 +504,58 @@ class AnalisadorSemantico:
                     f"não há dados suficientes para conferir o par livre de "
                     f"{doador.rotulo()}",
                 )
+            else:
+                # Antes da doação, a ligação coordenada ainda não contribuía
+                # para a ordem e a carga do doador era uma unidade menor.
+                ordem_antes = totais[doador.id] - ordem["COORDENADA"]
+                carga_antes = doador.carga - 1
+                eletrons_nao_ligantes = (
+                    eletrons_valencia - carga_antes - ordem_antes
+                )
+                if eletrons_nao_ligantes < 2:
+                    self.aviso(
+                        "COORD-001",
+                        lig,
+                        f"o doador {doador.rotulo()} não possui um par de "
+                        "elétrons livre para a ligação coordenada",
+                    )
+
+            receptor = por_id[lig.destino]
+            dados_receptor = self.dados_elementos[receptor.elemento]
+            numero_atomico = dados_receptor["numero_atomico"]
+            eletrons_valencia_receptor = dados_receptor["eletrons_valencia"]
+            if eletrons_valencia_receptor is None or numero_atomico > 10:
+                self.aviso(
+                    "COORD-004",
+                    lig,
+                    f"não há dados suficientes para conferir orbital vazio de "
+                    f"{receptor.rotulo()}",
+                )
                 continue
 
-            # Antes da doação, a ligação coordenada ainda não contribuía para
-            # a ordem e a carga formal do doador era uma unidade menor.
-            ordem_antes = totais[doador.id] - ordem["COORDENADA"]
-            carga_antes = doador.carga - 1
-            eletrons_nao_ligantes = (
-                eletrons_valencia - carga_antes - ordem_antes
+            # Antes de aceitar o par, a ordem era uma unidade menor e a carga
+            # formal do receptor era uma unidade maior. H e He seguem dueto;
+            # os demais elementos do segundo período, octeto.
+            ordem_antes_receptor = (
+                totais[receptor.id] - ordem["COORDENADA"]
             )
-            if eletrons_nao_ligantes < 2:
+            carga_antes_receptor = receptor.carga + 1
+            eletrons_nao_ligantes_receptor = (
+                eletrons_valencia_receptor
+                - carga_antes_receptor
+                - ordem_antes_receptor
+            )
+            eletrons_ao_redor = (
+                2 * ordem_antes_receptor
+                + eletrons_nao_ligantes_receptor
+            )
+            capacidade = 2 if numero_atomico <= 2 else 8
+            if eletrons_ao_redor >= capacidade:
                 self.aviso(
-                    "COORD-001",
+                    "COORD-003",
                     lig,
-                    f"o doador {doador.rotulo()} não possui um par de elétrons "
-                    "livre para a ligação coordenada",
+                    f"o receptor {receptor.rotulo()} não possui orbital vazio "
+                    "para receber o par de elétrons",
                 )
 
     def conferir_ligacoes_metalicas(self):

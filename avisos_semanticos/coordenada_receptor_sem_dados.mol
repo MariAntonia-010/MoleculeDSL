@@ -1,0 +1,11 @@
+// esperado: Aviso semântico [COORD-004] na linha 10, coluna 4: não há dados suficientes para conferir orbital vazio de fe (Fe#1)
+molecule "Receptor coordenado sem dados" {
+    atom N(+1) as doador
+    atom Fe(-1) as fe
+    3x atom H as h
+
+    bond doador-h1
+    bond doador-h2
+    bond doador-h3
+    bond doador->fe
+}

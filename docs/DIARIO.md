@@ -270,3 +270,15 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   de valência.
 - `exemplos/sodio_metalico.mol` permanece válido sem aviso; o caso entre
   ametais está em `avisos_semanticos/metalica_com_ametais.mol`.
+
+---
+
+## 29/10/2026 — Receptor da ligação coordenada
+
+- `COORD-003` avisa quando o receptor do primeiro ou segundo período já
+  atingia dueto/octeto antes de receber o par eletrônico.
+- `COORD-004` avisa que faltam dados para receptores de períodos posteriores,
+  evitando inferir expansão de valência ou orbitais disponíveis.
+- O aminoborano continua válido: o B tinha seis elétrons ao redor antes da
+  doação e espaço para receber o par do N.
+- Casos novos cobrem receptor sem espaço e receptor sem dados suficientes.

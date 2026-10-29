@@ -67,6 +67,8 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | CARGA-001 | Carga formal inconsistente com a valência | erro |
 | COORD-001 | Doador sem par livre para ligação coordenada | aviso |
 | COORD-002 | Dados insuficientes para conferir o par livre do doador | aviso |
+| COORD-003 | Receptor sem espaço eletrônico para receber o par | aviso |
+| COORD-004 | Dados insuficientes para conferir o receptor | aviso |
 | METAL-001 | Ligação metálica envolve participante fora de um bloco metálico | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
@@ -89,7 +91,7 @@ Implementado em parte:
 - Ligações são classificadas pela diferença de eletronegatividade como covalente apolar, covalente polar ou iônica. Os limites padrão 0,4 e 1,7 ficam em `regras/classificacao_ligacoes.json`; o resultado é informativo e aparece em `--modelo`.
 - Elemento sem eletronegatividade na fonte produz `não classificada`. Não se usa a regra "metal + ametal = sempre iônica".
 - O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
-- A disponibilidade de orbital vazio no receptor ainda não é conferida porque `regras/elementos.json` não contém esse dado de forma confiável.
+- Para H, He e elementos do segundo período, o receptor é conferido pela capacidade de dueto/octeto antes da doação. Falta de espaço gera COORD-003. Períodos posteriores geram COORD-004, pois expansão de valência e orbitais disponíveis exigem dados que a base não possui.
 - Ligações metálicas são identificadas no modelo e mantidas como informação de referência. `METAL-001` usa os blocos da PubChem para avisar quando `~` envolve participante não metálico. Elas continuam fora da classificação por eletronegatividade e da valência, conforme H3; um modelo próprio de sólido metálico permanece para a continuação.
 
 ### M6: Anéis
