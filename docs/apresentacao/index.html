@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Apresentação offline do projeto MoleculeDSL">
+  <title>MoleculeDSL — apresentação</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --surface: #0d1b2d;
+      --surface-2: #12243a;
+      --text: #edf7ff;
+      --muted: #9db1c8;
+      --line: #25405f;
+      --cyan: #5ce1e6;
+      --green: #9bea75;
+      --amber: #ffc857;
+      --red: #ff7b7b;
+      --shadow: 0 24px 70px rgb(0 0 0 / 28%);
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f3f7fb;
+      --surface: #ffffff;
+      --surface-2: #e9f1f8;
+      --text: #10243a;
+      --muted: #536b82;
+      --line: #c8d7e5;
+      --cyan: #087f8c;
+      --green: #377d22;
+      --amber: #9b6400;
+      --red: #b52d3a;
+      --shadow: 0 20px 60px rgb(39 69 95 / 16%);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 2%, rgb(92 225 230 / 10%), transparent 28rem),
+        radial-gradient(circle at 90% 16%, rgb(155 234 117 / 8%), transparent 25rem),
+        var(--bg);
+      color: var(--text);
+      font: 17px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .nav {
+      position: fixed;
+      z-index: 20;
+      inset: 0 0 auto;
+      height: 4.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 0 4vw;
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter: blur(18px);
+    }
+    .brand { font-weight: 850; letter-spacing: -.04em; }
+    .brand span { color: var(--cyan); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-left: auto;
+      overflow-x: auto;
+      white-space: nowrap;
+      color: var(--muted);
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+    }
+    .nav-links a { text-decoration: none; }
+    .nav-links a:hover { color: var(--cyan); }
+    .theme {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .4rem .7rem;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+    main { overflow: hidden; }
+    section {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+      padding: 6.5rem 0;
+    }
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      align-items: center;
+      gap: 4rem;
+      padding-top: 8rem;
+    }
+    .eyebrow {
+      margin: 0 0 1rem;
+      color: var(--cyan);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { margin-top: 0; line-height: 1.08; }
+    h1 {
+      max-width: 850px;
+      margin-bottom: 1.4rem;
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      letter-spacing: -.075em;
+    }
+    h1 span { color: var(--cyan); }
+    h2 {
+      max-width: 850px;
+      margin-bottom: 1.1rem;
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      letter-spacing: -.055em;
+    }
+    h3 { font-size: 1.2rem; }
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: clamp(1.1rem, 2.3vw, 1.45rem);
+    }
+    .meta { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 2rem; }
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .48rem .8rem;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: .83rem;
+    }
+    .molecule {
+      position: relative;
+      width: min(420px, 78vw);
+      aspect-ratio: 1;
+      margin: auto;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgb(92 225 230 / 10%), transparent 62%);
+      box-shadow: var(--shadow);
+    }
+    .orbit {
+      position: absolute;
+      inset: 15%;
+      border: 1px solid color-mix(in srgb, var(--cyan) 45%, transparent);
+      border-radius: 50%;
+      transform: rotate(var(--r));
+    }
+    .orbit::after {
+      content: "";
+      position: absolute;
+      top: -.42rem;
+      left: 48%;
+      width: .82rem;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 25px var(--green);
+    }
+    .nucleus {
+      position: absolute;
+      inset: 39%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--cyan);
+      color: #06202c;
+      font-size: 2rem;
+      font-weight: 900;
+      box-shadow: 0 0 55px rgb(92 225 230 / 40%);
+    }
+    .section-head { margin-bottom: 2.5rem; }
+    .section-head p { max-width: 760px; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+    .card {
+      grid-column: span 4;
+      padding: 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 1.25rem;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      box-shadow: var(--shadow);
+    }
+    .card.wide { grid-column: span 8; }
+    .card.half { grid-column: span 6; }
+    .card p { color: var(--muted); }
+    .number {
+      display: block;
+      color: var(--green);
+      font-size: 2.7rem;
+      font-weight: 850;
+      letter-spacing: -.05em;
+    }
+    pre {
+      margin: 0;
+      padding: 1.25rem;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      background: #07111f;
+      color: #dbeafe;
+      font: .87rem/1.65 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      tab-size: 4;
+    }
+    code .kw, .kw { color: #5ce1e6; }
+    code .str, .str { color: #ffc857; }
+    code .op, .op { color: #9bea75; }
+    .operator-table, .rules {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .94rem;
+    }
+    th, td {
+      padding: .8rem .7rem;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-size: .74rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    td:first-child { color: var(--cyan); font-family: monospace; font-weight: 800; }
+    .pipeline {
+      width: 100%;
+      height: auto;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 1.5rem;
+      background: var(--surface);
+    }
+    .pipeline text { fill: var(--text); font-family: system-ui, sans-serif; }
+    .pipeline .box { fill: var(--surface-2); stroke: var(--line); }
+    .pipeline .arrow { stroke: var(--cyan); }
+    .ast-frame {
+      overflow: auto;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 1.5rem;
+      background: #f8fafc;
+    }
+    .ast-frame img { display: block; width: 100%; min-width: 900px; }
+    .status { display: inline-flex; align-items: center; gap: .4rem; }
+    .dot { width: .55rem; aspect-ratio: 1; border-radius: 50%; background: var(--green); }
+    .tabs { display: flex; gap: .5rem; margin-bottom: .7rem; }
+    .tab {
+      padding: .55rem .9rem;
+      border: 1px solid var(--line);
+      border-radius: .7rem;
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .tab[aria-selected="true"] { background: var(--cyan); color: #06202c; border-color: transparent; }
+    .panel[hidden] { display: none; }
+    .error { border-left: 3px solid var(--red); }
+    .success { border-left: 3px solid var(--green); }
+    .metric {
+      grid-column: span 3;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .metric strong { font-size: 3.2rem; letter-spacing: -.06em; }
+    .sources { columns: 2; column-gap: 3rem; color: var(--muted); }
+    footer {
+      padding: 3rem 4vw;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+    }
+    @media (max-width: 850px) {
+      body { font-size: 16px; }
+      .nav-links { display: none; }
+      .theme { margin-left: auto; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .molecule { width: min(330px, 80vw); }
+      .card, .card.wide, .card.half, .metric { grid-column: 1 / -1; }
+      .sources { columns: 1; }
+      section { padding: 5rem 0; }
+    }
+    @media print {
+      .nav, .theme { display: none; }
+      section { break-inside: avoid; width: 94%; padding: 2rem 0; }
+      .hero { min-height: auto; }
+      pre { white-space: pre-wrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="brand">Molecule<span>DSL</span></div>
+    <nav class="nav-links" aria-label="Seções">
+      <a href="#problema">Problema</a>
+      <a href="#linguagem">Linguagem</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#ast">AST</a>
+      <a href="#semantica">Semântica</a>
+      <a href="#demo">Demo</a>
+      <a href="#testes">Testes</a>
+    </nav>
+    <button class="theme" type="button" aria-label="Alternar tema">◐</button>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div>
+        <p class="eyebrow">Projeto de Compiladores · 2026</p>
+        <h1>Molecule<span>DSL</span></h1>
+        <p class="lead">Uma linguagem pequena, legível e verificável para transformar descrições textuais de moléculas em um grafo químico analisado.</p>
+        <div class="meta">
+          <span class="pill">Equipe MoleculeDSL</span>
+          <span class="pill">Python 3.10+</span>
+          <span class="pill">ANTLR 4.13.2</span>
+          <span class="pill status"><span class="dot"></span>90 testes passando</span>
+        </div>
+      </div>
+      <div class="molecule" aria-label="Ilustração abstrata de uma molécula">
+        <div class="orbit" style="--r:0deg"></div>
+        <div class="orbit" style="--r:60deg"></div>
+        <div class="orbit" style="--r:120deg"></div>
+        <div class="nucleus">M</div>
+      </div>
+    </section>
+
+    <section id="problema">
+      <div class="section-head">
+        <p class="eyebrow">01 · problema</p>
+        <h2>Química em texto, sem coordenadas.</h2>
+        <p>A MoleculeDSL separa a intenção química da visualização. O usuário declara átomos e ligações; o compilador cuida da estrutura, da posição dos erros e das verificações disponíveis.</p>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <span class="number">Legível</span>
+          <p>Programas curtos, próximos da notação usada para explicar uma molécula.</p>
+        </article>
+        <article class="card">
+          <span class="number">Precisa</span>
+          <p>Todo diagnóstico aponta fase, código, linha, coluna e uma correção compreensível.</p>
+        </article>
+        <article class="card">
+          <span class="number">Auditável</span>
+          <p>Dados químicos só entram quando possuem fonte registrada no levantamento.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="linguagem">
+      <div class="section-head">
+        <p class="eyebrow">02 · linguagem</p>
+        <h2>Um vocabulário pequeno cobre casos expressivos.</h2>
+      </div>
+      <div class="grid">
+        <article class="card wide">
+          <h3>Água</h3>
+          <pre><code><span class="kw">molecule</span> <span class="str">"Water"</span> {
+    <span class="kw">atom</span> O
+    <span class="kw">atom</span> H
+    <span class="kw">atom</span> H
+
+    <span class="kw">bond</span> H<span class="op">-</span>O
+    <span class="kw">bond</span> O<span class="op">-</span>H
+}</code></pre>
+        </article>
+        <article class="card">
+          <h3>Operadores</h3>
+          <table class="operator-table">
+            <tr><th>Símbolo</th><th>Ligação</th></tr>
+            <tr><td>-</td><td>simples</td></tr>
+            <tr><td>=</td><td>dupla</td></tr>
+            <tr><td>#</td><td>tripla</td></tr>
+            <tr><td>-&gt;</td><td>coordenada</td></tr>
+            <tr><td>~</td><td>metálica</td></tr>
+          </table>
+        </article>
+        <article class="card half">
+          <h3>Anel nomeado</h3>
+          <pre><code><span class="kw">atom</span> C <span class="kw">as</span> c1
+<span class="kw">atom</span> C <span class="kw">as</span> c2
+<span class="kw">atom</span> C <span class="kw">as</span> c3
+<span class="kw">bond</span> c1-c2
+<span class="kw">bond</span> c2-c3
+<span class="kw">bond</span> c3-c1
+<span class="kw">ring</span> c1 c2 c3</code></pre>
+        </article>
+        <article class="card half">
+          <h3>Carga, quantidade e coordenação</h3>
+          <pre><code><span class="kw">atom</span> N(+1)
+<span class="kw">atom</span> B(-1)
+3x <span class="kw">atom</span> H <span class="kw">as</span> hn
+3x <span class="kw">atom</span> H <span class="kw">as</span> hb
+<span class="kw">bond</span> N<span class="op">-&gt;</span>B</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section id="pipeline">
+      <div class="section-head">
+        <p class="eyebrow">03 · pipeline</p>
+        <h2>Cada fase recebe uma entrada mais limpa.</h2>
+        <p>Se uma fase falha, as seguintes não rodam. Essa disciplina evita cascatas e preserva a origem real do problema.</p>
+      </div>
+      <svg class="pipeline" viewBox="0 0 1120 260" role="img" aria-label="Pipeline do compilador">
+        <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--cyan)"/></marker></defs>
+        <g transform="translate(25 70)">
+          <rect class="box" width="170" height="95" rx="18"/><text x="85" y="43" text-anchor="middle" font-size="19" font-weight="700">Lexer</text><text x="85" y="69" text-anchor="middle" font-size="13">tokens</text>
+        </g>
+        <path class="arrow" d="M205 118 H255" stroke-width="3" marker-end="url(#arrow)"/>
+        <g transform="translate(270 70)">
+          <rect class="box" width="170" height="95" rx="18"/><text x="85" y="43" text-anchor="middle" font-size="19" font-weight="700">Parser</text><text x="85" y="69" text-anchor="middle" font-size="13">parse tree</text>
+        </g>
+        <path class="arrow" d="M450 118 H500" stroke-width="3" marker-end="url(#arrow)"/>
+        <g transform="translate(515 70)">
+          <rect class="box" width="170" height="95" rx="18"/><text x="85" y="43" text-anchor="middle" font-size="19" font-weight="700">Visitor</text><text x="85" y="69" text-anchor="middle" font-size="13">AST própria</text>
+        </g>
+        <path class="arrow" d="M695 118 H745" stroke-width="3" marker-end="url(#arrow)"/>
+        <g transform="translate(760 70)">
+          <rect class="box" width="170" height="95" rx="18"/><text x="85" y="43" text-anchor="middle" font-size="19" font-weight="700">Modelo</text><text x="85" y="69" text-anchor="middle" font-size="13">grafo</text>
+        </g>
+        <path class="arrow" d="M940 118 H990" stroke-width="3" marker-end="url(#arrow)"/>
+        <g transform="translate(1005 70)">
+          <rect class="box" width="90" height="95" rx="18"/><text x="45" y="43" text-anchor="middle" font-size="16" font-weight="700">Semân.</text><text x="45" y="69" text-anchor="middle" font-size="13">0 / 2</text>
+        </g>
+        <text x="25" y="215" font-size="14">ANTLR 4: geração do lexer/parser + listeners e recuperação personalizados</text>
+      </svg>
+    </section>
+
+    <section id="antlr">
+      <div class="section-head">
+        <p class="eyebrow">04 · ANTLR 4</p>
+        <h2>Automação sem mensagens opacas.</h2>
+      </div>
+      <div class="grid">
+        <article class="card half">
+          <h3>O ANTLR entrega</h3>
+          <p>Lexer, parser LL(*), parse tree, visitor e recuperação padrão por inserção, remoção e sincronização.</p>
+        </article>
+        <article class="card half">
+          <h3>O projeto personaliza</h3>
+          <p>Listeners em português, IDs estáveis, limite de dez erros e uma estratégia que não descarta o início do próximo comando.</p>
+        </article>
+        <article class="card wide error">
+          <h3>Erro real</h3>
+          <pre>Erro sintático [SIN-004] na linha 3, coluna 10: esperado '}' para fechar a molécula</pre>
+        </article>
+        <article class="card">
+          <span class="number">1</span>
+          <p>código de saída para erros léxicos e sintáticos.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="ast">
+      <div class="section-head">
+        <p class="eyebrow">05 · AST</p>
+        <h2>A árvore contém conceitos, não pontuação.</h2>
+        <p>Dataclasses próprias preservam posições e quantificadores. A expansão para átomos e ligações individuais só acontece no modelo.</p>
+      </div>
+      <div class="ast-frame">
+        <img alt="AST real da água, gerada por desenhar_arvore.py" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDQ4IiBoZWlnaHQ9IjM2OCIgdmlld0JveD0iMCAwIDMwNDggMzY4Ij4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y4ZmFmYyIvPgo8c3R5bGU+dGV4dHtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtmb250LXNpemU6MTNweDtmaWxsOiMxNzIwMzN9Lm5ve2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzY0NzQ4YjtzdHJva2Utd2lkdGg6MS4zfS5hcmVzdGF7ZmlsbDpub25lO3N0cm9rZTojOTRhM2I4O3N0cm9rZS13aWR0aDoxLjN9LnRpdHVsb3tmb250LXNpemU6MTlweDtmb250LXdlaWdodDo3MDA7ZmlsbDojMGYxNzJhfTwvc3R5bGU+Cjx0ZXh0IGNsYXNzPSJ0aXR1bG8iIHg9IjMwIiB5PSIyNyI+TW9sZWN1bGVEU0wg4oCUIMOBcnZvcmUgU2ludMOhdGljYSBBYnN0cmF0YSAoQVNUKTwvdGV4dD4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSAxNTIzLjkgOTIuMCBMIDE1MjMuOSAxMTQuMCBMIDE1MjMuOSAxMTQuMCBMIDE1MjMuOSAxMzYuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE1MjMuOSAxNzQuMCBMIDE1MjMuOSAxOTYuMCBMIDI4MS41IDE5Ni4wIEwgMjgxLjUgMjE4LjAiLz4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSAyODEuNSAyNTYuMCBMIDI4MS41IDI3OC4wIEwgODMuNyAyNzguMCBMIDgzLjcgMzAwLjAiLz4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSAyODEuNSAyNTYuMCBMIDI4MS41IDI3OC4wIEwgMjMxLjYgMjc4LjAgTCAyMzEuNiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI4MS41IDI1Ni4wIEwgMjgxLjUgMjc4LjAgTCAzNjguNCAyNzguMCBMIDM2OC40IDMwMC4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gMjgxLjUgMjU2LjAgTCAyODEuNSAyNzguMCBMIDQ4My4wIDI3OC4wIEwgNDgzLjAgMzAwLjAiLz4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSAxNTIzLjkgMTc0LjAgTCAxNTIzLjkgMTk2LjAgTCA4MDYuNSAxOTYuMCBMIDgwNi41IDIxOC4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gODA2LjUgMjU2LjAgTCA4MDYuNSAyNzguMCBMIDYwOC43IDI3OC4wIEwgNjA4LjcgMzAwLjAiLz4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSA4MDYuNSAyNTYuMCBMIDgwNi41IDI3OC4wIEwgNzU2LjYgMjc4LjAgTCA3NTYuNiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDgwNi41IDI1Ni4wIEwgODA2LjUgMjc4LjAgTCA4OTMuNCAyNzguMCBMIDg5My40IDMwMC4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gODA2LjUgMjU2LjAgTCA4MDYuNSAyNzguMCBMIDEwMDguMCAyNzguMCBMIDEwMDguMCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE1MjMuOSAxNzQuMCBMIDE1MjMuOSAxOTYuMCBMIDEzMzEuNSAxOTYuMCBMIDEzMzEuNSAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzMzEuNSAyNTYuMCBMIDEzMzEuNSAyNzguMCBMIDExMzMuNyAyNzguMCBMIDExMzMuNyAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzMzEuNSAyNTYuMCBMIDEzMzEuNSAyNzguMCBMIDEyODEuNiAyNzguMCBMIDEyODEuNiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzMzEuNSAyNTYuMCBMIDEzMzEuNSAyNzguMCBMIDE0MTguNCAyNzguMCBMIDE0MTguNCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzMzEuNSAyNTYuMCBMIDEzMzEuNSAyNzguMCBMIDE1MzMuMCAyNzguMCBMIDE1MzMuMCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE1MjMuOSAxNzQuMCBMIDE1MjMuOSAxOTYuMCBMIDE5NTIuNyAxOTYuMCBMIDE5NTIuNyAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5NTIuNyAyNTYuMCBMIDE5NTIuNyAyNzguMCBMIDE2OTIuMCAyNzguMCBMIDE2OTIuMCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5NTIuNyAyNTYuMCBMIDE5NTIuNyAyNzguMCBMIDE4NzYuOSAyNzguMCBMIDE4NzYuOSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5NTIuNyAyNTYuMCBMIDE5NTIuNyAyNzguMCBMIDIwNjUuNSAyNzguMCBMIDIwNjUuNSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5NTIuNyAyNTYuMCBMIDE5NTIuNyAyNzguMCBMIDIyMzkuMyAyNzguMCBMIDIyMzkuMyAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE1MjMuOSAxNzQuMCBMIDE1MjMuOSAxOTYuMCBMIDI2NzAuMSAxOTYuMCBMIDI2NzAuMSAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI2NzAuMSAyNTYuMCBMIDI2NzAuMSAyNzguMCBMIDI0MDkuNCAyNzguMCBMIDI0MDkuNCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI2NzAuMSAyNTYuMCBMIDI2NzAuMSAyNzguMCBMIDI1OTQuMyAyNzguMCBMIDI1OTQuMyAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI2NzAuMSAyNTYuMCBMIDI2NzAuMSAyNzguMCBMIDI3ODIuOSAyNzguMCBMIDI3ODIuOSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI2NzAuMSAyNTYuMCBMIDI2NzAuMSAyNzguMCBMIDI5NTYuNyAyNzguMCBMIDI5NTYuNyAzMDAuMCIvPgo8cmVjdCBjbGFzcz0ibm8iIHg9IjE0NDguMCIgeT0iNTQuMCIgd2lkdGg9IjE1MS44IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTUyMy45IiB5PSI3Ny4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Nb2xlY3VsYTogJnF1b3Q7V2F0ZXImcXVvdDs8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMTQ4MS4zIiB5PSIxMzYuMCIgd2lkdGg9Ijg1LjIiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxNTIzLjkiIHk9IjE1OS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5jb21hbmRvczwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyMzUuMiIgeT0iMjE4LjAiIHdpZHRoPSI5Mi42IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMjgxLjUiIHk9IjI0MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BdG9tb0RlY2w8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMzAuMCIgeT0iMzAwLjAiIHdpZHRoPSIxMDcuNCIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjgzLjciIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5lbGVtZW50bzogTzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxNTkuNCIgeT0iMzAwLjAiIHdpZHRoPSIxNDQuNCIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjIzMS42IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bXVsdGlwbGljYWRvcjogMTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIzMjUuOCIgeT0iMzAwLjAiIHdpZHRoPSI4NS4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMzY4LjQiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5jYXJnYTogMDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSI0MzMuMCIgeT0iMzAwLjAiIHdpZHRoPSIxMDAuMCIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjQ4My4wIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bm9tZTogTm9uZTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSI3NjAuMiIgeT0iMjE4LjAiIHdpZHRoPSI5Mi42IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iODA2LjUiIHk9IjI0MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5BdG9tb0RlY2w8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iNTU1LjAiIHk9IjMwMC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSI2MDguNyIgeT0iMzIzLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmVsZW1lbnRvOiBIPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9IjY4NC40IiB5PSIzMDAuMCIgd2lkdGg9IjE0NC40IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iNzU2LjYiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5tdWx0aXBsaWNhZG9yOiAxPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9Ijg1MC44IiB5PSIzMDAuMCIgd2lkdGg9Ijg1LjIiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSI4OTMuNCIgeT0iMzIzLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmNhcmdhOiAwPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9Ijk1OC4wIiB5PSIzMDAuMCIgd2lkdGg9IjEwMC4wIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTAwOC4wIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bm9tZTogTm9uZTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxMjg1LjIiIHk9IjIxOC4wIiB3aWR0aD0iOTIuNiIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjEzMzEuNSIgeT0iMjQxLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkF0b21vRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxMDgwLjAiIHk9IjMwMC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxMTMzLjciIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5lbGVtZW50bzogSDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxMjA5LjQiIHk9IjMwMC4wIiB3aWR0aD0iMTQ0LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxMjgxLjYiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5tdWx0aXBsaWNhZG9yOiAxPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9IjEzNzUuOCIgeT0iMzAwLjAiIHdpZHRoPSI4NS4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTQxOC40IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Y2FyZ2E6IDA8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMTQ4My4wIiB5PSIzMDAuMCIgd2lkdGg9IjEwMC4wIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTUzMy4wIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bm9tZTogTm9uZTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxODk5LjAiIHk9IjIxOC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxOTUyLjciIHk9IjI0MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MaWdhY2FvRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxNjA1LjAiIHk9IjMwMC4wIiB3aWR0aD0iMTc0LjAiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxNjkyLjAiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcmlnZW06IEggKGVsZW1lbnRvKTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxODAxLjAiIHk9IjMwMC4wIiB3aWR0aD0iMTUxLjgiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxODc2LjkiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcGVyYWRvcjogU0lNUExFUzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxOTc0LjgiIHk9IjMwMC4wIiB3aWR0aD0iMTgxLjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyMDY1LjUiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5kZXN0aW5vOiBPIChlbGVtZW50byk8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMjE3OC4yIiB5PSIzMDAuMCIgd2lkdGg9IjEyMi4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMjIzOS4zIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+cmVwZXRpY29lczogMTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyNjE2LjQiIHk9IjIxOC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNjcwLjEiIHk9IjI0MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MaWdhY2FvRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyMzIyLjQiIHk9IjMwMC4wIiB3aWR0aD0iMTc0LjAiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNDA5LjQiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcmlnZW06IE8gKGVsZW1lbnRvKTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyNTE4LjQiIHk9IjMwMC4wIiB3aWR0aD0iMTUxLjgiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNTk0LjMiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcGVyYWRvcjogU0lNUExFUzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyNjkyLjIiIHk9IjMwMC4wIiB3aWR0aD0iMTgxLjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNzgyLjkiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5kZXN0aW5vOiBIIChlbGVtZW50byk8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMjg5NS42IiB5PSIzMDAuMCIgd2lkdGg9IjEyMi4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMjk1Ni43IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+cmVwZXRpY29lczogMTwvdGV4dD4KPC9zdmc+">
+      </div>
+    </section>
+
+    <section id="semantica">
+      <div class="section-head">
+        <p class="eyebrow">06 · semântica</p>
+        <h2>Estrutura primeiro. Química depois.</h2>
+        <p>As verificações avançam por etapas e só usam dados químicos com fonte registrada.</p>
+      </div>
+      <div class="grid">
+        <article class="card wide">
+          <table class="rules">
+            <tr><th>ID</th><th>Regra</th><th>Severidade</th></tr>
+            <tr><td>ELEM-001</td><td>Elemento desconhecido</td><td>erro</td></tr>
+            <tr><td>STRUCT-001…007</td><td>Integridade do grafo e limites</td><td>erro</td></tr>
+            <tr><td>BOND-001</td><td>Ordem de ligação não aceita</td><td>erro</td></tr>
+            <tr><td>VAL-001 / 002</td><td>Valência excedida / incompleta</td><td>erro / aviso</td></tr>
+            <tr><td>CARGA-001</td><td>Carga incompatível</td><td>erro</td></tr>
+            <tr><td>COORD-001 / 002</td><td>Par livre do doador</td><td>aviso</td></tr>
+            <tr><td>RING-001…003</td><td>Validade e duplicidade de anéis</td><td>erro</td></tr>
+          </table>
+        </article>
+        <article class="card">
+          <span class="number">Δχ</span>
+          <p>&lt; 0,4 apolar · até 1,7 polar · acima de 1,7 iônica. Limites configuráveis.</p>
+        </article>
+        <article class="card wide error">
+          <h3>Erro real de valência</h3>
+          <pre>Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de C#1 é 5; o máximo para C é 4</pre>
+        </article>
+        <article class="card success">
+          <h3>Sem atalhos</h3>
+          <p>A classificação nunca presume que “metal + ametal” significa automaticamente ligação iônica.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="section-head">
+        <p class="eyebrow">07 · demonstração</p>
+        <h2>Saída real, pré-computada.</h2>
+        <p>Os três painéis abaixo vieram da execução do projeto sobre <code>exemplos/agua.mol</code>.</p>
+      </div>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-panel="tokens">Tokens</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="ast-output">AST</button>
+        <button class="tab" role="tab" aria-selected="false" data-panel="modelo">Modelo</button>
+      </div>
+      <div class="panel" id="tokens" role="tabpanel">
+        <pre>MOLECULE 'molecule' linha 1
+TEXTO '"Water"' linha 1
+ABRE_CHAVE '{' linha 1
+ATOM 'atom' linha 2
+IDENT 'O' linha 2
+ATOM 'atom' linha 3
+IDENT 'H' linha 3
+ATOM 'atom' linha 4
+IDENT 'H' linha 4
+BOND 'bond' linha 6
+IDENT 'H' linha 6
+LIGACAO '-' linha 6
+IDENT 'O' linha 6
+BOND 'bond' linha 7
+IDENT 'O' linha 7
+LIGACAO '-' linha 7
+IDENT 'H' linha 7
+FECHA_CHAVE '}' linha 8
+
+18 tokens reconhecidos</pre>
+      </div>
+      <div class="panel" id="ast-output" role="tabpanel" hidden>
+        <pre>Molecula 'Water' [1:0]
+  AtomoDecl elemento=O multiplicador=1 carga=+0 nome=None [2:4]
+  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [3:4]
+  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [4:4]
+  LigacaoDecl SIMPLES repeticoes=1 [6:4]
+    origem:  H (elemento) [6:9]
+    destino: O (elemento) [6:11]
+  LigacaoDecl SIMPLES repeticoes=1 [7:4]
+    origem:  O (elemento) [7:9]
+    destino: H (elemento) [7:11]</pre>
+      </div>
+      <div class="panel" id="modelo" role="tabpanel" hidden>
+        <pre>Modelo 'Water'
+  Átomos (3)
+    O#1 carga=+0 [2:4]
+    H#1 carga=+0 [3:4]
+    H#2 carga=+0 [4:4]
+  Ligações (2)
+    H#1 SIMPLES O#1 classificação=covalente polar Δχ=1.24 [6:4]
+    O#1 SIMPLES H#2 classificação=covalente polar Δχ=1.24 [7:4]
+Molécula 'Water': análise concluída sem erros</pre>
+      </div>
+    </section>
+
+    <section id="testes">
+      <div class="section-head">
+        <p class="eyebrow">08 · testes</p>
+        <h2>O contrato é executável.</h2>
+      </div>
+      <div class="grid">
+        <article class="card metric"><span>Suíte total</span><strong>90</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
+        <article class="card metric"><span>Exemplos válidos</span><strong>16</strong><span>moléculas</span></article>
+        <article class="card metric"><span>Snapshots</span><strong>9</strong><span>AST + modelo</span></article>
+        <article class="card metric"><span>SVGs validados</span><strong>32</strong><span>2 árvores × 16 exemplos</span></article>
+      </div>
+      <pre style="margin-top:1rem">python3 testar.py
+...
+90 testes, 0 falha(s)</pre>
+    </section>
+
+    <section id="futuro">
+      <div class="section-head">
+        <p class="eyebrow">09 · limites e futuro</p>
+        <h2>O que não foi fingido como resolvido.</h2>
+      </div>
+      <div class="grid">
+        <article class="card"><h3>OCT-001</h3><p>Decidir se o octeto vira aviso próprio ou permanece coberto pelas regras de valência.</p></article>
+        <article class="card"><h3>Ciclos</h3><p>Decidir se ciclos sem uma declaração <code>ring</code> devem gerar aviso.</p></article>
+        <article class="card"><h3>Ligação metálica</h3><p>Exige um modelo que não trate um sólido metálico como molécula discreta.</p></article>
+        <article class="card"><h3>Solver</h3><p>Inferir ligações a partir apenas dos átomos continua como trabalho futuro.</p></article>
+        <article class="card"><h3>Mais química</h3><p>Aromaticidade, estereoquímica, isótopos, geometria e visualização 3D estão fora do escopo.</p></article>
+        <article class="card"><h3>Fontes antes de regras</h3><p>Valências ainda pendentes não entram no código até serem sustentadas pelo levantamento.</p></article>
+      </div>
+    </section>
+
+    <section id="referencias">
+      <div class="section-head">
+        <p class="eyebrow">10 · referências</p>
+        <h2>Implementação rastreável.</h2>
+      </div>
+      <div class="sources">
+        <p>ANTLR 4.13.2 — lexer, parser, visitor e runtime Python.</p>
+        <p>PubChem Periodic Table — elementos e eletronegatividade.</p>
+        <p>IUPAC Gold Book — ligação coordenada, ordem de ligação, deslocalização e carga.</p>
+        <p>Pearson e LibreTexts — convenções didáticas de valência e classificação.</p>
+        <p><code>docs/levantamento_quimica.md</code> — matriz de fontes e pendências.</p>
+        <p><code>docs/especificacao.md</code> — contrato da linguagem.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>MoleculeDSL · uma DSL de química construída como projeto de compiladores.</footer>
+
+  <script>
+    const root = document.documentElement;
+    const saved = localStorage.getItem("moleculedsl-theme");
+    if (saved) root.dataset.theme = saved;
+
+    document.querySelector(".theme").addEventListener("click", () => {
+      const next = root.dataset.theme === "light" ? "dark" : "light";
+      root.dataset.theme = next;
+      localStorage.setItem("moleculedsl-theme", next);
+    });
+
+    const tabs = [...document.querySelectorAll(".tab")];
+    tabs.forEach((tab) => tab.addEventListener("click", () => {
+      tabs.forEach((item) => item.setAttribute("aria-selected", String(item === tab)));
+      document.querySelectorAll(".panel").forEach((panel) => {
+        panel.hidden = panel.id !== tab.dataset.panel;
+      });
+    }));
+  </script>
+</body>
+</html>
