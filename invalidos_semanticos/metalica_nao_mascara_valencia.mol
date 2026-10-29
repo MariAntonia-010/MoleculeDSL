@@ -1,0 +1,14 @@
+// esperado: Erro semântico [VAL-001] na linha 4, coluna 4: a soma das ordens de ligação de c (C#1) é 5; o máximo para C é 4
+// esperado: Aviso semântico [METAL-001] na linha 8, coluna 4: a ligação metálica envolve participante não metálico: c (C#1) (Nonmetal)
+molecule "Metálica não mascara valência" {
+    atom C as c
+    atom Fe as fe
+    5x atom H as h
+
+    bond c~fe
+    bond c-h1
+    bond c-h2
+    bond c-h3
+    bond c-h4
+    bond c-h5
+}

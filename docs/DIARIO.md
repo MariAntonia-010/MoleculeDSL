@@ -310,3 +310,5 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   aviso `BOND-002`.
 - A mensagem de `COORD-003` passou a assumir explicitamente que é resultado
   do modelo dueto/octeto, não prova física da inexistência de orbital.
+- Participar de `~` não desativa mais a verificação de outras ligações do
+  átomo; o caso de regressão combina C–H e C~Fe.

@@ -634,6 +634,7 @@ class AnalisadorSemantico:
         soma = {a.id: 0 for a in self.modelo.atomos}
         vizinhos = {a.id: [] for a in self.modelo.atomos}
         metalicos = set()
+        com_ligacao_contavel = set()
         self.avisos_valencia = {}
         for lig in self.modelo.ligacoes:
             if lig.operador is Operador.METALICA:
@@ -642,9 +643,16 @@ class AnalisadorSemantico:
             for a, b in ((lig.origem, lig.destino), (lig.destino, lig.origem)):
                 soma[a] += ordem[lig.operador.name]
                 vizinhos[a].append(por_id[b].elemento)
+                com_ligacao_contavel.add(a)
 
         for atomo in self.modelo.atomos:
-            if atomo.id in metalicos:
+            # Um átomo com somente `~` fica fora do modelo molecular de
+            # valência. Se também possui ligações contáveis, elas precisam
+            # ser verificadas normalmente.
+            if (
+                atomo.id in metalicos
+                and atomo.id not in com_ligacao_contavel
+            ):
                 continue
             self.conferir_atomo(atomo, soma[atomo.id], vizinhos[atomo.id])
         self.emitir_avisos_valencia()

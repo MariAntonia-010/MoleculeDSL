@@ -247,7 +247,8 @@ não entram no
 cálculo de valência nem na classificação por eletronegatividade. O aviso
 `METAL-001` é emitido quando `~` envolve um elemento cujo bloco da tabela
 periódica não é metálico. Um modelo semântico próprio para sólidos metálicos
-fica para a continuação do projeto.
+fica para a continuação do projeto. A aresta `~` não recebe ordem de ligação,
+mas não desativa a conferência das demais ligações do mesmo átomo.
 
 O compilador não possui uma regra separada `OCT-001`: octeto e dueto já são
 refletidos pelas valências dos elementos que possuem dados confirmados.
