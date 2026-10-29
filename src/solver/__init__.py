@@ -10,7 +10,7 @@ from ast_nos import (
     Referencia,
     TipoReferencia,
 )
-from solver.backtracking import enumerate_edges
+from solver.backtracking import enumerate_edges as enumerate_reference
 from solver.chemical_profile import from_rules
 from solver.messages import SolverMessage
 from solver.problem import normalize
@@ -142,9 +142,41 @@ def solve(molecule, rules, request=None):
             return "timeout"
         return None
 
-    edges, extra, stop_reason = enumerate_edges(
-        problem, profile, limit, should_stop
-    )
+    backend_name = request.backend
+    backend_version = "1"
+    try:
+        if request.backend == "reference":
+            edges, extra, stop_reason = enumerate_reference(
+                problem, profile, limit, should_stop
+            )
+            backend_name = "reference-backtracking"
+        elif request.backend == "cpsat":
+            import ortools
+            from solver.cpsat import enumerate_edges as enumerate_cpsat
+
+            backend_version = ortools.__version__
+            edges, extra, stop_reason = enumerate_cpsat(
+                problem, profile, limit, request
+            )
+            backend_name = "ortools-cpsat"
+        else:
+            return error_result(
+                SolverMessage(
+                    "SOLVER-006",
+                    molecule.linha,
+                    molecule.coluna,
+                    f"backend desconhecido '{request.backend}'",
+                )
+            )
+    except RuntimeError as error:
+        return error_result(
+            SolverMessage(
+                "SOLVER-006",
+                molecule.linha,
+                molecule.coluna,
+                str(error),
+            )
+        )
     if edges is None:
         atom = extra
         return error_result(
@@ -194,6 +226,8 @@ def solve(molecule, rules, request=None):
         classes_seen=len(solutions) + (1 if truncated else 0),
         truncated=truncated,
         elapsed_ms=int((monotonic() - started) * 1000),
+        backend=backend_name,
+        backend_version=backend_version,
         details={"chemical_profile_digest": profile.digest},
     )
     return SolveResult(solutions, [], summary)

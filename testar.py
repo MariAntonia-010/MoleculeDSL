@@ -254,7 +254,7 @@ def testar_contrato_solver():
     import semantico
     import solver
     from solver.canonical import canonical_key
-    from solver.problem import SolverAtom
+    from solver.problem import SolverAtom, normalize
     from solver.result import SolveStatus, Uniqueness
 
     caminho = os.path.join(PASTA_RAIZ, "resolver", "agua.mol")
@@ -324,6 +324,92 @@ def testar_contrato_solver():
             json.loads(linha)
     except (TypeError, ValueError) as erro:
         problemas.append(f"serialização inválida: {erro}")
+
+    try:
+        import ortools  # noqa: F401
+    except ImportError:
+        ortools = None
+    if ortools is not None:
+        from ast_nos import LigacaoDecl
+
+        def chaves(resultado_solver):
+            chaves_resultado = set()
+            for solucao in resultado_solver.solutions:
+                problema, _ = normalize(
+                    type(solucao)(
+                        nome=solucao.nome,
+                        linha=solucao.linha,
+                        coluna=solucao.coluna,
+                        comandos=[
+                            comando
+                            for comando in solucao.comandos
+                            if not isinstance(comando, LigacaoDecl)
+                        ],
+                        tipo=solucao.tipo,
+                        carga_total=solucao.carga_total,
+                        eletrons_desemparelhados=(
+                            solucao.eletrons_desemparelhados
+                        ),
+                        declaracao_legacy=solucao.declaracao_legacy,
+                    )
+                )
+                nomes = {
+                    atomo.name: atomo.index for atomo in problema.atoms
+                }
+                arestas = {}
+                for comando in solucao.comandos:
+                    if isinstance(comando, LigacaoDecl):
+                        par = tuple(
+                            sorted(
+                                (
+                                    nomes[comando.origem.texto],
+                                    nomes[comando.destino.texto],
+                                )
+                            )
+                        )
+                        arestas[par] = {
+                            "-": 1,
+                            "=": 2,
+                            "#": 3,
+                        }[comando.operador.value]
+                chaves_resultado.add(
+                    canonical_key(arestas, problema.atoms)
+                )
+            return chaves_resultado
+
+        formulas = [
+            "agua.mol",
+            "dioxido_carbono.mol",
+            "nitrogenio.mol",
+            "amonio.mol",
+            "formula_ambigua.mol",
+        ]
+        for nome in formulas:
+            entrada = construir(
+                analisar(os.path.join(PASTA_RAIZ, "resolver", nome))
+            )
+            referencia = solver.solve(
+                entrada,
+                semantico.carregar_valencias(),
+                solver.SolveRequest(
+                    max_solutions=10,
+                    require_unique=False,
+                    backend="reference",
+                ),
+            )
+            cpsat = solver.solve(
+                entrada,
+                semantico.carregar_valencias(),
+                solver.SolveRequest(
+                    max_solutions=10,
+                    require_unique=False,
+                    backend="cpsat",
+                ),
+            )
+            if chaves(referencia) != chaves(cpsat):
+                problemas.append(
+                    f"backends divergem para {nome}"
+                )
 
     contagens = [
         (1, 4, 1),
@@ -402,6 +488,24 @@ def testar_cli_solver_estruturado():
         problemas.append(f"JSONL limitado saiu com código {codigo}")
     if len(linhas) != 3 or linhas[-1]["status"] != "limit_reached":
         problemas.append("JSONL não contém duas soluções e sumário limitado")
+    try:
+        import ortools  # noqa: F401
+    except ImportError:
+        ortools = None
+    if ortools is not None:
+        codigo, saida = rodar_comando(
+            [
+                "--resolver",
+                "--backend=cpsat",
+                "--formato=json",
+                agua,
+            ]
+        )
+        documento = json.loads(saida)
+        if codigo != 0:
+            problemas.append(f"CP-SAT saiu com código {codigo}")
+        if documento["summary"]["backend"] != "ortools-cpsat":
+            problemas.append("backend CP-SAT não apareceu no sumário")
     return problemas
 
 

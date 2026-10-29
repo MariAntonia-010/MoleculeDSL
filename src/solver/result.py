@@ -27,6 +27,7 @@ class SolveRequest:
     max_heavy_atoms: int = 8
     time_limit_seconds: float | None = None
     cancel_check: object | None = None
+    backend: str = "reference"
 
 
 @dataclass

@@ -27,6 +27,7 @@ USO = (
     "\n  --max-solucoes=N define o limite da enumeração"
     "\n  --tempo-limite=S interrompe a busca após S segundos"
     "\n  --formato=texto|json|jsonl escolhe a saída do solver"
+    "\n  --backend=reference|cpsat escolhe o backend"
 )
 
 OPCOES = {
@@ -47,6 +48,7 @@ def ler_argumentos(argumentos):
         "max_solucoes": 10,
         "tempo_limite": None,
         "formato": "texto",
+        "backend": "reference",
     }
 
     for arg in argumentos:
@@ -75,6 +77,12 @@ def ler_argumentos(argumentos):
                     return None
                 configuracao["formato"] = valor
                 continue
+            if arg.startswith("--backend="):
+                valor = arg.split("=", 1)[1]
+                if valor not in {"reference", "cpsat"}:
+                    return None
+                configuracao["backend"] = valor
+                continue
             if arg not in OPCOES:
                 print(f"Opção desconhecida: {arg}")
                 return None
@@ -93,6 +101,7 @@ def compilar(caminho, opcoes, configuracao=None):
         "max_solucoes": 10,
         "tempo_limite": None,
         "formato": "texto",
+        "backend": "reference",
     }
     # Etapas encadeadas: cada uma só roda se a anterior não teve erro
     lexer, fluxo, erros_lexicos = tokenizar(caminho)
@@ -133,6 +142,7 @@ def compilar(caminho, opcoes, configuracao=None):
                 max_solutions=configuracao["max_solucoes"],
                 require_unique=False,
                 time_limit_seconds=configuracao["tempo_limite"],
+                backend=configuracao["backend"],
             ),
         )
         if formato != "texto":
@@ -200,6 +210,7 @@ def compilar(caminho, opcoes, configuracao=None):
                 max_solutions=2,
                 require_unique=True,
                 time_limit_seconds=configuracao["tempo_limite"],
+                backend=configuracao["backend"],
             ),
         )
         if formato != "texto":

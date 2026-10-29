@@ -52,6 +52,12 @@ Instale as dependências:
 python3 -m pip install -r requirements.txt
 ```
 
+Para habilitar o backend opcional CP-SAT:
+
+```bash
+python3 -m pip install -r requirements-solver.txt
+```
+
 O `antlr4-tools` pode instalar o executável em `~/.local/bin`. Se o terminal
 não o encontrar, inclua essa pasta no `PATH`:
 
@@ -92,6 +98,7 @@ Opções disponíveis:
 | `--max-solucoes=N` | altera o limite da enumeração |
 | `--tempo-limite=S` | interrompe a busca após S segundos |
 | `--formato=texto\|json\|jsonl` | escolhe a saída do solver |
+| `--backend=reference\|cpsat` | seleciona o backend de busca |
 
 As opções podem ser combinadas:
 
@@ -133,6 +140,11 @@ python3 src/main.py --resolver-todas --max-solucoes=2 \
 O sumário informa `complete`, `unique`, `status`, quantidade emitida,
 backend, versão, tempo e digest das regras. `LIMIT_REACHED`, `TIMEOUT` e
 `CANCELLED` nunca são apresentados como busca completa.
+
+O backend `reference` permanece o oráculo auditável. `cpsat` usa OR-Tools,
+conectividade por fluxo e a mesma distribuição prévia de H; as soluções são
+canonicalizadas fora do CP-SAT. A suíte compara os conjuntos dos dois
+backends em fórmulas pequenas.
 
 O modelo classifica ligações por diferença de eletronegatividade como
 covalente apolar, covalente polar ou iônica. Os limites configuráveis ficam

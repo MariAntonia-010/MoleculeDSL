@@ -129,18 +129,21 @@ Busca interrompida nunca pode ser reportada como `UNSAT` ou única.
 
 ## Fase 4 — CP-SAT opcional
 
-Escopo:
+Implementado inicialmente:
 
-- até aproximadamente 20 átomos pesados com restrições;
 - variáveis de ordem 0 a 3;
 - conectividade por fluxo;
 - escolha de estado atômico;
 - carga total;
 - uma, segunda ou K soluções;
 - canonicalização externa.
+- distribuição de H antes do modelo CP-SAT;
+- deadline, cancelamento e limite de classes;
+- comparação diferencial com o backend de referência.
 
-O backend precisa reproduzir o conjunto do oráculo pequeno. OR-Tools será
-dependência opcional, não requisito do compilador principal.
+OR-Tools fica em `requirements-solver.txt` e não é requisito do compilador
+principal. Antes de ampliar a escala para aproximadamente 20 átomos pesados,
+faltam benchmarks, quebra de simetria no modelo e worker isolado.
 
 ## Fase 5 — Geração canônica
 
