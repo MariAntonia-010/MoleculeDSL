@@ -1,0 +1,11 @@
+molecule "Dimethylamine" {
+    atom N
+    2x atom C as c
+    7x atom H
+
+    bond N-c1
+    bond N-c2
+    bond N-H
+    bond c1-H x3
+    bond c2-H x3
+}

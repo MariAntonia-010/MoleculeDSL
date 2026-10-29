@@ -1,0 +1,6 @@
+molecule "Boron trichloride" {
+    atom B
+    3x atom Cl
+
+    bond B-Cl x3
+}

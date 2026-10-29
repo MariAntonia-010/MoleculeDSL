@@ -1,0 +1,6 @@
+// esperado: Erro semântico [BOND-001] na linha 5, coluna 4: Cl só faz ligação simples, mas Cl#1 está numa ligação dupla
+molecule "Chlorine monoxide" {
+    atom Cl
+    atom O
+    bond Cl=O
+}

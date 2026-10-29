@@ -1,0 +1,18 @@
+molecule "Tetrahydrofuran" {
+    atom O as o
+    4x atom C as c
+    8x atom H
+
+    bond o-c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-o
+
+    bond c1-H x2
+    bond c2-H x2
+    bond c3-H x2
+    bond c4-H x2
+
+    ring o c1 c2 c3 c4
+}

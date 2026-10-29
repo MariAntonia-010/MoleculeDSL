@@ -1,0 +1,8 @@
+molecule "Hydrazine" {
+    2x atom N as n
+    4x atom H
+
+    bond n1-n2
+    bond n1-H x2
+    bond n2-H x2
+}

@@ -1,0 +1,30 @@
+// Dois anéis de 6 que dividem a ligação c9=c10
+molecule "Naphthalene" {
+    10x atom C as c
+    8x atom H as h
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c10
+    bond c10=c9
+    bond c9-c1
+
+    bond c5=c6
+    bond c6-c7
+    bond c7=c8
+    bond c8-c9
+    bond c10-c5
+
+    bond c1-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+    bond c5-h5
+    bond c6-h6
+    bond c7-h7
+    bond c8-h8
+
+    ring c1 c2 c3 c4 c10 c9
+    ring c5 c6 c7 c8 c9 c10
+}

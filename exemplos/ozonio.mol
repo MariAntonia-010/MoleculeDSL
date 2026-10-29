@@ -1,0 +1,9 @@
+// O mesmo elemento com cargas diferentes
+molecule "Ozone" {
+    atom O as o1
+    atom O(+1) as o2
+    atom O(-1) as o3
+
+    bond o1=o2
+    bond o2-o3
+}

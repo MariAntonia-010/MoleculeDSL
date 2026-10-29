@@ -1,0 +1,8 @@
+molecule "Formaldehyde" {
+    atom C
+    atom O
+    2x atom H
+
+    bond C=O
+    bond C-H x2
+}

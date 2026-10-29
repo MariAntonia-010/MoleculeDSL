@@ -1,0 +1,15 @@
+// Anel de três com um oxigênio
+molecule "Oxirane" {
+    atom C as c1
+    atom C as c2
+    atom O as o
+    4x atom H
+
+    bond c1-c2
+    bond c2-o
+    bond o-c1
+    bond c1-H x2
+    bond c2-H x2
+
+    ring c1 c2 o
+}

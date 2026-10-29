@@ -1,0 +1,9 @@
+molecule "Ethene" {
+    atom C as c1
+    atom C as c2
+    4x atom H
+
+    bond c1=c2
+    bond c1-H x2
+    bond c2-H x2
+}

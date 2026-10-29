@@ -1,0 +1,8 @@
+molecule "Fluoromethane" {
+    atom C
+    atom F
+    3x atom H
+
+    bond C-F
+    bond C-H x3
+}

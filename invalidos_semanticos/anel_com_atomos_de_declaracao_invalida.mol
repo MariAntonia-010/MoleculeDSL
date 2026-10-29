@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-007] na linha 4, coluna 4: a quantidade de átomos precisa ser pelo menos 1
+// Os átomos do 0x deram erro, então o ring não gera outro
+molecule "Ring" {
+    0x atom C as c
+    ring c1 c2 c3
+}

@@ -1,0 +1,8 @@
+// esperado: Erro semântico [STRUCT-006] na linha 7, coluna 4: já existe uma ligação entre n1 (N#1) e H#1
+// N e H têm um átomo só, então "N" é o n1 e as duas ligações são a mesma
+molecule "Imidogen" {
+    atom N as n1
+    atom H
+    bond n1-H
+    bond N-H
+}

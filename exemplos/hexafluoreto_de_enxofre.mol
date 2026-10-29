@@ -1,0 +1,6 @@
+molecule "Sulfur hexafluoride" {
+    atom S
+    6x atom F
+
+    bond S-F x6
+}

@@ -1,0 +1,7 @@
+// esperado: Erro sintático na linha 6, coluna 12: comando inválido '-': esperado 'atom', 'bond', 'ring' ou '}'
+molecule "Hydroxyl" {
+    atom C
+    atom O
+    atom H
+    bond C-O-H
+}

@@ -1,0 +1,6 @@
+// esperado: Erro léxico na linha 5, coluna 10: caractere inválido '<'
+molecule "Ammonia borane" {
+    atom N
+    atom B
+    bond B<-N
+}

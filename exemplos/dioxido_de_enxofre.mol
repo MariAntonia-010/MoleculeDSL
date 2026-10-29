@@ -1,0 +1,7 @@
+// Enxofre com valência 4
+molecule "Sulfur dioxide" {
+    atom S
+    2x atom O
+
+    bond S=O x2
+}

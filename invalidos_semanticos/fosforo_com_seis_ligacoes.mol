@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de P#1 é 6; o máximo para P é 5
+molecule "Phosphorus hexafluoride" {
+    atom P
+    6x atom F
+    bond P-F x6
+}

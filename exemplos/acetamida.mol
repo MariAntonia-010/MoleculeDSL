@@ -1,0 +1,13 @@
+molecule "Acetamide" {
+    atom C as c1
+    atom C as c2
+    atom O
+    atom N
+    5x atom H
+
+    bond c1-c2
+    bond c2=O
+    bond c2-N
+    bond c1-H x3
+    bond N-H x2
+}

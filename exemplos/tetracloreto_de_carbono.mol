@@ -1,0 +1,6 @@
+molecule "Carbon tetrachloride" {
+    atom C
+    4x atom Cl
+
+    bond C-Cl x4
+}

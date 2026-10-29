@@ -1,0 +1,7 @@
+// esperado: Erro semântico [STRUCT-002] na linha 5, coluna 4: o nome 'h1' já foi usado na linha 4
+// h1 já existe quando o 2x tenta criar h1 e h2
+molecule "Water" {
+    atom O as h1
+    2x atom H as h
+    bond h1-h2
+}

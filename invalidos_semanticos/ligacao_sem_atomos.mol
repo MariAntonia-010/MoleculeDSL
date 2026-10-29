@@ -1,0 +1,5 @@
+// esperado: Erro semântico [STRUCT-001] na linha 4, coluna 9: nenhum átomo de H foi declarado
+// esperado: Erro semântico [STRUCT-001] na linha 4, coluna 11: nenhum átomo de O foi declarado
+molecule "Water" {
+    bond H-O
+}

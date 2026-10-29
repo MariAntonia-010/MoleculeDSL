@@ -1,0 +1,7 @@
+// Carga +1 no oxigênio: 3 ligações
+molecule "Hydronium" {
+    atom O(+1)
+    3x atom H
+
+    bond O-H x3
+}

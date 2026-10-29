@@ -1,0 +1,9 @@
+// esperado: Erro semântico [VAL-001] na linha 4, coluna 4: a soma das ordens de ligação de Cl#1 é 3; o máximo para Cl é 1
+// A valência expandida só vale se todos os vizinhos forem F ou O
+molecule "Mixed" {
+    atom Cl
+    2x atom F
+    atom H
+    bond Cl-F x2
+    bond Cl-H
+}

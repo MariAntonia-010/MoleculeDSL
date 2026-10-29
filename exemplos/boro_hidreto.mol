@@ -1,0 +1,7 @@
+// Boro com carga -1: 4 ligações
+molecule "Borohydride" {
+    atom B(-1)
+    4x atom H
+
+    bond B-H x4
+}

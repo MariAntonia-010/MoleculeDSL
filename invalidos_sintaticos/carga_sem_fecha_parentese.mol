@@ -1,0 +1,6 @@
+// esperado: Erro sintático na linha 3, coluna 13: esperado ')' para fechar a carga, encontrado '4x'
+molecule "Ammonium" {
+    atom N(+1
+    4x atom H
+    bond N-H x4
+}

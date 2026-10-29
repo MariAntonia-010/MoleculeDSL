@@ -1,0 +1,6 @@
+molecule "Hypochlorite" {
+    atom Cl
+    atom O(-1)
+
+    bond Cl-O
+}

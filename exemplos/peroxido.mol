@@ -1,0 +1,5 @@
+molecule "Peroxide" {
+    2x atom O(-1) as o
+
+    bond o1-o2
+}

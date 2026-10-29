@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-006] na linha 5, coluna 4: a repetição x3 ligaria os mesmos dois átomos 3 vezes
+molecule "Carbon monoxide" {
+    atom C
+    atom O
+    bond C-O x3
+}

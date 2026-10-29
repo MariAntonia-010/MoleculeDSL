@@ -1,0 +1,9 @@
+molecule "Methylammonium" {
+    atom C
+    atom N(+1)
+    6x atom H
+
+    bond C-N
+    bond C-H x3
+    bond N-H x3
+}

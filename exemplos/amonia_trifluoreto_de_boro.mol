@@ -1,0 +1,11 @@
+// Ligação coordenada entre N e B, com flúor no boro
+molecule "Ammonia boron trifluoride" {
+    atom N(+1)
+    atom B(-1)
+    3x atom H
+    3x atom F
+
+    bond N-H x3
+    bond B-F x3
+    bond N->B
+}

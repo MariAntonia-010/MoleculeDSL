@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 3, coluna 4: comando inválido 'At': esperado 'atom', 'bond', 'ring' ou '}'
+molecule "Water" {
+    Atom O
+}

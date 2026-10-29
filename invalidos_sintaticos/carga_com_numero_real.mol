@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 3, coluna 12: esperado número inteiro na carga, encontrado '1.5'
+molecule "Ammonium" {
+    atom N(+1.5)
+}

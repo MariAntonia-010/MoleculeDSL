@@ -1,0 +1,9 @@
+molecule "Methanethiol" {
+    atom C
+    atom S
+    4x atom H
+
+    bond C-S
+    bond C-H x3
+    bond S-H
+}

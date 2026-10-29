@@ -1,0 +1,8 @@
+molecule "Chloroform" {
+    atom C
+    atom H
+    3x atom Cl
+
+    bond C-H
+    bond C-Cl x3
+}

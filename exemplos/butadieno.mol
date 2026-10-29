@@ -1,0 +1,13 @@
+// Duas ligações duplas separadas por uma simples
+molecule "1,3-Butadiene" {
+    4x atom C as c
+    6x atom H
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c1-H x2
+    bond c2-H
+    bond c3-H
+    bond c4-H x2
+}

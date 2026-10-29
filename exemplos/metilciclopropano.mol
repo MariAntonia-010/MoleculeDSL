@@ -1,0 +1,17 @@
+molecule "Methylcyclopropane" {
+    3x atom C as c
+    atom C as metil
+    8x atom H
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-c1
+    bond c1-metil
+
+    bond c1-H
+    bond c2-H x2
+    bond c3-H x2
+    bond metil-H x3
+
+    ring c1 c2 c3
+}

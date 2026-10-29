@@ -1,0 +1,6 @@
+// esperado: Erro sintático na linha 5, coluna 11: esperado elemento ou nome de átomo na ligação, encontrado '='
+molecule "Carbon dioxide" {
+    atom C
+    2x atom O
+    bond C==O x2
+}

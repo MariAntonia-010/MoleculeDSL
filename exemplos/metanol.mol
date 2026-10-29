@@ -1,0 +1,9 @@
+molecule "Methanol" {
+    atom C
+    atom O
+    4x atom H
+
+    bond C-O
+    bond C-H x3
+    bond O-H
+}

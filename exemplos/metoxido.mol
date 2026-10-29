@@ -1,0 +1,8 @@
+molecule "Methoxide" {
+    atom C
+    atom O(-1)
+    3x atom H
+
+    bond C-O
+    bond C-H x3
+}

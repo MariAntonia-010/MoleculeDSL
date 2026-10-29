@@ -1,0 +1,6 @@
+// Com dois átomos de O, "O=O" liga o primeiro ao segundo
+molecule "Oxygen" {
+    2x atom O
+
+    bond O=O
+}

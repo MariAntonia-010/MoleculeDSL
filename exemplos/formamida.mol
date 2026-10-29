@@ -1,0 +1,11 @@
+molecule "Formamide" {
+    atom C
+    atom O
+    atom N
+    3x atom H
+
+    bond C=O
+    bond C-N
+    bond C-H
+    bond N-H x2
+}

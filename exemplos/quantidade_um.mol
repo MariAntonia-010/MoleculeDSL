@@ -1,0 +1,8 @@
+// 1x e x1 são aceitos
+molecule "Methane" {
+    1x atom C
+    4x atom H
+
+    bond C-H x1
+    bond C-H x3
+}

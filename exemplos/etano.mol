@@ -1,0 +1,9 @@
+molecule "Ethane" {
+    atom C as c1
+    atom C as c2
+    6x atom H
+
+    bond c1-c2
+    bond c1-H x3
+    bond c2-H x3
+}

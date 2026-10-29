@@ -1,0 +1,4 @@
+// esperado: Erro léxico na linha 3, coluna 14: caractere inválido 'á'
+molecule "Water" {
+    atom O as água
+}

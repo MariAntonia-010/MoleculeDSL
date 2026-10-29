@@ -1,0 +1,9 @@
+// Ligação entre dois oxigênios
+molecule "Hydrogen peroxide" {
+    2x atom O as o
+    2x atom H
+
+    bond o1-o2
+    bond o1-H
+    bond o2-H
+}

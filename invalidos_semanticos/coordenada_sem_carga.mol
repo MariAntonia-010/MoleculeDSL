@@ -1,0 +1,16 @@
+// esperado: Erro semântico [CARGA-001] na linha 5, coluna 4: a soma das ordens de ligação de N#1 é 4, o que só é possível com carga +1: declare atom N(+1)
+// esperado: Erro semântico [CARGA-001] na linha 6, coluna 4: a soma das ordens de ligação de B#1 é 4, o que só é possível com carga -1: declare atom B(-1)
+// A coordenada conta 1: N e B ficam com 4 e precisam de carga
+molecule "Ammonia borane" {
+    atom N
+    atom B
+    3x atom H as hn
+    3x atom H as hb
+    bond N-hn1
+    bond N-hn2
+    bond N-hn3
+    bond B-hb1
+    bond B-hb2
+    bond B-hb3
+    bond N->B
+}

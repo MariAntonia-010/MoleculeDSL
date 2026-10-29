@@ -1,0 +1,5 @@
+// esperado: Erro léxico na linha 3, coluna 17: caractere inválido '['
+// esperado: Erro léxico na linha 5, coluna 0: caractere inválido ']'
+molecule "Water" [
+    atom O
+]

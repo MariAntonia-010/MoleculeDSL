@@ -1,0 +1,7 @@
+// Fósforo com valência 3
+molecule "Phosphine" {
+    atom P
+    3x atom H
+
+    bond P-H x3
+}

@@ -1,0 +1,6 @@
+molecule "Sulfur trioxide" {
+    atom S
+    3x atom O
+
+    bond S=O x3
+}

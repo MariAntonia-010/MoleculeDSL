@@ -1,0 +1,6 @@
+molecule "Phosphorus trichloride" {
+    atom P
+    3x atom Cl
+
+    bond P-Cl x3
+}

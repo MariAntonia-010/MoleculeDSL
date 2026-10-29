@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de Cl#1 é 2; o esperado para Cl é 1, 3, 5 ou 7
+molecule "Chlorine difluoride" {
+    atom Cl
+    2x atom F
+    bond Cl-F x2
+}

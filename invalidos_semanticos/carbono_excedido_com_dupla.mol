@@ -1,0 +1,9 @@
+// esperado: Erro semântico [VAL-001] na linha 4, coluna 4: a soma das ordens de ligação de C#1 é 5; o máximo para C é 4
+// Cada = conta 2: C fica com 2 + 2 + 1
+molecule "Carbon dioxide" {
+    atom C
+    2x atom O
+    atom H
+    bond C=O x2
+    bond C-H
+}

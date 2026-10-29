@@ -1,0 +1,10 @@
+molecule "Acetonitrile" {
+    atom C as c1
+    atom C as c2
+    atom N
+    3x atom H
+
+    bond c1-c2
+    bond c2#N
+    bond c1-H x3
+}

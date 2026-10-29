@@ -1,0 +1,6 @@
+// esperado: Erro sintático na linha 3, coluna 12: esperado número inteiro na carga, encontrado ')'
+molecule "Hydroxide" {
+    atom O(-)
+    atom H
+    bond O-H
+}

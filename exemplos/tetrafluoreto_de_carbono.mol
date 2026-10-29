@@ -1,0 +1,6 @@
+molecule "Carbon tetrafluoride" {
+    atom C
+    4x atom F
+
+    bond C-F x4
+}

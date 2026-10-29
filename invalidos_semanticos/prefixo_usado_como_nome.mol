@@ -1,0 +1,7 @@
+// esperado: Erro semântico [STRUCT-001] na linha 6, coluna 11: nenhum átomo se chama 'h'
+// Com 3x, o nome h vira prefixo: os átomos são h1, h2 e h3
+molecule "Methyl" {
+    atom C
+    3x atom H as h
+    bond C-h
+}
