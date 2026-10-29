@@ -290,17 +290,18 @@ suas ligações inferidas. O solver:
 - usa somente valências confirmadas;
 - considera ordens simples, dupla e tripla;
 - exige conectividade;
-- aceita no máximo oito átomos;
+- aceita no máximo 24 átomos totais e oito átomos pesados;
 - só retorna quando existe uma única solução.
 
 H₂O, CO₂, N₂ e NH₄⁺ são os casos de referência. No modo de solução única,
-fórmulas com zero ou múltiplas soluções exigem ligações explícitas. C₆H₁₂
-fica fora desta etapa por tamanho e ambiguidade estrutural.
+fórmulas com zero ou múltiplas soluções exigem ligações explícitas. C₆H₁₂ é
+aceita no modo de enumeração, com resultado truncado pelo limite padrão.
 
 O modo `--resolver-todas` enumera até dez soluções não equivalentes,
 deduplicando permutações de átomos com o mesmo elemento e carga. Para
 C₂H₄O, são exibidas três alternativas formais. O compilador não escolhe qual
-delas representa a espécie desejada.
+delas representa a espécie desejada. Hidrogênios são distribuídos antes da
+busca sobre a matriz dos átomos pesados.
 
 ---
 

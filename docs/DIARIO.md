@@ -358,3 +358,22 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - Permutações de átomos com o mesmo elemento e carga são deduplicadas.
 - C₂H₄O resulta em três alternativas formais, incluindo uma estrutura
   cíclica; o compilador exibe todas e não escolhe por estabilidade.
+
+---
+
+## 29/10/2026 — Solver modular e hidrogênios pré-distribuídos
+
+- `src/solver.py` foi migrado para o pacote `src/solver/`, mantendo a fachada
+  pública usada pelo `main.py`.
+- Criados contratos `SolveRequest`, `SolveResult` e `SolveSummary`, com
+  status conclusivos e digest do perfil químico.
+- Hidrogênios são distribuídos canonicamente antes da busca no grafo pesado.
+- A canonicalização pesada inclui quantidade de H e evita permutar os H
+  explicitamente.
+- Limites atuais: 24 átomos totais e oito pesados.
+- Corrigida uma falha de completude: limitar candidatos antes da
+  canonicalização podia ocultar classes quando os primeiros rótulos eram
+  duplicados.
+- O oráculo confere contagens conhecidas de CH₄ a C₆H₁₄ e álcoois/éteres
+  pequenos.
+- C₆H₁₂ passa a ser enumerável; o limite padrão produz status truncado.

@@ -243,6 +243,92 @@ def testar_solver_todas(caminho):
     return problemas
 
 
+def testar_contrato_solver():
+    src = os.path.join(PASTA_RAIZ, "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+
+    from construtor_ast import construir
+    from sintatico import analisar
+    import semantico
+    import solver
+    from solver.canonical import canonical_key
+    from solver.problem import SolverAtom
+    from solver.result import SolveStatus, Uniqueness
+
+    caminho = os.path.join(PASTA_RAIZ, "resolver", "agua.mol")
+    molecula = construir(analisar(caminho))
+    resultado = solver.solve(molecula, semantico.carregar_valencias())
+    problemas = []
+    if resultado.summary.status is not SolveStatus.COMPLETE:
+        problemas.append("status da água não é COMPLETE")
+    if resultado.summary.unique is not Uniqueness.TRUE:
+        problemas.append("unicidade da água não é TRUE")
+    if not resultado.summary.complete:
+        problemas.append("busca da água não foi marcada completa")
+
+    atomos = (
+        SolverAtom(0, "C", 0, 1, 0, "c"),
+        SolverAtom(1, "O", 0, 1, 0, "o"),
+        SolverAtom(2, "H", 0, 1, 0, "h1"),
+        SolverAtom(3, "H", 0, 1, 0, "h2"),
+    )
+    chave_a = canonical_key({(0, 2): 1, (1, 3): 1}, atomos)
+    chave_b = canonical_key({(0, 3): 1, (1, 2): 1}, atomos)
+    if chave_a != chave_b:
+        problemas.append("chave canônica mudou com átomos equivalentes")
+
+    serializado = solver.summary_dict(resultado.summary)
+    if serializado["status"] != "complete":
+        problemas.append("status serializado incorreto")
+    if "chemical_profile_digest" not in serializado["details"]:
+        problemas.append("digest do perfil químico ausente")
+
+    contagens = [
+        (1, 4, 1),
+        (2, 6, 1),
+        (2, 6, 2, "O"),
+        (3, 8, 3, "O"),
+        (4, 10, 2),
+        (5, 12, 3),
+        (6, 14, 5),
+    ]
+    with tempfile.TemporaryDirectory() as pasta:
+        for caso in contagens:
+            carbonos, hidrogenios, esperado, *hetero = caso
+            linhas = ['species molecule "Contagem" {']
+            linhas.append(f"    {carbonos}x atom C")
+            if hetero:
+                linhas.append(f"    atom {hetero[0]}")
+            linhas.append(f"    {hidrogenios}x atom H")
+            linhas.append("}")
+            arquivo = os.path.join(
+                pasta, f"c{carbonos}h{hidrogenios}.mol"
+            )
+            with open(arquivo, "w", encoding="utf-8") as saida:
+                saida.write("\n".join(linhas) + "\n")
+            estrutura = construir(analisar(arquivo))
+            resultado = solver.solve(
+                estrutura,
+                semantico.carregar_valencias(),
+                solver.SolveRequest(
+                    max_solutions=esperado + 1,
+                    require_unique=False,
+                ),
+            )
+            if len(resultado.solutions) != esperado:
+                formula = f"C{carbonos}H{hidrogenios}"
+                if hetero:
+                    formula += hetero[0]
+                problemas.append(
+                    f"{formula}: {len(resultado.solutions)} soluções, "
+                    f"esperado {esperado}"
+                )
+            if not resultado.summary.complete:
+                problemas.append(f"busca de {arquivo} não ficou completa")
+    return problemas
+
+
 def testar_svgs_das_arvores():
     problemas = []
     with tempfile.TemporaryDirectory() as pasta:
@@ -358,6 +444,7 @@ def main():
             ),
         ),
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
+        ("solver/contrato_estruturado", testar_contrato_solver),
     ]
     casos_especiais += [
         (

@@ -127,9 +127,10 @@ Implementado em `src/semantico.py`:
 
 ### M7: Solver
 
-Implementado para soluções únicas com até oito átomos. O solver expande as
-declarações, busca ordens de 1 a 3 que satisfaçam as valências confirmadas e
-exige um grafo conectado. Casos cobertos: H₂O, CO₂, N₂ e NH₄⁺.
+Implementado para soluções únicas com até 24 átomos totais e oito pesados. O
+solver distribui H antes da matriz pesada, busca ordens de 1 a 3 que
+satisfaçam as valências confirmadas e exige um grafo conectado. Casos de
+referência: H₂O, CO₂, N₂ e NH₄⁺.
 
 `--resolver-todas` enumera até dez estruturas não equivalentes para fórmulas
 pequenas. A deduplicação permite permutar átomos do mesmo elemento e carga;
@@ -140,8 +141,9 @@ C₂H₄O produz três alternativas formais.
 - `SOLVER-003`: nenhuma estrutura satisfaz as regras;
 - `SOLVER-004`: existem múltiplas estruturas.
 
-C₆H₁₂ continua fora por exceder o limite atual de átomos. A escolha química
-entre alternativas enumeradas continua sendo responsabilidade do usuário.
+C₆H₁₂ já entra no backend por ter seis átomos pesados; sua enumeração é
+truncada no limite padrão. A escolha química entre alternativas continua
+sendo responsabilidade do usuário.
 
 ### M8: Erros, testes e documentação
 - Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.

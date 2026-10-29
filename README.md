@@ -106,8 +106,9 @@ python3 src/main.py --resolver --modelo resolver/agua.mol
 ```
 
 Nesta etapa estão cobertos H₂O, CO₂, N₂ e NH₄⁺. No modo `--resolver`,
-entradas sem solução, ambíguas, com ligações já declaradas ou com mais de
-oito átomos são rejeitadas.
+entradas sem solução, ambíguas ou com ligações já declaradas são rejeitadas.
+O backend de referência aceita até 24 átomos totais e oito átomos pesados;
+hidrogênios são distribuídos antes da geração da matriz pesada.
 
 Para inspecionar fórmulas ambíguas pequenas:
 
@@ -263,6 +264,7 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 - [Plano semântico](docs/plano_semantico.md)
 - [Levantamento e fontes de química](docs/levantamento_quimica.md)
 - [Pesquisa química aprofundada](docs/pesquisa_quimica_aprofundada.md)
+- [Plano completo do solver](docs/plano_solver.md)
 - [Diário do projeto](docs/DIARIO.md)
 - [Página de apresentação](docs/apresentacao/index.html)
 
