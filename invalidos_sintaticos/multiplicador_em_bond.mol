@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 3, coluna 7: o multiplicador (como '4x') só pode vir antes de 'atom'
+molecule "Methane" {
+    4x bond C-H
+}

@@ -1,0 +1,10 @@
+// esperado: Erro semântico [STRUCT-001] na linha 9, coluna 15: nenhum átomo se chama 'c4'
+molecule "Ring" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    bond c1-c2
+    bond c2-c3
+    bond c3-c1
+    ring c1 c2 c4
+}

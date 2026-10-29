@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-004] na linha 5, coluna 11: todos os 3 átomos de H já foram citados
+molecule "Methane" {
+    atom C
+    3x atom H
+    bond C-H x4
+}

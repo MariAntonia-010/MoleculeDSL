@@ -1,0 +1,4 @@
+// esperado: Erro léxico na linha 3, coluna 5: '.' fora de um número real
+molecule "Test" {
+    3. atom H
+}

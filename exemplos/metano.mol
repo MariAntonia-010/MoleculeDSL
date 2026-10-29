@@ -1,0 +1,6 @@
+molecule "Methane" {
+    atom C
+    4x atom H
+
+    bond C-H x4
+}

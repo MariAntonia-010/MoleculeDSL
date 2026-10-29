@@ -1,0 +1,1437 @@
+{
+ "_fonte": "PubChem Periodic Table (https://pubchem.ncbi.nlm.nih.gov/rest/pug/periodictable/CSV), consultado em 2026-10-14",
+ "_notas": [
+  "eletrons_valencia foi DERIVADO da configuracao eletronica (eletrons s e p na camada mais externa) e so para blocos principais; null = nao derivado.",
+  "estados_oxidacao NAO e valencia: sao estados de oxidacao informados pela fonte.",
+  "eletronegatividade: valores da fonte (coincidem com a escala de Pauling para H, C, O e F); null = sem valor na fonte.",
+  "valencias permitidas NAO constam aqui: nao vem desta fonte (ver docs/levantamento_quimica.md)."
+ ],
+ "elementos": {
+  "H": {
+   "numero_atomico": 1,
+   "nome": "Hydrogen",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "1s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 2.2,
+   "estados_oxidacao": [
+    "+1",
+    "-1"
+   ]
+  },
+  "He": {
+   "numero_atomico": 2,
+   "nome": "Helium",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "1s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "0"
+   ]
+  },
+  "Li": {
+   "numero_atomico": 3,
+   "nome": "Lithium",
+   "bloco": "Alkali metal",
+   "configuracao_eletronica": "[He]2s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 0.98,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Be": {
+   "numero_atomico": 4,
+   "nome": "Beryllium",
+   "bloco": "Alkaline earth metal",
+   "configuracao_eletronica": "[He]2s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": 1.57,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "B": {
+   "numero_atomico": 5,
+   "nome": "Boron",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[He]2s2 2p1",
+   "eletrons_valencia": 3,
+   "eletronegatividade": 2.04,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "C": {
+   "numero_atomico": 6,
+   "nome": "Carbon",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "[He]2s2 2p2",
+   "eletrons_valencia": 4,
+   "eletronegatividade": 2.55,
+   "estados_oxidacao": [
+    "+4",
+    "+2",
+    "-4"
+   ]
+  },
+  "N": {
+   "numero_atomico": 7,
+   "nome": "Nitrogen",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "[He] 2s2 2p3",
+   "eletrons_valencia": 5,
+   "eletronegatividade": 3.04,
+   "estados_oxidacao": [
+    "+5",
+    "+4",
+    "+3",
+    "+2",
+    "+1",
+    "-1",
+    "-2",
+    "-3"
+   ]
+  },
+  "O": {
+   "numero_atomico": 8,
+   "nome": "Oxygen",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "[He]2s2 2p4",
+   "eletrons_valencia": 6,
+   "eletronegatividade": 3.44,
+   "estados_oxidacao": [
+    "-2"
+   ]
+  },
+  "F": {
+   "numero_atomico": 9,
+   "nome": "Fluorine",
+   "bloco": "Halogen",
+   "configuracao_eletronica": "[He]2s2 2p5",
+   "eletrons_valencia": 7,
+   "eletronegatividade": 3.98,
+   "estados_oxidacao": [
+    "-1"
+   ]
+  },
+  "Ne": {
+   "numero_atomico": 10,
+   "nome": "Neon",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "[He]2s2 2p6",
+   "eletrons_valencia": 8,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "0"
+   ]
+  },
+  "Na": {
+   "numero_atomico": 11,
+   "nome": "Sodium",
+   "bloco": "Alkali metal",
+   "configuracao_eletronica": "[Ne]3s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 0.93,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Mg": {
+   "numero_atomico": 12,
+   "nome": "Magnesium",
+   "bloco": "Alkaline earth metal",
+   "configuracao_eletronica": "[Ne]3s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": 1.31,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "Al": {
+   "numero_atomico": 13,
+   "nome": "Aluminum",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Ne]3s2 3p1",
+   "eletrons_valencia": 3,
+   "eletronegatividade": 1.61,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Si": {
+   "numero_atomico": 14,
+   "nome": "Silicon",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[Ne]3s2 3p2",
+   "eletrons_valencia": 4,
+   "eletronegatividade": 1.9,
+   "estados_oxidacao": [
+    "+4",
+    "+2",
+    "-4"
+   ]
+  },
+  "P": {
+   "numero_atomico": 15,
+   "nome": "Phosphorus",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "[Ne]3s2 3p3",
+   "eletrons_valencia": 5,
+   "eletronegatividade": 2.19,
+   "estados_oxidacao": [
+    "+5",
+    "+3",
+    "-3"
+   ]
+  },
+  "S": {
+   "numero_atomico": 16,
+   "nome": "Sulfur",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "[Ne]3s2 3p4",
+   "eletrons_valencia": 6,
+   "eletronegatividade": 2.58,
+   "estados_oxidacao": [
+    "+6",
+    "+4",
+    "-2"
+   ]
+  },
+  "Cl": {
+   "numero_atomico": 17,
+   "nome": "Chlorine",
+   "bloco": "Halogen",
+   "configuracao_eletronica": "[Ne]3s2 3p5",
+   "eletrons_valencia": 7,
+   "eletronegatividade": 3.16,
+   "estados_oxidacao": [
+    "+7",
+    "+5",
+    "+1",
+    "-1"
+   ]
+  },
+  "Ar": {
+   "numero_atomico": 18,
+   "nome": "Argon",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "[Ne]3s2 3p6",
+   "eletrons_valencia": 8,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "0"
+   ]
+  },
+  "K": {
+   "numero_atomico": 19,
+   "nome": "Potassium",
+   "bloco": "Alkali metal",
+   "configuracao_eletronica": "[Ar]4s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 0.82,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Ca": {
+   "numero_atomico": 20,
+   "nome": "Calcium",
+   "bloco": "Alkaline earth metal",
+   "configuracao_eletronica": "[Ar]4s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": 1.0,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "Sc": {
+   "numero_atomico": 21,
+   "nome": "Scandium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.36,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Ti": {
+   "numero_atomico": 22,
+   "nome": "Titanium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d2",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.54,
+   "estados_oxidacao": [
+    "+4",
+    "+3",
+    "+2"
+   ]
+  },
+  "V": {
+   "numero_atomico": 23,
+   "nome": "Vanadium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d3",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.63,
+   "estados_oxidacao": [
+    "+5",
+    "+4",
+    "+3",
+    "+2"
+   ]
+  },
+  "Cr": {
+   "numero_atomico": 24,
+   "nome": "Chromium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]3d5 4s1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.66,
+   "estados_oxidacao": [
+    "+6",
+    "+3",
+    "+2"
+   ]
+  },
+  "Mn": {
+   "numero_atomico": 25,
+   "nome": "Manganese",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d5",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.55,
+   "estados_oxidacao": [
+    "+7",
+    "+4",
+    "+3",
+    "+2"
+   ]
+  },
+  "Fe": {
+   "numero_atomico": 26,
+   "nome": "Iron",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d6",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.83,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Co": {
+   "numero_atomico": 27,
+   "nome": "Cobalt",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d7",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.88,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Ni": {
+   "numero_atomico": 28,
+   "nome": "Nickel",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d8",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.91,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Cu": {
+   "numero_atomico": 29,
+   "nome": "Copper",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s1 3d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.9,
+   "estados_oxidacao": [
+    "+2",
+    "+1"
+   ]
+  },
+  "Zn": {
+   "numero_atomico": 30,
+   "nome": "Zinc",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.65,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "Ga": {
+   "numero_atomico": 31,
+   "nome": "Gallium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Ar]4s2 3d10 4p1",
+   "eletrons_valencia": 3,
+   "eletronegatividade": 1.81,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Ge": {
+   "numero_atomico": 32,
+   "nome": "Germanium",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[Ar]4s2 3d10 4p2",
+   "eletrons_valencia": 4,
+   "eletronegatividade": 2.01,
+   "estados_oxidacao": [
+    "+4",
+    "+2"
+   ]
+  },
+  "As": {
+   "numero_atomico": 33,
+   "nome": "Arsenic",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[Ar]4s2 3d10 4p3",
+   "eletrons_valencia": 5,
+   "eletronegatividade": 2.18,
+   "estados_oxidacao": [
+    "+5",
+    "+3",
+    "-3"
+   ]
+  },
+  "Se": {
+   "numero_atomico": 34,
+   "nome": "Selenium",
+   "bloco": "Nonmetal",
+   "configuracao_eletronica": "[Ar]4s2 3d10 4p4",
+   "eletrons_valencia": 6,
+   "eletronegatividade": 2.55,
+   "estados_oxidacao": [
+    "+6",
+    "+4",
+    "-2"
+   ]
+  },
+  "Br": {
+   "numero_atomico": 35,
+   "nome": "Bromine",
+   "bloco": "Halogen",
+   "configuracao_eletronica": "[Ar]4s2 3d10 4p5",
+   "eletrons_valencia": 7,
+   "eletronegatividade": 2.96,
+   "estados_oxidacao": [
+    "+5",
+    "+1",
+    "-1"
+   ]
+  },
+  "Kr": {
+   "numero_atomico": 36,
+   "nome": "Krypton",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "[Ar]4s2 3d10 4p6",
+   "eletrons_valencia": 8,
+   "eletronegatividade": 3.0,
+   "estados_oxidacao": [
+    "0"
+   ]
+  },
+  "Rb": {
+   "numero_atomico": 37,
+   "nome": "Rubidium",
+   "bloco": "Alkali metal",
+   "configuracao_eletronica": "[Kr]5s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 0.82,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Sr": {
+   "numero_atomico": 38,
+   "nome": "Strontium",
+   "bloco": "Alkaline earth metal",
+   "configuracao_eletronica": "[Kr]5s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": 0.95,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "Y": {
+   "numero_atomico": 39,
+   "nome": "Yttrium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s2 4d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.22,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Zr": {
+   "numero_atomico": 40,
+   "nome": "Zirconium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s2 4d2",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.33,
+   "estados_oxidacao": [
+    "+4"
+   ]
+  },
+  "Nb": {
+   "numero_atomico": 41,
+   "nome": "Niobium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s1 4d4",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.6,
+   "estados_oxidacao": [
+    "+5",
+    "+3"
+   ]
+  },
+  "Mo": {
+   "numero_atomico": 42,
+   "nome": "Molybdenum",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s1 4d5",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.16,
+   "estados_oxidacao": [
+    "+6"
+   ]
+  },
+  "Tc": {
+   "numero_atomico": 43,
+   "nome": "Technetium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s2 4d5",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.9,
+   "estados_oxidacao": [
+    "+7",
+    "+6",
+    "+4"
+   ]
+  },
+  "Ru": {
+   "numero_atomico": 44,
+   "nome": "Ruthenium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s1 4d7",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.2,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Rh": {
+   "numero_atomico": 45,
+   "nome": "Rhodium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s1 4d8",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.28,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Pd": {
+   "numero_atomico": 46,
+   "nome": "Palladium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]4d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.2,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Ag": {
+   "numero_atomico": 47,
+   "nome": "Silver",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s1 4d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.93,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Cd": {
+   "numero_atomico": 48,
+   "nome": "Cadmium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Kr]5s2 4d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.69,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "In": {
+   "numero_atomico": 49,
+   "nome": "Indium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Kr]5s2 4d10 5p1",
+   "eletrons_valencia": 3,
+   "eletronegatividade": 1.78,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Sn": {
+   "numero_atomico": 50,
+   "nome": "Tin",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Kr]5s2 4d10 5p2",
+   "eletrons_valencia": 4,
+   "eletronegatividade": 1.96,
+   "estados_oxidacao": [
+    "+4",
+    "+2"
+   ]
+  },
+  "Sb": {
+   "numero_atomico": 51,
+   "nome": "Antimony",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[Kr]5s2 4d10 5p3",
+   "eletrons_valencia": 5,
+   "eletronegatividade": 2.05,
+   "estados_oxidacao": [
+    "+5",
+    "+3",
+    "-3"
+   ]
+  },
+  "Te": {
+   "numero_atomico": 52,
+   "nome": "Tellurium",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[Kr]5s2 4d10 5p4",
+   "eletrons_valencia": 6,
+   "eletronegatividade": 2.1,
+   "estados_oxidacao": [
+    "+6",
+    "+4",
+    "-2"
+   ]
+  },
+  "I": {
+   "numero_atomico": 53,
+   "nome": "Iodine",
+   "bloco": "Halogen",
+   "configuracao_eletronica": "[Kr]5s2 4d10 5p5",
+   "eletrons_valencia": 7,
+   "eletronegatividade": 2.66,
+   "estados_oxidacao": [
+    "+7",
+    "+5",
+    "+1",
+    "-1"
+   ]
+  },
+  "Xe": {
+   "numero_atomico": 54,
+   "nome": "Xenon",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "[Kr]5s2 4d10 5p6",
+   "eletrons_valencia": 8,
+   "eletronegatividade": 2.6,
+   "estados_oxidacao": [
+    "0"
+   ]
+  },
+  "Cs": {
+   "numero_atomico": 55,
+   "nome": "Cesium",
+   "bloco": "Alkali metal",
+   "configuracao_eletronica": "[Xe]6s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 0.79,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Ba": {
+   "numero_atomico": 56,
+   "nome": "Barium",
+   "bloco": "Alkaline earth metal",
+   "configuracao_eletronica": "[Xe]6s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": 0.89,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "La": {
+   "numero_atomico": 57,
+   "nome": "Lanthanum",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 5d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.1,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Ce": {
+   "numero_atomico": 58,
+   "nome": "Cerium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f1 5d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.12,
+   "estados_oxidacao": [
+    "+4",
+    "+3"
+   ]
+  },
+  "Pr": {
+   "numero_atomico": 59,
+   "nome": "Praseodymium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f3",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.13,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Nd": {
+   "numero_atomico": 60,
+   "nome": "Neodymium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f4",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.14,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Pm": {
+   "numero_atomico": 61,
+   "nome": "Promethium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f5",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Sm": {
+   "numero_atomico": 62,
+   "nome": "Samarium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f6",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.17,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Eu": {
+   "numero_atomico": 63,
+   "nome": "Europium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f7",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Gd": {
+   "numero_atomico": 64,
+   "nome": "Gadolinium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f7 5d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.2,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Tb": {
+   "numero_atomico": 65,
+   "nome": "Terbium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f9",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Dy": {
+   "numero_atomico": 66,
+   "nome": "Dysprosium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.22,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Ho": {
+   "numero_atomico": 67,
+   "nome": "Holmium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f11",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.23,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Er": {
+   "numero_atomico": 68,
+   "nome": "Erbium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f12",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.24,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Tm": {
+   "numero_atomico": 69,
+   "nome": "Thulium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f13",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.25,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Yb": {
+   "numero_atomico": 70,
+   "nome": "Ytterbium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f14",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Lu": {
+   "numero_atomico": 71,
+   "nome": "Lutetium",
+   "bloco": "Lanthanide",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.27,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Hf": {
+   "numero_atomico": 72,
+   "nome": "Hafnium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d2",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+4"
+   ]
+  },
+  "Ta": {
+   "numero_atomico": 73,
+   "nome": "Tantalum",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d3",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.5,
+   "estados_oxidacao": [
+    "+5"
+   ]
+  },
+  "W": {
+   "numero_atomico": 74,
+   "nome": "Tungsten",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d4",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.36,
+   "estados_oxidacao": [
+    "+6"
+   ]
+  },
+  "Re": {
+   "numero_atomico": 75,
+   "nome": "Rhenium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d5",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.9,
+   "estados_oxidacao": [
+    "+7",
+    "+6",
+    "+4"
+   ]
+  },
+  "Os": {
+   "numero_atomico": 76,
+   "nome": "Osmium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d6",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.2,
+   "estados_oxidacao": [
+    "+4",
+    "+3"
+   ]
+  },
+  "Ir": {
+   "numero_atomico": 77,
+   "nome": "Iridium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d7",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.2,
+   "estados_oxidacao": [
+    "+4",
+    "+3"
+   ]
+  },
+  "Pt": {
+   "numero_atomico": 78,
+   "nome": "Platinum",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s1 4f14 5d9",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.28,
+   "estados_oxidacao": [
+    "+4",
+    "+2"
+   ]
+  },
+  "Au": {
+   "numero_atomico": 79,
+   "nome": "Gold",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s1 4f14 5d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.54,
+   "estados_oxidacao": [
+    "+3",
+    "+1"
+   ]
+  },
+  "Hg": {
+   "numero_atomico": 80,
+   "nome": "Mercury",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 2.0,
+   "estados_oxidacao": [
+    "+2",
+    "+1"
+   ]
+  },
+  "Tl": {
+   "numero_atomico": 81,
+   "nome": "Thallium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10 6p1",
+   "eletrons_valencia": 3,
+   "eletronegatividade": 1.62,
+   "estados_oxidacao": [
+    "+3",
+    "+1"
+   ]
+  },
+  "Pb": {
+   "numero_atomico": 82,
+   "nome": "Lead",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10 6p2",
+   "eletrons_valencia": 4,
+   "eletronegatividade": 2.33,
+   "estados_oxidacao": [
+    "+4",
+    "+2"
+   ]
+  },
+  "Bi": {
+   "numero_atomico": 83,
+   "nome": "Bismuth",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10 6p3",
+   "eletrons_valencia": 5,
+   "eletronegatividade": 2.02,
+   "estados_oxidacao": [
+    "+5",
+    "+3"
+   ]
+  },
+  "Po": {
+   "numero_atomico": 84,
+   "nome": "Polonium",
+   "bloco": "Metalloid",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10 6p4",
+   "eletrons_valencia": 6,
+   "eletronegatividade": 2.0,
+   "estados_oxidacao": [
+    "+4",
+    "+2"
+   ]
+  },
+  "At": {
+   "numero_atomico": 85,
+   "nome": "Astatine",
+   "bloco": "Halogen",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10 6p5",
+   "eletrons_valencia": 7,
+   "eletronegatividade": 2.2,
+   "estados_oxidacao": [
+    "7",
+    "5",
+    "3",
+    "1",
+    "-1"
+   ]
+  },
+  "Rn": {
+   "numero_atomico": 86,
+   "nome": "Radon",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "[Xe]6s2 4f14 5d10 6p6",
+   "eletrons_valencia": 8,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "0"
+   ]
+  },
+  "Fr": {
+   "numero_atomico": 87,
+   "nome": "Francium",
+   "bloco": "Alkali metal",
+   "configuracao_eletronica": "[Rn]7s1",
+   "eletrons_valencia": 1,
+   "eletronegatividade": 0.7,
+   "estados_oxidacao": [
+    "+1"
+   ]
+  },
+  "Ra": {
+   "numero_atomico": 88,
+   "nome": "Radium",
+   "bloco": "Alkaline earth metal",
+   "configuracao_eletronica": "[Rn]7s2",
+   "eletrons_valencia": 2,
+   "eletronegatividade": 0.9,
+   "estados_oxidacao": [
+    "+2"
+   ]
+  },
+  "Ac": {
+   "numero_atomico": 89,
+   "nome": "Actinium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 6d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.1,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Th": {
+   "numero_atomico": 90,
+   "nome": "Thorium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 6d2",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+4"
+   ]
+  },
+  "Pa": {
+   "numero_atomico": 91,
+   "nome": "Protactinium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f2 6d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.5,
+   "estados_oxidacao": [
+    "+5",
+    "+4"
+   ]
+  },
+  "U": {
+   "numero_atomico": 92,
+   "nome": "Uranium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f3 6d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.38,
+   "estados_oxidacao": [
+    "+6",
+    "+5",
+    "+4",
+    "+3"
+   ]
+  },
+  "Np": {
+   "numero_atomico": 93,
+   "nome": "Neptunium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f4 6d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.36,
+   "estados_oxidacao": [
+    "+6",
+    "+5",
+    "+4",
+    "+3"
+   ]
+  },
+  "Pu": {
+   "numero_atomico": 94,
+   "nome": "Plutonium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f6",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.28,
+   "estados_oxidacao": [
+    "+6",
+    "+5",
+    "+4",
+    "+3"
+   ]
+  },
+  "Am": {
+   "numero_atomico": 95,
+   "nome": "Americium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f7",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+6",
+    "+5",
+    "+4",
+    "+3"
+   ]
+  },
+  "Cm": {
+   "numero_atomico": 96,
+   "nome": "Curium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f7 6d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Bk": {
+   "numero_atomico": 97,
+   "nome": "Berkelium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f9",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+4",
+    "+3"
+   ]
+  },
+  "Cf": {
+   "numero_atomico": 98,
+   "nome": "Californium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f10",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Es": {
+   "numero_atomico": 99,
+   "nome": "Einsteinium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f11",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Fm": {
+   "numero_atomico": 100,
+   "nome": "Fermium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn] 5f12 7s2",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Md": {
+   "numero_atomico": 101,
+   "nome": "Mendelevium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f13",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "No": {
+   "numero_atomico": 102,
+   "nome": "Nobelium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f14",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3",
+    "+2"
+   ]
+  },
+  "Lr": {
+   "numero_atomico": 103,
+   "nome": "Lawrencium",
+   "bloco": "Actinide",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d1",
+   "eletrons_valencia": null,
+   "eletronegatividade": 1.3,
+   "estados_oxidacao": [
+    "+3"
+   ]
+  },
+  "Rf": {
+   "numero_atomico": 104,
+   "nome": "Rutherfordium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d2",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+4"
+   ]
+  },
+  "Db": {
+   "numero_atomico": 105,
+   "nome": "Dubnium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d3",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "5",
+    "4",
+    "3"
+   ]
+  },
+  "Sg": {
+   "numero_atomico": 106,
+   "nome": "Seaborgium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d4",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "6",
+    "5",
+    "4",
+    "3",
+    "0"
+   ]
+  },
+  "Bh": {
+   "numero_atomico": 107,
+   "nome": "Bohrium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d5",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "7",
+    "5",
+    "4",
+    "3"
+   ]
+  },
+  "Hs": {
+   "numero_atomico": 108,
+   "nome": "Hassium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d6",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "8",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2"
+   ]
+  },
+  "Mt": {
+   "numero_atomico": 109,
+   "nome": "Meitnerium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d7 (calculated)",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "9",
+    "8",
+    "6",
+    "4",
+    "3",
+    "1"
+   ]
+  },
+  "Ds": {
+   "numero_atomico": 110,
+   "nome": "Darmstadtium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d8 (predicted)",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "8",
+    "6",
+    "4",
+    "2",
+    "0"
+   ]
+  },
+  "Rg": {
+   "numero_atomico": 111,
+   "nome": "Roentgenium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d9 (predicted)",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "5",
+    "3",
+    "1",
+    "-1"
+   ]
+  },
+  "Cn": {
+   "numero_atomico": 112,
+   "nome": "Copernicium",
+   "bloco": "Transition metal",
+   "configuracao_eletronica": "[Rn]7s2 5f14 6d10 (predicted)",
+   "eletrons_valencia": null,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "2",
+    "1",
+    "0"
+   ]
+  },
+  "Nh": {
+   "numero_atomico": 113,
+   "nome": "Nihonium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Rn]5f14 6d10 7s2 7p1 (predicted)",
+   "eletrons_valencia": 3,
+   "eletronegatividade": null,
+   "estados_oxidacao": []
+  },
+  "Fl": {
+   "numero_atomico": 114,
+   "nome": "Flerovium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Rn]7s2 7p2 5f14 6d10 (predicted)",
+   "eletrons_valencia": 4,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "6",
+    "4",
+    "2",
+    "1",
+    "0"
+   ]
+  },
+  "Mc": {
+   "numero_atomico": 115,
+   "nome": "Moscovium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Rn]7s2 7p3 5f14 6d10 (predicted)",
+   "eletrons_valencia": 5,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "3",
+    "1"
+   ]
+  },
+  "Lv": {
+   "numero_atomico": 116,
+   "nome": "Livermorium",
+   "bloco": "Post-transition metal",
+   "configuracao_eletronica": "[Rn]7s2 7p4 5f14 6d10 (predicted)",
+   "eletrons_valencia": 6,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+4",
+    "+2",
+    "-2"
+   ]
+  },
+  "Ts": {
+   "numero_atomico": 117,
+   "nome": "Tennessine",
+   "bloco": "Halogen",
+   "configuracao_eletronica": "[Rn]7s2 7p5 5f14 6d10 (predicted)",
+   "eletrons_valencia": 7,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+5",
+    "+3",
+    "+1",
+    "-1"
+   ]
+  },
+  "Og": {
+   "numero_atomico": 118,
+   "nome": "Oganesson",
+   "bloco": "Noble gas",
+   "configuracao_eletronica": "[Rn]7s2 7p6 5f14 6d10 (predicted)",
+   "eletrons_valencia": 8,
+   "eletronegatividade": null,
+   "estados_oxidacao": [
+    "+6",
+    "+4",
+    "+2",
+    "+1",
+    "0",
+    "-1"
+   ]
+  }
+ }
+}

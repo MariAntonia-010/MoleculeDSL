@@ -1,0 +1,6 @@
+// esperado: Erro sintático na linha 5, coluna 14: um anel precisa de pelo menos três nomes de átomos
+molecule "Ring" {
+    atom C as c1
+    atom C as c2
+    ring c1 c2
+}

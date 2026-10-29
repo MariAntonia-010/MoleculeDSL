@@ -1,0 +1,4 @@
+// Molécula de um átomo só: não precisa de ligação
+molecule "Helium" {
+    atom He
+}

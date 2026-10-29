@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de Cl#1 é 3; o máximo para Cl é 1
+molecule "Chlorine hydride" {
+    atom Cl
+    3x atom H
+    bond Cl-H x3
+}

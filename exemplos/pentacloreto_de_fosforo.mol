@@ -1,0 +1,7 @@
+// Fósforo com valência 5
+molecule "Phosphorus pentachloride" {
+    atom P
+    5x atom Cl
+
+    bond P-Cl x5
+}

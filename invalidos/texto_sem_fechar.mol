@@ -1,0 +1,5 @@
+// esperado: Erro léxico na linha 4, coluna 4: texto sem aspas de fechamento
+molecule "Water" {
+    atom O
+    "
+}

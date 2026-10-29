@@ -1,0 +1,6 @@
+// esperado: Erro sintático na linha 4, coluna 14: esperado nome de átomo depois de 'as', encontrado 'x4'
+// esperado: Erro sintático na linha 5, coluna 14: esperado nome de átomo depois de 'as', encontrado 'ring'
+molecule "Water" {
+    atom O as x4
+    atom O as ring
+}

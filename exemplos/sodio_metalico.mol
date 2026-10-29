@@ -1,0 +1,7 @@
+// Ligação metálica (~)
+molecule "Sodium" {
+    atom Na as na1
+    atom Na as na2
+
+    bond na1~na2
+}
