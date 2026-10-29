@@ -1,0 +1,19 @@
+molecule "Pyrrole" {
+    atom N as n
+    4x atom C as c
+    5x atom H
+
+    bond n-c1
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-n
+
+    bond n-H
+    bond c1-H
+    bond c2-H
+    bond c3-H
+    bond c4-H
+
+    ring n c1 c2 c3 c4
+}

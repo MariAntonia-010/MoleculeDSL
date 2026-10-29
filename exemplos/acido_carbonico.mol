@@ -1,0 +1,12 @@
+molecule "Carbonic acid" {
+    atom C
+    atom O as od
+    2x atom O as o
+    2x atom H
+
+    bond C=od
+    bond C-o1
+    bond C-o2
+    bond o1-H
+    bond o2-H
+}

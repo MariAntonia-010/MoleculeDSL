@@ -1,0 +1,19 @@
+// Anel de cinco com um enxofre
+molecule "Thiophene" {
+    atom S as s
+    4x atom C as c
+    4x atom H
+
+    bond s-c1
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-s
+
+    bond c1-H
+    bond c2-H
+    bond c3-H
+    bond c4-H
+
+    ring s c1 c2 c3 c4
+}

@@ -1,0 +1,9 @@
+// esperado: Erro semântico [STRUCT-001] na linha 8, coluna 11: nenhum átomo se chama 'h4'
+molecule "Ammonia" {
+    atom N
+    3x atom H as h
+    bond N-h1
+    bond N-h2
+    bond N-h3
+    bond N-h4
+}

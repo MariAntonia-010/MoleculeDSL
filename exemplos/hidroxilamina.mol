@@ -1,0 +1,9 @@
+molecule "Hydroxylamine" {
+    atom N
+    atom O
+    3x atom H
+
+    bond N-O
+    bond N-H x2
+    bond O-H
+}

@@ -1,0 +1,17 @@
+molecule "Glycine" {
+    atom N as n
+    atom C as c1
+    atom C as c2
+    atom O as o1
+    atom O as o2
+    5x atom H
+
+    bond n-c1
+    bond c1-c2
+    bond c2=o1
+    bond c2-o2
+
+    bond n-H x2
+    bond c1-H x2
+    bond o2-H
+}

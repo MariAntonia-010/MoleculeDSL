@@ -1,0 +1,8 @@
+molecule "Nitrous oxide" {
+    atom N as n1
+    atom N(+1) as n2
+    atom O(-1)
+
+    bond n1#n2
+    bond n2-O
+}

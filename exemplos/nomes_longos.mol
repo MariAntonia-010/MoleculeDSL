@@ -1,0 +1,15 @@
+// Nomes com várias letras, dígitos e _
+molecule "Ethane" {
+    atom C as carbono_a
+    atom C as carbono_b
+    3x atom H as h_a
+    3x atom H as h_b
+
+    bond carbono_a-carbono_b
+    bond carbono_a-h_a1
+    bond carbono_a-h_a2
+    bond carbono_a-h_a3
+    bond carbono_b-h_b1
+    bond carbono_b-h_b2
+    bond carbono_b-h_b3
+}

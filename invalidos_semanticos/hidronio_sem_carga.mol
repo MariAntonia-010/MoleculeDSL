@@ -1,0 +1,6 @@
+// esperado: Erro semântico [CARGA-001] na linha 3, coluna 4: a soma das ordens de ligação de O#1 é 3, o que só é possível com carga +1: declare atom O(+1)
+molecule "Hydronium" {
+    atom O
+    3x atom H
+    bond O-H x3
+}

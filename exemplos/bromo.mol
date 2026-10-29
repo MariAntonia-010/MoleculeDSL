@@ -1,0 +1,6 @@
+molecule "Bromine" {
+    atom Br as br1
+    atom Br as br2
+
+    bond br1-br2
+}

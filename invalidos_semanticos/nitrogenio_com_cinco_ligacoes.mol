@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de N#1 é 5; o máximo para N é 3
+molecule "Nitrogen pentafluoride" {
+    atom N
+    5x atom F
+    bond N-F x5
+}

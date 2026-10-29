@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de H#1 é 2; o máximo para H é 1
+molecule "Bifluoride" {
+    atom H
+    2x atom F
+    bond H-F x2
+}

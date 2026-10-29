@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de F#1 é 2; o máximo para F é 1
+molecule "Fluorine" {
+    atom F
+    2x atom H
+    bond F-H x2
+}

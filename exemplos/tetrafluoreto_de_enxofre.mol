@@ -1,0 +1,6 @@
+molecule "Sulfur tetrafluoride" {
+    atom S
+    4x atom F
+
+    bond S-F x4
+}

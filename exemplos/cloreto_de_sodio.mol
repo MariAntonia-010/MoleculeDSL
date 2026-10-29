@@ -1,0 +1,6 @@
+molecule "Sodium chloride" {
+    atom Na
+    atom Cl
+
+    bond Na-Cl
+}

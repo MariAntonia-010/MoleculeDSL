@@ -1,0 +1,6 @@
+molecule "Chlorine monofluoride" {
+    atom Cl
+    atom F
+
+    bond Cl-F
+}

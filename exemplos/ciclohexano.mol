@@ -1,0 +1,20 @@
+molecule "Cyclohexane" {
+    6x atom C as c
+    12x atom H
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c1
+
+    bond c1-H x2
+    bond c2-H x2
+    bond c3-H x2
+    bond c4-H x2
+    bond c5-H x2
+    bond c6-H x2
+
+    ring c4 c5 c6 c1 c2 c3
+}

@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de B#1 é 2; o esperado para B é 3
+molecule "Boron hydride" {
+    atom B
+    2x atom H
+    bond B-H x2
+}

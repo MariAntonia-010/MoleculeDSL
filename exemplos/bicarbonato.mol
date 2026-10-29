@@ -1,0 +1,12 @@
+molecule "Bicarbonate" {
+    atom C
+    atom O as od
+    atom O as oh
+    atom O(-1) as o
+    atom H
+
+    bond C=od
+    bond C-oh
+    bond C-o
+    bond oh-H
+}

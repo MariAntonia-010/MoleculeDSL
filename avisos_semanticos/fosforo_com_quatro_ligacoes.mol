@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de P#1 é 4; o esperado para P é 3 ou 5
+molecule "Phosphorus tetrachloride" {
+    atom P
+    4x atom Cl
+    bond P-Cl x4
+}

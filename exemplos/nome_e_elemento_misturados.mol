@@ -1,0 +1,8 @@
+// h1 é citado pelo nome, então o "H" da segunda ligação é o h2
+molecule "Water" {
+    atom O
+    2x atom H as h
+
+    bond O-h1
+    bond O-H
+}

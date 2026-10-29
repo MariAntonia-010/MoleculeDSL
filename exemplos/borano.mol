@@ -1,0 +1,7 @@
+// Boro com valência 3
+molecule "Borane" {
+    atom B
+    3x atom H
+
+    bond B-H x3
+}

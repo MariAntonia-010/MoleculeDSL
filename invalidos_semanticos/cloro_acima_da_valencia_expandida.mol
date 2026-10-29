@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de Cl#1 é 8; o máximo para Cl é 7
+molecule "Chlorine octafluoride" {
+    atom Cl
+    8x atom F
+    bond Cl-F x8
+}

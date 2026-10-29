@@ -1,0 +1,9 @@
+// Fósforo com valência 5: uma dupla e três simples
+molecule "Phosphoryl chloride" {
+    atom P
+    atom O
+    3x atom Cl
+
+    bond P=O
+    bond P-Cl x3
+}

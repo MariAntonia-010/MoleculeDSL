@@ -1,0 +1,10 @@
+molecule "Sulfate" {
+    atom S
+    2x atom O as od
+    2x atom O(-1) as o
+
+    bond S=od1
+    bond S=od2
+    bond S-o1
+    bond S-o2
+}

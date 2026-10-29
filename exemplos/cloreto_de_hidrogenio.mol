@@ -1,0 +1,6 @@
+molecule "Hydrogen chloride" {
+    atom H
+    atom Cl
+
+    bond H-Cl
+}

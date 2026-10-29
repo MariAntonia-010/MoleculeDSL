@@ -1,0 +1,8 @@
+molecule "Nitrite" {
+    atom N
+    atom O as od
+    atom O(-1) as o
+
+    bond N=od
+    bond N-o
+}

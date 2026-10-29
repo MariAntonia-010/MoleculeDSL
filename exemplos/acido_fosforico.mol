@@ -1,0 +1,14 @@
+molecule "Phosphoric acid" {
+    atom P
+    atom O as od
+    3x atom O as o
+    3x atom H
+
+    bond P=od
+    bond P-o1
+    bond P-o2
+    bond P-o3
+    bond o1-H
+    bond o2-H
+    bond o3-H
+}

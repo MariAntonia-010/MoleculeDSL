@@ -1,0 +1,8 @@
+molecule "Phosgene" {
+    atom C
+    atom O
+    2x atom Cl
+
+    bond C=O
+    bond C-Cl x2
+}

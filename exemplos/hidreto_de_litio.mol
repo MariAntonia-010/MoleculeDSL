@@ -1,0 +1,6 @@
+molecule "Lithium hydride" {
+    atom Li
+    atom H
+
+    bond Li-H
+}

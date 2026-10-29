@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-005] na linha 5, coluna 4: o átomo c1 (C#1) não pode se ligar a ele mesmo
+molecule "Ethane" {
+    atom C as c1
+    atom C as c2
+    bond c1-c1
+}

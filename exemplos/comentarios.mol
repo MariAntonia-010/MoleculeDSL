@@ -1,0 +1,8 @@
+// Comentário antes da molécula
+molecule "Hydrogen fluoride" { // comentário na linha do {
+    // linha só com comentário
+
+    atom H    // hidrogênio
+    atom F//comentário sem espaço
+    bond H-F
+} // comentário depois do fim

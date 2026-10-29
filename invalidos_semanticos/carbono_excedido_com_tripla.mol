@@ -1,0 +1,10 @@
+// esperado: Erro semântico [VAL-001] na linha 4, coluna 4: a soma das ordens de ligação de c1 (C#1) é 5; o máximo para C é 4
+// O # conta 3: c1 fica com 3 + 1 + 1
+molecule "Acetylene" {
+    atom C as c1
+    atom C as c2
+    3x atom H
+    bond c1#c2
+    bond c1-H x2
+    bond c2-H
+}

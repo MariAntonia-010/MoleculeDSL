@@ -1,0 +1,7 @@
+// esperado: Erro semântico [ELEM-001] na linha 4, coluna 4: elemento desconhecido 'Qq'
+// O erro de 'Qq' não gera outro erro quando q é citado
+molecule "Unknown" {
+    atom Qq as q
+    atom O
+    bond q-O
+}

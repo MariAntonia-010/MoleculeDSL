@@ -1,0 +1,11 @@
+molecule "Acetone" {
+    3x atom C as c
+    atom O
+    6x atom H
+
+    bond c1-c2
+    bond c2-c3
+    bond c2=O
+    bond c1-H x3
+    bond c3-H x3
+}

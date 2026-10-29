@@ -1,0 +1,6 @@
+molecule "Cyanide" {
+    atom C(-1)
+    atom N
+
+    bond C#N
+}

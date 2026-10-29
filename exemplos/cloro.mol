@@ -1,0 +1,5 @@
+molecule "Chlorine" {
+    2x atom Cl
+
+    bond Cl-Cl
+}

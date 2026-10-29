@@ -1,0 +1,14 @@
+// Carbono central ligado a três metilas
+molecule "Isobutane" {
+    atom C as central
+    3x atom C as m
+    10x atom H
+
+    bond central-m1
+    bond central-m2
+    bond central-m3
+    bond central-H
+    bond m1-H x3
+    bond m2-H x3
+    bond m3-H x3
+}

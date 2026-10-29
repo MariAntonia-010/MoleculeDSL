@@ -1,0 +1,18 @@
+molecule "Furan" {
+    4x atom C as c
+    atom O as o
+    4x atom H
+
+    bond o-c1
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-o
+
+    bond c1-H
+    bond c2-H
+    bond c3-H
+    bond c4-H
+
+    ring o c1 c2 c3 c4
+}

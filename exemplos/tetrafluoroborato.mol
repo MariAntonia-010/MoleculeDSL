@@ -1,0 +1,6 @@
+molecule "Tetrafluoroborate" {
+    atom B(-1)
+    4x atom F
+
+    bond B-F x4
+}

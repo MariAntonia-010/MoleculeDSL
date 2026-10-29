@@ -1,0 +1,5 @@
+// esperado: Erro semântico [CARGA-001] na linha 4, coluna 4: O#1 com carga -1 deveria ter soma das ordens de ligação 1, mas tem 0
+// Sem ligação, O(-1) tem soma 0, mas deveria ter 1
+molecule "Oxide" {
+    atom O(-1)
+}

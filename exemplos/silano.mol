@@ -1,0 +1,7 @@
+// Si não tem valência em regras/valencias.json, então não é conferido
+molecule "Silane" {
+    atom Si
+    4x atom H
+
+    bond Si-H x4
+}

@@ -1,0 +1,12 @@
+molecule "Trimethylamine" {
+    atom N
+    3x atom C as c
+    9x atom H
+
+    bond N-c1
+    bond N-c2
+    bond N-c3
+    bond c1-H x3
+    bond c2-H x3
+    bond c3-H x3
+}

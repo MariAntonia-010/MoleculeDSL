@@ -1,0 +1,8 @@
+molecule "Dichloromethane" {
+    atom C
+    2x atom H
+    2x atom Cl
+
+    bond C-H x2
+    bond C-Cl x2
+}

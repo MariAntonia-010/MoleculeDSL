@@ -1,0 +1,10 @@
+molecule "Phosphate" {
+    atom P
+    atom O as od
+    3x atom O(-1) as o
+
+    bond P=od
+    bond P-o1
+    bond P-o2
+    bond P-o3
+}

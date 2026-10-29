@@ -1,0 +1,6 @@
+// esperado: Erro semântico [CARGA-001] na linha 3, coluna 4: C#1 com carga -1 deveria ter soma das ordens de ligação 3, mas tem 4
+molecule "Methane" {
+    atom C(-1)
+    4x atom H
+    bond C-H x4
+}

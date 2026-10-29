@@ -1,0 +1,6 @@
+molecule "Boron trifluoride" {
+    atom B
+    3x atom F
+
+    bond B-F x3
+}
