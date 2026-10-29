@@ -12,6 +12,7 @@ from ast_nos import (
 )
 from solver.backtracking import enumerate_edges as enumerate_reference
 from solver.chemical_profile import from_rules
+from solver.filters import Fragment, SolveFilters, parse_fragment
 from solver.messages import SolverMessage
 from solver.problem import normalize
 from solver.result import (
@@ -25,8 +26,10 @@ from solver.serialization import (
     result_dict,
     result_json,
     result_jsonl,
+    solution_jsonl,
     summary_dict,
     summary_json,
+    summary_jsonl,
 )
 
 
@@ -142,12 +145,34 @@ def solve(molecule, rules, request=None):
             return "timeout"
         return None
 
+    # Toda solução passa por aqui. A busca procura limit + 1 classes para
+    # saber se houve truncamento, mas a excedente nunca é entregue.
+    solutions = []
+    emitted = 0
+
+    def emit(edge_set):
+        nonlocal emitted
+        if emitted >= limit:
+            emitted += 1
+            return
+        emitted += 1
+        solution = build_molecule(problem, edge_set)
+        if request.on_solution is not None:
+            request.on_solution(solution, emitted)
+        else:
+            solutions.append(solution)
+
     backend_name = request.backend
     backend_version = "1"
     try:
         if request.backend == "reference":
             edges, extra, stop_reason = enumerate_reference(
-                problem, profile, limit, should_stop
+                problem,
+                profile,
+                limit,
+                should_stop,
+                filters=request.filters,
+                emit=emit,
             )
             backend_name = "reference-backtracking"
         elif request.backend == "cpsat":
@@ -158,6 +183,13 @@ def solve(molecule, rules, request=None):
             edges, extra, stop_reason = enumerate_cpsat(
                 problem, profile, limit, request
             )
+            # O CP-SAT devolve a lista ao final; a entrega por solução
+            # acontece depois da busca.
+            if edges is not None:
+                for edge_set in edges:
+                    emit(edge_set)
+                if extra:
+                    emitted += 1
             backend_name = "ortools-cpsat"
         else:
             return error_result(
@@ -188,23 +220,28 @@ def solve(molecule, rules, request=None):
                 f"com carga {atom.charge:+d}",
             )
         )
-    truncated = bool(extra)
-    if not edges and stop_reason is None:
+    truncated = bool(extra) or emitted > limit
+    delivered = min(emitted, limit)
+    if not delivered and stop_reason is None:
         return error_result(
             SolverMessage(
                 "SOLVER-003",
                 molecule.linha,
                 molecule.coluna,
-                "nenhuma estrutura conectada satisfaz as valências conhecidas",
+                "nenhuma estrutura conectada satisfaz as valências conhecidas"
+                + (
+                    " e os filtros pedidos"
+                    if request.filters is not None and request.filters.active
+                    else ""
+                ),
             ),
             SolveStatus.UNSAT,
         )
 
-    solutions = [build_molecule(problem, edge_set) for edge_set in edges]
     complete = not truncated and stop_reason is None
-    if len(solutions) == 1 and complete:
+    if delivered == 1 and complete:
         unique = Uniqueness.TRUE
-    elif len(solutions) > 1:
+    elif delivered > 1:
         unique = Uniqueness.FALSE
     else:
         unique = Uniqueness.UNKNOWN
@@ -222,13 +259,22 @@ def solve(molecule, rules, request=None):
         status=status,
         unique=unique,
         complete=complete,
-        solutions_emitted=len(solutions),
-        classes_seen=len(solutions) + (1 if truncated else 0),
+        solutions_emitted=delivered,
+        classes_seen=delivered + (1 if truncated else 0),
         truncated=truncated,
         elapsed_ms=int((monotonic() - started) * 1000),
         backend=backend_name,
         backend_version=backend_version,
-        details={"chemical_profile_digest": profile.digest},
+        details={
+            "chemical_profile": profile.name,
+            "chemical_profile_version": profile.version,
+            "chemical_profile_digest": profile.digest,
+            "filters": (
+                request.filters.describe()
+                if request.filters is not None
+                else []
+            ),
+        },
     )
     return SolveResult(solutions, [], summary)
 
@@ -275,17 +321,22 @@ def enumerar(molecule, rules, limite=10):
 
 
 __all__ = [
+    "Fragment",
+    "SolveFilters",
     "SolveRequest",
     "SolveResult",
     "SolveStatus",
     "SolveSummary",
     "Uniqueness",
     "enumerar",
+    "parse_fragment",
     "resolver",
     "result_dict",
     "result_json",
     "result_jsonl",
+    "solution_jsonl",
     "solve",
     "summary_dict",
     "summary_json",
+    "summary_jsonl",
 ]

@@ -25,6 +25,23 @@ def connected(vertex_count, edges):
     return len(visited) == vertex_count
 
 
+def feasible(residual):
+    # Podas seguras, válidas para qualquer perfil: cada ligação consome a
+    # mesma ordem nas duas pontas, então a soma residual é par; um grafo
+    # conectado com n átomos pesados precisa de n - 1 arestas, e nenhum
+    # átomo pesado pode ficar sem ligação entre os pesados.
+    total = sum(residual)
+    if total % 2:
+        return False
+    count = len(residual)
+    if count >= 2:
+        if any(value == 0 for value in residual):
+            return False
+        if total // 2 < count - 1:
+            return False
+    return True
+
+
 def search_heavy(residual, on_solution, should_stop):
     count = len(residual)
     if count < 2:
@@ -97,15 +114,30 @@ def materialize_edges(problem, heavy_edges, hydrogen_distribution):
     return edges
 
 
-def enumerate_edges(problem, profile, limit, should_stop=lambda: None):
+def enumerate_edges(
+    problem,
+    profile,
+    limit,
+    should_stop=lambda: None,
+    filters=None,
+    emit=None,
+):
+    # Sem emit, as soluções voltam numa lista. Com emit(edges), cada uma
+    # é entregue ao ser encontrada e a lista devolvida fica vazia.
     heavy = problem.heavy_atoms
     hydrogens = problem.hydrogens
 
     if not heavy:
         if len(hydrogens) == 2:
-            return [
-                {(hydrogens[0].index, hydrogens[1].index): 1}
-            ], False, None
+            if filters is not None and not filters.accepts_bonds(
+                [("H", 1, "H")], 0
+            ):
+                return [], False, None
+            edges = {(hydrogens[0].index, hydrogens[1].index): 1}
+            if emit is not None:
+                emit(edges)
+                return [], False, None
+            return [edges], False, None
         return [], False, None
 
     candidates = []
@@ -116,6 +148,7 @@ def enumerate_edges(problem, profile, limit, should_stop=lambda: None):
         candidates.append(allowed)
 
     solutions = []
+    found = 0
     keys = set()
     search_limit = limit + 1
     for targets in product(*candidates):
@@ -131,26 +164,36 @@ def enumerate_edges(problem, profile, limit, should_stop=lambda: None):
                     targets, hydrogen_distribution
                 )
             )
+            if not feasible(residual):
+                continue
+
             def accept(heavy_edges):
+                nonlocal found
+                if filters is not None and not filters.accepts(
+                    heavy, heavy_edges, hydrogen_distribution
+                ):
+                    return False
                 key = canonical_heavy_key(
                     heavy_edges, heavy, hydrogen_distribution
                 )
                 if key in keys:
                     return False
                 keys.add(key)
+                found += 1
                 edges = materialize_edges(
                     problem, heavy_edges, hydrogen_distribution
                 )
-                solutions.append(edges)
-                if len(solutions) >= search_limit:
-                    return True
-                return False
+                if emit is not None:
+                    emit(edges)
+                else:
+                    solutions.append(edges)
+                return found >= search_limit
 
             stop_reason = search_heavy(
                 residual, accept, should_stop
             )
             if stop_reason is not None:
                 return solutions, False, stop_reason
-            if len(solutions) >= search_limit:
+            if found >= search_limit:
                 return solutions[:limit], True, None
     return solutions, False, None

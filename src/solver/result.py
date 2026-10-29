@@ -28,6 +28,10 @@ class SolveRequest:
     time_limit_seconds: float | None = None
     cancel_check: object | None = None
     backend: str = "reference"
+    filters: object | None = None
+    # Com on_solution(molecula, indice), cada solução é entregue assim que
+    # aparece e não fica acumulada em SolveResult.solutions.
+    on_solution: object | None = None
 
 
 @dataclass

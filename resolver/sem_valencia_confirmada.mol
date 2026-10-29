@@ -1,0 +1,5 @@
+// esperado: Erro de resolução [SOLVER-002] na linha 3, coluna 4: não há valência confirmada para resolver Si com carga +0
+species molecule "Silano" {
+    atom Si
+    4x atom H
+}

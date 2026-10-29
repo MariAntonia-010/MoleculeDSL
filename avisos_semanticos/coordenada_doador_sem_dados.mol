@@ -1,0 +1,11 @@
+// esperado: Aviso semântico [COORD-002] na linha 7, coluna 4: não há dados suficientes para conferir o par livre de fe (Fe#1)
+molecule "Doador coordenado sem dados" {
+    atom Fe(+1) as fe
+    atom B(-1) as b
+    3x atom H as h
+
+    bond fe->b
+    bond b-h1
+    bond b-h2
+    bond b-h3
+}

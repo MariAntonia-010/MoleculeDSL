@@ -1,0 +1,5 @@
+// esperado: Erro de resolução [SOLVER-003] na linha 2, coluna 0: nenhuma estrutura conectada satisfaz as valências conhecidas
+species molecule "Carbono com um hidrogênio" {
+    atom C
+    atom H
+}

@@ -9,6 +9,8 @@ from dataclasses import dataclass
 class ChemicalProfile:
     rules: dict
     digest: str
+    name: str
+    version: str
 
     def allowed_valences(self, atom):
         if atom.charge:
@@ -24,4 +26,12 @@ def from_rules(rules):
         rules, ensure_ascii=False, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
     digest = hashlib.sha256(serialized).hexdigest()[:16]
-    return ChemicalProfile(rules, digest)
+    # Regras sem o bloco "perfil" continuam aceitas; o digest ainda
+    # identifica o conteúdo exato.
+    perfil = rules.get("perfil", {})
+    return ChemicalProfile(
+        rules,
+        digest,
+        perfil.get("nome", "sem-nome"),
+        str(perfil.get("versao", "0")),
+    )

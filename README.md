@@ -99,6 +99,10 @@ Opções disponíveis:
 | `--tempo-limite=S` | interrompe a busca após S segundos |
 | `--formato=texto\|json\|jsonl` | escolhe a saída do solver |
 | `--backend=reference\|cpsat` | seleciona o backend de busca |
+| `--aneis=N` | mantém só estruturas com N anéis |
+| `--ligacoes-multiplas=N` | mantém só estruturas com N ligações duplas ou triplas |
+| `--exigir=C=O` | mantém só estruturas com essa ligação (pode repetir) |
+| `--proibir=C#C` | descarta estruturas com essa ligação (pode repetir) |
 
 As opções podem ser combinadas:
 
@@ -138,8 +142,22 @@ python3 src/main.py --resolver-todas --max-solucoes=2 \
 ```
 
 O sumário informa `complete`, `unique`, `status`, quantidade emitida,
-backend, versão, tempo e digest das regras. `LIMIT_REACHED`, `TIMEOUT` e
+backend, versão, tempo, nome, versão e digest do perfil químico e os
+filtros aplicados. Em `jsonl`, cada solução é escrita assim que é
+encontrada, sem acumular a enumeração na memória; o sumário vem por último. `LIMIT_REACHED`, `TIMEOUT` e
 `CANCELLED` nunca são apresentados como busca completa.
+
+Filtros objetivos ajudam a escolher entre alternativas sem ranking oculto.
+Eles valem para `--resolver` e `--resolver-todas`:
+
+```bash
+python3 src/main.py --resolver-todas --exigir=C=O resolver/formula_ambigua.mol
+python3 src/main.py --resolver --aneis=0 --proibir=C=O resolver/formula_ambigua.mol
+```
+
+Para C₂H₄O, `--exigir=C=O` deixa só o acetaldeído, e `--aneis=0
+--proibir=C=O` torna o álcool vinílico a única estrutura. Um fragmento usa
+dois símbolos de elemento e o operador da ligação (`C-H`, `C=O`, `N#N`).
 
 O backend `reference` permanece o oráculo auditável. `cpsat` usa OR-Tools,
 conectividade por fluxo e a mesma distribuição prévia de H; as soluções são

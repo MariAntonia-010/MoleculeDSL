@@ -244,6 +244,224 @@ def testar_solver_todas(caminho):
     return problemas
 
 
+def chaves_canonicas(resultado_solver):
+    # Conjunto das chaves canônicas das soluções, para comparar resultados
+    # sem depender da ordem ou dos nomes gerados.
+    from ast_nos import LigacaoDecl
+    from solver.canonical import canonical_key
+    from solver.problem import normalize
+
+    chaves_resultado = set()
+    for solucao in resultado_solver.solutions:
+        problema, _ = normalize(
+            type(solucao)(
+                nome=solucao.nome,
+                linha=solucao.linha,
+                coluna=solucao.coluna,
+                comandos=[
+                    comando
+                    for comando in solucao.comandos
+                    if not isinstance(comando, LigacaoDecl)
+                ],
+                tipo=solucao.tipo,
+                carga_total=solucao.carga_total,
+                eletrons_desemparelhados=(
+                    solucao.eletrons_desemparelhados
+                ),
+                declaracao_legacy=solucao.declaracao_legacy,
+            )
+        )
+        nomes = {
+            atomo.name: atomo.index for atomo in problema.atoms
+        }
+        arestas = {}
+        for comando in solucao.comandos:
+            if isinstance(comando, LigacaoDecl):
+                par = tuple(
+                    sorted(
+                        (
+                            nomes[comando.origem.texto],
+                            nomes[comando.destino.texto],
+                        )
+                    )
+                )
+                arestas[par] = {
+                    "-": 1,
+                    "=": 2,
+                    "#": 3,
+                }[comando.operador.value]
+        chaves_resultado.add(
+            canonical_key(arestas, problema.atoms)
+        )
+    return chaves_resultado
+
+
+def escrever_mol(pasta, nome, linhas):
+    arquivo = os.path.join(pasta, nome)
+    with open(arquivo, "w", encoding="utf-8") as saida:
+        saida.write("\n".join(linhas) + "\n")
+    return arquivo
+
+
+def testar_fases_solver():
+    src = os.path.join(PASTA_RAIZ, "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+
+    from construtor_ast import construir
+    from sintatico import analisar
+    import semantico
+    import solver
+    from solver.backtracking import feasible
+    from solver.result import SolveStatus, Uniqueness
+
+    regras = semantico.carregar_valencias()
+    problemas = []
+
+    def resolver_arquivo(caminho, **opcoes):
+        opcoes.setdefault("max_solutions", 10)
+        opcoes.setdefault("require_unique", False)
+        return solver.solve(
+            construir(analisar(caminho)),
+            regras,
+            solver.SolveRequest(**opcoes),
+        )
+
+    # Fase 0: perfil químico com nome e versão explícitos
+    agua = os.path.join(PASTA_RAIZ, "resolver", "agua.mol")
+    detalhes = resolver_arquivo(agua).summary.details
+    if detalhes.get("chemical_profile") != "lewis-introdutorio":
+        problemas.append("nome do perfil químico ausente no sumário")
+    if detalhes.get("chemical_profile_version") != "1":
+        problemas.append("versão do perfil químico ausente no sumário")
+
+    # Fase 1: podas seguras
+    casos_poda = [
+        ((4, 2), True),
+        ((3, 2), False),
+        ((4, 0, 2), False),
+        ((1, 1, 1, 1), False),
+        ((2, 2, 1, 1), True),
+        ((1, 1, 1, 1, 2), False),
+    ]
+    for residual, esperado in casos_poda:
+        if feasible(residual) is not esperado:
+            problemas.append(f"poda errada para residual {residual}")
+
+    # Fase 2: invariância sob permutação das declarações
+    with tempfile.TemporaryDirectory() as pasta:
+        ordens = [
+            ["    2x atom C", "    atom O", "    6x atom H"],
+            ["    6x atom H", "    atom O", "    2x atom C"],
+            ["    atom C", "    3x atom H", "    atom O", "    atom C", "    3x atom H"],
+        ]
+        conjuntos = []
+        for indice, corpo in enumerate(ordens):
+            arquivo = escrever_mol(
+                pasta,
+                f"permutacao{indice}.mol",
+                ['species molecule "Permutação" {', *corpo, "}"],
+            )
+            conjuntos.append(chaves_canonicas(resolver_arquivo(arquivo)))
+        if any(conjunto != conjuntos[0] for conjunto in conjuntos):
+            problemas.append("soluções mudaram com a ordem das declarações")
+        if len(conjuntos[0]) != 2:
+            problemas.append(
+                f"C2H6O deveria ter 2 classes, obtido {len(conjuntos[0])}"
+            )
+
+    # Fase 3: entrega em fluxo sem acumular soluções
+    ambigua = os.path.join(PASTA_RAIZ, "resolver", "formula_ambigua.mol")
+    recebidas = []
+    em_fluxo = resolver_arquivo(
+        ambigua,
+        max_solutions=2,
+        on_solution=lambda estrutura, indice: recebidas.append(indice),
+    )
+    if em_fluxo.solutions:
+        problemas.append("modo em fluxo acumulou soluções no resultado")
+    if recebidas != [1, 2]:
+        problemas.append(f"índices entregues em fluxo: {recebidas}")
+    if em_fluxo.summary.status is not SolveStatus.LIMIT_REACHED:
+        problemas.append("fluxo limitado não retornou LIMIT_REACHED")
+    acumulado = resolver_arquivo(ambigua)
+    recebidas_todas = []
+    resolver_arquivo(
+        ambigua,
+        on_solution=lambda estrutura, indice: recebidas_todas.append(
+            estrutura
+        ),
+    )
+    if len(recebidas_todas) != len(acumulado.solutions):
+        problemas.append("fluxo e lista devolveram quantidades diferentes")
+
+    # Fase 6: filtros objetivos
+    filtros = [
+        (solver.SolveFilters(rings=1), 1),
+        (solver.SolveFilters(rings=0), 2),
+        (solver.SolveFilters(multiple_bonds=1), 2),
+        (solver.SolveFilters(required=(solver.parse_fragment("C=O"),)), 1),
+        (solver.SolveFilters(forbidden=(solver.parse_fragment("O-H"),)), 2),
+        (
+            solver.SolveFilters(
+                rings=0,
+                forbidden=(solver.parse_fragment("C=O"),),
+            ),
+            1,
+        ),
+    ]
+    for filtro, esperado in filtros:
+        resultado = resolver_arquivo(ambigua, filters=filtro)
+        if len(resultado.solutions) != esperado:
+            problemas.append(
+                f"filtro {filtro.describe()}: "
+                f"{len(resultado.solutions)} soluções, esperado {esperado}"
+            )
+    unica = resolver_arquivo(
+        ambigua,
+        max_solutions=2,
+        require_unique=True,
+        filters=solver.SolveFilters(
+            rings=0, forbidden=(solver.parse_fragment("C=O"),)
+        ),
+    )
+    if unica.summary.unique is not Uniqueness.TRUE:
+        problemas.append("filtro que deixa uma estrutura não deu unicidade")
+    vazio = resolver_arquivo(ambigua, filters=solver.SolveFilters(rings=2))
+    if vazio.summary.status is not SolveStatus.UNSAT or not str(
+        vazio.messages[0]
+    ).endswith("e os filtros pedidos"):
+        problemas.append("filtro impossível não retornou SOLVER-003")
+    if solver.parse_fragment("CO") is not None:
+        problemas.append("fragmento sem operador foi aceito")
+
+    codigo, saida = rodar_comando(
+        ["--resolver-todas", "--exigir=C=O", "--formato=jsonl", ambigua]
+    )
+    linhas = [json.loads(linha) for linha in saida.splitlines()]
+    if codigo != 0 or len(linhas) != 2:
+        problemas.append("CLI com --exigir não devolveu uma solução")
+    elif linhas[-1]["details"]["filters"] != ["exigir=C=O"]:
+        problemas.append("filtros não aparecem no sumário da CLI")
+    codigo, saida = rodar_comando(["--aneis=1", agua])
+    if codigo != 1:
+        problemas.append("filtro sem opção de resolução foi aceito")
+
+    try:
+        import ortools  # noqa: F401
+    except ImportError:
+        ortools = None
+    if ortools is not None:
+        for filtro, _ in filtros:
+            referencia = resolver_arquivo(ambigua, filters=filtro)
+            cpsat = resolver_arquivo(ambigua, filters=filtro, backend="cpsat")
+            if chaves_canonicas(referencia) != chaves_canonicas(cpsat):
+                problemas.append(
+                    f"backends divergem com o filtro {filtro.describe()}"
+                )
+    return problemas
+
+
 def testar_contrato_solver():
     src = os.path.join(PASTA_RAIZ, "src")
     if src not in sys.path:
@@ -330,53 +548,6 @@ def testar_contrato_solver():
     except ImportError:
         ortools = None
     if ortools is not None:
-        from ast_nos import LigacaoDecl
-
-        def chaves(resultado_solver):
-            chaves_resultado = set()
-            for solucao in resultado_solver.solutions:
-                problema, _ = normalize(
-                    type(solucao)(
-                        nome=solucao.nome,
-                        linha=solucao.linha,
-                        coluna=solucao.coluna,
-                        comandos=[
-                            comando
-                            for comando in solucao.comandos
-                            if not isinstance(comando, LigacaoDecl)
-                        ],
-                        tipo=solucao.tipo,
-                        carga_total=solucao.carga_total,
-                        eletrons_desemparelhados=(
-                            solucao.eletrons_desemparelhados
-                        ),
-                        declaracao_legacy=solucao.declaracao_legacy,
-                    )
-                )
-                nomes = {
-                    atomo.name: atomo.index for atomo in problema.atoms
-                }
-                arestas = {}
-                for comando in solucao.comandos:
-                    if isinstance(comando, LigacaoDecl):
-                        par = tuple(
-                            sorted(
-                                (
-                                    nomes[comando.origem.texto],
-                                    nomes[comando.destino.texto],
-                                )
-                            )
-                        )
-                        arestas[par] = {
-                            "-": 1,
-                            "=": 2,
-                            "#": 3,
-                        }[comando.operador.value]
-                chaves_resultado.add(
-                    canonical_key(arestas, problema.atoms)
-                )
-            return chaves_resultado
-
         formulas = [
             "agua.mol",
             "dioxido_carbono.mol",
@@ -406,7 +577,7 @@ def testar_contrato_solver():
                     backend="cpsat",
                 ),
             )
-            if chaves(referencia) != chaves(cpsat):
+            if chaves_canonicas(referencia) != chaves_canonicas(cpsat):
                 problemas.append(
                     f"backends divergem para {nome}"
                 )
@@ -626,6 +797,7 @@ def main():
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
         ("solver/contrato_estruturado", testar_contrato_solver),
         ("solver/cli_estruturada", testar_cli_solver_estruturado),
+        ("solver/fases_do_plano", testar_fases_solver),
     ]
     casos_especiais += [
         (

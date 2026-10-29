@@ -3,7 +3,7 @@
 from itertools import combinations, product
 from time import monotonic
 
-from solver.backtracking import materialize_edges
+from solver.backtracking import feasible, materialize_edges
 from solver.canonical import canonical_heavy_key
 from solver.hydrogen import distributions
 
@@ -75,6 +75,10 @@ def solve_distribution(
                 for pair, variable in bonds.items()
                 if self.value(variable)
             }
+            if request.filters is not None and not request.filters.accepts(
+                heavy, heavy_edges, hydrogen_distribution
+            ):
+                return
             key = canonical_heavy_key(
                 heavy_edges, heavy, hydrogen_distribution
             )
@@ -115,7 +119,10 @@ def enumerate_edges(problem, profile, limit, request):
     heavy = problem.heavy_atoms
     hydrogens = problem.hydrogens
     if not heavy:
-        if len(hydrogens) == 2:
+        if len(hydrogens) == 2 and (
+            request.filters is None
+            or request.filters.accepts_bonds([("H", 1, "H")], 0)
+        ):
             return [
                 {(hydrogens[0].index, hydrogens[1].index): 1}
             ], False, None
@@ -145,6 +152,8 @@ def enumerate_edges(problem, profile, limit, request):
                 target - hydrogen
                 for target, hydrogen in zip(targets, hydrogen_distribution)
             )
+            if not feasible(residual):
+                continue
             reason, single = solve_distribution(
                 heavy,
                 residual,
@@ -155,7 +164,12 @@ def enumerate_edges(problem, profile, limit, request):
                 candidates_found,
                 limit,
             )
-            if reason == "candidate":
+            if reason == "candidate" and (
+                request.filters is None
+                or request.filters.accepts(
+                    heavy, single, hydrogen_distribution
+                )
+            ):
                 key = canonical_heavy_key(
                     single, heavy, hydrogen_distribution
                 )

@@ -86,7 +86,7 @@ total explícita; `molecule` e os sólidos têm carga total zero. A forma
 legada `molecule "Nome"` continua aceita sem conferir soma global, para não
 reinterpretar arquivos antigos.
 
-Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002, CARGA-001 e a conferência do doador coordenado estão implementadas. `OCT-001` foi removida por decisão do grupo: para os elementos com dados, o octeto/dueto já é refletido pelas regras de valência; para os demais, não há fonte suficiente para uma regra independente.
+Situação: todas as regras da tabela estão implementadas e têm caso de teste. `OCT-001` foi removida por decisão do grupo: para os elementos com dados, o octeto/dueto já é refletido pelas regras de valência; para os demais, não há fonte suficiente para uma regra independente.
 
 Detalhes da implementação:
 - As regras são conferidas em etapas, e cada etapa só roda se a anterior não deu erro, para não aparecerem erros em cascata: estrutura, depois STRUCT-003, depois BOND-001, depois valência e carga.
@@ -143,7 +143,9 @@ C₂H₄O produz três alternativas formais.
 
 C₆H₁₂ já entra no backend por ter seis átomos pesados; sua enumeração é
 truncada no limite padrão. A escolha química entre alternativas continua
-sendo responsabilidade do usuário.
+sendo responsabilidade do usuário, que pode restringir a busca com filtros
+objetivos (`--aneis`, `--ligacoes-multiplas`, `--exigir`, `--proibir`). O
+plano completo do solver está em `docs/plano_solver.md`.
 
 ### M8: Erros, testes e documentação
 - Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.
@@ -156,7 +158,7 @@ sendo responsabilidade do usuário.
 M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8, fechando M1 a M5 antes de tocar em M6 e M7.
 
 ## Riscos e pendências
-- Um modelo cristalino para sólidos e a enumeração assistida de soluções ambíguas permanecem abertos.
+- Um modelo cristalino para sólidos permanece aberto. A enumeração assistida tem filtros objetivos; fragmentos maiores ficam para depois.
 - O enunciado e o prazo da disciplina ainda não foram conferidos contra este plano.
 - Mudanças de sintaxe alteram o contrato do projeto e precisam de decisão do grupo.
 

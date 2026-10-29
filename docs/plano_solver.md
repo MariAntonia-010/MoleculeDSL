@@ -25,7 +25,10 @@ formas de ressonância, coordenação metálica ou estabilidade.
 - H distribuído antes da matriz dos átomos pesados;
 - deduplicação exata por permutações que preservam elemento, carga e H;
 - status estruturados em `solver.result`;
-- digest do perfil químico;
+- nome, versão e digest do perfil químico;
+- podas seguras de paridade e conectividade;
+- entrega em fluxo das soluções;
+- filtros objetivos de anéis, ligações múltiplas e fragmentos;
 - oráculo de contagens pequenas no `testar.py`.
 
 ## Arquitetura
@@ -41,6 +44,7 @@ src/solver/
   backtracking.py      backend de referência
   messages.py          diagnósticos
   serialization.py     JSON versionado
+  filters.py           filtros objetivos da Fase 6
 ```
 
 ## Fase 0 — Contrato
@@ -52,14 +56,11 @@ Implementado:
 - `SolveSummary`;
 - `COMPLETE`, `UNSAT`, `LIMIT_REACHED`, `TIMEOUT`, `CANCELLED`, `ERROR`;
 - unicidade `TRUE`, `FALSE`, `UNKNOWN`;
-- schema JSON e digest das regras.
-
-Pendente:
-
-- expor JSON na CLI;
-- tempo decorrido;
-- deadline e cancelamento;
-- versão explícita do perfil químico.
+- schema JSON e digest das regras;
+- JSON na CLI, tempo decorrido, deadline e cancelamento (ver Fase 3);
+- versão explícita do perfil químico: o bloco `perfil` de
+  `regras/valencias.json` dá nome e versão, e o sumário traz
+  `chemical_profile`, `chemical_profile_version` e o digest.
 
 ## Fase 1 — Backend de referência
 
@@ -74,12 +75,16 @@ Implementado:
 - canonicalização exata;
 - limite de soluções.
 
-Próximas podas seguras:
+Podas seguras implementadas em `feasible`, antes da busca pesada, nos dois
+backends:
 
 - soma residual par;
-- capacidade global restante;
-- impossibilidade de conectar componentes;
-- componente fechada antes do fim;
+- átomo pesado sem valência residual não conecta os demais;
+- capacidade mínima: `n` pesados exigem pelo menos `n - 1` arestas.
+
+Ainda possíveis:
+
+- componente fechada antes do fim, durante a busca;
 - DBE somente quando o perfil permitir.
 
 Não podar por estabilidade, presença em banco, quantidade de cargas, anéis
@@ -98,6 +103,10 @@ Já conferidos:
 | C₄H₁₀ | 2 |
 | C₅H₁₂ | 3 |
 | C₆H₁₄ | 5 |
+
+A invariância sob permutação das declarações é conferida em C₂H₆O com três
+ordens diferentes de `atom`; os conjuntos de chaves canônicas devem ser
+iguais.
 
 Gates obrigatórios:
 
@@ -120,9 +129,13 @@ Implementado:
 - status `LIMIT_REACHED`, `TIMEOUT` e `CANCELLED` no contrato estruturado;
 - JSON versionado com backend, versão, tempo e digest das regras.
 
+- entrega em fluxo: `SolveRequest.on_solution` recebe cada solução assim que
+  ela é encontrada e `SolveResult.solutions` fica vazia; a CLI usa isso em
+  `--resolver-todas --formato=jsonl`. No CP-SAT, a entrega acontece ao fim de
+  cada busca.
+
 Pendente:
 
-- streaming real sem acumular soluções;
 - worker isolado para backends nativos.
 
 Busca interrompida nunca pode ser reportada como `UNSAT` ou única.
@@ -158,11 +171,19 @@ produzir rótulos duplicados para filtrar no final.
 
 ## Fase 6 — Ambiguidade assistida
 
-- filtros objetivos fornecidos pelo usuário;
-- fragmentos obrigatórios/proibidos;
-- número de ciclos e ligações múltiplas;
-- seleção sem ranking oculto;
-- exportação de alternativas canônicas.
+Implementado em `src/solver/filters.py`:
+
+- filtros objetivos fornecidos pelo usuário (`SolveFilters`);
+- fragmentos obrigatórios/proibidos de uma ligação (`--exigir=C=O`,
+  `--proibir=C#C`);
+- número de ciclos (`--aneis=N`) e de ligações múltiplas
+  (`--ligacoes-multiplas=N`);
+- seleção sem ranking oculto: o filtro é aplicado antes da deduplicação e do
+  limite, e a unicidade de `--resolver` passa a valer dentro do filtro;
+- exportação de alternativas canônicas em JSON/JSONL, com os filtros no
+  sumário.
+
+Pendente: fragmentos com mais de uma ligação.
 
 Ranking de estabilidade só poderá existir com função, dados, validação e
 calibração explícitos.

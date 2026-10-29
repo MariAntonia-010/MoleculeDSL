@@ -81,20 +81,24 @@ def result_json(result):
     )
 
 
+def solution_jsonl(molecule, index):
+    return json.dumps(
+        solution_dict(molecule, index), ensure_ascii=False, sort_keys=True
+    )
+
+
+def summary_jsonl(summary):
+    return json.dumps(
+        {"type": "summary", **summary_dict(summary)},
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+
+
 def result_jsonl(result):
     lines = [
-        json.dumps(
-            solution_dict(solution, index),
-            ensure_ascii=False,
-            sort_keys=True,
-        )
+        solution_jsonl(solution, index)
         for index, solution in enumerate(result.solutions, start=1)
     ]
-    lines.append(
-        json.dumps(
-            {"type": "summary", **summary_dict(result.summary)},
-            ensure_ascii=False,
-            sort_keys=True,
-        )
-    )
+    lines.append(summary_jsonl(result.summary))
     return "\n".join(lines)

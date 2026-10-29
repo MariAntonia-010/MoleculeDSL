@@ -1,0 +1,6 @@
+// esperado: Erro de resolução [SOLVER-001] na linha 5, coluna 4: --resolver aceita somente declarações de átomos
+species molecule "Entrada com ligação" {
+    atom O
+    2x atom H
+    bond O-H
+}

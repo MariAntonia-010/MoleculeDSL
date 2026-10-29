@@ -9,6 +9,10 @@
   "ordem_ligacao_incomum: Cl, Br e I acima de ligação simples geram aviso, não erro universal.",
   "ordem_ligacao: a coordenada conta como uma ligação de 2 elétrons (G4). A metálica não entra na conta, e átomos com ligação metálica não são conferidos (H3)."
  ],
+ "perfil": {
+  "nome": "lewis-introdutorio",
+  "versao": "1"
+ },
  "valencias": {
   "H": [1],
   "B": [3],

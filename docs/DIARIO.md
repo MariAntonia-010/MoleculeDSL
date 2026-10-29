@@ -390,3 +390,21 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - JSON e JSONL incluem soluções, mensagens, completude, unicidade, backend,
   versão, tempo e digest do perfil químico.
 - Testes cobrem limite, deadline, cancelamento e parsing dos dois formatos.
+
+---
+
+## 29/10/2026 — Fases pendentes do plano do solver
+
+- Perfil químico com nome e versão (`perfil` em `regras/valencias.json`),
+  expostos no sumário junto do digest.
+- Podas seguras antes da busca pesada: soma residual par, átomo pesado sem
+  valência residual e capacidade mínima de `n - 1` arestas.
+- Entrega em fluxo: `SolveRequest.on_solution` e JSONL escrito à medida que
+  as soluções aparecem.
+- Filtros objetivos (`--aneis`, `--ligacoes-multiplas`, `--exigir`,
+  `--proibir`), iguais nos backends de referência e CP-SAT.
+- Testes de invariância sob permutação das declarações, dos filtros, do
+  fluxo e das podas; casos para SOLVER-001, SOLVER-002, SOLVER-003 e
+  COORD-002.
+- Continuam fora: geração canônica (Fase 5), modelo eletrônico (Fase 7),
+  estereoquímica (Fase 8), coordenação e sólidos (Fase 9) e worker isolado.

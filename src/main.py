@@ -28,6 +28,10 @@ USO = (
     "\n  --tempo-limite=S interrompe a busca após S segundos"
     "\n  --formato=texto|json|jsonl escolhe a saída do solver"
     "\n  --backend=reference|cpsat escolhe o backend"
+    "\n  --aneis=N mantém só estruturas com N anéis"
+    "\n  --ligacoes-multiplas=N mantém só estruturas com N ligações duplas ou triplas"
+    "\n  --exigir=C=O mantém só estruturas com essa ligação (pode repetir)"
+    "\n  --proibir=C#C descarta estruturas com essa ligação (pode repetir)"
 )
 
 OPCOES = {
@@ -49,6 +53,7 @@ def ler_argumentos(argumentos):
         "tempo_limite": None,
         "formato": "texto",
         "backend": "reference",
+        "filtros": {"aneis": None, "multiplas": None, "exigir": [], "proibir": []},
     }
 
     for arg in argumentos:
@@ -77,6 +82,24 @@ def ler_argumentos(argumentos):
                     return None
                 configuracao["formato"] = valor
                 continue
+            if arg.startswith(("--aneis=", "--ligacoes-multiplas=")):
+                try:
+                    valor = int(arg.split("=", 1)[1])
+                except ValueError:
+                    return None
+                if valor < 0:
+                    return None
+                chave = "aneis" if arg.startswith("--aneis=") else "multiplas"
+                configuracao["filtros"][chave] = valor
+                continue
+            if arg.startswith(("--exigir=", "--proibir=")):
+                chave, texto = arg[2:].split("=", 1)
+                fragmento = solver.parse_fragment(texto)
+                if fragmento is None:
+                    print(f"Fragmento inválido: {texto} (use, por exemplo, C=O)")
+                    return None
+                configuracao["filtros"][chave].append(fragmento)
+                continue
             if arg.startswith("--backend="):
                 valor = arg.split("=", 1)[1]
                 if valor not in {"reference", "cpsat"}:
@@ -94,6 +117,19 @@ def ler_argumentos(argumentos):
         return None
 
     return arquivos[0], opcoes, configuracao
+
+
+def filtros_do_solver(configuracao):
+    filtros = configuracao.get("filtros")
+    if not filtros:
+        return None
+    resultado = solver.SolveFilters(
+        rings=filtros["aneis"],
+        multiple_bonds=filtros["multiplas"],
+        required=tuple(filtros["exigir"]),
+        forbidden=tuple(filtros["proibir"]),
+    )
+    return resultado if resultado.active else None
 
 
 def compilar(caminho, opcoes, configuracao=None):
@@ -133,6 +169,15 @@ def compilar(caminho, opcoes, configuracao=None):
     if formato != "texto" and opcoes & {"--tokens", "--ast", "--modelo"}:
         print("Saída estruturada não pode ser combinada com tokens, AST ou modelo")
         return ERRO_LEXICO_OU_SINTATICO
+    filtros = filtros_do_solver(configuracao)
+    if filtros is not None and not (
+        "--resolver" in opcoes or "--resolver-todas" in opcoes
+    ):
+        print("Filtros de estrutura exigem uma opção de resolução")
+        return ERRO_LEXICO_OU_SINTATICO
+
+    if "--resolver-todas" in opcoes and formato == "jsonl":
+        return resolver_todas_em_fluxo(molecula, configuracao, filtros)
 
     if "--resolver-todas" in opcoes:
         resultado = solver.solve(
@@ -143,6 +188,7 @@ def compilar(caminho, opcoes, configuracao=None):
                 require_unique=False,
                 time_limit_seconds=configuracao["tempo_limite"],
                 backend=configuracao["backend"],
+                filters=filtros,
             ),
         )
         if formato != "texto":
@@ -151,20 +197,6 @@ def compilar(caminho, opcoes, configuracao=None):
                 resultado.messages.extend(mensagens)
         if formato == "json":
             print(solver.result_json(resultado))
-            tem_erro = any(
-                getattr(mensagem, "severidade", None) == semantico.ERRO
-                for mensagem in resultado.messages
-            )
-            return (
-                SUCESSO
-                if resultado.solutions
-                and not tem_erro
-                and resultado.summary.status
-                not in (solver.SolveStatus.TIMEOUT, solver.SolveStatus.CANCELLED)
-                else ERRO_SEMANTICO
-            )
-        if formato == "jsonl":
-            print(solver.result_jsonl(resultado))
             tem_erro = any(
                 getattr(mensagem, "severidade", None) == semantico.ERRO
                 for mensagem in resultado.messages
@@ -211,6 +243,7 @@ def compilar(caminho, opcoes, configuracao=None):
                 require_unique=True,
                 time_limit_seconds=configuracao["tempo_limite"],
                 backend=configuracao["backend"],
+                filters=filtros,
             ),
         )
         if formato != "texto":
@@ -278,6 +311,42 @@ def compilar(caminho, opcoes, configuracao=None):
 
     print(f"Espécie {molecula.nome!r}: análise concluída sem erros")
     return SUCESSO
+
+
+def resolver_todas_em_fluxo(molecula, configuracao, filtros):
+    # Cada solução vira uma linha JSON assim que é encontrada, sem
+    # acumular a enumeração inteira na memória. O resumo vem por último.
+    tem_erro = False
+
+    def emitir(estrutura, indice):
+        nonlocal tem_erro
+        _, mensagens = semantico.analisar(estrutura)
+        if any(m.severidade == semantico.ERRO for m in mensagens):
+            tem_erro = True
+        print(solver.solution_jsonl(estrutura, indice), flush=True)
+
+    resultado = solver.solve(
+        molecula,
+        semantico.carregar_valencias(),
+        solver.SolveRequest(
+            max_solutions=configuracao["max_solucoes"],
+            require_unique=False,
+            time_limit_seconds=configuracao["tempo_limite"],
+            backend=configuracao["backend"],
+            filters=filtros,
+            on_solution=emitir,
+        ),
+    )
+    print(solver.summary_jsonl(resultado.summary))
+    return (
+        SUCESSO
+        if resultado.summary.solutions_emitted
+        and not tem_erro
+        and not resultado.messages
+        and resultado.summary.status
+        not in (solver.SolveStatus.TIMEOUT, solver.SolveStatus.CANCELLED)
+        else ERRO_SEMANTICO
+    )
 
 
 def main():
