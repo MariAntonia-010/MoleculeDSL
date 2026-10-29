@@ -1,0 +1,9 @@
+// esperado: Erro semântico [RING-003] na linha 8, coluna 4: o mesmo anel já foi declarado na linha 7
+molecule "Ring" {
+    3x atom C as c
+    bond c1-c2
+    bond c2-c3
+    bond c3-c1
+    ring c1 c2 c3
+    ring c2 c1 c3
+}

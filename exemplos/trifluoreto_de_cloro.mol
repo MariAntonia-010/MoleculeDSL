@@ -1,0 +1,7 @@
+// Valência expandida do cloro: 3 ligações, todas com flúor
+molecule "Chlorine trifluoride" {
+    atom Cl
+    3x atom F
+
+    bond Cl-F x3
+}

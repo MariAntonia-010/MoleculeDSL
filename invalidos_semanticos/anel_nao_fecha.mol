@@ -1,0 +1,7 @@
+// esperado: Erro semântico [RING-002] na linha 6, coluna 15: o anel não fecha: c3 e c1 não estão ligados
+molecule "Chain" {
+    3x atom C as c
+    bond c1-c2
+    bond c2-c3
+    ring c1 c2 c3
+}

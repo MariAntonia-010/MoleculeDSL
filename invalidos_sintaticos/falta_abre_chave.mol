@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 2, coluna 16: esperado '{' depois do nome da molécula
+molecule "Water"
+    atom O
+}

@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 2, coluna 9: esperado nome da molécula entre aspas
+molecule {
+    atom O
+}
