@@ -268,8 +268,8 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - A regra é aviso porque H3 não sustenta tratar ligação metálica como ligação
   de uma molécula discreta. Átomos envolvidos em `~` continuam fora da soma
   de valência.
-- `exemplos/sodio_metalico.mol` permanece válido sem aviso; o caso entre
-  ametais está em `avisos_semanticos/metalica_com_ametais.mol`.
+- `exemplos/sodio_metalico.mol` permaneceu inicialmente sem aviso; a revisão
+  aprofundada posterior substituiu essa decisão por `METAL-002`.
 
 ---
 
@@ -312,3 +312,11 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   do modelo dueto/octeto, não prova física da inexistência de orbital.
 - Participar de `~` não desativa mais a verificação de outras ligações do
   átomo; o caso de regressão combina C–H e C~Fe.
+
+### Ajuste após a revisão
+
+- Todo uso de `~` agora gera `METAL-002`, deixando explícito que uma aresta
+  do grafo não valida um sólido metálico.
+- `METAL-001` continua como diagnóstico complementar de composição.
+- `testar.py` passou a aceitar exemplos válidos com avisos esperados, e o
+  exemplo do sódio registra o novo aviso sem sair com erro.

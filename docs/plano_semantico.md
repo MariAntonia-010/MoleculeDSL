@@ -71,6 +71,7 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | COORD-003 | Receptor sem espaço eletrônico para receber o par | aviso |
 | COORD-004 | Dados insuficientes para conferir o receptor | aviso |
 | METAL-001 | Ligação metálica envolve participante fora de um bloco metálico | aviso |
+| METAL-002 | Aresta `~` não valida o comportamento coletivo de um sólido | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
 
@@ -97,7 +98,7 @@ Implementado em parte:
 - Elemento sem eletronegatividade na fonte produz `não classificada`. Não se usa a regra "metal + ametal = sempre iônica".
 - O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
 - Para H, He e elementos do segundo período, o receptor é conferido pela capacidade de dueto/octeto antes da doação. Falta de espaço gera COORD-003. Períodos posteriores geram COORD-004, pois expansão de valência e orbitais disponíveis exigem dados que a base não possui.
-- Ligações metálicas são identificadas no modelo e mantidas como informação de referência. `METAL-001` usa os blocos da PubChem para avisar quando `~` envolve participante não metálico. A aresta `~` não soma ordem, mas outras ligações do mesmo átomo continuam sendo verificadas; um modelo próprio de sólido metálico permanece para a continuação.
+- Ligações metálicas são identificadas no modelo e mantidas como informação de referência. Todo `~` gera METAL-002, pois uma aresta não valida o comportamento coletivo do sólido; METAL-001 acrescenta o aviso de participante não metálico. A aresta não soma ordem, mas outras ligações do mesmo átomo continuam sendo verificadas.
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.

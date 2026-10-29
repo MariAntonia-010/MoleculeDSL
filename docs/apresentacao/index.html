@@ -487,7 +487,7 @@
             <tr><td>VAL-001 / 002</td><td>Valência excedida / incompleta</td><td>erro / aviso</td></tr>
             <tr><td>CARGA-001</td><td>Carga incompatível</td><td>erro</td></tr>
             <tr><td>COORD-001…004</td><td>Doador e receptor coordenados</td><td>aviso</td></tr>
-            <tr><td>METAL-001</td><td>Participante não metálico em ~</td><td>aviso</td></tr>
+            <tr><td>METAL-001 / 002</td><td>Composição e limite coletivo de ~</td><td>aviso</td></tr>
             <tr><td>RING-001…003</td><td>Validade e duplicidade de anéis</td><td>erro</td></tr>
             <tr><td>RING-004</td><td>Ciclo independente sem ring</td><td>aviso</td></tr>
           </table>
@@ -589,7 +589,7 @@ Molécula 'Water': análise concluída sem erros</pre>
       <div class="grid">
         <article class="card"><h3>Octeto</h3><p><code>OCT-001</code> foi removida: as regras de valência já cobrem os elementos com dados.</p></article>
         <article class="card"><h3>Ciclos</h3><p>Ciclos independentes sem uma declaração <code>ring</code> agora geram <code>RING-004</code>.</p></article>
-        <article class="card"><h3>Ligação metálica</h3><p><code>METAL-001</code> já valida os participantes; o modelo próprio do sólido fica para a continuação.</p></article>
+        <article class="card"><h3>Ligação metálica</h3><p><code>METAL-001</code> verifica participantes e <code>METAL-002</code> informa que uma aresta não valida o sólido.</p></article>
         <article class="card"><h3>Solver</h3><p>Inferir ligações a partir apenas dos átomos ficou para a próxima iteração.</p></article>
         <article class="card"><h3>Mais química</h3><p>Aromaticidade, estereoquímica, isótopos, geometria e visualização 3D estão fora do escopo.</p></article>
         <article class="card"><h3>Fontes antes de regras</h3><p>Valências ainda pendentes não entram no código até serem sustentadas pelo levantamento.</p></article>

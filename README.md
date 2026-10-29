@@ -149,6 +149,7 @@ O catálogo de códigos, causas e correções está em
 | `CARGA-001` | carga inconsistente com a valência | erro |
 | `COORD-001` a `COORD-004` | par livre do doador e espaço eletrônico do receptor | aviso |
 | `METAL-001` | ligação `~` envolve participante não metálico | aviso |
+| `METAL-002` | grafo molecular não valida sólido metálico | aviso |
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
 | `RING-004` | ciclo independente sem declaração `ring` | aviso |
 
@@ -183,6 +184,8 @@ Casos inválidos e avisos declaram as mensagens esperadas no próprio arquivo:
 ```
 
 A comparação é exata: ID, linha, coluna e explicação precisam coincidir.
+Exemplos válidos também podem declarar avisos esperados, mantendo código de
+saída 0.
 
 ## Estrutura
 
@@ -221,7 +224,8 @@ Continuam pendentes:
 
 - valências ainda sem fonte e ligações múltiplas de S/P;
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
-  `METAL-001` já avisa quando `~` envolve participante não metálico;
+  `METAL-001` verifica a composição e `METAL-002` informa a limitação
+  coletiva de todo uso de `~`;
 - solver de estruturas a partir apenas dos átomos, planejado para a próxima
   iteração.
 

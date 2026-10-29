@@ -1,4 +1,5 @@
-// esperado: Aviso semântico [METAL-001] na linha 5, coluna 4: a ligação metálica envolve participante não metálico: c1 (C#1) (Nonmetal), c2 (C#2) (Nonmetal)
+// esperado: Aviso semântico [METAL-002] na linha 6, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-001] na linha 6, coluna 4: a ligação metálica envolve participante não metálico: c1 (C#1) (Nonmetal), c2 (C#2) (Nonmetal)
 molecule "Ligação metálica entre ametais" {
     atom C as c1
     atom C as c2

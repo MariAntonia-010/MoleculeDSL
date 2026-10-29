@@ -245,10 +245,11 @@ pois não é seguro inferir expansão de valência. Ligações metálicas são
 identificadas no modelo como informação de referência, mas nesta iteração
 não entram no
 cálculo de valência nem na classificação por eletronegatividade. O aviso
-`METAL-001` é emitido quando `~` envolve um elemento cujo bloco da tabela
-periódica não é metálico. Um modelo semântico próprio para sólidos metálicos
-fica para a continuação do projeto. A aresta `~` não recebe ordem de ligação,
-mas não desativa a conferência das demais ligações do mesmo átomo.
+Todo `~` produz `METAL-002`, informando que uma aresta do grafo molecular não
+valida o comportamento coletivo de um sólido. `METAL-001` é acrescentado
+quando algum participante pertence a um bloco não metálico. A aresta `~` não
+recebe ordem de ligação, mas não desativa a conferência das demais ligações
+do mesmo átomo.
 
 O compilador não possui uma regra separada `OCT-001`: octeto e dueto já são
 refletidos pelas valências dos elementos que possuem dados confirmados.

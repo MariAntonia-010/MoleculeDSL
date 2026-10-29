@@ -240,7 +240,8 @@ Próximas etapas seguras:
 3. manter H/F como limites estritos do perfil Lewis simples;
 4. adicionar carga total da espécie antes de conferir a soma das cargas;
 5. modelar radical antes de transformar valência incompleta em erro;
-6. fazer `~` sempre informar que o grafo não valida um sólido metálico;
+6. ~~fazer `~` sempre informar que o grafo não valida um sólido metálico;~~
+   implementado como `METAL-002`;
 7. criar tipo de espécie antes de representar NaCl, redes ou cristais.
 
 ## 10. Regra de governança

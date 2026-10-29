@@ -565,6 +565,13 @@ class AnalisadorSemantico:
             if ligacao.operador is not Operador.METALICA:
                 continue
 
+            self.aviso(
+                "METAL-002",
+                ligacao,
+                "ligação metálica é coletiva; uma aresta do grafo molecular "
+                "não valida um sólido metálico",
+            )
+
             participantes = (
                 por_id[ligacao.origem],
                 por_id[ligacao.destino],

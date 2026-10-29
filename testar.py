@@ -225,7 +225,18 @@ def testar_svgs_das_arvores():
 
 
 def main():
-    casos = [(c, testar_valido) for p in PASTAS_VALIDOS for c in arquivos(p)]
+    casos = []
+    for pasta in PASTAS_VALIDOS:
+        for caminho in arquivos(pasta):
+            if erros_esperados(caminho):
+                casos.append(
+                    (
+                        caminho,
+                        lambda c=caminho: testar_com_mensagens(c, 0),
+                    )
+                )
+            else:
+                casos.append((caminho, testar_valido))
     for pasta, codigo in PASTAS_COM_MENSAGENS.items():
         casos += [
             (c, lambda c, codigo=codigo: testar_com_mensagens(c, codigo))
