@@ -1,0 +1,7 @@
+// esperado: Aviso semântico [BOND-002] na linha 6, coluna 4: ligação dupla com Br é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+// Br não tem valência nos dados, mas só faz ligação simples
+molecule "Bromine" {
+    atom Br as br1
+    atom Br as br2
+    bond br1=br2
+}

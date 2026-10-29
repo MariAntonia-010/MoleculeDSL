@@ -1,4 +1,4 @@
-// esperado: Erro semântico [STRUCT-006] na linha 5, coluna 4: a repetição x3 ligaria os mesmos dois átomos 3 vezes
+// esperado: Erro semântico [STRUCT-006] na linha 5, coluna 4: a repetição x3 ligaria os mesmos dois átomos 3 vezes; use = ou # para ligação dupla ou tripla
 molecule "Carbon monoxide" {
     atom C
     atom O

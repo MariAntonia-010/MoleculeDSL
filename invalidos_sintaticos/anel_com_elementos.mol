@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 4, coluna 9: um anel precisa de pelo menos três nomes de átomos, encontrado 'C'
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 9: um anel precisa de pelo menos três nomes de átomos, encontrado 'C'
 molecule "Cyclopropane" {
     3x atom C
     ring C C C

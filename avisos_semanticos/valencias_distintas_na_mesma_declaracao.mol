@@ -1,0 +1,8 @@
+// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de c1 (C#1) é 1; o esperado para C é 4
+// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de c2 (C#2) é 2; o esperado para C é 4
+molecule "Somas diferentes" {
+    2x atom C as c
+    atom H
+    bond c1-c2
+    bond c2-H
+}

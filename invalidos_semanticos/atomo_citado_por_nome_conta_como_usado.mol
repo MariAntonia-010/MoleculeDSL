@@ -1,4 +1,4 @@
-// esperado: Erro semântico [STRUCT-004] na linha 8, coluna 11: todos os 2 átomos de H já foram citados
+// esperado: Erro semântico [STRUCT-004] na linha 8, coluna 11: todos os 2 átomos de H já foram citados; declare mais átomos ou use nomes para escolher qual
 // O "H" não volta para o h1, que já foi citado pelo nome
 molecule "Water" {
     atom O

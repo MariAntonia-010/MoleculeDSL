@@ -1,5 +1,5 @@
-// esperado: Erro léxico na linha 5, coluna 11: caractere inválido ','
-// esperado: Erro léxico na linha 5, coluna 15: caractere inválido ','
+// esperado: Erro léxico [LEX-001] na linha 5, coluna 11: caractere inválido ','
+// esperado: Erro léxico [LEX-001] na linha 5, coluna 15: caractere inválido ','
 molecule "Cyclopropane" {
     3x atom C as c
     ring c1, c2, c3

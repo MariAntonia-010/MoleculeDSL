@@ -1,0 +1,5 @@
+molecule "iodo_expandido" {
+    atom I
+    7x atom F
+    bond I-F x7
+}

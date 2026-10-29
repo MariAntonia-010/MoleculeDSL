@@ -1,0 +1,5 @@
+molecule "bromo_expandido" {
+    atom Br
+    3x atom F
+    bond Br-F x3
+}

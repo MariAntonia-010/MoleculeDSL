@@ -1,0 +1,8 @@
+// As cargas são as da estrutura final: água + próton forma H3O(+).
+molecule "Hydronium coordinate" {
+    atom O(+1)
+    2x atom H
+    atom H as p
+    bond O-H x2
+    bond O->p
+}

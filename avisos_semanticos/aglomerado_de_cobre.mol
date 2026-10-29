@@ -1,0 +1,15 @@
+// esperado: Aviso semântico [METAL-002] na linha 9, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-002] na linha 10, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-002] na linha 11, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-002] na linha 12, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// Anel formado só por ligações metálicas
+molecule "Copper cluster" {
+    4x atom Cu as cu
+
+    bond cu1~cu2
+    bond cu2~cu3
+    bond cu3~cu4
+    bond cu4~cu1
+
+    ring cu1 cu2 cu3 cu4
+}

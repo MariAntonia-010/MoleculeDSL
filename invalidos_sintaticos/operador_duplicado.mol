@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 5, coluna 11: esperado elemento ou nome de átomo na ligação, encontrado '='
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 11: esperado elemento ou nome de átomo na ligação, encontrado '='
 molecule "Carbon dioxide" {
     atom C
     2x atom O

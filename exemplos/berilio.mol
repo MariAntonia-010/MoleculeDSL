@@ -1,0 +1,5 @@
+molecule "berilio" {
+    atom Be
+    2x atom Cl
+    bond Be-Cl x2
+}

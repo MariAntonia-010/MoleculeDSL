@@ -1,0 +1,7 @@
+// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de Cl#1 é 2; o esperado para Cl é 1, 3, 5 ou 7
+// esperado: Aviso semântico [BOND-002] na linha 6, coluna 4: ligação dupla com Cl é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+molecule "Chlorine monoxide" {
+    atom Cl
+    atom O
+    bond Cl=O
+}

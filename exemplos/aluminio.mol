@@ -1,0 +1,5 @@
+molecule "aluminio" {
+    atom Al
+    3x atom Cl
+    bond Al-Cl x3
+}
