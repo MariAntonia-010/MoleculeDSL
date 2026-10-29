@@ -1,0 +1,7 @@
+// Espaços entre os átomos e o operador são ignorados
+molecule "Water" {
+    atom O
+    2x atom H
+
+    bond O - H x2
+}

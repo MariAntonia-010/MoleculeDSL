@@ -1,0 +1,12 @@
+molecule "Urea" {
+    atom C
+    atom O
+    2x atom N as n
+    4x atom H
+
+    bond C=O
+    bond C-n1
+    bond C-n2
+    bond n1-H x2
+    bond n2-H x2
+}

@@ -1,0 +1,9 @@
+// esperado: Erro semântico [STRUCT-004] na linha 8, coluna 11: todos os 2 átomos de H já foram citados
+// O "H" não volta para o h1, que já foi citado pelo nome
+molecule "Water" {
+    atom O
+    2x atom H as h
+    bond O-h1
+    bond O-H
+    bond O-H
+}

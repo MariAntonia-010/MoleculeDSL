@@ -1,0 +1,7 @@
+// Fe não tem valência em regras/valencias.json, então não é conferido
+molecule "Iron chloride" {
+    atom Fe
+    3x atom Cl
+
+    bond Fe-Cl x3
+}

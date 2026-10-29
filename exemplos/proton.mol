@@ -1,0 +1,4 @@
+// Íon de um átomo só; carga fora da tabela C3 não é conferida
+molecule "Proton" {
+    atom H(+1)
+}

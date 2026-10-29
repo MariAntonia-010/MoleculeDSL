@@ -1,0 +1,8 @@
+molecule "Carbonyl sulfide" {
+    atom O
+    atom C
+    atom S
+
+    bond O=C
+    bond C=S
+}

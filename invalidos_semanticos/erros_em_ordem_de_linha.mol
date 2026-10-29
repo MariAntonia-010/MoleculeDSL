@@ -1,0 +1,8 @@
+// esperado: Erro semântico [STRUCT-001] na linha 5, coluna 9: nenhum átomo se chama 'c1'
+// esperado: Erro semântico [ELEM-001] na linha 7, coluna 4: elemento desconhecido 'Zz'
+// Os erros saem na ordem das linhas, e não na ordem em que são conferidos
+molecule "Order" {
+    bond c1-O
+    atom O
+    atom Zz
+}

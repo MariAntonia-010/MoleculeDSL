@@ -1,0 +1,22 @@
+molecule "Toluene" {
+    6x atom C as c
+    atom C as metil
+    8x atom H
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c5
+    bond c5=c6
+    bond c6-c1
+    bond c1-metil
+
+    bond c2-H
+    bond c3-H
+    bond c4-H
+    bond c5-H
+    bond c6-H
+    bond metil-H x3
+
+    ring c1 c2 c3 c4 c5 c6
+}

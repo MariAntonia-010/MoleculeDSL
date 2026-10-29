@@ -1,0 +1,6 @@
+molecule "Carbon disulfide" {
+    atom C
+    2x atom S
+
+    bond C=S x2
+}

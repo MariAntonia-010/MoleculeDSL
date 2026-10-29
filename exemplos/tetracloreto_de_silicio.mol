@@ -1,0 +1,6 @@
+molecule "Silicon tetrachloride" {
+    atom Si
+    4x atom Cl
+
+    bond Si-Cl x4
+}

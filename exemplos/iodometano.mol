@@ -1,0 +1,8 @@
+molecule "Iodomethane" {
+    atom C
+    atom I
+    3x atom H
+
+    bond C-I
+    bond C-H x3
+}

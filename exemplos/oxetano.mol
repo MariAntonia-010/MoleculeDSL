@@ -1,0 +1,17 @@
+// Anel de quatro com um oxigênio
+molecule "Oxetane" {
+    atom O as o
+    3x atom C as c
+    6x atom H
+
+    bond o-c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-o
+
+    bond c1-H x2
+    bond c2-H x2
+    bond c3-H x2
+
+    ring o c1 c2 c3
+}

@@ -1,0 +1,13 @@
+molecule "Ethylene glycol" {
+    2x atom C as c
+    2x atom O as o
+    6x atom H
+
+    bond c1-c2
+    bond c1-o1
+    bond c2-o2
+    bond c1-H x2
+    bond c2-H x2
+    bond o1-H
+    bond o2-H
+}

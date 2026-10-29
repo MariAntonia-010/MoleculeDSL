@@ -1,0 +1,16 @@
+// O anel pode ser citado em qualquer sentido e a partir de qualquer átomo
+molecule "Cyclobutane" {
+    4x atom C as c
+    8x atom H
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c1
+    bond c1-H x2
+    bond c2-H x2
+    bond c3-H x2
+    bond c4-H x2
+
+    ring c3 c2 c1 c4
+}

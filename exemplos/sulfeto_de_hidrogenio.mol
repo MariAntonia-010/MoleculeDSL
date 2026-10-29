@@ -1,0 +1,7 @@
+// Enxofre com valência 2
+molecule "Hydrogen sulfide" {
+    atom S
+    2x atom H
+
+    bond S-H x2
+}

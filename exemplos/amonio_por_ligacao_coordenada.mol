@@ -1,0 +1,9 @@
+// O quarto H chega por ligação coordenada, do N para o H
+molecule "Ammonium" {
+    atom N(+1)
+    3x atom H
+    atom H as p
+
+    bond N-H x3
+    bond N->p
+}

@@ -1,0 +1,6 @@
+// esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de S#1 é 7; o máximo para S é 6
+molecule "Sulfur heptafluoride" {
+    atom S
+    7x atom F
+    bond S-F x7
+}

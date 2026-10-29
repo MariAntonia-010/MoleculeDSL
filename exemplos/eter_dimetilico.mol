@@ -1,0 +1,11 @@
+molecule "Dimethyl ether" {
+    atom C as c1
+    atom C as c2
+    atom O
+    6x atom H
+
+    bond c1-O
+    bond O-c2
+    bond c1-H x3
+    bond c2-H x3
+}

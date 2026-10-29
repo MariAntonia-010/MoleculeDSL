@@ -1,0 +1,13 @@
+molecule "Methyl acetate" {
+    3x atom C as c
+    atom O as o1
+    atom O as o2
+    6x atom H
+
+    bond c1-c2
+    bond c2=o1
+    bond c2-o2
+    bond o2-c3
+    bond c1-H x3
+    bond c3-H x3
+}

@@ -1,0 +1,7 @@
+// Cadeia de três átomos com ligação metálica
+molecule "Lithium" {
+    3x atom Li as li
+
+    bond li1~li2
+    bond li2~li3
+}

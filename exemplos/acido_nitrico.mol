@@ -1,0 +1,12 @@
+molecule "Nitric acid" {
+    atom N(+1)
+    atom O as o1
+    atom O(-1) as o2
+    atom O as o3
+    atom H
+
+    bond N=o1
+    bond N-o2
+    bond N-o3
+    bond o3-H
+}

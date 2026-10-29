@@ -1,0 +1,10 @@
+// Cada "H" usa o próximo hidrogênio ainda não citado
+molecule "Acetylene" {
+    atom C as c1
+    atom C as c2
+    2x atom H
+
+    bond c1#c2
+    bond c1-H
+    bond c2-H
+}

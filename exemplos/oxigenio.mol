@@ -1,0 +1,6 @@
+molecule "Oxygen" {
+    atom O as o1
+    atom O as o2
+
+    bond o1=o2
+}

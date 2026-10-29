@@ -1,0 +1,8 @@
+molecule "Hydrogen cyanide" {
+    atom H
+    atom C
+    atom N
+
+    bond H-C
+    bond C#N
+}

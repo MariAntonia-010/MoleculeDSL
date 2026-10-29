@@ -1,0 +1,9 @@
+molecule "Carbonate" {
+    atom C
+    atom O as od
+    2x atom O(-1) as o
+
+    bond C=od
+    bond C-o1
+    bond C-o2
+}

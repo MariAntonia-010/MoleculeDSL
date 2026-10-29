@@ -1,0 +1,5 @@
+// esperado: Erro sintático na linha 3, coluna 13: esperado nome de átomo depois de 'as', encontrado '4x'
+molecule "Methane" {
+    atom C as
+    4x atom H
+}

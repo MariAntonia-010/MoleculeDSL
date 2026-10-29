@@ -1,0 +1,6 @@
+// Com dois átomos de H, "H-H" liga o primeiro ao segundo
+molecule "Hydrogen" {
+    2x atom H
+
+    bond H-H
+}

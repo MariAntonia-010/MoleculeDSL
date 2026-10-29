@@ -1,0 +1,7 @@
+// Ligação tripla com carga nos dois átomos
+molecule "Carbon monoxide" {
+    atom C(-1)
+    atom O(+1)
+
+    bond C#O
+}

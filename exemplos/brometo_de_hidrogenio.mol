@@ -1,0 +1,6 @@
+molecule "Hydrogen bromide" {
+    atom H
+    atom Br
+
+    bond H-Br
+}

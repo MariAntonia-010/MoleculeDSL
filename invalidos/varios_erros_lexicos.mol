@@ -1,0 +1,7 @@
+// esperado: Erro léxico na linha 4, coluna 11: caractere inválido '@'
+// esperado: Erro léxico na linha 5, coluna 11: caractere inválido '$'
+molecule "Water" {
+    atom O @
+    atom H $
+    atom H
+}

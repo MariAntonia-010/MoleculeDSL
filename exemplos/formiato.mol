@@ -1,0 +1,10 @@
+molecule "Formate" {
+    atom C
+    atom O as o1
+    atom O(-1) as o2
+    atom H
+
+    bond C=o1
+    bond C-o2
+    bond C-H
+}

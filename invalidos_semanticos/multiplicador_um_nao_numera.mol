@@ -1,0 +1,7 @@
+// esperado: Erro semântico [STRUCT-001] na linha 6, coluna 9: nenhum átomo se chama 'o1'
+// Com 1x, o nome não ganha número: o átomo se chama o, e não o1
+molecule "Hydroxide" {
+    1x atom O(-1) as o
+    atom H
+    bond o1-H
+}

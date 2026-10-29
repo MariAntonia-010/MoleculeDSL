@@ -1,0 +1,9 @@
+molecule "Tetrafluoroethylene" {
+    atom C as c1
+    atom C as c2
+    4x atom F
+
+    bond c1=c2
+    bond c1-F x2
+    bond c2-F x2
+}

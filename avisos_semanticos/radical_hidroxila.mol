@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de O#1 é 1; o esperado para O é 2 (se for um íon, declare atom O(-1))
+molecule "Hydroxyl radical" {
+    atom O
+    atom H
+    bond O-H
+}

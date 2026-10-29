@@ -1,0 +1,7 @@
+// esperado: Erro semântico [STRUCT-006] na linha 6, coluna 4: já existe uma ligação entre c2 (C#2) e c1 (C#1)
+molecule "Ethene" {
+    atom C as c1
+    atom C as c2
+    bond c1-c2
+    bond c2=c1
+}

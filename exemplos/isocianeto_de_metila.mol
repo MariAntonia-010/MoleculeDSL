@@ -1,0 +1,10 @@
+molecule "Methyl isocyanide" {
+    atom C as metil
+    atom N(+1)
+    atom C(-1) as cn
+    3x atom H
+
+    bond metil-N
+    bond N#cn
+    bond metil-H x3
+}

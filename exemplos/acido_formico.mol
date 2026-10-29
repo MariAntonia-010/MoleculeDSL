@@ -1,0 +1,11 @@
+molecule "Formic acid" {
+    atom C
+    atom O as o1
+    atom O as o2
+    2x atom H
+
+    bond C=o1
+    bond C-o2
+    bond C-H
+    bond o2-H
+}

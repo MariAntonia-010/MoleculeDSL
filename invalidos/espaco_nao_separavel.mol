@@ -1,0 +1,4 @@
+// esperado: Erro léxico na linha 3, coluna 8: caractere invisível inválido (U+00A0)
+molecule "Water" {
+    atom O
+}

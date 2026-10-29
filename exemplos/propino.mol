@@ -1,0 +1,9 @@
+molecule "Propyne" {
+    3x atom C as c
+    4x atom H
+
+    bond c1#c2
+    bond c2-c3
+    bond c1-H
+    bond c3-H x3
+}

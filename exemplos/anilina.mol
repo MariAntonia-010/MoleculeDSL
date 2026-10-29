@@ -1,0 +1,22 @@
+molecule "Aniline" {
+    6x atom C as c
+    atom N
+    7x atom H
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c5
+    bond c5=c6
+    bond c6-c1
+    bond c1-N
+    bond N-H x2
+
+    bond c2-H
+    bond c3-H
+    bond c4-H
+    bond c5-H
+    bond c6-H
+
+    ring c1 c2 c3 c4 c5 c6
+}

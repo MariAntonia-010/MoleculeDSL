@@ -1,0 +1,12 @@
+molecule "Dimethyl sulfoxide" {
+    atom S
+    atom O
+    2x atom C as c
+    6x atom H
+
+    bond S=O
+    bond S-c1
+    bond S-c2
+    bond c1-H x3
+    bond c2-H x3
+}

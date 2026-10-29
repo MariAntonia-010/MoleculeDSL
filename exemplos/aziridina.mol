@@ -1,0 +1,16 @@
+// Anel de três com um nitrogênio
+molecule "Aziridine" {
+    atom C as c1
+    atom C as c2
+    atom N as n
+    5x atom H
+
+    bond c1-c2
+    bond c2-n
+    bond n-c1
+    bond n-H
+    bond c1-H x2
+    bond c2-H x2
+
+    ring c1 c2 n
+}

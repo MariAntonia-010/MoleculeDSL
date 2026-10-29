@@ -1,0 +1,7 @@
+// esperado: Erro semântico [BOND-001] na linha 6, coluna 4: H só faz ligação simples, mas H#1 está numa ligação dupla
+// x4 cria 4 ligações duplas inválidas, mas o erro aparece uma vez só
+molecule "Methane" {
+    atom C
+    4x atom H
+    bond C=H x4
+}

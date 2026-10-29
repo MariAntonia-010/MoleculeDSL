@@ -1,0 +1,9 @@
+molecule "Methylamine" {
+    atom C
+    atom N
+    5x atom H
+
+    bond C-N
+    bond C-H x3
+    bond N-H x2
+}

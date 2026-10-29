@@ -1,0 +1,7 @@
+// Valência expandida do cloro: 5 ligações com flúor
+molecule "Chlorine pentafluoride" {
+    atom Cl
+    5x atom F
+
+    bond Cl-F x5
+}

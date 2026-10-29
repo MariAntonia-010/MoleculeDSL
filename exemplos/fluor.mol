@@ -1,0 +1,6 @@
+molecule "Fluorine" {
+    atom F as f1
+    atom F as f2
+
+    bond f1-f2
+}

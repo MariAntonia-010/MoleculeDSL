@@ -1,0 +1,14 @@
+// Enxofre com valência 6
+molecule "Sulfuric acid" {
+    atom S
+    2x atom O as od     // oxigênios da ligação dupla
+    2x atom O as oh     // oxigênios ligados ao hidrogênio
+    2x atom H
+
+    bond S=od1
+    bond S=od2
+    bond S-oh1
+    bond S-oh2
+    bond oh1-H
+    bond oh2-H
+}

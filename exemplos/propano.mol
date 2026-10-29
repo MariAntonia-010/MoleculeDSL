@@ -1,0 +1,10 @@
+molecule "Propane" {
+    3x atom C as c
+    8x atom H
+
+    bond c1-c2
+    bond c2-c3
+    bond c1-H x3
+    bond c2-H x2
+    bond c3-H x3
+}

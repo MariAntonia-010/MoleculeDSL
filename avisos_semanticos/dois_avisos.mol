@@ -1,0 +1,10 @@
+// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de c1 (C#1) é 3; o esperado para C é 4 (se for um íon, declare atom C(-1))
+// esperado: Aviso semântico [VAL-002] na linha 5, coluna 4: a soma das ordens de ligação de c2 (C#2) é 3; o esperado para C é 4 (se for um íon, declare atom C(-1))
+molecule "Ethylene radical" {
+    atom C as c1
+    atom C as c2
+    4x atom H
+    bond c1-c2
+    bond c1-H x2
+    bond c2-H x2
+}

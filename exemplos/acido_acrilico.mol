@@ -1,0 +1,15 @@
+molecule "Acrylic acid" {
+    3x atom C as c
+    atom O as o1
+    atom O as o2
+    4x atom H
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=o1
+    bond c3-o2
+
+    bond c1-H x2
+    bond c2-H
+    bond o2-H
+}

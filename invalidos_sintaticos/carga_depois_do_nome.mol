@@ -1,0 +1,4 @@
+// esperado: Erro sintático na linha 3, coluna 16: comando inválido '(': esperado 'atom', 'bond', 'ring' ou '}'
+molecule "Ammonium" {
+    atom N as n1(+1)
+}
