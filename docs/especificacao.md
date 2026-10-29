@@ -293,9 +293,14 @@ suas ligações inferidas. O solver:
 - aceita no máximo oito átomos;
 - só retorna quando existe uma única solução.
 
-H₂O, CO₂, N₂ e NH₄⁺ são os casos de referência. Fórmulas com zero ou
-múltiplas soluções, como C₂H₄O, exigem ligações explícitas. C₆H₁₂ fica fora
-desta etapa por tamanho e ambiguidade estrutural.
+H₂O, CO₂, N₂ e NH₄⁺ são os casos de referência. No modo de solução única,
+fórmulas com zero ou múltiplas soluções exigem ligações explícitas. C₆H₁₂
+fica fora desta etapa por tamanho e ambiguidade estrutural.
+
+O modo `--resolver-todas` enumera até dez soluções não equivalentes,
+deduplicando permutações de átomos com o mesmo elemento e carga. Para
+C₂H₄O, são exibidas três alternativas formais. O compilador não escolhe qual
+delas representa a espécie desejada.
 
 ---
 

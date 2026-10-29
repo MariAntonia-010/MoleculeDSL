@@ -88,6 +88,7 @@ Opções disponíveis:
 | `--ast` | árvore sintática abstrata própria, com posições |
 | `--modelo` | grafo expandido de átomos e ligações |
 | `--resolver` | infere ligações quando há somente átomos e solução única |
+| `--resolver-todas` | enumera até dez estruturas não equivalentes |
 
 As opções podem ser combinadas:
 
@@ -104,9 +105,18 @@ entre isômeros:
 python3 src/main.py --resolver --modelo resolver/agua.mol
 ```
 
-Nesta etapa estão cobertos H₂O, CO₂, N₂ e NH₄⁺. Entradas sem solução,
-ambíguas, com ligações já declaradas ou com mais de oito átomos são
-rejeitadas e devem receber ligações explícitas.
+Nesta etapa estão cobertos H₂O, CO₂, N₂ e NH₄⁺. No modo `--resolver`,
+entradas sem solução, ambíguas, com ligações já declaradas ou com mais de
+oito átomos são rejeitadas.
+
+Para inspecionar fórmulas ambíguas pequenas:
+
+```bash
+python3 src/main.py --resolver-todas resolver/formula_ambigua.mol
+```
+
+Átomos equivalentes são deduplicados por isomorfismo elementar. C₂H₄O
+produz três alternativas formais; a enumeração é limitada às dez primeiras.
 
 O modelo classifica ligações por diferença de eletronegatividade como
 covalente apolar, covalente polar ou iônica. Os limites configuráveis ficam
@@ -269,7 +279,7 @@ Continuam pendentes:
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
   `METAL-001` verifica a composição e `METAL-002` informa a limitação
   coletiva de todo uso de `~`;
-- enumeração e escolha assistida entre múltiplas soluções do solver.
+- seleção assistida entre alternativas enumeradas pelo solver.
 
 `OCT-001` foi removida: para elementos com dados, octeto e dueto já são
 refletidos pelas regras de valência. Ciclos independentes sem `ring` agora

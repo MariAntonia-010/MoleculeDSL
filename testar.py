@@ -227,6 +227,22 @@ def testar_solver(caminho):
     return problemas
 
 
+def testar_solver_todas(caminho):
+    codigo, saida = rodar_comando(["--resolver-todas", caminho])
+    esperado_path = os.path.splitext(caminho)[0] + ".todas.txt"
+    with open(esperado_path, encoding="utf-8") as arquivo:
+        esperado = arquivo.read()
+    problemas = []
+    if codigo != 0:
+        problemas.append(f"código de saída {codigo}, esperado 0")
+    if saida != esperado:
+        problemas.append(
+            f"enumeração diferente de "
+            f"{os.path.relpath(esperado_path, PASTA_RAIZ)}"
+        )
+    return problemas
+
+
 def testar_svgs_das_arvores():
     problemas = []
     with tempfile.TemporaryDirectory() as pasta:
@@ -349,6 +365,17 @@ def main():
             lambda caminho=caminho: testar_solver(caminho),
         )
         for caminho in arquivos("resolver")
+    ]
+    casos_especiais += [
+        (
+            f"solver-todas/{os.path.basename(snapshot)}",
+            lambda caminho=snapshot[: -len(".todas.txt")] + ".mol": (
+                testar_solver_todas(caminho)
+            ),
+        )
+        for snapshot in sorted(
+            glob.glob(os.path.join(PASTA_RAIZ, "resolver", "*.todas.txt"))
+        )
     ]
     for nome, testar in casos_especiais:
         problemas = testar()

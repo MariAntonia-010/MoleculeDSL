@@ -131,12 +131,17 @@ Implementado para soluções únicas com até oito átomos. O solver expande as
 declarações, busca ordens de 1 a 3 que satisfaçam as valências confirmadas e
 exige um grafo conectado. Casos cobertos: H₂O, CO₂, N₂ e NH₄⁺.
 
+`--resolver-todas` enumera até dez estruturas não equivalentes para fórmulas
+pequenas. A deduplicação permite permutar átomos do mesmo elemento e carga;
+C₂H₄O produz três alternativas formais.
+
 - `SOLVER-001`: entrada já tem ligações/anéis, está vazia ou excede o limite;
 - `SOLVER-002`: falta valência confirmada;
 - `SOLVER-003`: nenhuma estrutura satisfaz as regras;
 - `SOLVER-004`: existem múltiplas estruturas.
 
-C₆H₁₂ e outras fórmulas ambíguas continuam exigindo ligações explícitas.
+C₆H₁₂ continua fora por exceder o limite atual de átomos. A escolha química
+entre alternativas enumeradas continua sendo responsabilidade do usuário.
 
 ### M8: Erros, testes e documentação
 - Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.

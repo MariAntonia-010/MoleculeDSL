@@ -17,14 +17,22 @@ ERRO_LEXICO_OU_SINTATICO = 1
 ERRO_SEMANTICO = 2
 
 USO = (
-    "Uso: python src/main.py [--tokens] [--ast] [--modelo] [--resolver] <arquivo>\n"
+    "Uso: python src/main.py [--tokens] [--ast] [--modelo] "
+    "[--resolver|--resolver-todas] <arquivo>\n"
     "  --tokens  mostra os tokens reconhecidos\n"
     "  --ast     mostra a AST construída\n"
     "  --modelo  mostra o modelo da molécula (átomos e ligações)"
     "\n  --resolver infere ligações quando a entrada contém somente átomos"
+    "\n  --resolver-todas enumera até 10 estruturas não equivalentes"
 )
 
-OPCOES = {"--tokens", "--ast", "--modelo", "--resolver"}
+OPCOES = {
+    "--tokens",
+    "--ast",
+    "--modelo",
+    "--resolver",
+    "--resolver-todas",
+}
 
 
 def ler_argumentos(argumentos):
@@ -66,6 +74,33 @@ def compilar(caminho, opcoes):
         return ERRO_LEXICO_OU_SINTATICO
 
     molecula = construir(arvore)
+
+    if "--resolver" in opcoes and "--resolver-todas" in opcoes:
+        print("As opções --resolver e --resolver-todas são mutuamente exclusivas")
+        return ERRO_LEXICO_OU_SINTATICO
+
+    if "--resolver-todas" in opcoes:
+        estruturas, mensagens_solver, truncado = solver.enumerar(
+            molecula, semantico.carregar_valencias()
+        )
+        for mensagem in mensagens_solver:
+            print(mensagem)
+        if mensagens_solver:
+            return ERRO_SEMANTICO
+
+        for indice, estrutura in enumerate(estruturas, start=1):
+            modelo_molecula, mensagens = semantico.analisar(estrutura)
+            print(f"Solução {indice}/{len(estruturas)}")
+            if "--ast" in opcoes:
+                print(formatar(estrutura))
+            for mensagem in mensagens:
+                print(mensagem)
+            if any(m.severidade == semantico.ERRO for m in mensagens):
+                return ERRO_SEMANTICO
+            print(modelo.formatar(modelo_molecula))
+        if truncado:
+            print("Mais soluções existem; exibidas somente as 10 primeiras")
+        return SUCESSO
 
     if "--resolver" in opcoes:
         molecula, mensagens_solver = solver.resolver(

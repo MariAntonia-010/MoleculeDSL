@@ -321,7 +321,7 @@
           <span class="pill">Equipe MoleculeDSL</span>
           <span class="pill">Python 3.10+</span>
           <span class="pill">ANTLR 4.13.2</span>
-          <span class="pill status"><span class="dot"></span>115 testes passando</span>
+          <span class="pill status"><span class="dot"></span>116 testes passando</span>
         </div>
       </div>
       <div class="molecule" aria-label="Ilustração abstrata de uma molécula">
@@ -573,14 +573,14 @@ Espécie 'Water': análise concluída sem erros</pre>
         <h2>O contrato é executável.</h2>
       </div>
       <div class="grid">
-        <article class="card metric"><span>Suíte total</span><strong>115</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
+        <article class="card metric"><span>Suíte total</span><strong>116</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
         <article class="card metric"><span>Exemplos válidos</span><strong>17</strong><span>espécies</span></article>
         <article class="card metric"><span>Snapshots</span><strong>9</strong><span>AST + modelo</span></article>
         <article class="card metric"><span>SVGs validados</span><strong>34</strong><span>2 árvores × 17 exemplos</span></article>
       </div>
       <pre style="margin-top:1rem">python3 testar.py
 ...
-115 testes, 0 falha(s)</pre>
+116 testes, 0 falha(s)</pre>
     </section>
 
     <section id="futuro">
@@ -592,7 +592,7 @@ Espécie 'Water': análise concluída sem erros</pre>
         <article class="card"><h3>Octeto</h3><p><code>OCT-001</code> foi removida: as regras de valência já cobrem os elementos com dados.</p></article>
         <article class="card"><h3>Ciclos</h3><p>Ciclos independentes sem uma declaração <code>ring</code> agora geram <code>RING-004</code>.</p></article>
         <article class="card"><h3>Ligação metálica</h3><p><code>METAL-001</code> verifica participantes e <code>METAL-002</code> informa que uma aresta não valida o sólido.</p></article>
-        <article class="card"><h3>Solver</h3><p>H₂O, CO₂, N₂ e NH₄⁺ são resolvidos quando a estrutura é única; ambiguidades são rejeitadas.</p></article>
+        <article class="card"><h3>Solver</h3><p>Soluções únicas são resolvidas; <code>--resolver-todas</code> enumera até dez alternativas sem escolher arbitrariamente.</p></article>
         <article class="card"><h3>Mais química</h3><p>Aromaticidade, estereoquímica, isótopos, geometria e visualização 3D estão fora do escopo.</p></article>
         <article class="card"><h3>Fontes antes de regras</h3><p>Valências ainda pendentes não entram no código até serem sustentadas pelo levantamento.</p></article>
       </div>

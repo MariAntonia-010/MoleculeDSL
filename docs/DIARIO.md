@@ -351,3 +351,10 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   acima de oito átomos recebem `SOLVER-001` a `SOLVER-004`.
 - C₂H₄O comprova rejeição por múltiplas estruturas; C₆H₁₂ permanece para uma
   etapa futura de enumeração e seleção assistida.
+
+### Enumeração controlada
+
+- `--resolver-todas` enumera até dez soluções não equivalentes.
+- Permutações de átomos com o mesmo elemento e carga são deduplicadas.
+- C₂H₄O resulta em três alternativas formais, incluindo uma estrutura
+  cíclica; o compilador exibe todas e não escolhe por estabilidade.

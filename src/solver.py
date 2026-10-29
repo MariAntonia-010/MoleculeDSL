@@ -1,7 +1,7 @@
 """Inferência limitada de ligações a partir de declarações de átomos."""
 
 from dataclasses import dataclass, replace
-from itertools import combinations, product
+from itertools import combinations, permutations, product
 
 from ast_nos import (
     AnelDecl,
@@ -82,11 +82,33 @@ def conectado(quantidade, arestas):
     return len(visitados) == quantidade
 
 
-def buscar_arestas(alvos):
+def chave_canonica(arestas, atomos):
+    grupos = {}
+    for indice, atomo in enumerate(atomos):
+        grupos.setdefault((atomo.elemento, atomo.carga), []).append(indice)
+
+    melhor = None
+    permutacoes = [
+        list(permutations(indices))
+        for _, indices in sorted(grupos.items())
+    ]
+    for partes in product(*permutacoes):
+        ordem_indices = [indice for parte in partes for indice in parte]
+        chave = tuple(
+            arestas.get(tuple(sorted((ordem_indices[a], ordem_indices[b]))), 0)
+            for a, b in combinations(range(len(atomos)), 2)
+        )
+        if melhor is None or chave < melhor:
+            melhor = chave
+    return melhor
+
+
+def buscar_arestas(alvos, atomos, limite):
     quantidade = len(alvos)
     pares = list(combinations(range(quantidade), 2))
     restantes = list(alvos)
     solucoes = []
+    chaves = set()
 
     def capacidade_futura(inicio, atomo):
         return sum(
@@ -97,13 +119,17 @@ def buscar_arestas(alvos):
         )
 
     def visitar(indice, arestas):
-        if len(solucoes) >= 2:
+        if len(solucoes) >= limite:
             return
         if indice == len(pares):
             if all(valor == 0 for valor in restantes) and conectado(
                 quantidade, arestas
             ):
-                solucoes.append(dict(arestas))
+                solucao = dict(arestas)
+                chave = chave_canonica(solucao, atomos)
+                if chave not in chaves:
+                    chaves.add(chave)
+                    solucoes.append(solucao)
             return
 
         a, b = pares[indice]
@@ -125,10 +151,10 @@ def buscar_arestas(alvos):
     return solucoes
 
 
-def resolver(molecula, regras):
+def preparar(molecula, regras):
     for comando in molecula.comandos:
         if isinstance(comando, (LigacaoDecl, AnelDecl)):
-            return None, [
+            return None, None, [
                 MensagemSolver(
                     "SOLVER-001",
                     comando.linha,
@@ -139,7 +165,7 @@ def resolver(molecula, regras):
 
     atomos = expandir_atomos(molecula)
     if not atomos:
-        return None, [
+        return None, None, [
             MensagemSolver(
                 "SOLVER-001",
                 molecula.linha,
@@ -148,7 +174,7 @@ def resolver(molecula, regras):
             )
         ]
     if len(atomos) > LIMITE_ATOMOS_SOLVER:
-        return None, [
+        return None, None, [
             MensagemSolver(
                 "SOLVER-001",
                 molecula.linha,
@@ -162,7 +188,7 @@ def resolver(molecula, regras):
     for atomo in atomos:
         aceitas = valencias_candidatas(atomo, regras)
         if not aceitas:
-            return None, [
+            return None, None, [
                 MensagemSolver(
                     "SOLVER-002",
                     atomo.linha,
@@ -172,34 +198,22 @@ def resolver(molecula, regras):
                 )
             ]
         candidatos.append(aceitas)
+    return atomos, candidatos, []
 
+
+def buscar_solucoes(atomos, candidatos, limite):
     solucoes = []
     for alvos in product(*candidatos):
-        solucoes.extend(buscar_arestas(alvos))
-        if len(solucoes) >= 2:
+        restantes = limite - len(solucoes)
+        solucoes.extend(buscar_arestas(alvos, atomos, restantes))
+        if len(solucoes) >= limite:
             break
+    return solucoes
 
-    if not solucoes:
-        return None, [
-            MensagemSolver(
-                "SOLVER-003",
-                molecula.linha,
-                molecula.coluna,
-                "nenhuma estrutura conectada satisfaz as valências conhecidas",
-            )
-        ]
-    if len(solucoes) > 1:
-        return None, [
-            MensagemSolver(
-                "SOLVER-004",
-                molecula.linha,
-                molecula.coluna,
-                "a fórmula admite múltiplas estruturas; declare as ligações",
-            )
-        ]
 
+def montar_molecula(molecula, atomos, solucao):
     ligacoes = []
-    for (a, b), ordem in solucoes[0].items():
+    for (a, b), ordem in solucao.items():
         if not ordem:
             continue
         origem = atomos[a]
@@ -224,4 +238,44 @@ def resolver(molecula, regras):
                 coluna=molecula.coluna,
             )
         )
-    return replace(molecula, comandos=[*atomos, *ligacoes]), []
+    return replace(molecula, comandos=[*atomos, *ligacoes])
+
+
+def enumerar(molecula, regras, limite=10):
+    atomos, candidatos, mensagens = preparar(molecula, regras)
+    if mensagens:
+        return [], mensagens, False
+
+    solucoes = buscar_solucoes(atomos, candidatos, limite + 1)
+    if not solucoes:
+        return [], [
+            MensagemSolver(
+                "SOLVER-003",
+                molecula.linha,
+                molecula.coluna,
+                "nenhuma estrutura conectada satisfaz as valências conhecidas",
+            )
+        ], False
+
+    truncado = len(solucoes) > limite
+    estruturas = [
+        montar_molecula(molecula, atomos, solucao)
+        for solucao in solucoes[:limite]
+    ]
+    return estruturas, [], truncado
+
+
+def resolver(molecula, regras):
+    estruturas, mensagens, _ = enumerar(molecula, regras, limite=2)
+    if mensagens:
+        return None, mensagens
+    if len(estruturas) > 1:
+        return None, [
+            MensagemSolver(
+                "SOLVER-004",
+                molecula.linha,
+                molecula.coluna,
+                "a fórmula admite múltiplas estruturas; declare as ligações",
+            )
+        ]
+    return estruturas[0], []
