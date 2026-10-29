@@ -2,11 +2,12 @@ import os
 import sys
 
 from antlr4 import CommonTokenStream, Token
-from antlr4.error.ErrorListener import ErrorListener
 from antlr4.error.ErrorStrategy import DefaultErrorStrategy
+from antlr4.error.Errors import FailedPredicateException, NoViableAltException
 
 # lexico.py adiciona a pasta "gerado" ao caminho de importação
 from lexico import ErroLexico, ler_arquivo
+from erros import ColetorErrosANTLR
 from MoleculeDSLLexer import MoleculeDSLLexer
 from MoleculeDSLParser import MoleculeDSLParser
 
@@ -109,14 +110,15 @@ class RecuperacaoPorComando(DefaultErrorStrategy):
         return super().singleTokenDeletion(recognizer)
 
 
-class ErroSintatico(ErrorListener):
+class ErroSintatico(ColetorErrosANTLR):
     def __init__(self):
-        super().__init__()
-        self.erros = []
+        super().__init__("sintático")
         self.linhas_com_erro = set()
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        mensagem, falta_algo = self.traduzir(recognizer, offendingSymbol, e)
+        mensagem, falta_algo = self.traduzir_contexto(
+            recognizer, offendingSymbol, e
+        )
 
         # Se falta algo no fim de uma linha, o erro fica logo depois do
         # token anterior, e não no primeiro token da linha seguinte
@@ -130,10 +132,24 @@ class ErroSintatico(ErrorListener):
             return
         self.linhas_com_erro.add(line)
 
-        self.erros.append((line, column, mensagem))
-        print(f"Erro sintático na linha {line}, coluna {column}: {mensagem}")
+        mensagem_antlr = msg.lower()
+        if offendingSymbol.type == Token.EOF:
+            codigo = "SIN-004"
+        elif isinstance(e, FailedPredicateException):
+            codigo = "SIN-005"
+        elif isinstance(e, NoViableAltException) or mensagem_antlr.startswith(
+            "no viable alternative"
+        ):
+            codigo = "SIN-003"
+        elif mensagem_antlr.startswith("extraneous input"):
+            codigo = "SIN-002"
+        elif mensagem_antlr.startswith("missing ") or falta_algo:
+            codigo = "SIN-001"
+        else:
+            codigo = "SIN-002"
+        self.adicionar(codigo, line, column, mensagem)
 
-    def traduzir(self, recognizer, token, e):
+    def traduzir_contexto(self, recognizer, token, e):
         # Devolve a mensagem e se o erro é algo que falta (True) ou um
         # token que sobra (False)
         ctx = e.ctx if e is not None and e.ctx is not None else recognizer._ctx
@@ -192,37 +208,41 @@ class ErroSintatico(ErrorListener):
 
 
 def tokenizar(caminho):
-    # Devolve o lexer, o fluxo de tokens já lido e se não houve erro léxico.
+    # Devolve o lexer, o fluxo de tokens e os erros léxicos coletados.
     # Se o arquivo não puder ser lido, o lexer e o fluxo são None.
-    entrada = ler_arquivo(caminho)
+    entrada, erros_leitura = ler_arquivo(caminho)
+    erros_lexicos = ErroLexico()
 
     if entrada is None:
-        return None, None, False
+        erros_lexicos.erros.extend(erros_leitura)
+        return None, None, erros_lexicos
 
     lexer = MoleculeDSLLexer(entrada)
     lexer.removeErrorListeners()
-    erros_lexicos = ErroLexico()
     lexer.addErrorListener(erros_lexicos)
 
     fluxo = CommonTokenStream(lexer)
     fluxo.fill()
 
-    return lexer, fluxo, not erros_lexicos.erros
+    return lexer, fluxo, erros_lexicos
 
 
 def analisar(caminho):
     # Devolve a árvore sintática, ou None se houver erro léxico ou sintático
-    lexer, fluxo, sem_erro_lexico = tokenizar(caminho)
+    lexer, fluxo, erros_lexicos = tokenizar(caminho)
 
     # Com erro léxico, a análise sintática só geraria erros em cascata
-    if not sem_erro_lexico:
+    if erros_lexicos.erros:
+        erros_lexicos.imprimir()
         return None
 
-    return analisar_fluxo(fluxo)
+    arvore, erros_sintaticos = analisar_fluxo(fluxo)
+    erros_sintaticos.imprimir()
+    return arvore
 
 
 def analisar_fluxo(fluxo):
-    # Devolve a árvore sintática, ou None se houver erro sintático
+    # Devolve a árvore sintática (ou None) e os erros sintáticos coletados.
     parser = MoleculeDSLParser(fluxo)
     parser._errHandler = RecuperacaoPorComando()
     parser.removeErrorListeners()
@@ -232,9 +252,9 @@ def analisar_fluxo(fluxo):
     arvore = parser.programa()
 
     if erros_sintaticos.erros:
-        return None
+        return None, erros_sintaticos
 
-    return arvore
+    return arvore, erros_sintaticos
 
 
 def main():

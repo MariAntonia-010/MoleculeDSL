@@ -2,6 +2,7 @@ import glob
 import os
 import subprocess
 import sys
+import tempfile
 
 
 # Roda o src/main.py em todos os exemplos e confere o resultado:
@@ -45,6 +46,18 @@ def rodar(caminho):
         if linha.startswith("Erro ") or linha.startswith("Aviso ")
     ]
     return resultado.returncode, saida, mensagens
+
+
+def rodar_comando(argumentos, ambiente_extra=None):
+    ambiente = dict(os.environ, PYTHONIOENCODING="utf-8")
+    ambiente.update(ambiente_extra or {})
+    resultado = subprocess.run(
+        [sys.executable, MAIN, *argumentos],
+        capture_output=True,
+        env=ambiente,
+    )
+    saida = (resultado.stdout + resultado.stderr).decode("utf-8")
+    return resultado.returncode, saida
 
 
 def erros_esperados(caminho):
@@ -100,6 +113,53 @@ def testar_com_mensagens(caminho, codigo_esperado):
     return problemas
 
 
+def testar_arquivo_inexistente():
+    caminho = os.path.join(PASTA_RAIZ, "nao_existe.mol")
+    codigo, saida = rodar_comando([caminho])
+    esperado = "Erro de entrada [ENT-001]: arquivo não encontrado:"
+    problemas = []
+    if codigo != 1:
+        problemas.append(f"código de saída {codigo}, esperado 1")
+    if esperado not in saida:
+        problemas.append(f"saída não contém: {esperado}")
+        problemas.append(f"saída: {saida.strip()}")
+    return problemas
+
+
+def testar_gerado_ausente():
+    with tempfile.TemporaryDirectory() as pasta_vazia:
+        codigo, saida = rodar_comando(
+            [os.path.join(PASTA_RAIZ, "exemplos", "agua.mol")],
+            {"MOLECULEDSL_GERADO": pasta_vazia},
+        )
+    esperado = "Erro de configuração [CFG-001]: código do ANTLR não encontrado"
+    problemas = []
+    if codigo != 1:
+        problemas.append(f"código de saída {codigo}, esperado 1")
+    if esperado not in saida:
+        problemas.append(f"saída não contém: {esperado}")
+        problemas.append(f"saída: {saida.strip()}")
+    return problemas
+
+
+def testar_limite_de_erros():
+    with tempfile.TemporaryDirectory() as pasta:
+        caminho = os.path.join(pasta, "muitos_erros.mol")
+        with open(caminho, "w", encoding="utf-8") as arquivo:
+            arquivo.write('molecule "Muitos erros" {\\n    @@@@@@@@@@@@\\n}\\n')
+        codigo, saida = rodar_comando([caminho])
+
+    problemas = []
+    quantidade = saida.count("Erro léxico [LEX-001]")
+    if codigo != 1:
+        problemas.append(f"código de saída {codigo}, esperado 1")
+    if quantidade != 10:
+        problemas.append(f"{quantidade} erros exibidos, esperado limite de 10")
+    if "Aviso de compilação [LIM-001]" not in saida:
+        problemas.append("faltou o aviso de erros omitidos")
+    return problemas
+
+
 def main():
     casos = [(c, testar_valido) for p in PASTAS_VALIDOS for c in arquivos(p)]
     for pasta, codigo in PASTAS_COM_MENSAGENS.items():
@@ -122,7 +182,23 @@ def main():
         else:
             print(f"ok     {nome}")
 
-    print(f"\n{len(casos)} testes, {falhas} falha(s)")
+    casos_especiais = [
+        ("entrada/arquivo_inexistente", testar_arquivo_inexistente),
+        ("configuracao/gerado_ausente", testar_gerado_ausente),
+        ("erros/limite_de_dez", testar_limite_de_erros),
+    ]
+    for nome, testar in casos_especiais:
+        problemas = testar()
+        if problemas:
+            falhas += 1
+            print(f"FALHOU {nome}")
+            for problema in problemas:
+                print(f"    {problema}")
+        else:
+            print(f"ok     {nome}")
+
+    total = len(casos) + len(casos_especiais)
+    print(f"\n{total} testes, {falhas} falha(s)")
 
     if falhas:
         sys.exit(1)

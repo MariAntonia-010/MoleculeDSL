@@ -1,2 +1,2 @@
-// esperado: Erro sintático na linha 2, coluna 0: o programa deve começar com 'molecule'
+// esperado: Erro sintático [SIN-002] na linha 2, coluna 0: o programa deve começar com 'molecule'
 atom O

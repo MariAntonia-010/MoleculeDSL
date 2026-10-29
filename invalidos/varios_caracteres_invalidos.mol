@@ -1,0 +1,8 @@
+// esperado: Erro léxico [LEX-001] na linha 5, coluna 10: caractere inválido ';'
+// esperado: Erro léxico [LEX-001] na linha 6, coluna 10: caractere inválido ','
+// esperado: Erro léxico [LEX-001] na linha 7, coluna 10: caractere inválido '$'
+molecule "Caracteres inválidos" {
+    atom O;
+    atom H,
+    atom H$
+}

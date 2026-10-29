@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 4, coluna 11: esperado operador de ligação
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 11: esperado operador de ligação
 molecule "Water" {
     atom H
     bond H O

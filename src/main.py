@@ -48,17 +48,19 @@ def ler_argumentos(argumentos):
 
 def compilar(caminho, opcoes):
     # Etapas encadeadas: cada uma só roda se a anterior não teve erro
-    lexer, fluxo, sem_erro_lexico = tokenizar(caminho)
+    lexer, fluxo, erros_lexicos = tokenizar(caminho)
 
     if "--tokens" in opcoes and lexer is not None:
         imprimir_tokens(lexer, fluxo)
 
-    if not sem_erro_lexico:
+    if erros_lexicos.erros:
+        erros_lexicos.imprimir()
         return ERRO_LEXICO_OU_SINTATICO
 
-    arvore = analisar_fluxo(fluxo)
+    arvore, erros_sintaticos = analisar_fluxo(fluxo)
 
-    if arvore is None:
+    if erros_sintaticos.erros:
+        erros_sintaticos.imprimir()
         return ERRO_LEXICO_OU_SINTATICO
 
     molecula = construir(arvore)
@@ -92,7 +94,7 @@ def main():
     caminho, opcoes = lidos
 
     if not os.path.isfile(caminho):
-        print(f"Arquivo não encontrado: {caminho}")
+        print(f"Erro de entrada [ENT-001]: arquivo não encontrado: {caminho}")
         sys.exit(ERRO_LEXICO_OU_SINTATICO)
 
     sys.exit(compilar(caminho, opcoes))

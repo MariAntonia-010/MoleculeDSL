@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 4, coluna 4: multiplicador sem x: escreva '4x atom'
+// esperado: Erro sintático [SIN-002] na linha 4, coluna 4: multiplicador sem x: escreva '4x atom'
 molecule "Methane" {
     atom C
     4 atom H

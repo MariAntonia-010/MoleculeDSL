@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 5, coluna 13: repetição sem número
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 13: repetição sem número
 molecule "Methane" {
     atom C
     4x atom H

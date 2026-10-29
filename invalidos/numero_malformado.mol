@@ -1,4 +1,4 @@
-// esperado: Erro léxico na linha 3, coluna 5: '.' fora de um número real
+// esperado: Erro léxico [LEX-003] na linha 3, coluna 5: '.' fora de um número real
 molecule "Test" {
     3. atom H
 }

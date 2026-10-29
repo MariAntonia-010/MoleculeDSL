@@ -1,0 +1,3 @@
+// esperado: Erro sintático [SIN-004] na linha 3, coluna 8: esperado símbolo de elemento depois de 'atom'
+molecule "Fim no atom" {
+    atom

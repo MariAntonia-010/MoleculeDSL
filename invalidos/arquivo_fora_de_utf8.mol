@@ -1,4 +1,4 @@
-// esperado: Erro léxico na linha 3, coluna 14: o arquivo precisa estar salvo em UTF-8
+// esperado: Erro léxico [LEX-005] na linha 3, coluna 14: o arquivo precisa estar salvo em UTF-8
 molecule "Water" {
     atom O // �gua em latin-1
 }

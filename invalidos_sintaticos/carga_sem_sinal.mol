@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 3, coluna 11: a carga precisa de sinal
+// esperado: Erro sintático [SIN-001] na linha 3, coluna 11: a carga precisa de sinal
 molecule "Ammonium" {
     atom N(1)
 }

@@ -2,75 +2,89 @@ import os
 import sys
 
 from antlr4 import InputStream, CommonTokenStream, Token
-from antlr4.error.ErrorListener import ErrorListener
+
+from erros import ColetorErrosANTLR, ErroCompilacao
 
 
 # Localiza a pasta raiz do projeto
 PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Adiciona a pasta com o código gerado pelo ANTLR
-PASTA_GERADO = os.path.join(PASTA_RAIZ, "gerado")
+PASTA_GERADO = os.environ.get(
+    "MOLECULEDSL_GERADO", os.path.join(PASTA_RAIZ, "gerado")
+)
 sys.path.insert(0, PASTA_GERADO)
 
 try:
     from MoleculeDSLLexer import MoleculeDSLLexer
 except ModuleNotFoundError:
-    print("Código do ANTLR não encontrado em gerado/. Gere com: sh gerar.sh")
+    print(
+        f"Erro de configuração [CFG-001]: código do ANTLR não encontrado em "
+        f"{PASTA_GERADO!r}. Gere com: sh gerar.sh"
+    )
     sys.exit(1)
 
 
-class ErroLexico(ErrorListener):
+class ErroLexico(ColetorErrosANTLR):
     def __init__(self):
-        super().__init__()
-        self.erros = []
+        super().__init__("léxico")
 
-    def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
+    def traduzir(self, recognizer, offendingSymbol, line, column, msg, e):
         # Substitui a mensagem do ANTLR ("token recognition error") por
         # uma em português, a partir do primeiro caractere não reconhecido
-        caractere = recognizer._input.getText(e.startIndex, e.startIndex)
-        mensagem = traduzir_erro_lexico(caractere)
-
-        self.erros.append((line, column, mensagem))
-        print(f"Erro léxico na linha {line}, coluna {column}: {mensagem}")
+        caractere = ""
+        if e is not None and hasattr(e, "startIndex"):
+            caractere = recognizer._input.getText(e.startIndex, e.startIndex)
+        return traduzir_erro_lexico(caractere)
 
 
 def traduzir_erro_lexico(caractere):
     if not caractere:
-        return "fim do arquivo inesperado"
+        return "LEX-001", "fim do arquivo inesperado"
     if caractere == '"':
-        return "texto sem aspas de fechamento: o texto precisa terminar na mesma linha"
+        return (
+            "LEX-002",
+            "texto sem aspas de fechamento: o texto precisa terminar na mesma linha",
+        )
     if caractere == ".":
-        return "'.' fora de um número real (um número real é escrito como 3.5)"
+        return (
+            "LEX-003",
+            "'.' fora de um número real (um número real é escrito como 3.5)",
+        )
     if caractere.isprintable() and not caractere.isspace():
-        return f"caractere inválido '{caractere}'"
-    return f"caractere invisível inválido (U+{ord(caractere):04X})"
+        return "LEX-001", f"caractere inválido '{caractere}'"
+    return "LEX-004", f"caractere invisível inválido (U+{ord(caractere):04X})"
 
 
 def ler_arquivo(caminho):
-    # Devolve o conteúdo pronto para o lexer, ou None se o arquivo não
-    # estiver em UTF-8. O BOM que alguns editores do Windows colocam no
-    # início do arquivo é ignorado.
+    # Devolve o conteúdo pronto para o lexer e os erros de leitura.
+    # O BOM que alguns editores do Windows colocam no início é ignorado.
     with open(caminho, "rb") as arquivo:
         dados = arquivo.read()
 
     try:
-        return InputStream(dados.decode("utf-8-sig"))
+        return InputStream(dados.decode("utf-8-sig")), []
     except UnicodeDecodeError as e:
         # Coluna em caracteres, como nos outros erros, e não em bytes
         linha = dados.count(b"\n", 0, e.start) + 1
         inicio_linha = dados.rfind(b"\n", 0, e.start) + 1
         coluna = len(dados[inicio_linha:e.start].decode("utf-8-sig"))
-        print(
-            f"Erro léxico na linha {linha}, coluna {coluna}: o arquivo precisa "
-            "estar salvo em UTF-8"
+        erro = ErroCompilacao(
+            "léxico",
+            "LEX-005",
+            linha,
+            coluna,
+            "o arquivo precisa estar salvo em UTF-8",
         )
-        return None
+        return None, [erro]
 
 
 def analisar(caminho):
-    entrada = ler_arquivo(caminho)
+    entrada, erros_leitura = ler_arquivo(caminho)
 
     if entrada is None:
+        for erro in erros_leitura:
+            print(erro)
         return False
 
     lexer = MoleculeDSLLexer(entrada)
@@ -86,6 +100,7 @@ def analisar(caminho):
     imprimir_tokens(lexer, fluxo)
 
     if erros.erros:
+        erros.imprimir()
         return False
 
     return True

@@ -1,3 +1,3 @@
-// esperado: Erro sintático na linha 3, coluna 10: esperado '}' para fechar a molécula
+// esperado: Erro sintático [SIN-004] na linha 3, coluna 10: esperado '}' para fechar a molécula
 molecule "Water" {
     atom O

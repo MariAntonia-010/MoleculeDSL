@@ -1,7 +1,7 @@
-// esperado: Erro sintático na linha 6, coluna 8: esperado símbolo de elemento depois de 'atom'
-// esperado: Erro sintático na linha 7, coluna 11: esperado operador de ligação
-// esperado: Erro sintático na linha 8, coluna 11: esperado elemento ou nome de átomo na ligação
-// esperado: Erro sintático na linha 10, coluna 14: um anel precisa de pelo menos três nomes de átomos
+// esperado: Erro sintático [SIN-001] na linha 6, coluna 8: esperado símbolo de elemento depois de 'atom'
+// esperado: Erro sintático [SIN-001] na linha 7, coluna 11: esperado operador de ligação
+// esperado: Erro sintático [SIN-001] na linha 8, coluna 11: esperado elemento ou nome de átomo na ligação
+// esperado: Erro sintático [SIN-001] na linha 10, coluna 14: um anel precisa de pelo menos três nomes de átomos
 molecule "Errors" {
     atom
     bond H O

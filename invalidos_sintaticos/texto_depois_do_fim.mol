@@ -1,4 +1,4 @@
-// esperado: Erro sintático na linha 5, coluna 0: conteúdo depois do fim da molécula
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 0: conteúdo depois do fim da molécula
 molecule "Water" {
     atom O
 }

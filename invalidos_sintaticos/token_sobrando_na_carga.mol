@@ -1,0 +1,4 @@
+// esperado: Erro sintático [SIN-002] na linha 3, coluna 14: esperado ')' para fechar a carga
+molecule "Token sobrando" {
+    atom N(+1 2)
+}

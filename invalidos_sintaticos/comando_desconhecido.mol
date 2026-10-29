@@ -1,0 +1,4 @@
+// esperado: Erro sintático [SIN-002] na linha 3, coluna 4: comando inválido 'atoms'
+molecule "Comando desconhecido" {
+    atoms
+}
