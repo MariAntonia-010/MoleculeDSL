@@ -1,0 +1,6 @@
+Molecula 'Ammonium' [2:0]
+  AtomoDecl elemento=N multiplicador=1 carga=+1 nome=None [3:4]
+  AtomoDecl elemento=H multiplicador=4 carga=+0 nome=None [4:4]
+  LigacaoDecl SIMPLES repeticoes=4 [6:4]
+    origem:  N (elemento) [6:9]
+    destino: H (elemento) [6:11]

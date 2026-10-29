@@ -2,7 +2,13 @@ import json
 import os
 from dataclasses import dataclass
 
-from ast_nos import AnelDecl, AtomoDecl, LigacaoDecl
+from ast_nos import (
+    AnelDecl,
+    AtomoDecl,
+    LigacaoDecl,
+    Operador,
+    TipoReferencia,
+)
 from modelo import Atomo, Ligacao, Modelo
 
 
@@ -179,13 +185,13 @@ class AnalisadorSemantico:
 
     def fixo(self, ref):
         # Uma referência é fixa quando sempre cita o mesmo átomo
-        if ref.tipo == "nome":
+        if ref.tipo is TipoReferencia.NOME:
             return ref.texto in self.por_nome
         return len(self.por_elemento.get(ref.texto, [])) == 1
 
     def resolver(self, ref):
         # Devolve o átomo citado, ou None se houver erro
-        if ref.tipo == "nome":
+        if ref.tipo is TipoReferencia.NOME:
             if ref.texto in self.por_nome:
                 atomo = self.por_nome[ref.texto]
             else:
@@ -365,12 +371,12 @@ class AnalisadorSemantico:
         # BOND-001 primeiro: com ela, os erros de valência seriam consequência
         avisados = set()
         for lig in self.modelo.ligacoes:
-            if lig.operador.name not in ("DUPLA", "TRIPLA"):
+            if lig.operador not in (Operador.DUPLA, Operador.TRIPLA):
                 continue
             for atomo in (por_id[lig.origem], por_id[lig.destino]):
                 if atomo.elemento in regras["somente_ligacao_simples"] and (lig.linha, lig.coluna) not in avisados:
                     avisados.add((lig.linha, lig.coluna))
-                    tipo = "dupla" if lig.operador.name == "DUPLA" else "tripla"
+                    tipo = "dupla" if lig.operador is Operador.DUPLA else "tripla"
                     self.erro(
                         "BOND-001",
                         lig,
@@ -384,7 +390,7 @@ class AnalisadorSemantico:
         vizinhos = {a.id: [] for a in self.modelo.atomos}
         metalicos = set()
         for lig in self.modelo.ligacoes:
-            if lig.operador.name == "METALICA":
+            if lig.operador is Operador.METALICA:
                 metalicos.update((lig.origem, lig.destino))
                 continue
             for a, b in ((lig.origem, lig.destino), (lig.destino, lig.origem)):

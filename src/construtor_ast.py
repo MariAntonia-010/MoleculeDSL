@@ -13,6 +13,7 @@ from ast_nos import (
     Molecula,
     Operador,
     Referencia,
+    TipoReferencia,
     formatar,
 )
 
@@ -88,12 +89,21 @@ class ConstrutorAST(MoleculeDSLVisitor):
 
     def visitReferencia(self, ctx):
         token = ctx.start
-        tipo = "elemento" if token.type == P.IDENT else "nome"
+        tipo = (
+            TipoReferencia.ELEMENTO
+            if token.type == P.IDENT
+            else TipoReferencia.NOME
+        )
         return Referencia(token.text, tipo, token.line, token.column)
 
     def visitAnel(self, ctx):
         nomes = [
-            Referencia(n.getText(), "nome", n.symbol.line, n.symbol.column)
+            Referencia(
+                n.getText(),
+                TipoReferencia.NOME,
+                n.symbol.line,
+                n.symbol.column,
+            )
             for n in ctx.NOME()
         ]
         return AnelDecl(nomes, ctx.start.line, ctx.start.column)

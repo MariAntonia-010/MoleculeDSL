@@ -1,0 +1,109 @@
+# Árvore Sintática Abstrata da MoleculeDSL
+
+A AST é a representação própria da MoleculeDSL entre a árvore sintática do
+ANTLR e o modelo semântico. Ela contém apenas os conceitos da linguagem,
+sem nós de pontuação como `{`, `(` ou `)`. A análise semântica recebe a AST
+e não acessa a parse tree do ANTLR.
+
+Cada arquivo contém uma única molécula, conforme a decisão registrada em
+`plano_sintatico.md`. Por isso, `Molecula` é a raiz; não há um nó `Programa`
+com uma lista de moléculas.
+
+## Estrutura dos nós
+
+```text
+Molecula
+├── nome: str
+├── linha: int
+├── coluna: int
+└── comandos: list[Comando]
+    ├── AtomoDecl
+    │   ├── multiplicador: int
+    │   ├── elemento: str
+    │   ├── carga: int
+    │   └── nome: str | None
+    ├── LigacaoDecl
+    │   ├── origem: Referencia
+    │   ├── operador: Operador
+    │   ├── destino: Referencia
+    │   └── repeticoes: int
+    └── AnelDecl
+        └── nomes: list[Referencia]
+```
+
+`AtomoDecl`, `LigacaoDecl`, `AnelDecl` e `Referencia` também guardam linha e
+coluna. `TipoReferencia` distingue `ELEMENTO` de `NOME`, sem strings livres.
+`Operador` é um enum com `SIMPLES`, `DUPLA`, `TRIPLA`, `COORDENADA` e
+`METALICA`.
+
+Quantificadores permanecem explícitos na AST: `4x atom H` produz um
+`AtomoDecl` com `multiplicador=4`, e `bond C-H x4` produz um `LigacaoDecl`
+com `repeticoes=4`. A expansão em átomos e ligações individuais pertence ao
+modelo semântico.
+
+## Mapeamento da gramática
+
+| Regra da gramática | Resultado na AST |
+|---|---|
+| `programa` | encaminha o único nó `Molecula` |
+| `molecula` | `Molecula` |
+| `comando` | encaminha `AtomoDecl`, `LigacaoDecl` ou `AnelDecl` |
+| `atomo` | `AtomoDecl` |
+| `carga` | inteiro positivo ou negativo dentro de `AtomoDecl` |
+| `ligacao` | `LigacaoDecl` |
+| `referencia` | `Referencia` com `TipoReferencia` |
+| `operador` | `Operador` |
+| `anel` | `AnelDecl` |
+
+O visitor está em `src/construtor_ast.py`; as dataclasses e os enums ficam em
+`src/ast_nos.py`.
+
+## Exemplo: água
+
+Entrada:
+
+```text
+molecule "Water" {
+    atom O
+    atom H
+    atom H
+
+    bond H-O
+    bond O-H
+}
+```
+
+Saída de `python src/main.py --ast exemplos/agua.mol`:
+
+```text
+Molecula 'Water' [1:0]
+  AtomoDecl elemento=O multiplicador=1 carga=+0 nome=None [2:4]
+  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [3:4]
+  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [4:4]
+  LigacaoDecl SIMPLES repeticoes=1 [6:4]
+    origem:  H (elemento) [6:9]
+    destino: O (elemento) [6:11]
+  LigacaoDecl SIMPLES repeticoes=1 [7:4]
+    origem:  O (elemento) [7:9]
+    destino: H (elemento) [7:11]
+```
+
+Versão visual gerada pelo projeto:
+
+![AST da água](ast-agua.svg)
+
+Há também uma referência com anel em
+[ast-ciclopropano.svg](ast-ciclopropano.svg) e a parse tree da água em
+[arvore-sintatica-agua.svg](arvore-sintatica-agua.svg).
+
+## Testes
+
+`testar.py` compara a saída textual de `--ast` com arquivos versionados para:
+
+- água;
+- amônio;
+- ciclopropano;
+- aminoborano.
+
+O mesmo script gera, em uma pasta temporária, a parse tree e a AST em SVG de
+todos os exemplos válidos e valida a estrutura básica de cada arquivo.

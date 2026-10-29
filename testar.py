@@ -15,6 +15,7 @@ import tempfile
 
 PASTA_RAIZ = os.path.dirname(os.path.abspath(__file__))
 MAIN = os.path.join(PASTA_RAIZ, "src", "main.py")
+DESENHAR_ARVORE = os.path.join(PASTA_RAIZ, "src", "desenhar_arvore.py")
 
 PASTAS_VALIDOS = ["exemplos"]
 # Pasta e código de saída esperado
@@ -48,11 +49,11 @@ def rodar(caminho):
     return resultado.returncode, saida, mensagens
 
 
-def rodar_comando(argumentos, ambiente_extra=None):
+def rodar_comando(argumentos, ambiente_extra=None, script=MAIN):
     ambiente = dict(os.environ, PYTHONIOENCODING="utf-8")
     ambiente.update(ambiente_extra or {})
     resultado = subprocess.run(
-        [sys.executable, MAIN, *argumentos],
+        [sys.executable, script, *argumentos],
         capture_output=True,
         env=ambiente,
     )
@@ -160,6 +161,52 @@ def testar_limite_de_erros():
     return problemas
 
 
+def testar_ast(caminho):
+    codigo, saida = rodar_comando(["--ast", caminho])
+    linhas = saida.splitlines()
+    if linhas and linhas[-1].startswith("Molécula "):
+        linhas.pop()
+    obtido = "\n".join(linhas).strip()
+
+    esperado_path = os.path.splitext(caminho)[0] + ".ast.txt"
+    with open(esperado_path, encoding="utf-8") as arquivo:
+        esperado = arquivo.read().strip()
+
+    problemas = []
+    if codigo != 0:
+        problemas.append(f"código de saída {codigo}, esperado 0")
+    if obtido != esperado:
+        problemas.append(f"AST diferente de {os.path.relpath(esperado_path, PASTA_RAIZ)}")
+    return problemas
+
+
+def testar_svgs_das_arvores():
+    problemas = []
+    with tempfile.TemporaryDirectory() as pasta:
+        for caminho in arquivos("exemplos"):
+            nome = os.path.splitext(os.path.basename(caminho))[0]
+            for tipo in ("sintatica", "ast"):
+                destino = os.path.join(pasta, f"{nome}.{tipo}.svg")
+                codigo, saida = rodar_comando(
+                    [caminho, "--tipo", tipo, "-o", destino],
+                    script=DESENHAR_ARVORE,
+                )
+                if codigo != 0:
+                    problemas.append(
+                        f"{nome}/{tipo}: código {codigo}; saída: {saida.strip()}"
+                    )
+                    continue
+                try:
+                    with open(destino, encoding="utf-8") as arquivo:
+                        svg = arquivo.read()
+                except OSError as erro:
+                    problemas.append(f"{nome}/{tipo}: {erro}")
+                    continue
+                if "<svg " not in svg or not svg.rstrip().endswith("</svg>"):
+                    problemas.append(f"{nome}/{tipo}: SVG inválido")
+    return problemas
+
+
 def main():
     casos = [(c, testar_valido) for p in PASTAS_VALIDOS for c in arquivos(p)]
     for pasta, codigo in PASTAS_COM_MENSAGENS.items():
@@ -186,6 +233,27 @@ def main():
         ("entrada/arquivo_inexistente", testar_arquivo_inexistente),
         ("configuracao/gerado_ausente", testar_gerado_ausente),
         ("erros/limite_de_dez", testar_limite_de_erros),
+        (
+            "ast/agua",
+            lambda: testar_ast(os.path.join(PASTA_RAIZ, "exemplos", "agua.mol")),
+        ),
+        (
+            "ast/amonio",
+            lambda: testar_ast(os.path.join(PASTA_RAIZ, "exemplos", "amonio.mol")),
+        ),
+        (
+            "ast/ciclopropano",
+            lambda: testar_ast(
+                os.path.join(PASTA_RAIZ, "exemplos", "ciclopropano.mol")
+            ),
+        ),
+        (
+            "ast/aminoborano",
+            lambda: testar_ast(
+                os.path.join(PASTA_RAIZ, "exemplos", "aminoborano.mol")
+            ),
+        ),
+        ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
     ]
     for nome, testar in casos_especiais:
         problemas = testar()

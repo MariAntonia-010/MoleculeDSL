@@ -15,7 +15,7 @@ molecule "Water" {
 }
 ```
 
-A linguagem também tem ligações dupla (`=`), tripla (`#`), coordenada (`->`) e metálica (`~`), carga formal (`atom N(+1)`), átomos com nome (`atom C as c1`) e anéis (`ring c1 c2 c3`). A descrição completa e a gramática estão em [docs/especificacao.md](docs/especificacao.md).
+A linguagem também tem ligações dupla (`=`), tripla (`#`), coordenada (`->`) e metálica (`~`), carga formal (`atom N(+1)`), átomos com nome (`atom C as c1`) e anéis (`ring c1 c2 c3`). A descrição completa e a gramática estão em [docs/especificacao.md](docs/especificacao.md). A estrutura da [AST](docs/ast.md) e o catálogo de [erros](docs/erros.md) têm documentação própria.
 
 ## Instalação e execução
 

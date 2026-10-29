@@ -73,11 +73,13 @@ def ast_para_visual(molecula) -> NoVisual:
                     "LigacaoDecl",
                     [
                         NoVisual(
-                            f"origem: {comando.origem.texto} ({comando.origem.tipo})"
+                            f"origem: {comando.origem.texto} "
+                            f"({comando.origem.tipo.value})"
                         ),
                         NoVisual(f"operador: {comando.operador.name}"),
                         NoVisual(
-                            f"destino: {comando.destino.texto} ({comando.destino.tipo})"
+                            f"destino: {comando.destino.texto} "
+                            f"({comando.destino.tipo.value})"
                         ),
                         NoVisual(f"repeticoes: {comando.repeticoes}"),
                     ],
@@ -87,7 +89,10 @@ def ast_para_visual(molecula) -> NoVisual:
             comandos.append(
                 NoVisual(
                     "AnelDecl",
-                    [NoVisual(f"nome: {ref.texto} ({ref.tipo})") for ref in comando.nomes],
+                    [
+                        NoVisual(f"nome: {ref.texto} ({ref.tipo.value})")
+                        for ref in comando.nomes
+                    ],
                 )
             )
         else:

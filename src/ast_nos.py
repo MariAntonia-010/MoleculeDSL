@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -8,18 +10,22 @@ from enum import Enum
 
 
 class Operador(Enum):
-    SIMPLES = 1
-    DUPLA = 2
-    TRIPLA = 3
-    COORDENADA = "coordenada"
-    METALICA = "metalica"
+    SIMPLES = "-"
+    DUPLA = "="
+    TRIPLA = "#"
+    COORDENADA = "->"
+    METALICA = "~"
+
+
+class TipoReferencia(Enum):
+    ELEMENTO = "elemento"
+    NOME = "nome"
 
 
 @dataclass
 class Referencia:
-    # tipo é "elemento" (ex.: H) ou "nome" (ex.: c1)
     texto: str
-    tipo: str
+    tipo: TipoReferencia
     linha: int
     coluna: int
 
@@ -51,12 +57,15 @@ class AnelDecl:
     coluna: int
 
 
+Comando = AtomoDecl | LigacaoDecl | AnelDecl
+
+
 @dataclass
 class Molecula:
     nome: str
     linha: int
     coluna: int
-    comandos: list = field(default_factory=list)
+    comandos: list[Comando] = field(default_factory=list)
 
 
 def formatar(molecula):
@@ -66,7 +75,7 @@ def formatar(molecula):
         return f"[{no.linha}:{no.coluna}]"
 
     def ref(r):
-        return f"{r.texto} ({r.tipo}) {pos(r)}"
+        return f"{r.texto} ({r.tipo.value}) {pos(r)}"
 
     linhas = [f"Molecula {molecula.nome!r} {pos(molecula)}"]
 
