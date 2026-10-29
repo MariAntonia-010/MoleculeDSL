@@ -303,6 +303,11 @@ C₂H₄O, são exibidas três alternativas formais. O compilador não escolhe q
 delas representa a espécie desejada. Hidrogênios são distribuídos antes da
 busca sobre a matriz dos átomos pesados.
 
+`--max-solucoes=N` e `--tempo-limite=S` controlam a execução.
+`--formato=json` devolve um documento completo; `jsonl` emite uma solução
+por linha e termina com o sumário. Uma busca interrompida usa `TIMEOUT` ou
+`CANCELLED`, preservando `complete=false` e unicidade desconhecida.
+
 ---
 
 ## 9. O que a linguagem deliberadamente não faz?

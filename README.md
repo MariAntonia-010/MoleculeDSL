@@ -89,6 +89,9 @@ Opções disponíveis:
 | `--modelo` | grafo expandido de átomos e ligações |
 | `--resolver` | infere ligações quando há somente átomos e solução única |
 | `--resolver-todas` | enumera até dez estruturas não equivalentes |
+| `--max-solucoes=N` | altera o limite da enumeração |
+| `--tempo-limite=S` | interrompe a busca após S segundos |
+| `--formato=texto\|json\|jsonl` | escolhe a saída do solver |
 
 As opções podem ser combinadas:
 
@@ -118,6 +121,18 @@ python3 src/main.py --resolver-todas resolver/formula_ambigua.mol
 
 Átomos equivalentes são deduplicados por isomorfismo elementar. C₂H₄O
 produz três alternativas formais; a enumeração é limitada às dez primeiras.
+
+Para consumo por ferramentas:
+
+```bash
+python3 src/main.py --resolver --formato=json resolver/agua.mol
+python3 src/main.py --resolver-todas --max-solucoes=2 \
+  --formato=jsonl resolver/formula_ambigua.mol
+```
+
+O sumário informa `complete`, `unique`, `status`, quantidade emitida,
+backend, versão, tempo e digest das regras. `LIMIT_REACHED`, `TIMEOUT` e
+`CANCELLED` nunca são apresentados como busca completa.
 
 O modelo classifica ligações por diferença de eletronegatividade como
 covalente apolar, covalente polar ou iônica. Os limites configuráveis ficam

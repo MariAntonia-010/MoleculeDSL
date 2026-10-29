@@ -377,3 +377,16 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - O oráculo confere contagens conhecidas de CH₄ a C₆H₁₄ e álcoois/éteres
   pequenos.
 - C₆H₁₂ passa a ser enumerável; o limite padrão produz status truncado.
+
+---
+
+## 29/10/2026 — Limites e saída estruturada do solver
+
+- `SolveRequest` ganhou deadline e cancelamento cooperativo.
+- A busca diferencia `COMPLETE`, `UNSAT`, `LIMIT_REACHED`, `TIMEOUT`,
+  `CANCELLED` e `ERROR`.
+- A CLI aceita `--max-solucoes`, `--tempo-limite` e
+  `--formato=texto|json|jsonl`.
+- JSON e JSONL incluem soluções, mensagens, completude, unicidade, backend,
+  versão, tempo e digest do perfil químico.
+- Testes cobrem limite, deadline, cancelamento e parsing dos dois formatos.

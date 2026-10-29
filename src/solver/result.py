@@ -25,6 +25,8 @@ class SolveRequest:
     require_unique: bool = True
     max_atoms: int = 24
     max_heavy_atoms: int = 8
+    time_limit_seconds: float | None = None
+    cancel_check: object | None = None
 
 
 @dataclass
@@ -37,6 +39,7 @@ class SolveSummary:
     backend: str = "reference-backtracking"
     backend_version: str = "1"
     truncated: bool = False
+    elapsed_ms: int = 0
     details: dict = field(default_factory=dict)
 
 

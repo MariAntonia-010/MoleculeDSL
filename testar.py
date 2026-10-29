@@ -1,4 +1,5 @@
 import glob
+import json
 import os
 import subprocess
 import sys
@@ -284,6 +285,46 @@ def testar_contrato_solver():
     if "chemical_profile_digest" not in serializado["details"]:
         problemas.append("digest do perfil químico ausente")
 
+    grande = construir(
+        analisar(os.path.join(PASTA_RAIZ, "resolver", "ciclohexano_ambiguo.mol"))
+    )
+    limitado = solver.solve(
+        grande,
+        semantico.carregar_valencias(),
+        solver.SolveRequest(max_solutions=2, require_unique=False),
+    )
+    if limitado.summary.status is not SolveStatus.LIMIT_REACHED:
+        problemas.append("enumeração limitada não retornou LIMIT_REACHED")
+    cancelado = solver.solve(
+        grande,
+        semantico.carregar_valencias(),
+        solver.SolveRequest(
+            max_solutions=2,
+            require_unique=False,
+            cancel_check=lambda: True,
+        ),
+    )
+    if cancelado.summary.status is not SolveStatus.CANCELLED:
+        problemas.append("cancelamento não retornou CANCELLED")
+    expirado = solver.solve(
+        grande,
+        semantico.carregar_valencias(),
+        solver.SolveRequest(
+            max_solutions=2,
+            require_unique=False,
+            time_limit_seconds=1e-12,
+        ),
+    )
+    if expirado.summary.status is not SolveStatus.TIMEOUT:
+        problemas.append("deadline não retornou TIMEOUT")
+    try:
+        json.loads(solver.result_json(resultado))
+        linhas_jsonl = solver.result_jsonl(resultado).splitlines()
+        for linha in linhas_jsonl:
+            json.loads(linha)
+    except (TypeError, ValueError) as erro:
+        problemas.append(f"serialização inválida: {erro}")
+
     contagens = [
         (1, 4, 1),
         (2, 6, 1),
@@ -326,6 +367,41 @@ def testar_contrato_solver():
                 )
             if not resultado.summary.complete:
                 problemas.append(f"busca de {arquivo} não ficou completa")
+    return problemas
+
+
+def testar_cli_solver_estruturado():
+    problemas = []
+    agua = os.path.join(PASTA_RAIZ, "resolver", "agua.mol")
+    codigo, saida = rodar_comando(
+        ["--resolver", "--formato=json", agua]
+    )
+    try:
+        documento = json.loads(saida)
+    except ValueError as erro:
+        return [f"JSON da CLI inválido: {erro}"]
+    if codigo != 0 or documento["summary"]["status"] != "complete":
+        problemas.append("JSON da solução única não ficou COMPLETE")
+
+    ambigua = os.path.join(
+        PASTA_RAIZ, "resolver", "formula_ambigua.mol"
+    )
+    codigo, saida = rodar_comando(
+        [
+            "--resolver-todas",
+            "--max-solucoes=2",
+            "--formato=jsonl",
+            ambigua,
+        ]
+    )
+    try:
+        linhas = [json.loads(linha) for linha in saida.splitlines()]
+    except ValueError as erro:
+        return [f"JSONL da CLI inválido: {erro}"]
+    if codigo != 0:
+        problemas.append(f"JSONL limitado saiu com código {codigo}")
+    if len(linhas) != 3 or linhas[-1]["status"] != "limit_reached":
+        problemas.append("JSONL não contém duas soluções e sumário limitado")
     return problemas
 
 
@@ -445,6 +521,7 @@ def main():
         ),
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
         ("solver/contrato_estruturado", testar_contrato_solver),
+        ("solver/cli_estruturada", testar_cli_solver_estruturado),
     ]
     casos_especiais += [
         (

@@ -2,6 +2,8 @@
 
 import json
 
+from ast_nos import AtomoDecl, LigacaoDecl
+
 
 SCHEMA_VERSION = "1"
 
@@ -17,6 +19,7 @@ def summary_dict(summary):
         "backend": summary.backend,
         "backend_version": summary.backend_version,
         "truncated": summary.truncated,
+        "elapsed_ms": summary.elapsed_ms,
         "details": summary.details,
     }
 
@@ -25,3 +28,73 @@ def summary_json(summary):
     return json.dumps(
         summary_dict(summary), ensure_ascii=False, sort_keys=True
     )
+
+
+def solution_dict(molecule, index):
+    atoms = []
+    bonds = []
+    for command in molecule.comandos:
+        if isinstance(command, AtomoDecl):
+            atoms.append(
+                {
+                    "name": command.nome,
+                    "element": command.elemento,
+                    "formal_charge": command.carga,
+                }
+            )
+        elif isinstance(command, LigacaoDecl):
+            bonds.append(
+                {
+                    "from": command.origem.texto,
+                    "to": command.destino.texto,
+                    "order": command.operador.value,
+                }
+            )
+    return {
+        "type": "solution",
+        "index": index,
+        "species": {
+            "name": molecule.nome,
+            "type": molecule.tipo.value,
+            "total_charge": molecule.carga_total,
+            "unpaired_electrons": molecule.eletrons_desemparelhados,
+        },
+        "atoms": atoms,
+        "bonds": bonds,
+    }
+
+
+def result_dict(result):
+    return {
+        "summary": summary_dict(result.summary),
+        "messages": [str(message) for message in result.messages],
+        "solutions": [
+            solution_dict(solution, index)
+            for index, solution in enumerate(result.solutions, start=1)
+        ],
+    }
+
+
+def result_json(result):
+    return json.dumps(
+        result_dict(result), ensure_ascii=False, sort_keys=True
+    )
+
+
+def result_jsonl(result):
+    lines = [
+        json.dumps(
+            solution_dict(solution, index),
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+        for index, solution in enumerate(result.solutions, start=1)
+    ]
+    lines.append(
+        json.dumps(
+            {"type": "summary", **summary_dict(result.summary)},
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+    )
+    return "\n".join(lines)

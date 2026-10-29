@@ -24,6 +24,9 @@ USO = (
     "  --modelo  mostra o modelo da molécula (átomos e ligações)"
     "\n  --resolver infere ligações quando a entrada contém somente átomos"
     "\n  --resolver-todas enumera até 10 estruturas não equivalentes"
+    "\n  --max-solucoes=N define o limite da enumeração"
+    "\n  --tempo-limite=S interrompe a busca após S segundos"
+    "\n  --formato=texto|json|jsonl escolhe a saída do solver"
 )
 
 OPCOES = {
@@ -40,9 +43,38 @@ def ler_argumentos(argumentos):
     # os argumentos forem inválidos
     opcoes = set()
     arquivos = []
+    configuracao = {
+        "max_solucoes": 10,
+        "tempo_limite": None,
+        "formato": "texto",
+    }
 
     for arg in argumentos:
         if arg.startswith("--"):
+            if arg.startswith("--max-solucoes="):
+                try:
+                    valor = int(arg.split("=", 1)[1])
+                except ValueError:
+                    return None
+                if valor < 1:
+                    return None
+                configuracao["max_solucoes"] = valor
+                continue
+            if arg.startswith("--tempo-limite="):
+                try:
+                    valor = float(arg.split("=", 1)[1])
+                except ValueError:
+                    return None
+                if valor <= 0:
+                    return None
+                configuracao["tempo_limite"] = valor
+                continue
+            if arg.startswith("--formato="):
+                valor = arg.split("=", 1)[1]
+                if valor not in {"texto", "json", "jsonl"}:
+                    return None
+                configuracao["formato"] = valor
+                continue
             if arg not in OPCOES:
                 print(f"Opção desconhecida: {arg}")
                 return None
@@ -53,10 +85,15 @@ def ler_argumentos(argumentos):
     if len(arquivos) != 1:
         return None
 
-    return arquivos[0], opcoes
+    return arquivos[0], opcoes, configuracao
 
 
-def compilar(caminho, opcoes):
+def compilar(caminho, opcoes, configuracao=None):
+    configuracao = configuracao or {
+        "max_solucoes": 10,
+        "tempo_limite": None,
+        "formato": "texto",
+    }
     # Etapas encadeadas: cada uma só roda se a anterior não teve erro
     lexer, fluxo, erros_lexicos = tokenizar(caminho)
 
@@ -78,19 +115,66 @@ def compilar(caminho, opcoes):
     if "--resolver" in opcoes and "--resolver-todas" in opcoes:
         print("As opções --resolver e --resolver-todas são mutuamente exclusivas")
         return ERRO_LEXICO_OU_SINTATICO
+    formato = configuracao["formato"]
+    if formato != "texto" and not (
+        "--resolver" in opcoes or "--resolver-todas" in opcoes
+    ):
+        print("--formato=json|jsonl exige uma opção de resolução")
+        return ERRO_LEXICO_OU_SINTATICO
+    if formato != "texto" and opcoes & {"--tokens", "--ast", "--modelo"}:
+        print("Saída estruturada não pode ser combinada com tokens, AST ou modelo")
+        return ERRO_LEXICO_OU_SINTATICO
 
     if "--resolver-todas" in opcoes:
-        estruturas, mensagens_solver, truncado = solver.enumerar(
-            molecula, semantico.carregar_valencias()
+        resultado = solver.solve(
+            molecula,
+            semantico.carregar_valencias(),
+            solver.SolveRequest(
+                max_solutions=configuracao["max_solucoes"],
+                require_unique=False,
+                time_limit_seconds=configuracao["tempo_limite"],
+            ),
         )
-        for mensagem in mensagens_solver:
+        if formato != "texto":
+            for estrutura in resultado.solutions:
+                _, mensagens = semantico.analisar(estrutura)
+                resultado.messages.extend(mensagens)
+        if formato == "json":
+            print(solver.result_json(resultado))
+            tem_erro = any(
+                getattr(mensagem, "severidade", None) == semantico.ERRO
+                for mensagem in resultado.messages
+            )
+            return (
+                SUCESSO
+                if resultado.solutions
+                and not tem_erro
+                and resultado.summary.status
+                not in (solver.SolveStatus.TIMEOUT, solver.SolveStatus.CANCELLED)
+                else ERRO_SEMANTICO
+            )
+        if formato == "jsonl":
+            print(solver.result_jsonl(resultado))
+            tem_erro = any(
+                getattr(mensagem, "severidade", None) == semantico.ERRO
+                for mensagem in resultado.messages
+            )
+            return (
+                SUCESSO
+                if resultado.solutions
+                and not tem_erro
+                and resultado.summary.status
+                not in (solver.SolveStatus.TIMEOUT, solver.SolveStatus.CANCELLED)
+                else ERRO_SEMANTICO
+            )
+        for mensagem in resultado.messages:
             print(mensagem)
-        if mensagens_solver:
+        if resultado.messages:
             return ERRO_SEMANTICO
 
-        for indice, estrutura in enumerate(estruturas, start=1):
+        for indice, estrutura in enumerate(resultado.solutions, start=1):
             modelo_molecula, mensagens = semantico.analisar(estrutura)
-            print(f"Solução {indice}/{len(estruturas)}")
+            print(f"Solução {indice}/{len(resultado.solutions)}")
             if "--ast" in opcoes:
                 print(formatar(estrutura))
             for mensagem in mensagens:
@@ -98,18 +182,73 @@ def compilar(caminho, opcoes):
             if any(m.severidade == semantico.ERRO for m in mensagens):
                 return ERRO_SEMANTICO
             print(modelo.formatar(modelo_molecula))
-        if truncado:
-            print("Mais soluções existem; exibidas somente as 10 primeiras")
-        return SUCESSO
+        if resultado.summary.status is solver.SolveStatus.LIMIT_REACHED:
+            print(
+                "Mais soluções existem; exibidas somente as "
+                f"{len(resultado.solutions)} primeiras"
+            )
+        elif resultado.summary.status is solver.SolveStatus.TIMEOUT:
+            print("Tempo limite atingido; o resultado é parcial")
+            return ERRO_SEMANTICO
+        return SUCESSO if resultado.solutions else ERRO_SEMANTICO
 
     if "--resolver" in opcoes:
-        molecula, mensagens_solver = solver.resolver(
-            molecula, semantico.carregar_valencias()
+        resultado = solver.solve(
+            molecula,
+            semantico.carregar_valencias(),
+            solver.SolveRequest(
+                max_solutions=2,
+                require_unique=True,
+                time_limit_seconds=configuracao["tempo_limite"],
+            ),
         )
-        for mensagem in mensagens_solver:
+        if formato != "texto":
+            for estrutura in resultado.solutions:
+                _, mensagens = semantico.analisar(estrutura)
+                resultado.messages.extend(mensagens)
+        if formato == "json":
+            print(solver.result_json(resultado))
+        elif formato == "jsonl":
+            print(solver.result_jsonl(resultado))
+        if formato != "texto":
+            tem_erro = any(
+                getattr(mensagem, "severidade", None) == semantico.ERRO
+                for mensagem in resultado.messages
+            )
+            return (
+                SUCESSO
+                if resultado.solutions
+                and not tem_erro
+                and resultado.summary.unique is solver.Uniqueness.TRUE
+                and resultado.summary.status is solver.SolveStatus.COMPLETE
+                else ERRO_SEMANTICO
+            )
+        for mensagem in resultado.messages:
             print(mensagem)
-        if mensagens_solver:
+        if resultado.messages:
             return ERRO_SEMANTICO
+        if resultado.summary.status in (
+            solver.SolveStatus.TIMEOUT,
+            solver.SolveStatus.CANCELLED,
+        ):
+            if formato == "texto":
+                print(
+                    "Erro de resolução [SOLVER-005] na linha "
+                    f"{molecula.linha}, coluna {molecula.coluna}: "
+                    "a busca foi interrompida antes de provar a unicidade"
+                )
+            return ERRO_SEMANTICO
+        if resultado.summary.unique is not solver.Uniqueness.TRUE:
+            if formato == "texto":
+                print(
+                    "Erro de resolução [SOLVER-004] na linha "
+                    f"{molecula.linha}, coluna {molecula.coluna}: "
+                    "a fórmula admite múltiplas estruturas; declare as ligações"
+                )
+            return ERRO_SEMANTICO
+        if formato != "texto":
+            return SUCESSO
+        molecula = resultado.solutions[0]
 
     if "--ast" in opcoes:
         print(formatar(molecula))
@@ -137,13 +276,13 @@ def main():
         print(USO)
         sys.exit(ERRO_LEXICO_OU_SINTATICO)
 
-    caminho, opcoes = lidos
+    caminho, opcoes, configuracao = lidos
 
     if not os.path.isfile(caminho):
         print(f"Erro de entrada [ENT-001]: arquivo não encontrado: {caminho}")
         sys.exit(ERRO_LEXICO_OU_SINTATICO)
 
-    sys.exit(compilar(caminho, opcoes))
+    sys.exit(compilar(caminho, opcoes, configuracao))
 
 
 if __name__ == "__main__":

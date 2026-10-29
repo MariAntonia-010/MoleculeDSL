@@ -111,14 +111,18 @@ Gates obrigatórios:
 
 ## Fase 3 — Operação
 
-Adicionar:
+Implementado:
 
 - `--max-solucoes`;
 - `--tempo-limite`;
 - `--formato texto|json|jsonl`;
-- streaming de soluções;
 - cancelamento cooperativo;
-- status `LIMIT_REACHED`, `TIMEOUT` e `CANCELLED` na CLI;
+- status `LIMIT_REACHED`, `TIMEOUT` e `CANCELLED` no contrato estruturado;
+- JSON versionado com backend, versão, tempo e digest das regras.
+
+Pendente:
+
+- streaming real sem acumular soluções;
 - worker isolado para backends nativos.
 
 Busca interrompida nunca pode ser reportada como `UNSAT` ou única.

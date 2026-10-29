@@ -25,7 +25,7 @@ def connected(vertex_count, edges):
     return len(visited) == vertex_count
 
 
-def search_heavy(residual, on_solution):
+def search_heavy(residual, on_solution, should_stop):
     count = len(residual)
     if count < 2:
         if all(value == 0 for value in residual):
@@ -34,6 +34,7 @@ def search_heavy(residual, on_solution):
     pairs = list(combinations(range(count), 2))
     remaining = list(residual)
     stopped = False
+    stop_reason = None
 
     def future_capacity(start, atom):
         return sum(
@@ -44,7 +45,11 @@ def search_heavy(residual, on_solution):
         )
 
     def visit(index, edges):
-        nonlocal stopped
+        nonlocal stopped, stop_reason
+        stop_reason = should_stop()
+        if stop_reason is not None:
+            stopped = True
+            return
         if stopped:
             return
         if index == len(pairs):
@@ -70,6 +75,7 @@ def search_heavy(residual, on_solution):
             remaining[b] += order
 
     visit(0, {})
+    return stop_reason
 
 
 def materialize_edges(problem, heavy_edges, hydrogen_distribution):
@@ -91,26 +97,31 @@ def materialize_edges(problem, heavy_edges, hydrogen_distribution):
     return edges
 
 
-def enumerate_edges(problem, profile, limit):
+def enumerate_edges(problem, profile, limit, should_stop=lambda: None):
     heavy = problem.heavy_atoms
     hydrogens = problem.hydrogens
 
     if not heavy:
         if len(hydrogens) == 2:
-            return [{(hydrogens[0].index, hydrogens[1].index): 1}], False
-        return [], False
+            return [
+                {(hydrogens[0].index, hydrogens[1].index): 1}
+            ], False, None
+        return [], False, None
 
     candidates = []
     for atom in heavy:
         allowed = profile.allowed_valences(atom)
         if not allowed:
-            return None, atom
+            return None, atom, None
         candidates.append(allowed)
 
     solutions = []
     keys = set()
     search_limit = limit + 1
     for targets in product(*candidates):
+        stop_reason = should_stop()
+        if stop_reason is not None:
+            return solutions, False, stop_reason
         for hydrogen_distribution in distributions(
             heavy, targets, len(hydrogens)
         ):
@@ -135,7 +146,11 @@ def enumerate_edges(problem, profile, limit):
                     return True
                 return False
 
-            search_heavy(residual, accept)
+            stop_reason = search_heavy(
+                residual, accept, should_stop
+            )
+            if stop_reason is not None:
+                return solutions, False, stop_reason
             if len(solutions) >= search_limit:
-                return solutions[:limit], True
-    return solutions, False
+                return solutions[:limit], True, None
+    return solutions, False, None
