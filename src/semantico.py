@@ -18,6 +18,9 @@ ARQUIVO_VALENCIAS = os.path.join(PASTA_RAIZ, "regras", "valencias.json")
 ARQUIVO_CLASSIFICACAO = os.path.join(
     PASTA_RAIZ, "regras", "classificacao_ligacoes.json"
 )
+ARQUIVO_LIGACOES_METALICAS = os.path.join(
+    PASTA_RAIZ, "regras", "ligacoes_metalicas.json"
+)
 
 ERRO = "erro"
 AVISO = "aviso"
@@ -43,6 +46,11 @@ def carregar_classificacao():
         return json.load(arquivo)
 
 
+def carregar_ligacoes_metalicas():
+    with open(ARQUIVO_LIGACOES_METALICAS, encoding="utf-8") as arquivo:
+        return json.load(arquivo)
+
+
 @dataclass
 class MensagemSemantica:
     # Erros impedem a compilação; avisos só informam
@@ -65,12 +73,22 @@ class AnalisadorSemantico:
     # estruturais e de valência. Os IDs das regras estão em
     # docs/plano_semantico.md.
 
-    def __init__(self, molecula, dados_elementos, valencias, classificacao):
+    def __init__(
+        self,
+        molecula,
+        dados_elementos,
+        valencias,
+        classificacao,
+        ligacoes_metalicas,
+    ):
         self.molecula = molecula
         self.dados_elementos = dados_elementos
         self.elementos = set(dados_elementos)
         self.valencias = valencias
         self.classificacao = classificacao
+        self.blocos_metalicos = set(
+            ligacoes_metalicas["blocos_metalicos"]
+        )
         self.mensagens = []
         self.modelo = Modelo(molecula.nome)
 
@@ -120,6 +138,7 @@ class AnalisadorSemantico:
             self.conferir_ciclos_nao_declarados()
             self.classificar_ligacoes()
             self.conferir_coordenadas()
+            self.conferir_ligacoes_metalicas()
 
         if not self.tem_erro():
             self.conferir_valencias()
@@ -502,6 +521,31 @@ class AnalisadorSemantico:
                     "livre para a ligação coordenada",
                 )
 
+    def conferir_ligacoes_metalicas(self):
+        """Avisa quando `~` envolve elemento não classificado como metal."""
+        por_id = {atomo.id: atomo for atomo in self.modelo.atomos}
+        for ligacao in self.modelo.ligacoes:
+            if ligacao.operador is not Operador.METALICA:
+                continue
+
+            participantes = (
+                por_id[ligacao.origem],
+                por_id[ligacao.destino],
+            )
+            nao_metalicos = []
+            for atomo in participantes:
+                bloco = self.dados_elementos[atomo.elemento]["bloco"]
+                if bloco not in self.blocos_metalicos:
+                    nao_metalicos.append(f"{atomo.rotulo()} ({bloco})")
+
+            if nao_metalicos:
+                self.aviso(
+                    "METAL-001",
+                    ligacao,
+                    "a ligação metálica envolve participante não metálico: "
+                    + ", ".join(nao_metalicos),
+                )
+
     def conferir_valencias(self):
         # Só usa os dados de regras/valencias.json: elemento ou carga sem
         # dado não é conferido
@@ -657,4 +701,5 @@ def analisar(molecula):
         carregar_elementos(),
         carregar_valencias(),
         carregar_classificacao(),
+        carregar_ligacoes_metalicas(),
     ).analisar()

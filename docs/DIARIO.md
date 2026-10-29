@@ -256,3 +256,17 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   (`arestas - vértices + componentes`) com a quantidade de anéis declarados.
 - Novo caso `avisos_semanticos/ciclo_sem_ring.mol`; avisos não alteram o
   código de saída.
+
+---
+
+## 29/10/2026 — Validação informativa de ligação metálica
+
+- Criado `regras/ligacoes_metalicas.json`, que lista os blocos metálicos
+  exatamente como aparecem na tabela da PubChem.
+- `METAL-001` avisa quando o operador `~` envolve pelo menos um elemento
+  classificado fora desses blocos.
+- A regra é aviso porque H3 não sustenta tratar ligação metálica como ligação
+  de uma molécula discreta. Átomos envolvidos em `~` continuam fora da soma
+  de valência.
+- `exemplos/sodio_metalico.mol` permanece válido sem aviso; o caso entre
+  ametais está em `avisos_semanticos/metalica_com_ametais.mol`.

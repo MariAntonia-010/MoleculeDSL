@@ -119,7 +119,7 @@ Arquivo gerado: `regras/elementos.json`, com os 118 elementos.
 2. Definir valência de Be, Al, Si, Br e I (B7).
 3. **Decidido:** limites de F1 em 0,4 e 1,7, mantidos em arquivo de configuração.
 4. Decidir se S e P podem fazer ligação dupla e tripla (E3 e E6).
-5. **Decidido para esta iteração:** manter ligação metálica como informação de referência; validação semântica própria fica para a continuação.
+5. **Decidido para esta iteração:** manter ligação metálica como informação de referência e avisar quando `~` envolver participante fora dos blocos metálicos da PubChem; um modelo próprio fica para a continuação.
 6. Decidir o que fazer com metais de transição (A4, J).
 
 ## Resumo do que o compilador pode validar hoje com fonte

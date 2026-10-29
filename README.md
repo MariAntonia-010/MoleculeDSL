@@ -148,6 +148,7 @@ O catálogo de códigos, causas e correções está em
 | `CARGA-001` | carga inconsistente com a valência | erro |
 | `COORD-001` | doador coordenado sem par livre | aviso |
 | `COORD-002` | dados insuficientes para conferir o doador | aviso |
+| `METAL-001` | ligação `~` envolve participante não metálico | aviso |
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
 | `RING-004` | ciclo independente sem declaração `ring` | aviso |
 
@@ -217,8 +218,8 @@ Continuam pendentes:
 
 - validação do orbital vazio no receptor coordenado;
 - valências ainda sem fonte e ligações múltiplas de S/P;
-- validação semântica própria para ligação metálica, mantida como informação
-  de referência nesta iteração;
+- modelo semântico próprio para sólidos metálicos; nesta iteração,
+  `METAL-001` já avisa quando `~` envolve participante não metálico;
 - solver de estruturas a partir apenas dos átomos, planejado para a próxima
   iteração.
 

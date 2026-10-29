@@ -1,0 +1,16 @@
+{
+  "_fonte": "docs/levantamento_quimica.md, itens A1, H2 e H3",
+  "_notas": [
+    "A classificacao de bloco vem da tabela periodica da PubChem.",
+    "A validacao e apenas informativa: ligacao metalica nao e uma molecula discreta e nao recebe ordem de ligacao.",
+    "Um participante fora destes blocos gera aviso, nao erro."
+  ],
+  "blocos_metalicos": [
+    "Alkali metal",
+    "Alkaline earth metal",
+    "Transition metal",
+    "Post-transition metal",
+    "Lanthanide",
+    "Actinide"
+  ]
+}

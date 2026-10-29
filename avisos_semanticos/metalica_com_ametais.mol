@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [METAL-001] na linha 5, coluna 4: a ligação metálica envolve participante não metálico: c1 (C#1) (Nonmetal), c2 (C#2) (Nonmetal)
+molecule "Ligação metálica entre ametais" {
+    atom C as c1
+    atom C as c2
+    bond c1~c2
+}

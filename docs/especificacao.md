@@ -236,8 +236,10 @@ receptor. O compilador confere, como aviso, se o doador tinha um par livre
 antes da doação. A disponibilidade de orbital vazio no receptor ainda não é
 conferida por falta desse dado na base. Ligações metálicas são identificadas
 no modelo como informação de referência, mas nesta iteração não entram no
-cálculo de valência nem na classificação por eletronegatividade. A validação
-semântica própria dessas ligações fica para a continuação do projeto.
+cálculo de valência nem na classificação por eletronegatividade. O aviso
+`METAL-001` é emitido quando `~` envolve um elemento cujo bloco da tabela
+periódica não é metálico. Um modelo semântico próprio para sólidos metálicos
+fica para a continuação do projeto.
 
 O compilador não possui uma regra separada `OCT-001`: octeto e dueto já são
 refletidos pelas valências dos elementos que possuem dados confirmados.

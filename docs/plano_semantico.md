@@ -67,6 +67,7 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | CARGA-001 | Carga formal inconsistente com a valência | erro |
 | COORD-001 | Doador sem par livre para ligação coordenada | aviso |
 | COORD-002 | Dados insuficientes para conferir o par livre do doador | aviso |
+| METAL-001 | Ligação metálica envolve participante fora de um bloco metálico | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
 
@@ -89,7 +90,7 @@ Implementado em parte:
 - Elemento sem eletronegatividade na fonte produz `não classificada`. Não se usa a regra "metal + ametal = sempre iônica".
 - O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
 - A disponibilidade de orbital vazio no receptor ainda não é conferida porque `regras/elementos.json` não contém esse dado de forma confiável.
-- Ligações metálicas são identificadas no modelo e mantidas como informação de referência. Nesta iteração continuam fora da classificação por eletronegatividade e da valência, conforme H3; a continuação da análise semântica deverá definir validações próprias sem tratá-las como ligações de uma molécula discreta.
+- Ligações metálicas são identificadas no modelo e mantidas como informação de referência. `METAL-001` usa os blocos da PubChem para avisar quando `~` envolve participante não metálico. Elas continuam fora da classificação por eletronegatividade e da valência, conforme H3; um modelo próprio de sólido metálico permanece para a continuação.
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.
