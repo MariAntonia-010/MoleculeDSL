@@ -554,8 +554,8 @@ class AnalisadorSemantico:
                 self.aviso(
                     "COORD-003",
                     lig,
-                    f"o receptor {receptor.rotulo()} não possui orbital vazio "
-                    "para receber o par de elétrons",
+                    f"o modelo de dueto/octeto não identificou capacidade "
+                    f"receptora em {receptor.rotulo()} para receber o par",
                 )
 
     def conferir_ligacoes_metalicas(self):
@@ -590,20 +590,43 @@ class AnalisadorSemantico:
         ordem = regras["ordem_ligacao"]
         por_id = {a.id: a for a in self.modelo.atomos}
 
-        # BOND-001 primeiro: com ela, os erros de valência seriam consequência
-        avisados = set()
+        # Limites seguros viram erro; padrões usuais de elementos pesados
+        # viram aviso, pois não são tetos físicos universais.
+        erros_avisados = set()
+        avisos_emitidos = set()
+        maximos_estritos = regras["ordem_ligacao_maxima_estrita"]
+        ordens_incomuns = regras["ordem_ligacao_incomum"]
         for lig in self.modelo.ligacoes:
             if lig.operador not in (Operador.DUPLA, Operador.TRIPLA):
                 continue
+            valor_ordem = ordem[lig.operador.name]
+            tipo = "dupla" if lig.operador is Operador.DUPLA else "tripla"
             for atomo in (por_id[lig.origem], por_id[lig.destino]):
-                if atomo.elemento in regras["somente_ligacao_simples"] and (lig.linha, lig.coluna) not in avisados:
-                    avisados.add((lig.linha, lig.coluna))
-                    tipo = "dupla" if lig.operador is Operador.DUPLA else "tripla"
+                posicao = (lig.linha, lig.coluna)
+                maximo = maximos_estritos.get(atomo.elemento)
+                if maximo is not None and valor_ordem > maximo:
+                    if posicao in erros_avisados:
+                        continue
+                    erros_avisados.add(posicao)
                     self.erro(
                         "BOND-001",
                         lig,
                         f"{atomo.elemento} só faz ligação simples, mas {atomo.rotulo()} "
                         f"está numa ligação {tipo}",
+                    )
+                    continue
+
+                usual = ordens_incomuns.get(atomo.elemento)
+                if usual is not None and valor_ordem > usual:
+                    if posicao in avisos_emitidos:
+                        continue
+                    avisos_emitidos.add(posicao)
+                    self.aviso(
+                        "BOND-002",
+                        lig,
+                        f"ligação {tipo} com {atomo.elemento} é incomum no "
+                        "perfil Lewis introdutório; trate a ordem como "
+                        "representação formal",
                     )
         if self.tem_erro():
             return

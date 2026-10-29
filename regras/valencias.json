@@ -1,11 +1,12 @@
 {
- "_fonte": "docs/levantamento_quimica.md, itens B2 a B6, C3, E4 e G4",
+ "_fonte": "docs/levantamento_quimica.md (B2 a B6, C3, E4 e G4) e docs/pesquisa_quimica_aprofundada.md",
  "_notas": [
   "Só entram aqui regras marcadas como FONTE ou DERIVADA no levantamento. Elemento sem dado não é conferido.",
   "valencias: soma das ordens de ligação aceitas para o átomo neutro (B2, B3, B4 e B6).",
   "valencias_expandidas: valências extras de Cl quando todos os vizinhos são F ou O (B5). Br e I ficam de fora porque a valência deles como átomo neutro está PENDENTE (B7).",
   "valencias_com_carga: soma das ordens de ligação para as cargas da tabela C3 (DERIVADA de C1).",
-  "somente_ligacao_simples: H e halogênios (E4).",
+  "ordem_ligacao_maxima_estrita: limites seguros no perfil Lewis clássico para H e F.",
+  "ordem_ligacao_incomum: Cl, Br e I acima de ligação simples geram aviso, não erro universal.",
   "ordem_ligacao: a coordenada conta como uma ligação de 2 elétrons (G4). A metálica não entra na conta, e átomos com ligação metálica não são conferidos (H3)."
  ],
  "valencias": {
@@ -31,7 +32,15 @@
   "C": {"-1": [3]},
   "B": {"-1": [4]}
  },
- "somente_ligacao_simples": ["H", "F", "Cl", "Br", "I"],
+ "ordem_ligacao_maxima_estrita": {
+  "H": 1,
+  "F": 1
+ },
+ "ordem_ligacao_incomum": {
+  "Cl": 1,
+  "Br": 1,
+  "I": 1
+ },
  "ordem_ligacao": {
   "SIMPLES": 1,
   "DUPLA": 2,

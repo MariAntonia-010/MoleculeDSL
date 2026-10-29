@@ -74,6 +74,7 @@ Arquivo gerado: `regras/elementos.json`, com os 118 elementos.
 | E4 | H e halogênios fazem só ligação simples | FONTE (didática) | [Pearson](https://pearson.com/channels/intro-to-chemistry/learn/jules/10-chemical-bonding/bonding-preferences) |
 | E5 | Existe ordem de ligação fracionária (média ponderada das estruturas de ressonância). A MoleculeDSL só trabalha com ordens inteiras, então ressonância fica sem representação | FONTE | [Gold Book BT07005](https://goldbook.iupac.org/terms/view/BT07005) |
 | E6 | Lista exata de elementos que aceitam dupla e tripla além de C, N, O, S e P | PENDENTE | Não confirmei |
+| E7 | Revisão de E4: H e F sustentam limite estrito no perfil Lewis simples; Cl, Br e I possuem hipervalência e representações formais que tornam “só ligação simples” um padrão, não teto universal | REVISADO | [pesquisa aprofundada](pesquisa_quimica_aprofundada.md), IUPAC LT07065/HT07054 e PubChem |
 
 ## F. Classificação do tipo de ligação por eletronegatividade
 
@@ -119,7 +120,7 @@ Arquivo gerado: `regras/elementos.json`, com os 118 elementos.
 1. Confirmar B2 a B6 num livro-texto de química geral. As fontes usadas são didáticas.
 2. Definir valência de Be, Al, Si, Br e I (B7).
 3. **Decidido:** limites de F1 em 0,4 e 1,7, mantidos em arquivo de configuração.
-4. Decidir se S e P podem fazer ligação dupla e tripla (E3 e E6).
+4. **Decidido:** P e S podem aparecer com ordens formais múltiplas; a validade depende de carga, ressonância e soma das ordens.
 5. **Decidido para esta iteração:** manter ligação metálica como informação de referência e avisar quando `~` envolver participante fora dos blocos metálicos da PubChem; um modelo próprio fica para a continuação.
 6. Decidir o que fazer com metais de transição (A4, J).
 

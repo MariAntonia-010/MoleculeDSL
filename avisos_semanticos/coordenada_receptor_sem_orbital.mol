@@ -1,4 +1,4 @@
-// esperado: Aviso semântico [COORD-003] na linha 14, coluna 4: o receptor receptor (N#2) não possui orbital vazio para receber o par de elétrons
+// esperado: Aviso semântico [COORD-003] na linha 14, coluna 4: o modelo de dueto/octeto não identificou capacidade receptora em receptor (N#2) para receber o par
 molecule "Receptor coordenado sem orbital vazio" {
     atom N(+1) as doador
     atom N(-1) as receptor

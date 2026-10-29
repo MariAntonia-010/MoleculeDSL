@@ -294,3 +294,19 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   mantendo também a ordem e o código de saída.
 - Arquivos fora de UTF-8 e com caracteres invisíveis foram preservados em
   bytes durante a migração.
+
+---
+
+## 29/10/2026 — Revisão aprofundada das regras químicas
+
+- A pesquisa foi consolidada em
+  `docs/pesquisa_quimica_aprofundada.md`, priorizando IUPAC, NIST, PubChem e
+  OpenStax.
+- Foi confirmado que bonding number, valência, carga formal, estado de
+  oxidação e número de coordenação não podem compartilhar uma única tabela.
+- BrF₃, BrF₅, IF₅ e IF₇ mostram que Cl/Br/I não possuem teto universal de
+  uma ligação.
+- `BOND-001` ficou restrita a H/F; Cl/Br/I em ordem múltipla agora geram o
+  aviso `BOND-002`.
+- A mensagem de `COORD-003` passou a assumir explicitamente que é resultado
+  do modelo dueto/octeto, não prova física da inexistência de orbital.

@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [BOND-002] na linha 5, coluna 4: ligação dupla com Br é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+molecule "Bromo com ligação dupla formal" {
+    atom Br
+    atom O
+    bond Br=O
+}

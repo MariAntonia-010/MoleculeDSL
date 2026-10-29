@@ -142,7 +142,8 @@ O catálogo de códigos, causas e correções está em
 |---|---|---|
 | `ELEM-001` | elemento desconhecido | erro |
 | `STRUCT-001` a `STRUCT-007` | integridade de átomos, nomes, ligações e quantidades | erro |
-| `BOND-001` | ordem de ligação não aceita | erro |
+| `BOND-001` | ligação múltipla excede limite estrito de H/F | erro |
+| `BOND-002` | ligação múltipla incomum em Cl/Br/I | aviso |
 | `VAL-001` | valência excedida | erro |
 | `VAL-002` | valência incompleta | aviso |
 | `CARGA-001` | carga inconsistente com a valência | erro |
@@ -206,6 +207,7 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 - [Erros léxicos e sintáticos](docs/erros.md)
 - [Plano semântico](docs/plano_semantico.md)
 - [Levantamento e fontes de química](docs/levantamento_quimica.md)
+- [Pesquisa química aprofundada](docs/pesquisa_quimica_aprofundada.md)
 - [Diário do projeto](docs/DIARIO.md)
 - [Página de apresentação](docs/apresentacao/index.html)
 

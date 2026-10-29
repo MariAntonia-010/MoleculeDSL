@@ -231,6 +231,11 @@ Se um dos elementos não tiver eletronegatividade na fonte, a ligação aparece
 como `não classificada`. A implementação não presume que toda ligação entre
 metal e ametal seja iônica.
 
+No perfil Lewis introdutório, ligações múltiplas com H ou F geram erro
+`BOND-001`. Para Cl, Br e I, uma ligação múltipla gera apenas `BOND-002`:
+espécies hipervalentes e diferentes representações formais não permitem
+tratar a ligação simples usual como teto físico universal.
+
 Na ligação coordenada, `origem -> destino` mantém a direção do doador para o
 receptor. O compilador confere, como aviso, se o doador tinha um par livre
 antes da doação. Para H, He e os elementos do segundo período, também

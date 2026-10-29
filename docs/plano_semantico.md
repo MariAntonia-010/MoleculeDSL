@@ -61,7 +61,8 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | STRUCT-005 | Átomo ligado a ele mesmo | erro |
 | STRUCT-006 | Mais de uma ligação entre os mesmos dois átomos (inclusive por repetição, como `bond c1-c2 x2`) | erro |
 | STRUCT-007 | Quantidade ou repetição fora do intervalo de 1 a 1000 (`0x`, `x0`, `5000x`) | erro |
-| BOND-001 | Elemento não aceita essa ordem de ligação (`H=O`) | erro |
+| BOND-001 | H ou F excede ligação simples no perfil Lewis clássico | erro |
+| BOND-002 | Cl, Br ou I aparece em ligação múltipla formal | aviso |
 | VAL-001 | Soma das ordens de ligação acima da valência permitida | erro |
 | VAL-002 | Valência incompleta | aviso |
 | CARGA-001 | Carga formal inconsistente com a valência | erro |
@@ -77,7 +78,11 @@ Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002, CARGA
 
 Detalhes da implementação:
 - As regras são conferidas em etapas, e cada etapa só roda se a anterior não deu erro, para não aparecerem erros em cascata: estrutura, depois STRUCT-003, depois BOND-001, depois valência e carga.
-- BOND-001 vale só para H e halogênios (E4). As ligações múltiplas de outros elementos não são conferidas (E6 pendente).
+- BOND-001 fica restrita a H e F, cujo dueto/octeto fornece limite seguro no
+  perfil Lewis clássico. Cl, Br e I em ligação múltipla geram BOND-002,
+  porque espécies hipervalentes e representações formais impedem uma
+  proibição universal. P e S continuam sujeitos à soma de valência e a
+  avisos contextuais.
 - A coordenada conta como ordem 1. Átomos com ligação metálica não são conferidos (H3).
 - Átomo neutro acima da valência: se a soma bate com uma carga da tabela C3, é CARGA-001 com a sugestão da carga (ex.: N com 4 ligações → `N(+1)`); senão, VAL-001.
 - Átomo neutro abaixo da valência: é só aviso (VAL-002), porque pode ser um radical (D5). Se a soma bate com uma carga conhecida, o aviso sugere a carga.
