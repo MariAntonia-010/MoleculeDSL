@@ -1,0 +1,6 @@
+// esperado: Erro semântico [BOND-001] na linha 5, coluna 4: F só faz ligação simples
+molecule "Flúor com ligação tripla" {
+    atom F
+    atom O
+    bond F#O
+}

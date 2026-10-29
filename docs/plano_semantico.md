@@ -38,7 +38,9 @@ molecule "Ciclohexano" {
 
 ### M2: Dados químicos (`regras/*.json`)
 - Elementos: número atômico, elétrons de valência, valências múltiplas (N: 3 e 5; S: 2, 4 e 6), eletronegatividade e tipo (metal, ametal, semimetal).
-- Arquivos separados para ordens de ligação aceitas e cargas comuns.
+- `elementos.json` concentra os dados periódicos; `valencias.json` reúne
+  valências, cargas conhecidas e ordens de ligação; os limites informativos
+  de eletronegatividade ficam em `classificacao_ligacoes.json`.
 
 Feito em parte: `regras/valencias.json` tem só o que o `levantamento_quimica.md` marca como FONTE ou DERIVADA. São as valências de H, B, C, N, O, F, P, S e Cl (B2 a B4 e B6), a valência expandida de Cl ligado só a F ou O (B5), as cargas da tabela C3, os elementos que só fazem ligação simples (E4) e a ordem de cada tipo de ligação (G4). Elemento ou carga fora desse arquivo não é conferido. Br, I, S e P em ligações múltiplas, metais de transição e ligação metálica continuam pendentes.
 
