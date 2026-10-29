@@ -2,7 +2,7 @@
 
 from itertools import combinations, product
 
-from solver.canonical import canonical_heavy_key
+from solver.canonical import hydrogens_sorted, is_canonical_heavy
 from solver.hydrogen import distributions
 
 
@@ -147,9 +147,11 @@ def enumerate_edges(
             return None, atom, None
         candidates.append(allowed)
 
+    # Fase 5: cada classe é emitida só na sua rotulação canônica, testada
+    # na hora em que a estrutura fica completa. Não há conjunto de chaves
+    # crescendo com a enumeração.
     solutions = []
     found = 0
-    keys = set()
     search_limit = limit + 1
     for targets in product(*candidates):
         stop_reason = should_stop()
@@ -158,6 +160,8 @@ def enumerate_edges(
         for hydrogen_distribution in distributions(
             heavy, targets, len(hydrogens)
         ):
+            if not hydrogens_sorted(heavy, hydrogen_distribution):
+                continue
             residual = tuple(
                 target - hydrogen
                 for target, hydrogen in zip(
@@ -173,12 +177,10 @@ def enumerate_edges(
                     heavy, heavy_edges, hydrogen_distribution
                 ):
                     return False
-                key = canonical_heavy_key(
+                if not is_canonical_heavy(
                     heavy_edges, heavy, hydrogen_distribution
-                )
-                if key in keys:
+                ):
                     return False
-                keys.add(key)
                 found += 1
                 edges = materialize_edges(
                     problem, heavy_edges, hydrogen_distribution

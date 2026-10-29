@@ -462,6 +462,154 @@ def testar_fases_solver():
     return problemas
 
 
+def testar_fases_quimicas():
+    src = os.path.join(PASTA_RAIZ, "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+
+    from construtor_ast import construir
+    from sintatico import analisar
+    import complexos
+    import eletronico
+    import estereo
+    import semantico
+    import solver
+    from solver.canonical import is_canonical_heavy
+    from solver.problem import SolverAtom
+
+    elementos = semantico.carregar_elementos()
+    valencias = semantico.carregar_valencias()
+    metalicas = semantico.carregar_ligacoes_metalicas()
+    problemas = []
+
+    def modelo_de(*partes):
+        modelo, _ = semantico.analisar(
+            construir(analisar(os.path.join(PASTA_RAIZ, *partes)))
+        )
+        return modelo
+
+    # Fase 5: uma rotulação por classe, sem conjunto de chaves
+    carbonos = [SolverAtom(i, "C", 0, 1, 0, f"c{i}") for i in range(3)]
+    cadeias = [{(0, 1): 1, (1, 2): 1}, {(0, 2): 1, (1, 2): 1}, {(0, 1): 1, (0, 2): 1}]
+    # O átomo central de cada cadeia tem 2 H; as pontas, 3
+    hidrogenios = [(3, 2, 3), (3, 3, 2), (2, 3, 3)]
+    aceitas = [
+        is_canonical_heavy(arestas, carbonos, h)
+        for arestas, h in zip(cadeias, hidrogenios)
+    ]
+    if sum(aceitas) != 1:
+        problemas.append(f"propano canônico aceito {sum(aceitas)} vez(es)")
+    with tempfile.TemporaryDirectory() as pasta:
+        for nc, nh, esperado in ((4, 8, 5), (5, 10, 10), (4, 6, 9)):
+            arquivo = escrever_mol(
+                pasta,
+                f"c{nc}h{nh}.mol",
+                ['species molecule "X" {', f"    {nc}x atom C", f"    {nh}x atom H", "}"],
+            )
+            resultado = solver.solve(
+                construir(analisar(arquivo)),
+                valencias,
+                solver.SolveRequest(max_solutions=50, require_unique=False),
+            )
+            if len(resultado.solutions) != esperado:
+                problemas.append(
+                    f"C{nc}H{nh}: {len(resultado.solutions)} classes, "
+                    f"esperado {esperado}"
+                )
+
+    # Fase 7: modelo eletrônico e ressonância
+    formas_esperadas = {
+        "carbonato": 3,
+        "benzeno": 2,
+        "acetato": 2,
+        "ozonio": 2,
+        "agua": 1,
+        "cianeto": 1,
+    }
+    for nome, esperado in formas_esperadas.items():
+        formas, motivo, _ = eletronico.formas_de_ressonancia(
+            modelo_de("exemplos", f"{nome}.mol"), elementos, valencias
+        )
+        if formas is None or len(formas) != esperado:
+            problemas.append(
+                f"ressonância de {nome}: "
+                f"{motivo or len(formas)}, esperado {esperado}"
+            )
+    pares = {
+        estado.atomo.carga: estado.pares_livres
+        for estado in eletronico.estados(
+            modelo_de("exemplos", "carbonato.mol"), elementos, valencias
+        )
+        if estado.atomo.elemento == "O"
+    }
+    if pares != {0: 2, -1: 3}:
+        problemas.append(f"pares livres do carbonato: {pares}")
+    formas, _, _ = eletronico.formas_de_ressonancia(
+        modelo_de("exemplos", "amonio_por_ligacao_coordenada.mol"),
+        elementos,
+        valencias,
+    )
+    if formas is not None:
+        problemas.append("ressonância aceitou ligação coordenada")
+
+    # Fase 8: elementos estereogênicos
+    casos_estereo = {
+        "butan_2_ol": (1, 0),
+        "but_2_eno": (0, 1),
+        "glicerol": (0, 0),
+        "ciclohexeno": (0, 0),
+        "isopropanol": (0, 0),
+    }
+    for nome, (centros_esperados, duplas_esperadas) in casos_estereo.items():
+        modelo = modelo_de("exemplos", f"{nome}.mol")
+        (centros, duplas), _ = estereo.analisar(modelo, elementos, valencias)
+        if (len(centros), len(duplas)) != (centros_esperados, duplas_esperadas):
+            problemas.append(
+                f"estereoquímica de {nome}: {len(centros)} centro(s) e "
+                f"{len(duplas)} dupla(s)"
+            )
+    modelo = modelo_de("exemplos", "butan_2_ol.mol")
+    (centros, _), _ = estereo.analisar(modelo, elementos, valencias)
+    por_id = {a.id: a for a in modelo.atomos}
+    ordem = [por_id[i].nome for i in centros[0][1]] if centros else []
+    if ordem != ["o", "c3", "c1", "h5"]:
+        problemas.append(f"prioridades CIP do butan-2-ol: {ordem}")
+
+    # Fase 9: coordenação e sólidos
+    niquel = complexos.analisar(
+        modelo_de("avisos_semanticos", "tetracarbonilniquel.mol"),
+        elementos,
+        valencias,
+        metalicas,
+    )
+    centro = niquel["centros"][0]
+    if centro["oxidacao"] != 0 or sum(centro["eletrons"]) != 18:
+        problemas.append(f"Ni(CO)4: {centro}")
+    if [ligante["carga"] for ligante in niquel["ligantes"]] != [0, 0, 0, 0]:
+        problemas.append("ligantes CO de Ni(CO)4 não ficaram neutros")
+    sal = complexos.analisar(
+        modelo_de("exemplos", "cloreto_de_sodio.mol"), elementos, valencias, metalicas
+    )
+    if sal["centros"][0]["oxidacao"] != 1 or sal["ligantes"][0]["carga"] != -1:
+        problemas.append("NaCl não deu Na(+1) e Cl(-1)")
+    sodio = complexos.analisar(
+        modelo_de("exemplos", "sodio_metalico.mol"), elementos, valencias, metalicas
+    )
+    if sodio["centros"] or sodio["motivos"].get("metálica") != 1:
+        problemas.append("sódio metálico não ficou como motivo metálico")
+
+    codigo, saida = rodar_comando(
+        ["--eletronico", "--ressonancia", "--estereo", "--coordenacao",
+         os.path.join(PASTA_RAIZ, "exemplos", "butan_2_ol.mol")]
+    )
+    for trecho in ("Modelo eletrônico", "Ressonância:", "Centros estereogênicos", "Coordenação:"):
+        if trecho not in saida:
+            problemas.append(f"CLI não mostrou '{trecho}'")
+    if codigo != 0:
+        problemas.append(f"CLI dos relatórios saiu com código {codigo}")
+    return problemas
+
+
 def testar_contrato_solver():
     src = os.path.join(PASTA_RAIZ, "src")
     if src not in sys.path:
@@ -798,6 +946,7 @@ def main():
         ("solver/contrato_estruturado", testar_contrato_solver),
         ("solver/cli_estruturada", testar_cli_solver_estruturado),
         ("solver/fases_do_plano", testar_fases_solver),
+        ("solver/fases_quimicas", testar_fases_quimicas),
     ]
     casos_especiais += [
         (

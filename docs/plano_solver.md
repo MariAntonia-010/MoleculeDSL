@@ -160,14 +160,36 @@ faltam benchmarks, quebra de simetria no modelo e worker isolado.
 
 ## Fase 5 — Geração canônica
 
-Avaliar:
+Opções avaliadas:
 
-1. integração com Surge/MAYGEN;
-2. orderly generation própria por blocos;
-3. canonical augmentation com nauty/Traces.
+1. integração com Surge/MAYGEN: exigiria binário externo ou JVM no caminho
+   do compilador e um tradutor do perfil químico; fica para quando a escala
+   passar de oito átomos pesados;
+2. orderly generation própria por blocos: **implementada** no backend de
+   referência;
+3. canonical augmentation com nauty/Traces: mesma objeção de dependência
+   nativa do item 1.
 
-Critério: gerar um representante por órbita durante a construção, em vez de
-produzir rótulos duplicados para filtrar no final.
+Implementado em `src/solver/canonical.py` e usado em `backtracking.py`:
+
+- a representante de cada classe é a rotulação de menor vetor (H por átomo,
+  ordens das arestas) entre as permutações de átomos de mesmo elemento e
+  carga;
+- `hydrogens_sorted` descarta, antes da busca pesada, as distribuições de H
+  que não crescem dentro de cada grupo, pois nunca são representantes;
+- `is_canonical_heavy` testa cada estrutura completa e só emite a
+  representante; nenhum conjunto de chaves cresce com a enumeração, o que
+  completa o fluxo da Fase 3.
+
+Exatamente uma rotulação de cada classe passa no teste, e a representante
+sempre é gerada: os H dela crescem dentro de cada grupo, que é a mesma ordem
+exigida por `distributions`. A suíte compara os conjuntos com o CP-SAT, que
+ainda deduplica por chave, e confere C₄H₈ (5), C₅H₁₀ (10), C₄H₆ (9),
+C₃H₆O (9) e C₃H₉N (4).
+
+Pendente: o teste é feito na estrutura completa. Podar matrizes parciais
+(orderly generation de Read-Faradzev) reduziria a busca, mas exige ordenar
+o preenchimento por linhas da matriz.
 
 ## Fase 6 — Ambiguidade assistida
 
@@ -190,41 +212,65 @@ calibração explícitos.
 
 ## Fase 7 — Modelo eletrônico
 
-Antes de ressonância:
+Implementado em `src/eletronico.py`, com as opções `--eletronico` e
+`--ressonancia`:
 
-- pares livres;
-- elétrons pi;
-- invariantes de formas contribuintes;
-- carga total;
-- conectividade sigma.
+- pares livres e elétrons não ligantes de cada átomo
+  (`elétrons de valência − carga formal − soma das ordens`);
+- ligações pi por átomo e elétrons pi da espécie;
+- invariantes das formas contribuintes: mesmo esqueleto sigma, mesma carga
+  total e, portanto, mesma quantidade de elétrons;
+- formas de ressonância: as ordens de 1 a 3 e as cargas formais variam
+  dentro dos estados de `regras/valencias.json`, sempre com elétrons não
+  ligantes em pares. A forma declarada vem primeiro; as demais são
+  ordenadas pela quantidade de átomos com carga, mostrada na saída. Até dez
+  formas são exibidas.
 
-Depois:
+Casos conferidos: carbonato (3), benzeno (2), acetato (2), ozônio (2),
+água (1) e cianeto (1).
 
-- grupos de ressonância;
-- percepção configurável de aromaticidade;
-- tautomeria como agrupamento opcional.
+Fora do modelo: ligações coordenadas ou metálicas, radicais e elementos sem
+elétrons de valência. Aromaticidade continua fora do escopo
+(`plano_semantico.md`); tautomeria muda o esqueleto sigma e por isso não é
+ressonância — fica como agrupamento futuro.
 
 ## Fase 8 — Estereoquímica
 
-Após conectividade:
+Implementado em `src/estereo.py`, com a opção `--estereo`:
 
-- elementos estereogênicos;
-- R/S e E/Z;
-- `specified`, `unspecified`, `unknown`;
-- enumeração separada dos grafos constitucionais.
+- centros tetraédricos: quatro vizinhos por ligação simples, nenhum par
+  livre e quatro substituintes diferentes;
+- ligações duplas E/Z: cada ponta com dois substituintes diferentes, ou um
+  substituinte e um par livre (C=N); ficam de fora duplas em anéis com menos
+  de oito átomos e duplas cumuladas;
+- prioridades pela regra 1a de CIP: número atômico esfera a esfera, com
+  átomos duplicados para ligações múltiplas e fechamentos de anel;
+- como a linguagem não tem sintaxe de configuração, todo elemento aparece
+  como não especificado (`unspecified`); `specified` exigiria mudar o
+  contrato da linguagem, o que depende de decisão do grupo;
+- a enumeração estereoquímica é separada da constitucional: o relatório
+  informa o limite de 2ⁿ estereoisômeros.
+
+Fora: regras CIP 2 a 5, descontar formas meso, quiralidade axial e
+planar.
 
 ## Fase 9 — Coordenação e sólidos
 
-Módulo separado para:
+Implementado em `src/complexos.py`, com a opção `--coordenacao`:
 
-- metal central e ligantes;
-- átomos doadores;
-- denticidade e hapticidade;
-- pontes;
-- carga/estado de oxidação;
-- motivos iônicos, covalentes e metálicos.
+- centro metálico: átomo de bloco metálico ligado a não metal;
+- ligantes: componentes que sobram ao retirar os metais;
+- átomos doadores, denticidade (κ) e hapticidade (η, doadores vizinhos
+  entre si);
+- pontes (μ): doador ligado a mais de um metal;
+- carga do ligante (cargas formais menos a ordem das ligações com metais) e
+  estado de oxidação do metal (carga formal mais essa ordem);
+- motivos por tipo de ligação: iônica, covalente, coordenada e metálica;
+  um sólido só com `~` aparece como motivo metálico, sem centros.
 
-A regra dos 18 elétrons será no máximo aviso/ranking.
+A contagem de elétrons usa o modelo iônico e é só informativa, nunca
+aviso. Casos conferidos: Ni(CO)₄ (Ni 0, d10, 18 elétrons), NaCl (Na +1,
+Cl −1) e sódio metálico.
 
 ## Referências
 

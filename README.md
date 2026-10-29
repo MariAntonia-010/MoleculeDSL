@@ -169,6 +169,26 @@ covalente apolar, covalente polar ou iônica. Os limites configuráveis ficam
 em `regras/classificacao_ligacoes.json`. Ligação sem dados suficientes
 aparece como `não classificada`.
 
+### Relatórios químicos
+
+Depois de uma análise sem erros, quatro opções mostram informações extras:
+
+| Opção | Mostra |
+|---|---|
+| `--eletronico` | pares livres, elétrons não ligantes e ligações pi de cada átomo |
+| `--ressonancia` | formas de ressonância com o mesmo esqueleto sigma e a mesma carga |
+| `--estereo` | centros e ligações duplas estereogênicas, com prioridades CIP |
+| `--coordenacao` | metais, ligantes, κ/η/μ, estados de oxidação e contagem de elétrons |
+
+```bash
+python3 src/main.py --ressonancia exemplos/carbonato.mol
+python3 src/main.py --estereo exemplos/butan_2_ol.mol
+python3 src/main.py --coordenacao avisos_semanticos/tetracarbonilniquel.mol
+```
+
+A linguagem não descreve configuração, então R/S e E/Z aparecem como não
+especificados. A contagem de 18 elétrons é só informativa.
+
 Cada etapa também pode ser executada isoladamente:
 
 ```bash
@@ -288,7 +308,8 @@ saída 0.
 
 ```text
 gramatica/                  gramática combinada do ANTLR
-src/                        lexer, parser, AST, modelo e semântica
+src/                        lexer, parser, AST, modelo, semântica e relatórios químicos
+src/solver/                 solver de estruturas (backends, filtros, geração canônica)
 regras/                     dados químicos e limites configuráveis
 exemplos/                   programas válidos e snapshots
 invalidos/                  casos léxicos inválidos
@@ -326,14 +347,15 @@ Continuam pendentes:
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
   `METAL-001` verifica a composição e `METAL-002` informa a limitação
   coletiva de todo uso de `~`;
-- seleção assistida entre alternativas enumeradas pelo solver.
+- podar matrizes parciais na geração canônica, regras CIP 2 a 5 e formas
+  meso.
 
 `OCT-001` foi removida: para elementos com dados, octeto e dueto já são
 refletidos pelas regras de valência. Ciclos independentes sem `ring` agora
 geram o aviso `RING-004`.
 
-Também ficam fora do escopo atual aromaticidade, visualização 3D,
-estereoquímica e isótopos.
+Também ficam fora do escopo atual aromaticidade, visualização 3D, sintaxe
+para configuração estereoquímica e isótopos.
 
 ## Solução de problemas
 

@@ -9,6 +9,9 @@ from ast_nos import formatar
 import modelo
 import semantico
 import solver
+import eletronico
+import estereo
+import complexos
 
 
 # Códigos de saída
@@ -28,6 +31,10 @@ USO = (
     "\n  --tempo-limite=S interrompe a busca após S segundos"
     "\n  --formato=texto|json|jsonl escolhe a saída do solver"
     "\n  --backend=reference|cpsat escolhe o backend"
+    "\n  --eletronico mostra pares livres e elétrons pi de cada átomo"
+    "\n  --ressonancia lista as formas de ressonância"
+    "\n  --estereo lista centros e ligações estereogênicas"
+    "\n  --coordenacao descreve metais, ligantes e estados de oxidação"
     "\n  --aneis=N mantém só estruturas com N anéis"
     "\n  --ligacoes-multiplas=N mantém só estruturas com N ligações duplas ou triplas"
     "\n  --exigir=C=O mantém só estruturas com essa ligação (pode repetir)"
@@ -40,7 +47,13 @@ OPCOES = {
     "--modelo",
     "--resolver",
     "--resolver-todas",
+    "--eletronico",
+    "--ressonancia",
+    "--estereo",
+    "--coordenacao",
 }
+
+RELATORIOS = ("--eletronico", "--ressonancia", "--estereo", "--coordenacao")
 
 
 def ler_argumentos(argumentos):
@@ -166,7 +179,7 @@ def compilar(caminho, opcoes, configuracao=None):
     ):
         print("--formato=json|jsonl exige uma opção de resolução")
         return ERRO_LEXICO_OU_SINTATICO
-    if formato != "texto" and opcoes & {"--tokens", "--ast", "--modelo"}:
+    if formato != "texto" and opcoes & {"--tokens", "--ast", "--modelo", *RELATORIOS}:
         print("Saída estruturada não pode ser combinada com tokens, AST ou modelo")
         return ERRO_LEXICO_OU_SINTATICO
     filtros = filtros_do_solver(configuracao)
@@ -309,8 +322,32 @@ def compilar(caminho, opcoes, configuracao=None):
     if "--modelo" in opcoes:
         print(modelo.formatar(modelo_molecula))
 
+    imprimir_relatorios(modelo_molecula, opcoes)
+
     print(f"Espécie {molecula.nome!r}: análise concluída sem erros")
     return SUCESSO
+
+
+def imprimir_relatorios(modelo_molecula, opcoes):
+    if not opcoes & set(RELATORIOS):
+        return
+    elementos = semantico.carregar_elementos()
+    valencias = semantico.carregar_valencias()
+    if "--eletronico" in opcoes:
+        print(eletronico.formatar_estados(modelo_molecula, elementos, valencias))
+    if "--ressonancia" in opcoes:
+        print(eletronico.formatar_ressonancia(modelo_molecula, elementos, valencias))
+    if "--estereo" in opcoes:
+        print(estereo.formatar(modelo_molecula, elementos, valencias))
+    if "--coordenacao" in opcoes:
+        print(
+            complexos.formatar(
+                modelo_molecula,
+                elementos,
+                valencias,
+                semantico.carregar_ligacoes_metalicas(),
+            )
+        )
 
 
 def resolver_todas_em_fluxo(molecula, configuracao, filtros):

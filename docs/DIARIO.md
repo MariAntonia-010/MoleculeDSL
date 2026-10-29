@@ -408,3 +408,19 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   COORD-002.
 - Continuam fora: geração canônica (Fase 5), modelo eletrônico (Fase 7),
   estereoquímica (Fase 8), coordenação e sólidos (Fase 9) e worker isolado.
+
+---
+
+## 29/10/2026 — Fases 5, 7, 8 e 9 do plano do solver
+
+- Fase 5: geração canônica. Cada classe só é emitida na sua rotulação
+  representante, sem conjunto de chaves; distribuições de H que nunca são
+  representantes são cortadas antes da busca. Conferido contra o CP-SAT.
+- Fase 7: `src/eletronico.py`, com pares livres, ligações pi e formas de
+  ressonância (`--eletronico`, `--ressonancia`).
+- Fase 8: `src/estereo.py`, com centros tetraédricos e duplas E/Z pela
+  regra 1a de CIP (`--estereo`). Configuração sempre não especificada.
+- Fase 9: `src/complexos.py`, com centros metálicos, ligantes, κ/η/μ,
+  estados de oxidação e contagem informativa de elétrons (`--coordenacao`).
+- Exemplos novos: `butan_2_ol.mol`, `but_2_eno.mol` e
+  `avisos_semanticos/tetracarbonilniquel.mol`.

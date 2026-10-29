@@ -321,6 +321,6 @@ A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deli
 
 2. **Não representa aromaticidade.** Um anel aromático precisa ser escrito com ligações simples e duplas alternadas.
 
-3. **Não representa propriedades químicas avançadas**, como isótopos e estereoquímica.
+3. **Não representa propriedades químicas avançadas**, como isótopos e configuração estereoquímica. A opção `--estereo` aponta os centros e as ligações estereogênicas, mas a configuração R/S ou E/Z não pode ser declarada.
 
 4. **Não aceita mais de uma espécie por arquivo.**
