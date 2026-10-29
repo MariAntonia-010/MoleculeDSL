@@ -17,6 +17,13 @@ P = MoleculeDSLParser
 OPERADORES = {P.LIGACAO, P.DUPLA, P.TRIPLA, P.COORDENADA, P.METALICA}
 REFERENCIAS = {P.IDENT, P.NOME}
 SINAIS = {P.MAIS, P.LIGACAO}
+TIPOS_ESPECIE = {
+    P.MOLECULE,
+    P.MOLECULAR_ION,
+    P.IONIC_SOLID,
+    P.COVALENT_NETWORK,
+    P.METALLIC_SOLID,
+}
 
 # Descrição dos tokens nas mensagens genéricas
 DESCRICAO_TOKEN = {
@@ -160,11 +167,24 @@ class ErroSintatico(ColetorErrosANTLR):
         if regra == P.RULE_programa and esperados == {Token.EOF}:
             return f"conteúdo depois do fim da molécula: {encontrado}", False
 
-        if regra == P.RULE_molecula:
-            if P.MOLECULE in esperados:
-                return f"o programa deve começar com 'molecule', encontrado {encontrado}", False
+        if regra == P.RULE_cabecalho:
+            if esperados & {P.MOLECULE, P.SPECIES}:
+                return (
+                    f"o programa deve começar com 'molecule' ou 'species', "
+                    f"encontrado {encontrado}"
+                ), False
+            if esperados & TIPOS_ESPECIE:
+                return (
+                    f"esperado tipo de espécie depois de 'species', "
+                    f"encontrado {encontrado}"
+                ), True
             if P.TEXTO in esperados:
-                return f"esperado nome da molécula entre aspas depois de 'molecule', encontrado {encontrado}", True
+                return (
+                    f"esperado nome da espécie entre aspas, encontrado "
+                    f"{encontrado}"
+                ), True
+
+        if regra == P.RULE_molecula:
             if P.ABRE_CHAVE in esperados:
                 return f"esperado '{{' depois do nome da molécula, encontrado {encontrado}", True
             if P.FECHA_CHAVE in esperados:
@@ -186,7 +206,7 @@ class ErroSintatico(ColetorErrosANTLR):
                     "(palavras-chave e nomes como 'x4' são reservados)"
                 ), True
 
-        if regra in (P.RULE_carga, P.RULE_sinal):
+        if regra in (P.RULE_carga, P.RULE_cargaEspecie, P.RULE_sinal):
             if esperados & SINAIS:
                 return f"a carga precisa de sinal, como (+1) ou (-1), encontrado {encontrado}", True
             if P.INTEIRO in esperados:

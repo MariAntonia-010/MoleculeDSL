@@ -13,6 +13,7 @@ from ast_nos import (
     Molecula,
     Operador,
     Referencia,
+    TipoEspecie,
     TipoReferencia,
     formatar,
 )
@@ -36,10 +37,47 @@ class ConstrutorAST(MoleculeDSLVisitor):
         return self.visit(ctx.molecula())
 
     def visitMolecula(self, ctx):
+        cabecalho = ctx.cabecalho()
         # Tira as aspas do TEXTO
-        nome = ctx.TEXTO().getText()[1:-1]
+        nome = cabecalho.TEXTO().getText()[1:-1]
+        tipo, carga_total, legacy = self.visit(cabecalho)
+        eletrons_desemparelhados = None
+        if ctx.desemparelhados() is not None:
+            eletrons_desemparelhados = int(
+                ctx.desemparelhados().INTEIRO().getText()
+            )
         comandos = [self.visit(c) for c in ctx.comando()]
-        return Molecula(nome, ctx.start.line, ctx.start.column, comandos)
+        return Molecula(
+            nome=nome,
+            linha=ctx.start.line,
+            coluna=ctx.start.column,
+            comandos=comandos,
+            tipo=tipo,
+            carga_total=carga_total,
+            eletrons_desemparelhados=eletrons_desemparelhados,
+            declaracao_legacy=legacy,
+        )
+
+    def visitCabecalho(self, ctx):
+        if ctx.SPECIES() is None:
+            return TipoEspecie.MOLECULA, None, True
+        if ctx.MOLECULAR_ION() is not None:
+            return (
+                TipoEspecie.ION_MOLECULAR,
+                self.visit(ctx.cargaEspecie()),
+                False,
+            )
+        if ctx.IONIC_SOLID() is not None:
+            return TipoEspecie.SOLIDO_IONICO, 0, False
+        if ctx.COVALENT_NETWORK() is not None:
+            return TipoEspecie.REDE_COVALENTE, 0, False
+        if ctx.METALLIC_SOLID() is not None:
+            return TipoEspecie.SOLIDO_METALICO, 0, False
+        return TipoEspecie.MOLECULA, 0, False
+
+    def visitCargaEspecie(self, ctx):
+        valor = int(ctx.INTEIRO().getText())
+        return valor if ctx.sinal().MAIS() is not None else -valor
 
     def visitComando(self, ctx):
         return self.visit(ctx.getChild(0))

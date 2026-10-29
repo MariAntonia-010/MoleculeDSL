@@ -1,0 +1,6 @@
+// esperado: Erro semântico [RAD-002] na linha 2, coluna 0: unpaired=1 é incompatível com 10 elétrons
+species molecule "Metano radical inconsistente" unpaired 1 {
+    atom C
+    4x atom H
+    bond C-H x4
+}

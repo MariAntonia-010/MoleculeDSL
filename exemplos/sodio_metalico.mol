@@ -1,5 +1,5 @@
 // esperado: Aviso semântico [METAL-002] na linha 6, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
-molecule "Sodium" {
+species metallic_solid "Sodium" {
     atom Na as na1
     atom Na as na2
 

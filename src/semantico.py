@@ -7,6 +7,7 @@ from ast_nos import (
     AtomoDecl,
     LigacaoDecl,
     Operador,
+    TipoEspecie,
     TipoReferencia,
 )
 from modelo import Atomo, Ligacao, Modelo
@@ -90,7 +91,12 @@ class AnalisadorSemantico:
             ligacoes_metalicas["blocos_metalicos"]
         )
         self.mensagens = []
-        self.modelo = Modelo(molecula.nome)
+        self.modelo = Modelo(
+            molecula.nome,
+            tipo=molecula.tipo,
+            carga_total=molecula.carga_total,
+            eletrons_desemparelhados=molecula.eletrons_desemparelhados,
+        )
 
         self.por_nome = {}
         self.por_elemento = {}
@@ -129,10 +135,16 @@ class AnalisadorSemantico:
             if isinstance(c, AnelDecl):
                 self.declarar_anel(c)
 
+        if not self.tem_erro():
+            self.conferir_tipo_carga_e_radical()
+
         # Com outros erros, átomos sem ligação e problemas de valência
         # seriam só consequência deles
         if not self.tem_erro():
             self.conferir_conexoes()
+
+        if not self.tem_erro():
+            self.conferir_componentes()
 
         if not self.tem_erro():
             self.conferir_ciclos_nao_declarados()
@@ -365,9 +377,95 @@ class AnalisadorSemantico:
 
     # ---------- conexões ----------
 
+    def conferir_tipo_carga_e_radical(self):
+        soma_cargas = sum(atomo.carga for atomo in self.modelo.atomos)
+        carga_total = self.molecula.carga_total
+
+        if (
+            not self.molecula.declaracao_legacy
+            and carga_total is not None
+            and soma_cargas != carga_total
+        ):
+            self.erro(
+                "CARGA-002",
+                self.molecula,
+                f"a soma das cargas formais é {soma_cargas:+d}, mas a "
+                f"espécie declara carga total {carga_total:+d}",
+            )
+
+        if (
+            self.molecula.tipo is TipoEspecie.ION_MOLECULAR
+            and carga_total == 0
+        ):
+            self.erro(
+                "SPEC-001",
+                self.molecula,
+                "molecular_ion precisa declarar carga total diferente de zero",
+            )
+
+        if self.molecula.tipo is TipoEspecie.SOLIDO_METALICO and not any(
+            ligacao.operador is Operador.METALICA
+            for ligacao in self.modelo.ligacoes
+        ):
+            self.erro(
+                "SPEC-001",
+                self.molecula,
+                "metallic_solid precisa conter ao menos uma ligação '~'",
+            )
+
+        if self.molecula.tipo in (
+            TipoEspecie.SOLIDO_IONICO,
+            TipoEspecie.REDE_COVALENTE,
+        ):
+            self.aviso(
+                "SPEC-002",
+                self.molecula,
+                f"{self.molecula.tipo.value} é uma estrutura estendida; "
+                "o grafo representa apenas um motivo finito",
+            )
+
+        if self.tem_erro():
+            return
+
+        if (
+            self.molecula.declaracao_legacy
+            and self.molecula.eletrons_desemparelhados is None
+        ):
+            return
+
+        carga_para_contagem = (
+            carga_total if carga_total is not None else soma_cargas
+        )
+        total_eletrons = (
+            sum(
+                self.dados_elementos[atomo.elemento]["numero_atomico"]
+                for atomo in self.modelo.atomos
+            )
+            - carga_para_contagem
+        )
+        desemparelhados = self.molecula.eletrons_desemparelhados
+        if desemparelhados is None:
+            if total_eletrons % 2:
+                self.aviso(
+                    "RAD-001",
+                    self.molecula,
+                    "a espécie tem contagem eletrônica ímpar; declare "
+                    "'unpaired' para representar o radical",
+                )
+        elif (
+            desemparelhados > total_eletrons
+            or desemparelhados % 2 != total_eletrons % 2
+        ):
+            self.erro(
+                "RAD-002",
+                self.molecula,
+                f"unpaired={desemparelhados} é incompatível com "
+                f"{total_eletrons} elétrons",
+            )
+
     def conferir_conexoes(self):
         if not self.molecula.comandos:
-            self.erro("STRUCT-003", self.molecula, "a molécula não tem nenhum átomo")
+            self.erro("STRUCT-003", self.molecula, "a espécie não tem nenhum átomo")
             return
 
         # Uma molécula de um átomo só (ex.: He) não precisa de ligação
@@ -392,11 +490,7 @@ class AnalisadorSemantico:
                 mensagem = f"os átomos {rotulos} não têm nenhuma ligação"
             self.erro("STRUCT-003", atomos[0], mensagem)
 
-    def conferir_ciclos_nao_declarados(self):
-        """Avisa quando o grafo tem mais ciclos independentes que `ring`s."""
-        if not self.modelo.atomos:
-            return
-
+    def quantidade_componentes(self):
         adjacencias = {atomo.id: set() for atomo in self.modelo.atomos}
         for ligacao in self.modelo.ligacoes:
             adjacencias[ligacao.origem].add(ligacao.destino)
@@ -415,6 +509,31 @@ class AnalisadorSemantico:
                     continue
                 visitados.add(atual)
                 pilha.extend(adjacencias[atual] - visitados)
+        return componentes
+
+    def conferir_componentes(self):
+        if self.molecula.declaracao_legacy:
+            return
+        if self.molecula.tipo not in (
+            TipoEspecie.MOLECULA,
+            TipoEspecie.ION_MOLECULAR,
+        ):
+            return
+        componentes = self.quantidade_componentes()
+        if componentes > 1:
+            self.erro(
+                "STRUCT-008",
+                self.molecula,
+                f"a entidade molecular possui {componentes} componentes "
+                "desconectados",
+            )
+
+    def conferir_ciclos_nao_declarados(self):
+        """Avisa quando o grafo tem mais ciclos independentes que `ring`s."""
+        if not self.modelo.atomos:
+            return
+
+        componentes = self.quantidade_componentes()
 
         ciclos_independentes = (
             len(self.modelo.ligacoes) - len(self.modelo.atomos) + componentes

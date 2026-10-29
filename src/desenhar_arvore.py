@@ -99,8 +99,27 @@ def ast_para_visual(molecula) -> NoVisual:
             comandos.append(NoVisual(type(comando).__name__))
 
     return NoVisual(
-        f'Molecula: "{molecula.nome}"',
-        [NoVisual("comandos", comandos)],
+        f'Especie: "{molecula.nome}"',
+        [
+            NoVisual(f"tipo: {molecula.tipo.value}"),
+            NoVisual(
+                "carga total: "
+                + (
+                    str(molecula.carga_total)
+                    if molecula.carga_total is not None
+                    else "não declarada"
+                )
+            ),
+            NoVisual(
+                "desemparelhados: "
+                + (
+                    str(molecula.eletrons_desemparelhados)
+                    if molecula.eletrons_desemparelhados is not None
+                    else "não declarado"
+                )
+            ),
+            NoVisual("comandos", comandos),
+        ],
     )
 
 

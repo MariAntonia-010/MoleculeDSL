@@ -1,0 +1,4 @@
+// esperado: Erro sintático [SIN-001] na linha 2, coluna 47: esperado número inteiro, encontrado '{'
+species molecule "Radical incompleto" unpaired {
+    atom H
+}

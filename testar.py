@@ -164,7 +164,7 @@ def testar_limite_de_erros():
 def testar_ast(caminho):
     codigo, saida = rodar_comando(["--ast", caminho])
     linhas = saida.splitlines()
-    if linhas and linhas[-1].startswith("Molécula "):
+    if linhas and linhas[-1].startswith("Espécie "):
         linhas.pop()
     obtido = "\n".join(linhas).strip()
 

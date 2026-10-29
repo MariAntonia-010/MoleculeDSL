@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [RAD-001] na linha 3, coluna 0: a espécie tem contagem eletrônica ímpar; declare 'unpaired' para representar o radical
+// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de H#1 é 0; o esperado para H é 1
+species molecule "Átomo de hidrogênio" {
+    atom H
+}

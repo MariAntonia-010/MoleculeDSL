@@ -1,4 +1,4 @@
-molecule "Water" {
+species molecule "Water" {
     atom O
     atom H
     atom H

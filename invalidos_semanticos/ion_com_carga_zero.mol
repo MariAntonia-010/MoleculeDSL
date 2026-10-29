@@ -1,0 +1,4 @@
+// esperado: Erro semântico [SPEC-001] na linha 2, coluna 0: molecular_ion precisa declarar carga total diferente de zero
+species molecular_ion "Íon com carga zero" charge +0 {
+    atom He
+}

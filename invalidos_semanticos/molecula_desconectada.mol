@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-008] na linha 2, coluna 0: a entidade molecular possui 2 componentes desconectados
+species molecule "Duas moléculas de hidrogênio" {
+    4x atom H as h
+    bond h1-h2
+    bond h3-h4
+}

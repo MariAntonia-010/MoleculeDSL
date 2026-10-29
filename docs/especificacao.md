@@ -13,7 +13,7 @@ Seu objetivo é permitir que estruturas moleculares sejam representadas de forma
 O exemplo abaixo representa uma molécula de água (H₂O):
 
 ```text
-molecule "Water" {   // Inicia a definição da molécula chamada Water
+species molecule "Water" {   // Inicia uma espécie molecular neutra
     atom O           // Declara um átomo de oxigênio
     atom H           // Declara um átomo de hidrogênio
     atom H           // Declara outro átomo de hidrogênio
@@ -26,7 +26,7 @@ molecule "Water" {   // Inicia a definição da molécula chamada Water
 Um exemplo com átomos com nome, ligação dupla e anel (ciclopropeno, C₃H₄):
 
 ```text
-molecule "Cyclopropene" {
+species molecule "Cyclopropene" {
     atom C as c1
     atom C as c2
     atom C as c3
@@ -62,14 +62,28 @@ A MoleculeDSL trabalha com os seguintes tipos de dados:
 
 ## 4. Comandos
 
-Um programa contém uma única molécula. Dentro dela, os comandos `atom`, `bond` e `ring` podem aparecer em qualquer ordem.
+Um programa contém uma única espécie. Dentro dela, os comandos `atom`, `bond`
+e `ring` podem aparecer em qualquer ordem.
+
+O cabeçalho recomendado é:
+
+```text
+species <tipo> "Nome" [charge +N|-N] [unpaired N] {
+}
+```
+
+`charge` é obrigatório apenas para `molecular_ion`. Os tipos são `molecule`,
+`molecular_ion`, `ionic_solid`, `covalent_network` e `metallic_solid`.
+`unpaired` declara elétrons desemparelhados e permite validar a paridade da
+contagem eletrônica. O cabeçalho antigo `molecule "Nome"` permanece como
+compatibilidade e não ativa a conferência de carga total.
 
 ### `molecule`
 
 Inicia a declaração de uma molécula, com o nome entre aspas.
 
 ```text
-molecule "Water" {
+species molecule "Water" {
 }
 ```
 
@@ -183,7 +197,15 @@ A gramática completa, em EBNF. Na implementação, ela está em `gramatica/Mole
 ```ebnf
 (* Regras sintáticas *)
 programa      = molecula ;
-molecula      = "molecule" , texto , "{" , { comando } , "}" ;
+molecula      = cabecalho , [ desemparelhados ] , "{" , { comando } , "}" ;
+cabecalho     = "molecule" , texto
+              | "species" , "molecule" , texto
+              | "species" , "molecular_ion" , texto , carga_especie
+              | "species" , "ionic_solid" , texto
+              | "species" , "covalent_network" , texto
+              | "species" , "metallic_solid" , texto ;
+carga_especie = "charge" , ( "+" | "-" ) , inteiro ;
+desemparelhados = "unpaired" , inteiro ;
 comando       = atomo | ligacao | anel ;
 atomo         = [ multiplicador ] , "atom" , elemento , [ carga ] , [ "as" , nome ] ;
 carga         = "(" , ( "+" | "-" ) , inteiro , ")" ;
@@ -275,4 +297,4 @@ A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deli
 
 3. **Não representa propriedades químicas avançadas**, como isótopos e estereoquímica.
 
-4. **Não aceita mais de uma molécula por arquivo.**
+4. **Não aceita mais de uma espécie por arquivo.**

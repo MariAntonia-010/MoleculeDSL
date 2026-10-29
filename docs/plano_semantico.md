@@ -56,24 +56,35 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | ELEM-001 | Símbolo de elemento desconhecido | erro |
 | STRUCT-001 | `bond` cita átomo inexistente | erro |
 | STRUCT-002 | Nomes de átomo duplicados | erro |
-| STRUCT-003 | Molécula vazia ou átomo sem ligação (uma molécula de um átomo só não precisa de ligação) | erro |
+| STRUCT-003 | Espécie vazia ou átomo sem ligação (uma espécie de um átomo só não precisa de ligação) | erro |
 | STRUCT-004 | Todos os átomos do elemento citado já foram usados em outras ligações | erro |
 | STRUCT-005 | Átomo ligado a ele mesmo | erro |
 | STRUCT-006 | Mais de uma ligação entre os mesmos dois átomos (inclusive por repetição, como `bond c1-c2 x2`) | erro |
 | STRUCT-007 | Quantidade ou repetição fora do intervalo de 1 a 1000 (`0x`, `x0`, `5000x`) | erro |
+| STRUCT-008 | Entidade molecular possui componentes desconectados | erro |
 | BOND-001 | H ou F excede ligação simples no perfil Lewis clássico | erro |
 | BOND-002 | Cl, Br ou I aparece em ligação múltipla formal | aviso |
 | VAL-001 | Soma das ordens de ligação acima da valência permitida | erro |
 | VAL-002 | Valência incompleta | aviso |
 | CARGA-001 | Carga formal inconsistente com a valência | erro |
+| CARGA-002 | Soma das cargas formais difere da carga total declarada | erro |
 | COORD-001 | Doador sem par livre para ligação coordenada | aviso |
 | COORD-002 | Dados insuficientes para conferir o par livre do doador | aviso |
 | COORD-003 | Receptor sem espaço eletrônico para receber o par | aviso |
 | COORD-004 | Dados insuficientes para conferir o receptor | aviso |
 | METAL-001 | Ligação metálica envolve participante fora de um bloco metálico | aviso |
 | METAL-002 | Aresta `~` não valida o comportamento coletivo de um sólido | aviso |
+| RAD-001 | Contagem eletrônica ímpar sem `unpaired` | aviso |
+| RAD-002 | Paridade ou quantidade de `unpaired` incompatível | erro |
+| SPEC-001 | Tipo da espécie incompatível com sua declaração | erro |
+| SPEC-002 | Grafo finito representa apenas motivo de estrutura estendida | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
+
+A forma `species` declara o tipo da espécie. `molecular_ion` exige carga
+total explícita; `molecule` e os sólidos têm carga total zero. A forma
+legada `molecule "Nome"` continua aceita sem conferir soma global, para não
+reinterpretar arquivos antigos.
 
 Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002, CARGA-001 e a conferência do doador coordenado estão implementadas. `OCT-001` foi removida por decisão do grupo: para os elementos com dados, o octeto/dueto já é refletido pelas regras de valência; para os demais, não há fonte suficiente para uma regra independente.
 

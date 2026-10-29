@@ -1,1 +1,1 @@
-// esperado: Erro sintático [SIN-004] na linha 2, coluna 0: o programa deve começar com 'molecule', encontrado fim do arquivo
+// esperado: Erro sintático [SIN-004] na linha 2, coluna 0: o programa deve começar com 'molecule' ou 'species', encontrado fim do arquivo

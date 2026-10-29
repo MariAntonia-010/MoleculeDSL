@@ -1,0 +1,4 @@
+// esperado: Erro sintático [SIN-003] na linha 2, coluna 8: o programa deve começar com 'molecule' ou 'species', encontrado '"Sem tipo"'
+species "Sem tipo" {
+    atom H
+}

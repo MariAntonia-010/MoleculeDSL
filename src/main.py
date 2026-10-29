@@ -80,7 +80,7 @@ def compilar(caminho, opcoes):
     if "--modelo" in opcoes:
         print(modelo.formatar(modelo_molecula))
 
-    print(f"Molécula {molecula.nome!r}: análise concluída sem erros")
+    print(f"Espécie {molecula.nome!r}: análise concluída sem erros")
     return SUCESSO
 
 

@@ -24,7 +24,8 @@ Se houver erro léxico ou sintático, o programa para antes da semântica. Assim
 1. **Referências em `bond`:** manter símbolo de elemento (`H`) e aceitar também nome de átomo (`c1`). Isso mantém os exemplos atuais válidos.
 2. **Multiplicador com nome:** `4x atom H as h` cria `h1` a `h4` (o nome vira prefixo). A sintaxe só aceita, e a semântica expande.
 3. **Ligação metálica:** só o operador `~`. O bloco `metal { }` do plano semântico fica de fora. Ajustar o M1 do `plano_semantico.md`.
-4. **Uma molécula por arquivo**, por enquanto.
+4. **Uma espécie por arquivo.** A forma antiga `molecule` continua aceita;
+   `species` distingue molécula, íon molecular e estruturas estendidas.
 5. **Carga:** `atom N(+1)` e `atom O(-1)`. O sinal `-` reaproveita o token `LIGACAO`, e o parser resolve pelo contexto.
 6. **Gramática combinada** em um só `MoleculeDSL.g4`, como na aula de ANTLR.
 
@@ -35,7 +36,15 @@ grammar MoleculeDSL;
 
 // ---------- PARSER ----------
 programa   : molecula EOF ;
-molecula   : MOLECULE TEXTO ABRE_CHAVE comando* FECHA_CHAVE ;
+molecula   : cabecalho desemparelhados? ABRE_CHAVE comando* FECHA_CHAVE ;
+cabecalho  : MOLECULE TEXTO
+           | SPECIES MOLECULE TEXTO
+           | SPECIES MOLECULAR_ION TEXTO cargaEspecie
+           | SPECIES IONIC_SOLID TEXTO
+           | SPECIES COVALENT_NETWORK TEXTO
+           | SPECIES METALLIC_SOLID TEXTO ;
+cargaEspecie : CHARGE sinal INTEIRO ;
+desemparelhados : UNPAIRED INTEIRO ;
 comando    : atomo | ligacao | anel ;
 
 atomo      : MULTIPLICADOR_ATOMO? ATOM IDENT carga? (AS NOME)? ;

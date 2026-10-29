@@ -6,7 +6,7 @@ didático foi escrito em Python e usa ANTLR 4 para as etapas léxica e
 sintática.
 
 ```text
-molecule "Water" {
+species molecule "Water" {
     atom O
     2x atom H
 
@@ -15,10 +15,30 @@ molecule "Water" {
 }
 ```
 
+A forma antiga `molecule "Nome"` continua aceita por compatibilidade. A forma
+`species` declara explicitamente o tipo da espécie, sua carga total quando
+for um íon e a quantidade de elétrons desemparelhados quando for radical.
+
 A linguagem aceita ligações simples (`-`), duplas (`=`), triplas (`#`),
 coordenadas (`->`) e metálicas (`~`), além de carga (`atom N(+1)`), nomes
 (`atom C as c1`), quantificadores (`4x`, `x4`) e anéis
 (`ring c1 c2 c3`).
+
+Tipos disponíveis:
+
+```text
+species molecule "Water" { ... }
+species molecular_ion "Ammonium" charge +1 { ... }
+species ionic_solid "Sodium chloride" { ... }
+species covalent_network "Diamond motif" { ... }
+species metallic_solid "Sodium" { ... }
+```
+
+Radicais usam `unpaired`, por exemplo:
+
+```text
+species molecule "Nitric oxide" unpaired 1 { ... }
+```
 
 ## Pré-requisitos e instalação
 
@@ -147,11 +167,17 @@ O catálogo de códigos, causas e correções está em
 | `VAL-001` | valência excedida | erro |
 | `VAL-002` | valência incompleta | aviso |
 | `CARGA-001` | carga inconsistente com a valência | erro |
+| `CARGA-002` | soma das cargas formais difere da carga total | erro |
 | `COORD-001` a `COORD-004` | par livre do doador e espaço eletrônico do receptor | aviso |
 | `METAL-001` | ligação `~` envolve participante não metálico | aviso |
 | `METAL-002` | grafo molecular não valida sólido metálico | aviso |
+| `RAD-001` | contagem ímpar sem `unpaired` | aviso |
+| `RAD-002` | paridade de `unpaired` incompatível | erro |
+| `SPEC-001` | declaração incompatível com o tipo da espécie | erro |
+| `SPEC-002` | grafo finito representa apenas motivo de rede | aviso |
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
 | `RING-004` | ciclo independente sem declaração `ring` | aviso |
+| `STRUCT-008` | entidade molecular tem componentes desconectados | erro |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e
@@ -216,7 +242,8 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 
 ## Estado atual e limitações
 
-Léxico, sintaxe, AST, modelo, regras estruturais, valência, carga,
+Léxico, sintaxe, AST, modelo, tipos de espécie, carga total, radicais,
+regras estruturais, valência, carga formal,
 classificação por eletronegatividade, validação do doador coordenado e anéis
 estão implementados e testados.
 

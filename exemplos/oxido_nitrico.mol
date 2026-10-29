@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de N#1 é 2; o esperado para N é 3
+species molecule "Nitric oxide" unpaired 1 {
+    atom N
+    atom O
+    bond N=O
+}

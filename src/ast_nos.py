@@ -22,6 +22,14 @@ class TipoReferencia(Enum):
     NOME = "nome"
 
 
+class TipoEspecie(Enum):
+    MOLECULA = "molecule"
+    ION_MOLECULAR = "molecular_ion"
+    SOLIDO_IONICO = "ionic_solid"
+    REDE_COVALENTE = "covalent_network"
+    SOLIDO_METALICO = "metallic_solid"
+
+
 @dataclass
 class Referencia:
     texto: str
@@ -66,6 +74,10 @@ class Molecula:
     linha: int
     coluna: int
     comandos: list[Comando] = field(default_factory=list)
+    tipo: TipoEspecie = TipoEspecie.MOLECULA
+    carga_total: int | None = None
+    eletrons_desemparelhados: int | None = None
+    declaracao_legacy: bool = True
 
 
 def formatar(molecula):
@@ -77,7 +89,20 @@ def formatar(molecula):
     def ref(r):
         return f"{r.texto} ({r.tipo.value}) {pos(r)}"
 
-    linhas = [f"Molecula {molecula.nome!r} {pos(molecula)}"]
+    carga = (
+        "não declarada"
+        if molecula.carga_total is None
+        else f"{molecula.carga_total:+d}"
+    )
+    desemparelhados = (
+        "não declarado"
+        if molecula.eletrons_desemparelhados is None
+        else str(molecula.eletrons_desemparelhados)
+    )
+    linhas = [
+        f"Molecula {molecula.nome!r} tipo={molecula.tipo.value} "
+        f"carga_total={carga} desemparelhados={desemparelhados} {pos(molecula)}"
+    ]
 
     for c in molecula.comandos:
         if isinstance(c, AtomoDecl):

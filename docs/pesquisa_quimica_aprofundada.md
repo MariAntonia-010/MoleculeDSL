@@ -238,11 +238,27 @@ Próximas etapas seguras:
    aviso;
 2. rebaixar Cl/Br/I em ligação múltipla de erro para aviso;
 3. manter H/F como limites estritos do perfil Lewis simples;
-4. adicionar carga total da espécie antes de conferir a soma das cargas;
-5. modelar radical antes de transformar valência incompleta em erro;
+4. ~~adicionar carga total da espécie antes de conferir a soma das cargas;~~
+   implementado em `species molecular_ion ... charge`;
+5. ~~modelar radical antes de transformar valência incompleta em erro;~~
+   implementado com `unpaired` e verificação de paridade;
 6. ~~fazer `~` sempre informar que o grafo não valida um sólido metálico;~~
    implementado como `METAL-002`;
-7. criar tipo de espécie antes de representar NaCl, redes ou cristais.
+7. ~~criar tipo de espécie antes de representar NaCl, redes ou cristais;~~
+   implementado com `molecule`, `molecular_ion`, `ionic_solid`,
+   `covalent_network` e `metallic_solid`.
+
+### Limite deliberado: ressonância
+
+Ressonância ainda não recebeu sintaxe. Um `resonance_group` seguro precisa
+representar pares livres, elétrons pi e formas contribuintes que preservem
+os núcleos, a conectividade sigma e a carga total. Apenas rotular duas
+ligações como “ressonantes” no grafo atual criaria falsa precisão.
+
+Até existir esse modelo eletrônico, SO₂, SO₃ e espécies semelhantes usam uma
+forma formal localizada e a documentação explica que ela não é uma ordem
+física única. Aromaticidade permanece pelo mesmo motivo fora do escopo desta
+iteração.
 
 ## 10. Regra de governança
 

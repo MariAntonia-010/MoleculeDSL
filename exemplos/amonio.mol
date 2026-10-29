@@ -1,5 +1,5 @@
 // Carga formal positiva
-molecule "Ammonium" {
+species molecular_ion "Ammonium" charge +1 {
     atom N(+1)
     4x atom H
 

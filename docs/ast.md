@@ -5,15 +5,19 @@ ANTLR e o modelo semântico. Ela contém apenas os conceitos da linguagem,
 sem nós de pontuação como `{`, `(` ou `)`. A análise semântica recebe a AST
 e não acessa a parse tree do ANTLR.
 
-Cada arquivo contém uma única molécula, conforme a decisão registrada em
-`plano_sintatico.md`. Por isso, `Molecula` é a raiz; não há um nó `Programa`
-com uma lista de moléculas.
+Cada arquivo contém uma única espécie, conforme a decisão registrada em
+`plano_sintatico.md`. O nome histórico da classe raiz continua `Molecula`
+por compatibilidade; não há um nó `Programa` com uma lista de espécies.
 
 ## Estrutura dos nós
 
 ```text
 Molecula
 ├── nome: str
+├── tipo: TipoEspecie
+├── carga_total: int | None
+├── eletrons_desemparelhados: int | None
+├── declaracao_legacy: bool
 ├── linha: int
 ├── coluna: int
 └── comandos: list[Comando]
@@ -31,7 +35,9 @@ Molecula
         └── nomes: list[Referencia]
 ```
 
-`AtomoDecl`, `LigacaoDecl`, `AnelDecl` e `Referencia` também guardam linha e
+`TipoEspecie` distingue molécula, íon molecular, sólido iônico, rede
+covalente e sólido metálico. `AtomoDecl`, `LigacaoDecl`, `AnelDecl` e
+`Referencia` também guardam linha e
 coluna. `TipoReferencia` distingue `ELEMENTO` de `NOME`, sem strings livres.
 `Operador` é um enum com `SIMPLES`, `DUPLA`, `TRIPLA`, `COORDENADA` e
 `METALICA`.
@@ -47,6 +53,8 @@ modelo semântico.
 |---|---|
 | `programa` | encaminha o único nó `Molecula` |
 | `molecula` | `Molecula` |
+| `cabecalho` | tipo, nome e carga total de `Molecula` |
+| `desemparelhados` | `eletrons_desemparelhados` de `Molecula` |
 | `comando` | encaminha `AtomoDecl`, `LigacaoDecl` ou `AnelDecl` |
 | `atomo` | `AtomoDecl` |
 | `carga` | inteiro positivo ou negativo dentro de `AtomoDecl` |
@@ -63,7 +71,7 @@ O visitor está em `src/construtor_ast.py`; as dataclasses e os enums ficam em
 Entrada:
 
 ```text
-molecule "Water" {
+species molecule "Water" {
     atom O
     atom H
     atom H
@@ -76,7 +84,7 @@ molecule "Water" {
 Saída de `python src/main.py --ast exemplos/agua.mol`:
 
 ```text
-Molecula 'Water' [1:0]
+Molecula 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
   AtomoDecl elemento=O multiplicador=1 carga=+0 nome=None [2:4]
   AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [3:4]
   AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [4:4]

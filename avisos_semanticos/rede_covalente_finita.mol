@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [SPEC-002] na linha 3, coluna 0: covalent_network é uma estrutura estendida; o grafo representa apenas um motivo finito
+// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de C#1 é 0; o esperado para C é 4
+species covalent_network "Motivo finito de carbono" {
+    atom C
+}

@@ -1,7 +1,7 @@
-Modelo 'Hydroxide'
+Modelo 'Hydroxide' tipo=molecular_ion carga_total=-1 desemparelhados=não declarado
   Átomos (2)
     O#1 carga=-1 [3:4]
     H#1 carga=+0 [4:4]
   Ligações (1)
     O#1 SIMPLES H#1 classificação=covalente polar Δχ=1.24 [6:4]
-Molécula 'Hydroxide': análise concluída sem erros
+Espécie 'Hydroxide': análise concluída sem erros

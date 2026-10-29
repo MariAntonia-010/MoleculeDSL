@@ -7,7 +7,24 @@ programa
     ;
 
 molecula
-    : MOLECULE TEXTO ABRE_CHAVE comando* FECHA_CHAVE
+    : cabecalho desemparelhados? ABRE_CHAVE comando* FECHA_CHAVE
+    ;
+
+cabecalho
+    : MOLECULE TEXTO
+    | SPECIES MOLECULE TEXTO
+    | SPECIES MOLECULAR_ION TEXTO cargaEspecie
+    | SPECIES IONIC_SOLID TEXTO
+    | SPECIES COVALENT_NETWORK TEXTO
+    | SPECIES METALLIC_SOLID TEXTO
+    ;
+
+cargaEspecie
+    : CHARGE sinal INTEIRO
+    ;
+
+desemparelhados
+    : UNPAIRED INTEIRO
     ;
 
 comando
@@ -59,6 +76,13 @@ anel
 
 // Palavras-chave (antes de NOME, para vencer no empate)
 MOLECULE : 'molecule' ;
+SPECIES  : 'species' ;
+MOLECULAR_ION    : 'molecular_ion' ;
+IONIC_SOLID      : 'ionic_solid' ;
+COVALENT_NETWORK : 'covalent_network' ;
+METALLIC_SOLID   : 'metallic_solid' ;
+CHARGE    : 'charge' ;
+UNPAIRED  : 'unpaired' ;
 ATOM     : 'atom' ;
 BOND     : 'bond' ;
 AS       : 'as' ;

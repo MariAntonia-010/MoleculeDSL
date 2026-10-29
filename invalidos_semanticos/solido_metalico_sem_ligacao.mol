@@ -1,0 +1,4 @@
+// esperado: Erro semântico [SPEC-001] na linha 2, coluna 0: metallic_solid precisa conter ao menos uma ligação '~'
+species metallic_solid "Sódio sem ligação metálica" {
+    atom Na
+}

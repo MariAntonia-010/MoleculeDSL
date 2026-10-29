@@ -1,0 +1,4 @@
+// esperado: Erro sintático [SIN-001] na linha 2, coluna 34: esperado 'charge', encontrado '{'
+species molecular_ion "Sem carga" {
+    atom H
+}

@@ -1,5 +1,5 @@
 // Carga formal negativa
-molecule "Hydroxide" {
+species molecular_ion "Hydroxide" charge -1 {
     atom O(-1)
     atom H
 

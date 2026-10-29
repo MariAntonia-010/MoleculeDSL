@@ -1,8 +1,8 @@
 Aviso semântico [METAL-002] na linha 6, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
-Modelo 'Sodium'
+Modelo 'Sodium' tipo=metallic_solid carga_total=+0 desemparelhados=não declarado
   Átomos (2)
     na1 (Na#1) carga=+0 [3:4]
     na2 (Na#2) carga=+0 [4:4]
   Ligações (1)
     na1 (Na#1) METALICA na2 (Na#2) classificação=metálica [6:4]
-Molécula 'Sodium': análise concluída sem erros
+Espécie 'Sodium': análise concluída sem erros

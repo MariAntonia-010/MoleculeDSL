@@ -320,3 +320,21 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - `METAL-001` continua como diagnóstico complementar de composição.
 - `testar.py` passou a aceitar exemplos válidos com avisos esperados, e o
   exemplo do sódio registra o novo aviso sem sair com erro.
+
+---
+
+## 29/10/2026 — Tipos de espécie, carga total e radicais
+
+- Novo cabeçalho `species`, mantendo `molecule "Nome"` por compatibilidade.
+- Tipos: `molecule`, `molecular_ion`, `ionic_solid`, `covalent_network` e
+  `metallic_solid`.
+- `molecular_ion` exige `charge`; CARGA-002 compara a carga total com a soma
+  das cargas formais dos átomos.
+- `unpaired N` representa elétrons desemparelhados. RAD-001 avisa sobre
+  contagem ímpar não declarada; RAD-002 rejeita paridade incompatível.
+- STRUCT-008 rejeita múltiplos componentes em entidades moleculares
+  explicitamente tipadas.
+- SPEC-002 deixa claro que sólidos e redes são apenas motivos finitos no
+  grafo atual.
+- Ressonância não ganhou uma marca superficial: fica documentada até existir
+  modelo de pares livres, elétrons pi e formas contribuintes.

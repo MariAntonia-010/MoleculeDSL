@@ -1,4 +1,4 @@
-Molecula 'Water' [1:0]
+Molecula 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
   AtomoDecl elemento=O multiplicador=1 carga=+0 nome=None [2:4]
   AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [3:4]
   AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [4:4]

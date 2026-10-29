@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ast_nos import Operador
+from ast_nos import Operador, TipoEspecie
 
 
 # Modelo interno da molécula: um grafo em que os átomos são os vértices
@@ -41,6 +41,9 @@ class Ligacao:
 @dataclass
 class Modelo:
     nome: str
+    tipo: TipoEspecie = TipoEspecie.MOLECULA
+    carga_total: int | None = None
+    eletrons_desemparelhados: int | None = None
     atomos: list[Atomo] = field(default_factory=list)
     ligacoes: list[Ligacao] = field(default_factory=list)
     # Cada anel é a lista de ids dos átomos, na ordem citada
@@ -51,7 +54,20 @@ def formatar(modelo):
     """Texto legível do modelo, para a opção de depuração"""
     por_id = {a.id: a for a in modelo.atomos}
 
-    linhas = [f"Modelo {modelo.nome!r}"]
+    carga = (
+        "não declarada"
+        if modelo.carga_total is None
+        else f"{modelo.carga_total:+d}"
+    )
+    desemparelhados = (
+        "não declarado"
+        if modelo.eletrons_desemparelhados is None
+        else str(modelo.eletrons_desemparelhados)
+    )
+    linhas = [
+        f"Modelo {modelo.nome!r} tipo={modelo.tipo.value} "
+        f"carga_total={carga} desemparelhados={desemparelhados}"
+    ]
 
     linhas.append(f"  Átomos ({len(modelo.atomos)})")
     for a in modelo.atomos:
