@@ -63,11 +63,13 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | VAL-001 | Soma das ordens de ligação acima da valência permitida | erro |
 | VAL-002 | Valência incompleta | aviso |
 | CARGA-001 | Carga formal inconsistente com a valência | erro |
+| COORD-001 | Doador sem par livre para ligação coordenada | aviso |
+| COORD-002 | Dados insuficientes para conferir o par livre do doador | aviso |
 | OCT-001 | Octeto ou dueto não atendido (exceções conhecidas) | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
 
-Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002 e CARGA-001 estão implementadas. OCT-001 não foi feita: para os elementos com valência conhecida, o octeto já é coberto pela valência, e os demais dependem das pendências do `levantamento_quimica.md`.
+Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002, CARGA-001 e a conferência do doador coordenado estão implementadas. OCT-001 não foi feita: para os elementos com valência conhecida, o octeto já é coberto pela valência, e os demais dependem das pendências do `levantamento_quimica.md`.
 
 Detalhes da implementação:
 - As regras são conferidas em etapas, e cada etapa só roda se a anterior não deu erro, para não aparecerem erros em cascata: estrutura, depois STRUCT-003, depois BOND-001, depois valência e carga.
@@ -79,9 +81,14 @@ Detalhes da implementação:
 - A soma das cargas (C2) não é conferida, porque a linguagem não declara a carga total da molécula.
 
 ### M5: Tipos de ligação
-- Classificar pela diferença de eletronegatividade: covalente apolar, polar ou iônica. Não usar a regra "metal + ametal = sempre iônica".
-- Ligação coordenada: o doador precisa ter par livre e o receptor precisa ter orbital vazio.
-- Ligação metálica num modelo separado, porque não é uma molécula discreta.
+
+Implementado em parte:
+
+- Ligações são classificadas pela diferença de eletronegatividade como covalente apolar, covalente polar ou iônica. Os limites padrão 0,4 e 1,7 ficam em `regras/classificacao_ligacoes.json`; o resultado é informativo e aparece em `--modelo`.
+- Elemento sem eletronegatividade na fonte produz `não classificada`. Não se usa a regra "metal + ametal = sempre iônica".
+- O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
+- A disponibilidade de orbital vazio no receptor ainda não é conferida porque `regras/elementos.json` não contém esse dado de forma confiável.
+- Ligações metálicas são identificadas no modelo, mas continuam fora da classificação por eletronegatividade e da valência, conforme H3.
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.
@@ -100,7 +107,7 @@ Um ciclo que existe no grafo mas não foi declarado com `ring` não gera erro ne
 Para uma entrada só com átomos, montar a estrutura: distribuir ligações, recalcular carga e valência, aceitar ou rejeitar. Casos de teste: H₂O, CO₂, N₂, NH₄⁺ e ciclohexano.
 
 ### M8: Erros, testes e documentação
-- Relatório no formato `Erro semântico [ID] linha X: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.
+- Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.
 - Um exemplo válido e um inválido por regra (`invalidos_semanticos/`).
 - Script que roda todos os exemplos e confere sucesso ou o ID de erro esperado.
 - Atualizar README, especificação e slides.

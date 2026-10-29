@@ -1,0 +1,12 @@
+{
+  "_fonte": "docs/levantamento_quimica.md, itens F1 a F3",
+  "_notas": [
+    "Os limites sao convencoes configuraveis e a classificacao e apenas informativa.",
+    "Apolar: diferenca menor que limite_apolar.",
+    "Polar: diferenca maior ou igual a limite_apolar e menor ou igual a limite_ionica.",
+    "Ionica: diferenca maior que limite_ionica.",
+    "Ligacoes sem eletronegatividade para um dos elementos nao sao classificadas."
+  ],
+  "limite_apolar": 0.4,
+  "limite_ionica": 1.7
+}

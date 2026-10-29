@@ -15,6 +15,9 @@ from modelo import Atomo, Ligacao, Modelo
 PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ARQUIVO_ELEMENTOS = os.path.join(PASTA_RAIZ, "regras", "elementos.json")
 ARQUIVO_VALENCIAS = os.path.join(PASTA_RAIZ, "regras", "valencias.json")
+ARQUIVO_CLASSIFICACAO = os.path.join(
+    PASTA_RAIZ, "regras", "classificacao_ligacoes.json"
+)
 
 ERRO = "erro"
 AVISO = "aviso"
@@ -27,11 +30,16 @@ LIMITE_QUANTIDADE = 1000
 
 def carregar_elementos():
     with open(ARQUIVO_ELEMENTOS, encoding="utf-8") as arquivo:
-        return set(json.load(arquivo)["elementos"])
+        return json.load(arquivo)["elementos"]
 
 
 def carregar_valencias():
     with open(ARQUIVO_VALENCIAS, encoding="utf-8") as arquivo:
+        return json.load(arquivo)
+
+
+def carregar_classificacao():
+    with open(ARQUIVO_CLASSIFICACAO, encoding="utf-8") as arquivo:
         return json.load(arquivo)
 
 
@@ -57,10 +65,12 @@ class AnalisadorSemantico:
     # estruturais e de valência. Os IDs das regras estão em
     # docs/plano_semantico.md.
 
-    def __init__(self, molecula, elementos, valencias):
+    def __init__(self, molecula, dados_elementos, valencias, classificacao):
         self.molecula = molecula
-        self.elementos = elementos
+        self.dados_elementos = dados_elementos
+        self.elementos = set(dados_elementos)
         self.valencias = valencias
+        self.classificacao = classificacao
         self.mensagens = []
         self.modelo = Modelo(molecula.nome)
 
@@ -105,6 +115,10 @@ class AnalisadorSemantico:
         # seriam só consequência deles
         if not self.tem_erro():
             self.conferir_conexoes()
+
+        if not self.tem_erro():
+            self.classificar_ligacoes()
+            self.conferir_coordenadas()
 
         if not self.tem_erro():
             self.conferir_valencias()
@@ -361,6 +375,87 @@ class AnalisadorSemantico:
 
     # ---------- valência e carga ----------
 
+    def classificar_ligacoes(self):
+        """Classifica ligações por Δχ; o resultado nunca bloqueia a análise."""
+        por_id = {a.id: a for a in self.modelo.atomos}
+        limite_apolar = self.classificacao["limite_apolar"]
+        limite_ionica = self.classificacao["limite_ionica"]
+
+        for lig in self.modelo.ligacoes:
+            if lig.operador is Operador.METALICA:
+                lig.classificacao = "metálica"
+                continue
+
+            origem = por_id[lig.origem]
+            destino = por_id[lig.destino]
+            eletronegatividade_origem = self.dados_elementos[
+                origem.elemento
+            ]["eletronegatividade"]
+            eletronegatividade_destino = self.dados_elementos[
+                destino.elemento
+            ]["eletronegatividade"]
+
+            if (
+                eletronegatividade_origem is None
+                or eletronegatividade_destino is None
+            ):
+                continue
+
+            diferenca = abs(
+                eletronegatividade_origem - eletronegatividade_destino
+            )
+            lig.diferenca_eletronegatividade = diferenca
+            if diferenca < limite_apolar:
+                lig.classificacao = "covalente apolar"
+            elif diferenca <= limite_ionica:
+                lig.classificacao = "covalente polar"
+            else:
+                lig.classificacao = "iônica"
+
+    def conferir_coordenadas(self):
+        """Confere se o doador tinha um par livre antes da ligação."""
+        por_id = {a.id: a for a in self.modelo.atomos}
+        ordem = self.valencias["ordem_ligacao"]
+        totais = {a.id: 0 for a in self.modelo.atomos}
+        for lig in self.modelo.ligacoes:
+            if lig.operador is Operador.METALICA:
+                continue
+            valor = ordem[lig.operador.name]
+            totais[lig.origem] += valor
+            totais[lig.destino] += valor
+
+        for lig in self.modelo.ligacoes:
+            if lig.operador is not Operador.COORDENADA:
+                continue
+
+            doador = por_id[lig.origem]
+            eletrons_valencia = self.dados_elementos[doador.elemento][
+                "eletrons_valencia"
+            ]
+            if eletrons_valencia is None:
+                self.aviso(
+                    "COORD-002",
+                    lig,
+                    f"não há dados suficientes para conferir o par livre de "
+                    f"{doador.rotulo()}",
+                )
+                continue
+
+            # Antes da doação, a ligação coordenada ainda não contribuía para
+            # a ordem e a carga formal do doador era uma unidade menor.
+            ordem_antes = totais[doador.id] - ordem["COORDENADA"]
+            carga_antes = doador.carga - 1
+            eletrons_nao_ligantes = (
+                eletrons_valencia - carga_antes - ordem_antes
+            )
+            if eletrons_nao_ligantes < 2:
+                self.aviso(
+                    "COORD-001",
+                    lig,
+                    f"o doador {doador.rotulo()} não possui um par de elétrons "
+                    "livre para a ligação coordenada",
+                )
+
     def conferir_valencias(self):
         # Só usa os dados de regras/valencias.json: elemento ou carga sem
         # dado não é conferido
@@ -389,6 +484,7 @@ class AnalisadorSemantico:
         soma = {a.id: 0 for a in self.modelo.atomos}
         vizinhos = {a.id: [] for a in self.modelo.atomos}
         metalicos = set()
+        self.avisos_valencia = {}
         for lig in self.modelo.ligacoes:
             if lig.operador is Operador.METALICA:
                 metalicos.update((lig.origem, lig.destino))
@@ -401,6 +497,7 @@ class AnalisadorSemantico:
             if atomo.id in metalicos:
                 continue
             self.conferir_atomo(atomo, soma[atomo.id], vizinhos[atomo.id])
+        self.emitir_avisos_valencia()
 
     def valencias_neutras(self, atomo, vizinhos):
         regras = self.valencias
@@ -466,14 +563,37 @@ class AnalisadorSemantico:
                 )
             return
 
-        # Abaixo da valência pode ser um radical, então é só aviso
-        mensagem = (
-            f"a soma das ordens de ligação de {atomo.rotulo()} é {total}; "
-            f"o esperado para {el} é {self.listar(aceitas)}"
+        # Abaixo da valência pode ser um radical, então é só aviso.
+        # Átomos da mesma declaração e com o mesmo resultado são agrupados.
+        chave = (
+            atomo.linha,
+            atomo.coluna,
+            atomo.elemento,
+            total,
+            tuple(aceitas),
+            carga_possivel,
         )
-        if carga_possivel is not None:
-            mensagem += f" (se for um íon, declare atom {el}({carga_possivel:+d}))"
-        self.aviso("VAL-002", atomo, mensagem)
+        self.avisos_valencia.setdefault(chave, []).append(atomo)
+
+    def emitir_avisos_valencia(self):
+        for chave, atomos in self.avisos_valencia.items():
+            _, _, elemento, total, aceitas, carga_possivel = chave
+            if len(atomos) == 1:
+                sujeito = f"de {atomos[0].rotulo()}"
+            else:
+                rotulos = ", ".join(atomo.rotulo() for atomo in atomos)
+                sujeito = f"dos átomos {rotulos}"
+
+            mensagem = (
+                f"a soma das ordens de ligação {sujeito} é {total}; "
+                f"o esperado para {elemento} é {self.listar(aceitas)}"
+            )
+            if carga_possivel is not None:
+                mensagem += (
+                    f" (se for um íon, declare "
+                    f"atom {elemento}({carga_possivel:+d}))"
+                )
+            self.aviso("VAL-002", atomos[0], mensagem)
 
     @staticmethod
     def listar(valores):
@@ -487,5 +607,8 @@ class AnalisadorSemantico:
 def analisar(molecula):
     # Devolve o modelo e a lista de mensagens semânticas (erros e avisos)
     return AnalisadorSemantico(
-        molecula, carregar_elementos(), carregar_valencias()
+        molecula,
+        carregar_elementos(),
+        carregar_valencias(),
+        carregar_classificacao(),
     ).analisar()

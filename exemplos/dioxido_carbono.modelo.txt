@@ -1,0 +1,9 @@
+Modelo 'Carbon dioxide'
+  Átomos (3)
+    C#1 carga=+0 [3:4]
+    O#1 carga=+0 [4:4]
+    O#2 carga=+0 [4:4]
+  Ligações (2)
+    C#1 DUPLA O#1 classificação=covalente polar Δχ=0.89 [6:4]
+    C#1 DUPLA O#2 classificação=covalente polar Δχ=0.89 [6:4]
+Molécula 'Carbon dioxide': análise concluída sem erros

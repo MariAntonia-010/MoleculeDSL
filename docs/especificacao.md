@@ -213,6 +213,31 @@ O arquivo deve estar salvo em UTF-8. O BOM que alguns editores colocam no iníci
 
 A gramática só define se o programa está bem formado. Se a molécula é quimicamente válida, por exemplo se `Xx` é um elemento que existe ou se `c1` foi declarado, é decidido pela análise semântica (ver `plano_semantico.md`).
 
+### 8.1 Modelo e classificação das ligações
+
+Depois da AST, a análise semântica expande multiplicadores e repetições num
+grafo de átomos e ligações. A opção `--modelo` exibe esse grafo.
+
+Para ligações não metálicas, o modelo calcula a diferença absoluta de
+eletronegatividade (`Δχ`) com os dados de `regras/elementos.json` e informa:
+
+- `Δχ < 0,4`: covalente apolar;
+- `0,4 ≤ Δχ ≤ 1,7`: covalente polar;
+- `Δχ > 1,7`: iônica.
+
+Esses limites são convenções configuráveis em
+`regras/classificacao_ligacoes.json`, não uma separação química absoluta.
+Se um dos elementos não tiver eletronegatividade na fonte, a ligação aparece
+como `não classificada`. A implementação não presume que toda ligação entre
+metal e ametal seja iônica.
+
+Na ligação coordenada, `origem -> destino` mantém a direção do doador para o
+receptor. O compilador confere, como aviso, se o doador tinha um par livre
+antes da doação. A disponibilidade de orbital vazio no receptor ainda não é
+conferida por falta desse dado na base. Ligações metálicas são identificadas
+no modelo, mas não entram no cálculo de valência nem na classificação por
+eletronegatividade.
+
 ---
 
 ## 9. O que a linguagem deliberadamente não faz?

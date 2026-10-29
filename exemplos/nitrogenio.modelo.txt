@@ -1,0 +1,7 @@
+Modelo 'Nitrogen'
+  Átomos (2)
+    n1 (N#1) carga=+0 [3:4]
+    n2 (N#2) carga=+0 [4:4]
+  Ligações (1)
+    n1 (N#1) TRIPLA n2 (N#2) classificação=covalente apolar Δχ=0.00 [6:4]
+Molécula 'Nitrogen': análise concluída sem erros

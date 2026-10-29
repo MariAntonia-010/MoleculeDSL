@@ -180,6 +180,23 @@ def testar_ast(caminho):
     return problemas
 
 
+def testar_modelo(caminho):
+    codigo, saida = rodar_comando(["--modelo", caminho])
+    esperado_path = os.path.splitext(caminho)[0] + ".modelo.txt"
+    with open(esperado_path, encoding="utf-8") as arquivo:
+        esperado = arquivo.read()
+
+    problemas = []
+    if codigo != 0:
+        problemas.append(f"código de saída {codigo}, esperado 0")
+    if saida != esperado:
+        problemas.append(
+            f"modelo diferente de "
+            f"{os.path.relpath(esperado_path, PASTA_RAIZ)}"
+        )
+    return problemas
+
+
 def testar_svgs_das_arvores():
     problemas = []
     with tempfile.TemporaryDirectory() as pasta:
@@ -251,6 +268,36 @@ def main():
             "ast/aminoborano",
             lambda: testar_ast(
                 os.path.join(PASTA_RAIZ, "exemplos", "aminoborano.mol")
+            ),
+        ),
+        (
+            "modelo/agua",
+            lambda: testar_modelo(
+                os.path.join(PASTA_RAIZ, "exemplos", "agua.mol")
+            ),
+        ),
+        (
+            "modelo/dioxido_carbono",
+            lambda: testar_modelo(
+                os.path.join(PASTA_RAIZ, "exemplos", "dioxido_carbono.mol")
+            ),
+        ),
+        (
+            "modelo/nitrogenio",
+            lambda: testar_modelo(
+                os.path.join(PASTA_RAIZ, "exemplos", "nitrogenio.mol")
+            ),
+        ),
+        (
+            "modelo/hidroxido",
+            lambda: testar_modelo(
+                os.path.join(PASTA_RAIZ, "exemplos", "hidroxido.mol")
+            ),
+        ),
+        (
+            "modelo/sodio_metalico",
+            lambda: testar_modelo(
+                os.path.join(PASTA_RAIZ, "exemplos", "sodio_metalico.mol")
             ),
         ),
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),

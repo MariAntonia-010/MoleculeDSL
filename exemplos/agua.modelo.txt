@@ -1,0 +1,9 @@
+Modelo 'Water'
+  Átomos (3)
+    O#1 carga=+0 [2:4]
+    H#1 carga=+0 [3:4]
+    H#2 carga=+0 [4:4]
+  Ligações (2)
+    H#1 SIMPLES O#1 classificação=covalente polar Δχ=1.24 [6:4]
+    O#1 SIMPLES H#2 classificação=covalente polar Δχ=1.24 [7:4]
+Molécula 'Water': análise concluída sem erros
