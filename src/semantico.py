@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from ast_nos import AnelDecl, AtomoDecl, LigacaoDecl
 from modelo import Atomo, Ligacao, Modelo
+from classificacao import carregar_configuracao, classificar
 
 
 PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,7 +22,7 @@ LIMITE_QUANTIDADE = 1000
 
 def carregar_elementos():
     with open(ARQUIVO_ELEMENTOS, encoding="utf-8") as arquivo:
-        return set(json.load(arquivo)["elementos"])
+        return json.load(arquivo)["elementos"]
 
 
 def carregar_valencias():
@@ -51,10 +52,11 @@ class AnalisadorSemantico:
     # estruturais e de valência. Os IDs das regras estão em
     # docs/plano_semantico.md.
 
-    def __init__(self, molecula, elementos, valencias):
+    def __init__(self, molecula, elementos, valencias, configuracao_ligacoes=None):
         self.molecula = molecula
         self.elementos = elementos
         self.valencias = valencias
+        self.configuracao_ligacoes = configuracao_ligacoes
         self.mensagens = []
         self.modelo = Modelo(molecula.nome)
 
@@ -102,6 +104,12 @@ class AnalisadorSemantico:
 
         if not self.tem_erro():
             self.conferir_valencias()
+
+        if not self.tem_erro():
+            configuracao = self.configuracao_ligacoes
+            if configuracao is None:
+                configuracao = carregar_configuracao()
+            classificar(self.modelo, self.elementos, configuracao)
 
         self.mensagens.sort(key=lambda m: (m.linha, m.coluna))
         return self.modelo, self.mensagens
@@ -391,10 +399,27 @@ class AnalisadorSemantico:
                 soma[a] += ordem[lig.operador.name]
                 vizinhos[a].append(por_id[b].elemento)
 
+        avisos = {}
         for atomo in self.modelo.atomos:
             if atomo.id in metalicos:
                 continue
-            self.conferir_atomo(atomo, soma[atomo.id], vizinhos[atomo.id])
+            self.conferir_atomo(atomo, soma[atomo.id], vizinhos[atomo.id], avisos)
+
+        for chave, atomos in avisos.items():
+            _, _, el, total, aceitas, carga_possivel = chave
+            primeiro = atomos[0]
+            sujeito = (
+                f"de {primeiro.rotulo()}"
+                if len(atomos) == 1
+                else f"de cada um dos {len(atomos)} átomos de {el} desta declaração"
+            )
+            mensagem = (
+                f"a soma das ordens de ligação {sujeito} é {total}; "
+                f"o esperado para {el} é {self.listar(aceitas)}"
+            )
+            if carga_possivel is not None:
+                mensagem += f" (se for um íon, declare atom {el}({carga_possivel:+d}))"
+            self.aviso("VAL-002", primeiro, mensagem)
 
     def valencias_neutras(self, atomo, vizinhos):
         regras = self.valencias
@@ -413,7 +438,7 @@ class AnalisadorSemantico:
         tabela = self.valencias["valencias_com_carga"].get(elemento, {})
         return {int(carga): aceitas for carga, aceitas in tabela.items()}
 
-    def conferir_atomo(self, atomo, total, vizinhos):
+    def conferir_atomo(self, atomo, total, vizinhos, avisos):
         el = atomo.elemento
         com_carga = self.valencias_carregadas(el)
 
@@ -460,14 +485,12 @@ class AnalisadorSemantico:
                 )
             return
 
-        # Abaixo da valência pode ser um radical, então é só aviso
-        mensagem = (
-            f"a soma das ordens de ligação de {atomo.rotulo()} é {total}; "
-            f"o esperado para {el} é {self.listar(aceitas)}"
+        # Agrupa apenas situações iguais da mesma declaração. Somas ou
+        # valências esperadas diferentes precisam continuar distinguíveis.
+        chave = (
+            atomo.linha, atomo.coluna, el, total, tuple(aceitas), carga_possivel
         )
-        if carga_possivel is not None:
-            mensagem += f" (se for um íon, declare atom {el}({carga_possivel:+d}))"
-        self.aviso("VAL-002", atomo, mensagem)
+        avisos.setdefault(chave, []).append(atomo)
 
     @staticmethod
     def listar(valores):
@@ -478,8 +501,8 @@ class AnalisadorSemantico:
         return ", ".join(textos[:-1]) + " ou " + textos[-1]
 
 
-def analisar(molecula):
+def analisar(molecula, configuracao_ligacoes=None):
     # Devolve o modelo e a lista de mensagens semânticas (erros e avisos)
     return AnalisadorSemantico(
-        molecula, carregar_elementos(), carregar_valencias()
+        molecula, carregar_elementos(), carregar_valencias(), configuracao_ligacoes
     ).analisar()

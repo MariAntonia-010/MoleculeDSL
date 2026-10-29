@@ -229,3 +229,18 @@ A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deli
 3. **Não representa propriedades químicas avançadas**, como isótopos e estereoquímica.
 
 4. **Não aceita mais de uma molécula por arquivo.**
+
+
+---
+
+## 10. Classificação informativa das ligações
+
+O modelo inclui, além do operador e da direção, a classificação pela diferença absoluta de eletronegatividade dos elementos. A saída `--modelo` exibe essa informação.
+
+| Diferença Δχ (padrão) | Classificação |
+|---|---|
+| Menor que 0,4 | Covalente apolar |
+| De 0,4 a 1,7, inclusive | Covalente polar |
+| Maior que 1,7 | Iônica |
+
+Esses limites são uma convenção do projeto, configurável em `regras/ligacoes.json`, e não alteram a aceitação química da molécula. Dados ausentes deixam a ligação sem classificação. A ligação metálica (`~`) não usa Δχ; a coordenada (`->`) conserva seu operador e sua direção. O classificador não infere a polaridade da molécula inteira nem valida doadores e receptores.

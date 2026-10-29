@@ -1,0 +1,10 @@
+{
+  "_fonte": "docs/levantamento_quimica.md, F1 a F3: convenção configurável do projeto",
+  "_notas": [
+    "Classificação informativa, sem validar nem rejeitar a estrutura.",
+    "Delta menor que limite_apolar: covalente apolar; até limite_polar inclusive: covalente polar; acima: iônica.",
+    "Sem eletronegatividade: sem classificação. O operador metálico não usa delta."
+  ],
+  "limite_apolar": 0.4,
+  "limite_polar": 1.7
+}

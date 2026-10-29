@@ -4,7 +4,13 @@ import sys
 # sintatico.py (via lexico.py) adiciona a pasta "gerado" ao caminho
 from sintatico import analisar
 from MoleculeDSLParser import MoleculeDSLParser
-from MoleculeDSLVisitor import MoleculeDSLVisitor
+try:
+    from MoleculeDSLVisitor import MoleculeDSLVisitor
+except ModuleNotFoundError as erro:
+    if erro.name != "MoleculeDSLVisitor":
+        raise
+    print("Visitor do ANTLR não encontrado em gerado/. Gere com: sh gerar.sh")
+    sys.exit(1)
 
 from ast_nos import (
     AnelDecl,

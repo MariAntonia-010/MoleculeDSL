@@ -79,6 +79,12 @@ Detalhes da implementação:
 - A soma das cargas (C2) não é conferida, porque a linguagem não declara a carga total da molécula.
 
 ### M5: Tipos de ligação
+
+Situação em 29/10/2026: classificação por eletronegatividade implementada em `src/classificacao.py`, integrada ao modelo e à saída `--modelo`. Usa os dados já disponíveis em `regras/elementos.json`; os limites de F1–F3 estão em `regras/ligacoes.json` (padrão 0,4 e 1,7). As fronteiras adotadas são Δχ < 0,4, 0,4 <= Δχ <= 1,7 e Δχ > 1,7. Isso é uma convenção configurável, não uma validação química.
+
+Sem eletronegatividade de qualquer extremidade, a ligação fica sem classificação. `~` mantém a indicação metálica sem cálculo de Δχ; isso ainda não implementa um modelo separado para metais. A direção de `->` é preservada, mas a disponibilidade de par livre/orbital vazio ainda não é validada.
+
+Itens do marco:
 - Classificar pela diferença de eletronegatividade: covalente apolar, polar ou iônica. Não usar a regra "metal + ametal = sempre iônica".
 - Ligação coordenada: o doador precisa ter par livre e o receptor precisa ter orbital vazio.
 - Ligação metálica num modelo separado, porque não é uma molécula discreta.

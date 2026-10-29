@@ -1,0 +1,8 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de cada um dos 2 átomos de C desta declaração é 3; o esperado para C é 4 (se for um íon, declare atom C(-1))
+molecule "Radicais nomeados" {
+    2x atom C as c
+    4x atom H
+    bond c1-c2
+    bond c1-H x2
+    bond c2-H x2
+}

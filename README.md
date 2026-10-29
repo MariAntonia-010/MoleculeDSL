@@ -55,9 +55,9 @@ Opções:
 python src/main.py --tokens --ast exemplos/agua.mol
 ```
 
-Se a pasta `gerado/` não existir, o programa pede para rodar o `sh gerar.sh`.
+Se a pasta `gerado/` não existir ou faltarem o lexer, o parser ou o visitor, o programa pede para rodar o `sh gerar.sh`.
 
-O programa sai com código 0 se não houver erros, 1 se houver erro léxico ou sintático e 2 se houver erro semântico.
+O programa sai com código 0 se não houver erros, 1 se houver erro léxico, sintático ou de configuração e 2 se houver erro semântico.
 
 Cada etapa também pode ser executada sozinha:
 
@@ -92,7 +92,21 @@ A análise semântica está em andamento (ver [docs/plano_semantico.md](docs/pla
 - as regras estruturais: elemento desconhecido, átomo ou nome inexistente, nome duplicado, átomo sem ligação, ligação de um átomo com ele mesmo, ligação repetida e anéis;
 - as regras químicas que têm fonte no [levantamento de química](docs/levantamento_quimica.md): valência, carga formal e elementos que só fazem ligação simples. Os dados estão em `regras/valencias.json`, e elemento sem dado não é conferido.
 
-Erros semânticos impedem a compilação. Avisos, como uma valência incompleta, só são mostrados.
+Erros semânticos impedem a compilação. Avisos, como uma valência incompleta, só são mostrados. Átomos da mesma declaração com a mesma soma de ordens de ligação e a mesma valência esperada geram um único aviso, indicando a quantidade de átomos afetados. Situações diferentes continuam em avisos separados.
+
+## Classificação das ligações
+
+A opção `--modelo` mostra também a classificação informativa de cada ligação e a diferença de eletronegatividade (Δχ), usando os dados de `regras/elementos.json`.
+
+```bash
+python src/main.py --modelo exemplos/agua.mol
+```
+
+Na água, as ligações O–H aparecem como `covalente polar; Δχ=1.24`. Os limites são uma convenção configurável em `regras/ligacoes.json`: Δχ < 0,4 é apolar; de 0,4 a 1,7, inclusive, é polar; acima de 1,7 é iônica. Os valores precisam ser finitos e obedecer a `0 <= limite_apolar < limite_polar`.
+
+A classificação não gera erro nem aviso químico. Quando falta eletronegatividade de um dos elementos, a ligação fica sem classificação. O operador `~` mantém a indicação metálica, sem calcular Δχ. A coordenada mantém sua direção e recebe a classificação por Δχ como informação adicional.
+
+Essa entrega cobre a classificação do marco M5. A validação de doador/receptor de ligações coordenadas, o tratamento separado de estruturas metálicas e o solver continuam pendentes.
 
 ## Testes
 
@@ -111,3 +125,5 @@ O script analisa todos os arquivos de:
 - `avisos_semanticos/`: programas válidos que geram avisos.
 
 Cada arquivo inválido ou com aviso começa com uma ou mais linhas `// esperado: ...`, com o início da mensagem esperada, incluindo a linha e a coluna. O script confere se aparecem exatamente essas mensagens, na ordem, e o código de saída.
+
+O mesmo comando executa os testes de `tests/`, cobrindo classificação, limites configuráveis e geração ausente ou incompleta do ANTLR.

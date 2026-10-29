@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de cada um dos 1000 átomos de O desta declaração é 1; o esperado para O é 2 (se for um íon, declare atom O(-1))
+molecule "Avisos no limite" {
+    1000x atom O
+    bond O-O x500
+}

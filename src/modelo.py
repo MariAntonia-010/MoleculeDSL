@@ -34,6 +34,8 @@ class Ligacao:
     operador: Operador
     linha: int
     coluna: int
+    classificacao: str | None = None
+    diferenca_eletronegatividade: float | None = None
 
 
 @dataclass
@@ -57,9 +59,15 @@ def formatar(modelo):
 
     linhas.append(f"  Ligações ({len(modelo.ligacoes)})")
     for lig in modelo.ligacoes:
+        classificacao = lig.classificacao or "sem classificação (eletronegatividade indisponível)"
+        delta = (
+            f"; Δχ={lig.diferenca_eletronegatividade:g}"
+            if lig.diferenca_eletronegatividade is not None else ""
+        )
         linhas.append(
             f"    {por_id[lig.origem].rotulo()} {lig.operador.name} "
-            f"{por_id[lig.destino].rotulo()} [{lig.linha}:{lig.coluna}]"
+            f"{por_id[lig.destino].rotulo()} [{lig.linha}:{lig.coluna}] "
+            f"{classificacao}{delta}"
         )
 
     if modelo.aneis:

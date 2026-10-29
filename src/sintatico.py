@@ -8,7 +8,13 @@ from antlr4.error.ErrorStrategy import DefaultErrorStrategy
 # lexico.py adiciona a pasta "gerado" ao caminho de importação
 from lexico import ErroLexico, ler_arquivo
 from MoleculeDSLLexer import MoleculeDSLLexer
-from MoleculeDSLParser import MoleculeDSLParser
+try:
+    from MoleculeDSLParser import MoleculeDSLParser
+except ModuleNotFoundError as erro:
+    if erro.name != "MoleculeDSLParser":
+        raise
+    print("Parser do ANTLR não encontrado em gerado/. Gere com: sh gerar.sh")
+    sys.exit(1)
 
 
 P = MoleculeDSLParser

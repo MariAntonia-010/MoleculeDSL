@@ -205,3 +205,39 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 ### Pendências
 
 - Os avisos de valência saem um por átomo. Com `1000x atom O` sem ligações suficientes, são 1000 linhas de aviso. Vale agrupar por declaração, como já é feito no STRUCT-003.
+
+
+---
+
+## 29/10/2026 — Agrupamento dos avisos de valência
+
+### O que foi feito
+
+- Atualização local com a `main`, incluindo a nova bateria de casos de teste.
+- Resolvida a pendência de 28/10: avisos VAL-002 equivalentes da mesma declaração agora são agrupados, com a quantidade de átomos afetados.
+- O agrupamento preserva a linha e a coluna da declaração, a soma das ordens, a valência esperada e a sugestão de carga. Somas ou valências diferentes continuam separadas; declarações distintas também.
+- Casos de regressão para 1000 átomos, átomos nomeados e somas diferentes dentro da mesma declaração.
+
+### Limites
+
+- O agrupamento se aplica aos avisos VAL-002. Os erros mantêm seus diagnósticos individuais.
+- As pendências químicas e de escopo dos planos anteriores continuam abertas.
+
+
+---
+
+## 29/10/2026 — Classificação do M5 e geração incompleta
+
+### O que foi feito
+
+- Reproduzido o traceback quando `gerado/` contém o lexer mas não o parser. Também corrigido o caso de visitor ausente: ambos agora orientam executar `sh gerar.sh`, com saída 1.
+- Adicionados testes isolados em diretórios temporários para ausência e geração incompleta do ANTLR, fechando a pendência de teste registrada em 21/10.
+- Implementada a classificação informativa do M5, com os dados existentes de eletronegatividade e limites configuráveis (F1–F3). A saída `--modelo` mostra a classe e Δχ.
+- Testes de fronteiras, configuração inválida, dados ausentes, operadores, direção, integração com exemplos e preservação da aceitação da molécula.
+- Configuração inválida gera mensagem em português e saída 1, sem traceback.
+
+### Pendências do plano
+
+- M5 ainda não valida par livre do doador/orbital vazio do receptor, nem implementa um modelo separado de ligação metálica.
+- M2 mantém as lacunas de dados descritas no levantamento; M7 (solver) continua pendente.
+- A falha originalmente apontada pelo Cursor não pôde ser identificada, pois o histórico exige autenticação. A correção acima corresponde a um erro reproduzido localmente.

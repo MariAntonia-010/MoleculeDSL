@@ -8,6 +8,7 @@ from construtor_ast import construir
 from ast_nos import formatar
 import modelo
 import semantico
+from classificacao import ErroConfiguracao
 
 
 # Códigos de saída
@@ -66,7 +67,11 @@ def compilar(caminho, opcoes):
     if "--ast" in opcoes:
         print(formatar(molecula))
 
-    modelo_molecula, mensagens = semantico.analisar(molecula)
+    try:
+        modelo_molecula, mensagens = semantico.analisar(molecula)
+    except ErroConfiguracao as erro:
+        print(f"Erro de configuração: {erro}")
+        return ERRO_LEXICO_OU_SINTATICO
 
     # Avisos são mostrados, mas não impedem a compilação
     for mensagem in mensagens:

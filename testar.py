@@ -124,7 +124,14 @@ def main():
 
     print(f"\n{len(casos)} testes, {falhas} falha(s)")
 
-    if falhas:
+    print("\nTestes de classificação e geração do ANTLR:", flush=True)
+    unitarios = subprocess.run(
+        [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
+        cwd=PASTA_RAIZ,
+        env=dict(os.environ, PYTHONIOENCODING="utf-8"),
+    )
+
+    if falhas or unitarios.returncode:
         sys.exit(1)
 
 
