@@ -117,16 +117,16 @@ Arquivo gerado: `regras/elementos.json`, com os 118 elementos.
 
 1. Confirmar B2 a B6 num livro-texto de química geral. As fontes usadas são didáticas.
 2. Definir valência de Be, Al, Si, Br e I (B7).
-3. Definir os limites de F1 (padrão 0,4 e 1,7?) e deixá-los num arquivo de configuração.
+3. **Decidido:** limites de F1 em 0,4 e 1,7, mantidos em arquivo de configuração.
 4. Decidir se S e P podem fazer ligação dupla e tripla (E3 e E6).
-5. Decidir como tratar ligação metálica (H3).
+5. **Decidido para esta iteração:** manter ligação metálica como informação de referência; validação semântica própria fica para a continuação.
 6. Decidir o que fazer com metais de transição (A4, J).
 
 ## Resumo do que o compilador pode validar hoje com fonte
 
 - Soma das ordens de ligação por átomo, contra a valência permitida (B1 a B4).
 - Carga formal e soma das cargas (C1, C2).
-- Octeto como aviso, com exceções (D1 a D5).
+- Octeto e dueto por meio das regras de valência existentes; não há uma regra `OCT-001` separada.
 - Elementos que só aceitam ligação simples (E4).
 - Doador e receptor na ligação coordenada, com contagem de elétrons (G1, G4).
 - Classificação da ligação por Δχ, informativa (F1).

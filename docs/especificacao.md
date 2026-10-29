@@ -235,8 +235,18 @@ Na ligação coordenada, `origem -> destino` mantém a direção do doador para 
 receptor. O compilador confere, como aviso, se o doador tinha um par livre
 antes da doação. A disponibilidade de orbital vazio no receptor ainda não é
 conferida por falta desse dado na base. Ligações metálicas são identificadas
-no modelo, mas não entram no cálculo de valência nem na classificação por
-eletronegatividade.
+no modelo como informação de referência, mas nesta iteração não entram no
+cálculo de valência nem na classificação por eletronegatividade. A validação
+semântica própria dessas ligações fica para a continuação do projeto.
+
+O compilador não possui uma regra separada `OCT-001`: octeto e dueto já são
+refletidos pelas valências dos elementos que possuem dados confirmados.
+Criar uma segunda regra produziria diagnósticos duplicados; elementos sem
+dados continuam sem validação química inventada.
+
+Uma declaração `ring` identifica explicitamente um ciclo. Se o posto cíclico
+do grafo indicar mais ciclos independentes do que anéis declarados, o
+compilador produz o aviso `RING-004`, sem bloquear a análise.
 
 ---
 

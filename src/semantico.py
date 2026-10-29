@@ -117,6 +117,7 @@ class AnalisadorSemantico:
             self.conferir_conexoes()
 
         if not self.tem_erro():
+            self.conferir_ciclos_nao_declarados()
             self.classificar_ligacoes()
             self.conferir_coordenadas()
 
@@ -371,6 +372,51 @@ class AnalisadorSemantico:
             else:
                 mensagem = f"os átomos {rotulos} não têm nenhuma ligação"
             self.erro("STRUCT-003", atomos[0], mensagem)
+
+    def conferir_ciclos_nao_declarados(self):
+        """Avisa quando o grafo tem mais ciclos independentes que `ring`s."""
+        if not self.modelo.atomos:
+            return
+
+        adjacencias = {atomo.id: set() for atomo in self.modelo.atomos}
+        for ligacao in self.modelo.ligacoes:
+            adjacencias[ligacao.origem].add(ligacao.destino)
+            adjacencias[ligacao.destino].add(ligacao.origem)
+
+        componentes = 0
+        visitados = set()
+        for atomo_id in adjacencias:
+            if atomo_id in visitados:
+                continue
+            componentes += 1
+            pilha = [atomo_id]
+            while pilha:
+                atual = pilha.pop()
+                if atual in visitados:
+                    continue
+                visitados.add(atual)
+                pilha.extend(adjacencias[atual] - visitados)
+
+        ciclos_independentes = (
+            len(self.modelo.ligacoes) - len(self.modelo.atomos) + componentes
+        )
+        ciclos_faltantes = max(
+            0, ciclos_independentes - len(self.modelo.aneis)
+        )
+        if ciclos_faltantes == 0:
+            return
+
+        if ciclos_faltantes == 1:
+            mensagem = (
+                "o grafo contém 1 ciclo não declarado; use 'ring' para "
+                "identificá-lo"
+            )
+        else:
+            mensagem = (
+                f"o grafo contém {ciclos_faltantes} ciclos independentes não "
+                "declarados; use 'ring' para identificá-los"
+            )
+        self.aviso("RING-004", self.molecula, mensagem)
 
 
     # ---------- valência e carga ----------

@@ -235,3 +235,24 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   simplificada "metal + ametal".
 - OCT-001, ciclo sem `ring`, modelo químico de ligação metálica e solver não
   foram decididos nesta etapa.
+
+---
+
+## 29/10/2026 — Decisões da próxima etapa semântica
+
+### Decisões do grupo
+
+- `OCT-001` foi removida. Octeto e dueto já são refletidos pelas regras de
+  valência para elementos com dados; uma regra separada duplicaria avisos.
+- Ciclos independentes no grafo sem declaração `ring` passaram a gerar o
+  aviso `RING-004`.
+- Ligação metálica continua informativa nesta iteração e servirá de
+  referência para uma validação semântica própria na continuação.
+- O solver foi adiado explicitamente para a próxima iteração.
+
+### Implementação
+
+- `RING-004` compara o posto cíclico do grafo
+  (`arestas - vértices + componentes`) com a quantidade de anéis declarados.
+- Novo caso `avisos_semanticos/ciclo_sem_ring.mol`; avisos não alteram o
+  código de saída.

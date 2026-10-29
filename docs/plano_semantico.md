@@ -67,11 +67,10 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | CARGA-001 | Carga formal inconsistente com a valência | erro |
 | COORD-001 | Doador sem par livre para ligação coordenada | aviso |
 | COORD-002 | Dados insuficientes para conferir o par livre do doador | aviso |
-| OCT-001 | Octeto ou dueto não atendido (exceções conhecidas) | aviso |
 
 Carga formal = elétrons de valência − elétrons não ligantes − ordem total de ligação.
 
-Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002, CARGA-001 e a conferência do doador coordenado estão implementadas. OCT-001 não foi feita: para os elementos com valência conhecida, o octeto já é coberto pela valência, e os demais dependem das pendências do `levantamento_quimica.md`.
+Situação: ELEM-001, STRUCT-001 a STRUCT-007, BOND-001, VAL-001, VAL-002, CARGA-001 e a conferência do doador coordenado estão implementadas. `OCT-001` foi removida por decisão do grupo: para os elementos com dados, o octeto/dueto já é refletido pelas regras de valência; para os demais, não há fonte suficiente para uma regra independente.
 
 Detalhes da implementação:
 - As regras são conferidas em etapas, e cada etapa só roda se a anterior não deu erro, para não aparecerem erros em cascata: estrutura, depois STRUCT-003, depois BOND-001, depois valência e carga.
@@ -90,7 +89,7 @@ Implementado em parte:
 - Elemento sem eletronegatividade na fonte produz `não classificada`. Não se usa a regra "metal + ametal = sempre iônica".
 - O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
 - A disponibilidade de orbital vazio no receptor ainda não é conferida porque `regras/elementos.json` não contém esse dado de forma confiável.
-- Ligações metálicas são identificadas no modelo, mas continuam fora da classificação por eletronegatividade e da valência, conforme H3.
+- Ligações metálicas são identificadas no modelo e mantidas como informação de referência. Nesta iteração continuam fora da classificação por eletronegatividade e da valência, conforme H3; a continuação da análise semântica deverá definir validações próprias sem tratá-las como ligações de uma molécula discreta.
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.
@@ -102,11 +101,12 @@ Implementado em `src/semantico.py`:
 | RING-001 | Átomo repetido na lista do `ring` | erro |
 | RING-002 | Dois átomos vizinhos na lista (ou o último e o primeiro) não estão ligados | erro |
 | RING-003 | O mesmo anel declarado mais de uma vez, mesmo começando de outro átomo ou na ordem inversa | erro |
+| RING-004 | O grafo contém ciclo independente sem declaração `ring` | aviso |
 
-Um ciclo que existe no grafo mas não foi declarado com `ring` não gera erro nem aviso. Avisar sobre isso fica como decisão do grupo.
+`RING-004` usa o posto cíclico do grafo (`arestas - vértices + componentes`) para comparar a quantidade de ciclos independentes com os anéis declarados. O aviso não bloqueia a compilação.
 
 ### M7: Solver
-Para uma entrada só com átomos, montar a estrutura: distribuir ligações, recalcular carga e valência, aceitar ou rejeitar. Casos de teste: H₂O, CO₂, N₂, NH₄⁺ e ciclohexano.
+Fica para a próxima iteração. Para uma entrada só com átomos, deverá montar a estrutura: distribuir ligações, recalcular carga e valência, aceitar ou rejeitar. Casos de teste previstos: H₂O, CO₂, N₂, NH₄⁺ e ciclohexano.
 
 ### M8: Erros, testes e documentação
 - Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.
@@ -118,7 +118,7 @@ Para uma entrada só com átomos, montar a estrutura: distribuir ligações, rec
 M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8, fechando M1 a M5 antes de tocar em M6 e M7.
 
 ## Riscos e pendências
-- Ligação metálica e solver são as partes mais abertas.
+- A validação própria de ligação metálica e o solver da próxima iteração são as partes mais abertas.
 - O enunciado e o prazo da disciplina ainda não foram conferidos contra este plano.
 - Mudanças de sintaxe alteram o contrato do projeto e precisam de decisão do grupo.
 

@@ -321,7 +321,7 @@
           <span class="pill">Equipe MoleculeDSL</span>
           <span class="pill">Python 3.10+</span>
           <span class="pill">ANTLR 4.13.2</span>
-          <span class="pill status"><span class="dot"></span>91 testes passando</span>
+          <span class="pill status"><span class="dot"></span>92 testes passando</span>
         </div>
       </div>
       <div class="molecule" aria-label="Ilustração abstrata de uma molécula">
@@ -487,6 +487,7 @@
             <tr><td>CARGA-001</td><td>Carga incompatível</td><td>erro</td></tr>
             <tr><td>COORD-001 / 002</td><td>Par livre do doador</td><td>aviso</td></tr>
             <tr><td>RING-001…003</td><td>Validade e duplicidade de anéis</td><td>erro</td></tr>
+            <tr><td>RING-004</td><td>Ciclo independente sem ring</td><td>aviso</td></tr>
           </table>
         </article>
         <article class="card">
@@ -568,14 +569,14 @@ Molécula 'Water': análise concluída sem erros</pre>
         <h2>O contrato é executável.</h2>
       </div>
       <div class="grid">
-        <article class="card metric"><span>Suíte total</span><strong>91</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
+        <article class="card metric"><span>Suíte total</span><strong>92</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
         <article class="card metric"><span>Exemplos válidos</span><strong>16</strong><span>moléculas</span></article>
         <article class="card metric"><span>Snapshots</span><strong>9</strong><span>AST + modelo</span></article>
         <article class="card metric"><span>SVGs validados</span><strong>32</strong><span>2 árvores × 16 exemplos</span></article>
       </div>
       <pre style="margin-top:1rem">python3 testar.py
 ...
-91 testes, 0 falha(s)</pre>
+92 testes, 0 falha(s)</pre>
     </section>
 
     <section id="futuro">
@@ -584,10 +585,10 @@ Molécula 'Water': análise concluída sem erros</pre>
         <h2>O que não foi fingido como resolvido.</h2>
       </div>
       <div class="grid">
-        <article class="card"><h3>OCT-001</h3><p>Decidir se o octeto vira aviso próprio ou permanece coberto pelas regras de valência.</p></article>
-        <article class="card"><h3>Ciclos</h3><p>Decidir se ciclos sem uma declaração <code>ring</code> devem gerar aviso.</p></article>
-        <article class="card"><h3>Ligação metálica</h3><p>Exige um modelo que não trate um sólido metálico como molécula discreta.</p></article>
-        <article class="card"><h3>Solver</h3><p>Inferir ligações a partir apenas dos átomos continua como trabalho futuro.</p></article>
+        <article class="card"><h3>Octeto</h3><p><code>OCT-001</code> foi removida: as regras de valência já cobrem os elementos com dados.</p></article>
+        <article class="card"><h3>Ciclos</h3><p>Ciclos independentes sem uma declaração <code>ring</code> agora geram <code>RING-004</code>.</p></article>
+        <article class="card"><h3>Ligação metálica</h3><p>Permanece informativa; uma validação semântica própria será desenvolvida na continuação.</p></article>
+        <article class="card"><h3>Solver</h3><p>Inferir ligações a partir apenas dos átomos ficou para a próxima iteração.</p></article>
         <article class="card"><h3>Mais química</h3><p>Aromaticidade, estereoquímica, isótopos, geometria e visualização 3D estão fora do escopo.</p></article>
         <article class="card"><h3>Fontes antes de regras</h3><p>Valências ainda pendentes não entram no código até serem sustentadas pelo levantamento.</p></article>
       </div>

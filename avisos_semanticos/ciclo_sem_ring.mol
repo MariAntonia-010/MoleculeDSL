@@ -1,0 +1,10 @@
+// esperado: Aviso semântico [RING-004] na linha 2, coluna 0: o grafo contém 1 ciclo não declarado
+molecule "Ciclo sem ring" {
+    atom S as s1
+    atom S as s2
+    atom S as s3
+
+    bond s1-s2
+    bond s2-s3
+    bond s3-s1
+}

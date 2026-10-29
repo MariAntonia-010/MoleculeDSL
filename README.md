@@ -149,6 +149,7 @@ O catálogo de códigos, causas e correções está em
 | `COORD-001` | doador coordenado sem par livre | aviso |
 | `COORD-002` | dados insuficientes para conferir o doador | aviso |
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
+| `RING-004` | ciclo independente sem declaração `ring` | aviso |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e
@@ -212,14 +213,18 @@ Léxico, sintaxe, AST, modelo, regras estruturais, valência, carga,
 classificação por eletronegatividade, validação do doador coordenado e anéis
 estão implementados e testados.
 
-Continuam pendentes de decisão ou fonte:
+Continuam pendentes:
 
-- destino de `OCT-001`;
-- aviso para ciclo existente sem declaração `ring`;
 - validação do orbital vazio no receptor coordenado;
 - valências ainda sem fonte e ligações múltiplas de S/P;
-- modelo químico próprio para ligação metálica;
-- solver de estruturas a partir apenas dos átomos.
+- validação semântica própria para ligação metálica, mantida como informação
+  de referência nesta iteração;
+- solver de estruturas a partir apenas dos átomos, planejado para a próxima
+  iteração.
+
+`OCT-001` foi removida: para elementos com dados, octeto e dueto já são
+refletidos pelas regras de valência. Ciclos independentes sem `ring` agora
+geram o aviso `RING-004`.
 
 Também ficam fora do escopo atual aromaticidade, visualização 3D,
 estereoquímica e isótopos.
