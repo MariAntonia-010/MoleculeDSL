@@ -1,4 +1,4 @@
-// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de C#1 é 3; o esperado para C é 4
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de C#1 é 3; o esperado para C é 4 (se for um íon, declare atom C(-1))
 molecule "Methyl" {
     atom C
     3x atom H

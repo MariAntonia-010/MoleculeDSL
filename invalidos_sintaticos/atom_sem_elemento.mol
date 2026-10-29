@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-001] na linha 3, coluna 8: esperado símbolo de elemento depois de 'atom'
+// esperado: Erro sintático [SIN-001] na linha 3, coluna 8: esperado símbolo de elemento depois de 'atom', encontrado 'atom'
 molecule "Water" {
     atom
     atom H

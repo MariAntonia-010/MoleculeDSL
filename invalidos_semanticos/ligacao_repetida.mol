@@ -1,4 +1,4 @@
-// esperado: Erro semântico [STRUCT-006] na linha 6, coluna 4: já existe uma ligação entre O#1 e H#1
+// esperado: Erro semântico [STRUCT-006] na linha 6, coluna 4: já existe uma ligação entre O#1 e H#1; use = ou # para ligação dupla ou tripla
 molecule "Water" {
     atom O
     atom H

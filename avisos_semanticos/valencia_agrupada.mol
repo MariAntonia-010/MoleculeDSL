@@ -1,4 +1,4 @@
-// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação dos átomos C#1, C#2, C#3, C#4 é 1
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação dos átomos C#1, C#2, C#3, C#4 é 1; o esperado para C é 4
 molecule "Valências agrupadas" {
     4x atom C
     4x atom H

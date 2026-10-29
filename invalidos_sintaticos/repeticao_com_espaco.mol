@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-002] na linha 5, coluna 13: repetição com espaço: escreva 'x4'
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 13: repetição com espaço: escreva 'x4', sem espaço entre o x e o número
 molecule "Methane" {
     atom C
     4x atom H

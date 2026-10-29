@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-002] na linha 3, coluna 4: comando inválido 'atoms'
+// esperado: Erro sintático [SIN-002] na linha 3, coluna 4: comando inválido 'atoms': esperado 'atom', 'bond', 'ring' ou '}'
 molecule "Comando desconhecido" {
     atoms
 }

@@ -1,4 +1,4 @@
-// esperado: Erro léxico [LEX-002] na linha 4, coluna 4: texto sem aspas de fechamento
+// esperado: Erro léxico [LEX-002] na linha 4, coluna 4: texto sem aspas de fechamento: o texto precisa terminar na mesma linha
 molecule "Water" {
     atom O
     "

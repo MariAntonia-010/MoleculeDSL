@@ -9,7 +9,7 @@ import tempfile
 # - exemplos/: devem passar sem erros nem avisos (código de saída 0)
 # - invalidos/, invalidos_sintaticos/, invalidos_semanticos/ e
 #   avisos_semanticos/: cada arquivo diz, em linhas
-#   "// esperado: <início da mensagem>", os erros e avisos que devem
+#   "// esperado: <mensagem completa>", os erros e avisos que devem
 #   aparecer, na ordem. A saída deve ter exatamente essas mensagens e o
 #   código de saída da pasta (0, 1 ou 2).
 
@@ -107,7 +107,7 @@ def testar_com_mensagens(caminho, codigo_esperado):
             problemas.append(f"mensagem a mais: {obtido}")
         elif obtido is None:
             problemas.append(f"faltou a mensagem: {esperado}")
-        elif not obtido.startswith(esperado):
+        elif obtido != esperado:
             problemas.append(f"esperado: {esperado}")
             problemas.append(f"obtido:   {obtido}")
 

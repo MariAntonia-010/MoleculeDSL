@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-001] na linha 3, coluna 12: esperado número inteiro na carga
+// esperado: Erro sintático [SIN-001] na linha 3, coluna 12: esperado número inteiro na carga, encontrado ')'
 molecule "Carga sem inteiro" {
     atom N(+)
 }

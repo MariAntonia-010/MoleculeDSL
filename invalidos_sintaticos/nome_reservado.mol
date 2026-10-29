@@ -1,5 +1,5 @@
-// esperado: Erro sintático [SIN-001] na linha 4, coluna 14: esperado nome de átomo depois de 'as', encontrado 'x4'
-// esperado: Erro sintático [SIN-001] na linha 5, coluna 14: esperado nome de átomo depois de 'as', encontrado 'ring'
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 14: esperado nome de átomo depois de 'as', encontrado 'x4' (palavras-chave e nomes como 'x4' são reservados)
+// esperado: Erro sintático [SIN-001] na linha 5, coluna 14: esperado nome de átomo depois de 'as', encontrado 'ring' (palavras-chave e nomes como 'x4' são reservados)
 molecule "Water" {
     atom O as x4
     atom O as ring

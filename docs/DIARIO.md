@@ -282,3 +282,15 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
 - O aminoborano continua válido: o B tinha seis elétrons ao redor antes da
   doação e espaço para receber o par do N.
 - Casos novos cobrem receptor sem espaço e receptor sem dados suficientes.
+
+---
+
+## 29/10/2026 — Mensagens esperadas completas
+
+- `testar.py` deixou de aceitar apenas o início das mensagens.
+- Todas as linhas `// esperado:` foram materializadas com a saída completa do
+  compilador.
+- A comparação agora detecta mudanças em IDs, linha, coluna e explicação,
+  mantendo também a ordem e o código de saída.
+- Arquivos fora de UTF-8 e com caracteres invisíveis foram preservados em
+  bytes durante a migração.

@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-001] na linha 5, coluna 14: um anel precisa de pelo menos três nomes de átomos
+// esperado: Erro sintático [SIN-001] na linha 5, coluna 14: um anel precisa de pelo menos três nomes de átomos, encontrado '}'
 molecule "Ring" {
     atom C as c1
     atom C as c2

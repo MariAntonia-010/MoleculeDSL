@@ -1,4 +1,4 @@
-// esperado: Erro semântico [STRUCT-006] na linha 5, coluna 4: a repetição x2 ligaria os mesmos dois átomos 2 vezes
+// esperado: Erro semântico [STRUCT-006] na linha 5, coluna 4: a repetição x2 ligaria os mesmos dois átomos 2 vezes; use = ou # para ligação dupla ou tripla
 molecule "Ethene" {
     atom C as c1
     atom C as c2

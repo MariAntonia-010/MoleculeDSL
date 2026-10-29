@@ -1,4 +1,4 @@
-// esperado: Aviso semântico [COORD-001] na linha 7, coluna 4: o doador doador (H#1) não possui um par de elétrons livre
+// esperado: Aviso semântico [COORD-001] na linha 7, coluna 4: o doador doador (H#1) não possui um par de elétrons livre para a ligação coordenada
 molecule "Coordenada sem par livre" {
     atom H(+1) as doador
     atom B(-1) as b

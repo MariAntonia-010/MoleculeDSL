@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-001] na linha 3, coluna 13: esperado ')' para fechar a carga
+// esperado: Erro sintático [SIN-001] na linha 3, coluna 13: esperado ')' para fechar a carga, encontrado '}'
 molecule "Carga sem fechamento" {
     atom N(+1
 }

@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-001] na linha 2, coluna 9: esperado nome da molécula entre aspas
+// esperado: Erro sintático [SIN-001] na linha 2, coluna 9: esperado nome da molécula entre aspas depois de 'molecule', encontrado '{'
 molecule {
     atom O
 }

@@ -114,7 +114,8 @@ Fica para a próxima iteração. Para uma entrada só com átomos, deverá monta
 ### M8: Erros, testes e documentação
 - Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.
 - Um exemplo válido e um inválido por regra (`invalidos_semanticos/`).
-- Script que roda todos os exemplos e confere sucesso ou o ID de erro esperado.
+- Script que roda todos os exemplos e compara exatamente mensagem, ordem e
+  código de saída.
 - Atualizar README, especificação e slides.
 
 ## Ordem sugerida

@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-002] na linha 3, coluna 7: o multiplicador (como '4x') só pode vir antes de 'atom'
+// esperado: Erro sintático [SIN-002] na linha 3, coluna 7: o multiplicador (como '4x') só pode vir antes de 'atom', encontrado 'bond'
 molecule "Methane" {
     4x bond C-H
 }

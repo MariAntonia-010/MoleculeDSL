@@ -74,4 +74,4 @@ Erro sintático [SIN-004] na linha 3, coluna 10: esperado '}' para fechar a mol�
 
 Os arquivos em `invalidos/` e `invalidos_sintaticos/` registram a saída
 esperada em linhas `// esperado:`. O script `python testar.py` confere a
-mensagem, a ordem e o código de saída.
+mensagem completa, a ordem e o código de saída.

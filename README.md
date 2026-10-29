@@ -181,6 +181,8 @@ Casos inválidos e avisos declaram as mensagens esperadas no próprio arquivo:
 // esperado: Erro sintático [SIN-001] na linha 3, coluna 8: ...
 ```
 
+A comparação é exata: ID, linha, coluna e explicação precisam coincidir.
+
 ## Estrutura
 
 ```text

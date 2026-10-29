@@ -1,4 +1,4 @@
-// esperado: Erro semântico [BOND-001] na linha 5, coluna 4: F só faz ligação simples
+// esperado: Erro semântico [BOND-001] na linha 5, coluna 4: F só faz ligação simples, mas F#1 está numa ligação tripla
 molecule "Flúor com ligação tripla" {
     atom F
     atom O
