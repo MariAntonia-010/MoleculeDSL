@@ -338,3 +338,16 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   grafo atual.
 - Ressonância não ganhou uma marca superficial: fica documentada até existir
   modelo de pares livres, elétrons pi e formas contribuintes.
+
+---
+
+## 29/10/2026 — Solver de estruturas únicas
+
+- Adicionada a opção `--resolver` e o módulo `src/solver.py`.
+- A busca usa valências confirmadas, ordens de 1 a 3 e conectividade.
+- O solver só retorna uma estrutura quando a solução é única.
+- Casos positivos: H₂O, CO₂, N₂ e NH₄⁺.
+- Fórmula sem solução, fórmula ambígua, entrada com ligações e estruturas
+  acima de oito átomos recebem `SOLVER-001` a `SOLVER-004`.
+- C₂H₄O comprova rejeição por múltiplas estruturas; C₆H₁₂ permanece para uma
+  etapa futura de enumeração e seleção assistida.

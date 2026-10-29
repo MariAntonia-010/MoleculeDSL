@@ -8,6 +8,7 @@ from construtor_ast import construir
 from ast_nos import formatar
 import modelo
 import semantico
+import solver
 
 
 # Códigos de saída
@@ -16,13 +17,14 @@ ERRO_LEXICO_OU_SINTATICO = 1
 ERRO_SEMANTICO = 2
 
 USO = (
-    "Uso: python src/main.py [--tokens] [--ast] [--modelo] <arquivo>\n"
+    "Uso: python src/main.py [--tokens] [--ast] [--modelo] [--resolver] <arquivo>\n"
     "  --tokens  mostra os tokens reconhecidos\n"
     "  --ast     mostra a AST construída\n"
     "  --modelo  mostra o modelo da molécula (átomos e ligações)"
+    "\n  --resolver infere ligações quando a entrada contém somente átomos"
 )
 
-OPCOES = {"--tokens", "--ast", "--modelo"}
+OPCOES = {"--tokens", "--ast", "--modelo", "--resolver"}
 
 
 def ler_argumentos(argumentos):
@@ -64,6 +66,15 @@ def compilar(caminho, opcoes):
         return ERRO_LEXICO_OU_SINTATICO
 
     molecula = construir(arvore)
+
+    if "--resolver" in opcoes:
+        molecula, mensagens_solver = solver.resolver(
+            molecula, semantico.carregar_valencias()
+        )
+        for mensagem in mensagens_solver:
+            print(mensagem)
+        if mensagens_solver:
+            return ERRO_SEMANTICO
 
     if "--ast" in opcoes:
         print(formatar(molecula))

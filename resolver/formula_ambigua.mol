@@ -1,0 +1,6 @@
+// esperado: Erro de resolução [SOLVER-004] na linha 2, coluna 0: a fórmula admite múltiplas estruturas; declare as ligações
+species molecule "Ambiguous formula" {
+    2x atom C
+    atom O
+    4x atom H
+}

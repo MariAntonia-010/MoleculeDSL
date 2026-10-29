@@ -197,6 +197,36 @@ def testar_modelo(caminho):
     return problemas
 
 
+def testar_solver(caminho):
+    codigo, saida = rodar_comando(["--resolver", "--modelo", caminho])
+    esperados = erros_esperados(caminho)
+    problemas = []
+    if esperados:
+        mensagens = [
+            linha
+            for linha in saida.splitlines()
+            if linha.startswith(("Erro ", "Aviso "))
+        ]
+        if codigo != 2:
+            problemas.append(f"código de saída {codigo}, esperado 2")
+        if mensagens != esperados:
+            problemas.append(f"mensagens obtidas: {mensagens}")
+            problemas.append(f"mensagens esperadas: {esperados}")
+        return problemas
+
+    esperado_path = os.path.splitext(caminho)[0] + ".saida.txt"
+    with open(esperado_path, encoding="utf-8") as arquivo:
+        esperado = arquivo.read()
+    if codigo != 0:
+        problemas.append(f"código de saída {codigo}, esperado 0")
+    if saida != esperado:
+        problemas.append(
+            f"saída diferente de "
+            f"{os.path.relpath(esperado_path, PASTA_RAIZ)}"
+        )
+    return problemas
+
+
 def testar_svgs_das_arvores():
     problemas = []
     with tempfile.TemporaryDirectory() as pasta:
@@ -312,6 +342,13 @@ def main():
             ),
         ),
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
+    ]
+    casos_especiais += [
+        (
+            f"solver/{os.path.basename(caminho)}",
+            lambda caminho=caminho: testar_solver(caminho),
+        )
+        for caminho in arquivos("resolver")
     ]
     for nome, testar in casos_especiais:
         problemas = testar()

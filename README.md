@@ -87,12 +87,26 @@ Opções disponíveis:
 | `--tokens` | tokens produzidos pelo lexer |
 | `--ast` | árvore sintática abstrata própria, com posições |
 | `--modelo` | grafo expandido de átomos e ligações |
+| `--resolver` | infere ligações quando há somente átomos e solução única |
 
 As opções podem ser combinadas:
 
 ```bash
 python3 src/main.py --tokens --ast --modelo exemplos/agua.mol
 ```
+
+### Solver de soluções únicas
+
+O solver usa somente valências confirmadas e não escolhe arbitrariamente
+entre isômeros:
+
+```bash
+python3 src/main.py --resolver --modelo resolver/agua.mol
+```
+
+Nesta etapa estão cobertos H₂O, CO₂, N₂ e NH₄⁺. Entradas sem solução,
+ambíguas, com ligações já declaradas ou com mais de oito átomos são
+rejeitadas e devem receber ligações explícitas.
 
 O modelo classifica ligações por diferença de eletronegatividade como
 covalente apolar, covalente polar ou iônica. Os limites configuráveis ficam
@@ -201,6 +215,7 @@ O script verifica:
 - avisos em `avisos_semanticos/`;
 - arquivo inexistente e código ANTLR ausente;
 - snapshots textuais da AST e do modelo;
+- soluções únicas e rejeições do solver;
 - geração de parse tree e AST em SVG para todos os exemplos.
 
 Casos inválidos e avisos declaram as mensagens esperadas no próprio arquivo:
@@ -224,6 +239,7 @@ invalidos/                  casos léxicos inválidos
 invalidos_sintaticos/       casos sintáticos inválidos
 invalidos_semanticos/       casos semânticos inválidos
 avisos_semanticos/          programas válidos que geram avisos
+resolver/                   entradas e snapshots do solver
 docs/                       especificação, planos e diagramas
 docs/apresentacao/          página de apresentação offline
 gerado/                     código produzido pelo ANTLR, ignorado pelo Git
@@ -249,12 +265,11 @@ estão implementados e testados.
 
 Continuam pendentes:
 
-- valências ainda sem fonte e ligações múltiplas de S/P;
+- valências ainda sem fonte para Be, Al, Si e metais de transição;
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
   `METAL-001` verifica a composição e `METAL-002` informa a limitação
   coletiva de todo uso de `~`;
-- solver de estruturas a partir apenas dos átomos, planejado para a próxima
-  iteração.
+- enumeração e escolha assistida entre múltiplas soluções do solver.
 
 `OCT-001` foi removida: para elementos com dados, octeto e dueto já são
 refletidos pelas regras de valência. Ciclos independentes sem `ring` agora

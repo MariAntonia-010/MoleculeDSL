@@ -1,0 +1,5 @@
+// esperado: Erro de resolução [SOLVER-001] na linha 2, coluna 0: o solver aceita no máximo 8 átomos; estruturas maiores ou ambíguas exigem ligações explícitas
+species molecule "Cyclohexane unresolved" {
+    6x atom C
+    12x atom H
+}

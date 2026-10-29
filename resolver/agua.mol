@@ -1,0 +1,4 @@
+species molecule "Water solved" {
+    atom O
+    2x atom H
+}

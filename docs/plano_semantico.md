@@ -42,7 +42,7 @@ molecule "Ciclohexano" {
   valências, cargas conhecidas e ordens de ligação; os limites informativos
   de eletronegatividade ficam em `classificacao_ligacoes.json`.
 
-Feito em parte: `regras/valencias.json` tem só o que o `levantamento_quimica.md` marca como FONTE ou DERIVADA. São as valências de H, B, C, N, O, F, P, S e Cl (B2 a B4 e B6), a valência expandida de Cl ligado só a F ou O (B5), as cargas da tabela C3, os elementos que só fazem ligação simples (E4) e a ordem de cada tipo de ligação (G4). Elemento ou carga fora desse arquivo não é conferido. Br, I, S e P em ligações múltiplas, metais de transição e ligação metálica continuam pendentes.
+Feito em parte: `regras/valencias.json` tem só o que o levantamento e a pesquisa aprofundada sustentam. São as valências de H, B, C, N, O, F, P, S e Cl, a valência expandida de Cl ligado só a F ou O, cargas formais conhecidas e a ordem de cada tipo de ligação molecular. Cl, Br e I em ordem múltipla geram aviso; P e S são aceitos conforme soma de ordens. Valências gerais de Be, Al, Si e metais de transição continuam sem regra determinística.
 
 ### M3: Modelo interno
 Grafo molecular: átomos (id, elemento, carga) e arestas (ordem ou tipo, e direção quando coordenada). Anéis ficam como ciclos marcados.
@@ -95,7 +95,7 @@ Detalhes da implementação:
   porque espécies hipervalentes e representações formais impedem uma
   proibição universal. P e S continuam sujeitos à soma de valência e a
   avisos contextuais.
-- A coordenada conta como ordem 1. Átomos com ligação metálica não são conferidos (H3).
+- A coordenada conta como ordem 1. Arestas metálicas não somam ordem; outras ligações do mesmo átomo continuam sendo conferidas.
 - Átomo neutro acima da valência: se a soma bate com uma carga da tabela C3, é CARGA-001 com a sugestão da carga (ex.: N com 4 ligações → `N(+1)`); senão, VAL-001.
 - Átomo neutro abaixo da valência: é só aviso (VAL-002), porque pode ser um radical (D5). Se a soma bate com uma carga conhecida, o aviso sugere a carga.
 - Átomo com carga: CARGA-001 se a soma não bate com a tabela C3. Carga fora da tabela não é conferida.
@@ -126,7 +126,17 @@ Implementado em `src/semantico.py`:
 `RING-004` usa o posto cíclico do grafo (`arestas - vértices + componentes`) para comparar a quantidade de ciclos independentes com os anéis declarados. O aviso não bloqueia a compilação.
 
 ### M7: Solver
-Fica para a próxima iteração. Para uma entrada só com átomos, deverá montar a estrutura: distribuir ligações, recalcular carga e valência, aceitar ou rejeitar. Casos de teste previstos: H₂O, CO₂, N₂, NH₄⁺ e ciclohexano.
+
+Implementado para soluções únicas com até oito átomos. O solver expande as
+declarações, busca ordens de 1 a 3 que satisfaçam as valências confirmadas e
+exige um grafo conectado. Casos cobertos: H₂O, CO₂, N₂ e NH₄⁺.
+
+- `SOLVER-001`: entrada já tem ligações/anéis, está vazia ou excede o limite;
+- `SOLVER-002`: falta valência confirmada;
+- `SOLVER-003`: nenhuma estrutura satisfaz as regras;
+- `SOLVER-004`: existem múltiplas estruturas.
+
+C₆H₁₂ e outras fórmulas ambíguas continuam exigindo ligações explícitas.
 
 ### M8: Erros, testes e documentação
 - Relatório no formato `Erro semântico [ID] na linha X, coluna Y: mensagem`, com código de saída diferente de zero para erros. Avisos não bloqueiam.
@@ -139,7 +149,7 @@ Fica para a próxima iteração. Para uma entrada só com átomos, deverá monta
 M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8, fechando M1 a M5 antes de tocar em M6 e M7.
 
 ## Riscos e pendências
-- A validação própria de ligação metálica e o solver da próxima iteração são as partes mais abertas.
+- Um modelo cristalino para sólidos e a enumeração assistida de soluções ambíguas permanecem abertos.
 - O enunciado e o prazo da disciplina ainda não foram conferidos contra este plano.
 - Mudanças de sintaxe alteram o contrato do projeto e precisam de decisão do grupo.
 

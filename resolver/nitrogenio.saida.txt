@@ -1,0 +1,7 @@
+Modelo 'Nitrogen solved' tipo=molecule carga_total=+0 desemparelhados=não declarado
+  Átomos (2)
+    r1 (N#1) carga=+0 [2:4]
+    r2 (N#2) carga=+0 [2:4]
+  Ligações (1)
+    r1 (N#1) TRIPLA r2 (N#2) classificação=covalente apolar Δχ=0.00 [1:0]
+Espécie 'Nitrogen solved': análise concluída sem erros

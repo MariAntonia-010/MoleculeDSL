@@ -1,0 +1,13 @@
+Modelo 'Ammonium solved' tipo=molecular_ion carga_total=+1 desemparelhados=não declarado
+  Átomos (5)
+    r1 (N#1) carga=+1 [2:4]
+    r2 (H#1) carga=+0 [3:4]
+    r3 (H#2) carga=+0 [3:4]
+    r4 (H#3) carga=+0 [3:4]
+    r5 (H#4) carga=+0 [3:4]
+  Ligações (4)
+    r1 (N#1) SIMPLES r2 (H#1) classificação=covalente polar Δχ=0.84 [1:0]
+    r1 (N#1) SIMPLES r3 (H#2) classificação=covalente polar Δχ=0.84 [1:0]
+    r1 (N#1) SIMPLES r4 (H#3) classificação=covalente polar Δχ=0.84 [1:0]
+    r1 (N#1) SIMPLES r5 (H#4) classificação=covalente polar Δχ=0.84 [1:0]
+Espécie 'Ammonium solved': análise concluída sem erros

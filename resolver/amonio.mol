@@ -1,0 +1,4 @@
+species molecular_ion "Ammonium solved" charge +1 {
+    atom N(+1)
+    4x atom H
+}

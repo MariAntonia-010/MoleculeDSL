@@ -282,6 +282,21 @@ Uma declaração `ring` identifica explicitamente um ciclo. Se o posto cíclico
 do grafo indicar mais ciclos independentes do que anéis declarados, o
 compilador produz o aviso `RING-004`, sem bloquear a análise.
 
+### 8.2 Resolução automática
+
+Com `--resolver`, uma entrada que contém apenas declarações `atom` pode ter
+suas ligações inferidas. O solver:
+
+- usa somente valências confirmadas;
+- considera ordens simples, dupla e tripla;
+- exige conectividade;
+- aceita no máximo oito átomos;
+- só retorna quando existe uma única solução.
+
+H₂O, CO₂, N₂ e NH₄⁺ são os casos de referência. Fórmulas com zero ou
+múltiplas soluções, como C₂H₄O, exigem ligações explícitas. C₆H₁₂ fica fora
+desta etapa por tamanho e ambiguidade estrutural.
+
 ---
 
 ## 9. O que a linguagem deliberadamente não faz?

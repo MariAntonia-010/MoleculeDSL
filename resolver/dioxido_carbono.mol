@@ -1,0 +1,4 @@
+species molecule "Carbon dioxide solved" {
+    atom C
+    2x atom O
+}
