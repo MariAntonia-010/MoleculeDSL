@@ -58,7 +58,7 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | STRUCT-004 | Todos os átomos do elemento citado já foram usados em outras ligações | erro |
 | STRUCT-005 | Átomo ligado a ele mesmo | erro |
 | STRUCT-006 | Mais de uma ligação entre os mesmos dois átomos (inclusive por repetição, como `bond c1-c2 x2`) | erro |
-| STRUCT-007 | Quantidade ou repetição igual a zero (`0x`, `x0`) | erro |
+| STRUCT-007 | Quantidade ou repetição fora do intervalo de 1 a 1000 (`0x`, `x0`, `5000x`) | erro |
 | BOND-001 | Elemento não aceita essa ordem de ligação (`H=O`) | erro |
 | VAL-001 | Soma das ordens de ligação acima da valência permitida | erro |
 | VAL-002 | Valência incompleta | aviso |
