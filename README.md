@@ -246,16 +246,22 @@ python3 src/construtor_ast.py exemplos/agua.mol
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
+- **Guia:** 11 lições com código, saída real do compilador e variações de
+  escrita; cada exemplo é compilado pelo compilador real ao gerar a página;
 - **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
 - **Uso** e **Doc:** instalação, comandos, gramática real, erros e
   relatórios;
-- **Playground:** o código é analisado no navegador enquanto se digita, a
-  molécula é desenhada em 3D e cada erro vem com o que significa e como
-  corrigir;
-- **Laboratório:** misturas de moléculas em movimento e reações químicas
-  animadas, com balanceamento e ligações rompidas e formadas;
-- **Tabela periódica:** modelo atômico de Bohr, dados da fonte e o que o
-  compilador faz com cada elemento.
+- **Playground:** o código é analisado no navegador enquanto se digita e a
+  molécula é desenhada em 3D. Um erro semântico aparece numa faixa vermelha
+  com código, motivo e correção, a linha fica marcada e o átomo culpado é
+  destacado no desenho;
+- **Laboratório:** reações e misturas montadas pelo usuário, com espécies
+  dos exemplos ou código próprio, balanceamento automático e animação das
+  ligações que se rompem e se formam. Espécie com erro semântico não entra
+  na simulação;
+- **Tabela periódica:** modelo atômico de Bohr, dados da fonte, o que o
+  compilador faz com cada elemento e uma bancada que monta o código de uma
+  molécula.
 
 Todo exemplo tem um botão **Demonstrar tradução**, que mostra as cinco
 etapas (tokens, árvore sintática, AST, modelo e semântica) pela lente da

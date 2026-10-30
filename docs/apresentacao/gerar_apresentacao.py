@@ -17,6 +17,9 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from conteudo_guia import LICOES  # noqa: E402
+
 PASTA = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(os.path.dirname(PASTA))
 MAIN = os.path.join(RAIZ, "src", "main.py")
@@ -83,7 +86,7 @@ def main():
         with open(os.path.join(PASTA, nome), encoding="utf-8") as arquivo:
             return arquivo.read()
 
-    modulos = "".join(ler(nome) for nome in ("traducao.js", "laboratorio.js", "tabela.js"))
+    modulos = "".join(ler(nome) for nome in ("traducao.js", "guia.js", "laboratorio.js", "tabela.js"))
     pagina = pagina.replace("{{ESTILO}}", ler("estilo.css"))
     pagina = pagina.replace("{{APP_JS}}", ler("app.js").replace("  /* @modulos */\n", modulos))
 
@@ -147,7 +150,35 @@ def main():
         }
     with open(os.path.join(RAIZ, "regras", "valencias.json"), encoding="utf-8") as entrada:
         regras = json.load(entrada)
+    # Guia: cada exemplo passa pelo compilador real; código de saída
+    # diferente do esperado interrompe a geração
+    guia = []
+    with tempfile.TemporaryDirectory() as pasta_guia:
+        for licao in LICOES:
+            exemplos_licao = []
+            for indice, exemplo in enumerate(licao["exemplos"], start=1):
+                caminho = os.path.join(pasta_guia, f"{licao['id']}_{indice}.mol")
+                with open(caminho, "w", encoding="utf-8") as saida_mol:
+                    saida_mol.write(exemplo["codigo"])
+                processo = subprocess.run(
+                    [sys.executable, MAIN, *exemplo["opcoes"], caminho],
+                    capture_output=True, text=True, encoding="utf-8", cwd=RAIZ,
+                    env=dict(os.environ, PYTHONIOENCODING="utf-8"),
+                )
+                if processo.returncode != exemplo["saida"]:
+                    sys.exit(
+                        f"guia: '{exemplo['titulo']}' saiu com {processo.returncode}, "
+                        f"esperado {exemplo['saida']}\n{processo.stdout}"
+                    )
+                exemplos_licao.append({
+                    **exemplo,
+                    "saida_real": processo.stdout.strip(),
+                    "comando": " ".join(["python3 src/main.py", *exemplo["opcoes"], f"{licao['id']}.mol"]),
+                })
+            guia.append({**licao, "exemplos": exemplos_licao})
+
     dados = {
+        "guia": guia,
         "exemplos": lista_exemplos,
         "elementos": elementos,
         "valencias": {

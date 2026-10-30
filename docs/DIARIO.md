@@ -507,3 +507,19 @@ Próxima Etapa" (28/10/2026).
   química); botão "Demonstrar tradução" em todos os módulos. O parser do
   navegador passou a montar a árvore sintática regra por regra.
 - Benzeno da capa girando mais devagar.
+
+---
+
+## 30/10/2026 — Guia de uso, erro semântico em destaque e simulação montável
+
+- Guia com 11 lições e 21 exemplos (`docs/apresentacao/conteudo_guia.py`).
+  O gerador compila cada exemplo com o compilador real e falha se o código
+  de saída não for o esperado.
+- Playground: erro semântico numa faixa vermelha com código, motivo,
+  correção e código de saída; linha marcada no editor; átomo culpado
+  pulsando em vermelho no 3D.
+- Laboratório: montador de reações (exemplos ou código próprio, coeficientes,
+  balanceamento automático) e misturas com componentes em código próprio.
+  Espécie inválida bloqueia a simulação com o mesmo destaque de erro.
+- Tabela periódica: bancada que monta o código de uma molécula a partir dos
+  elementos escolhidos.

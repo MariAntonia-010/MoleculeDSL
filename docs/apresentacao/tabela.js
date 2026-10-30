@@ -84,6 +84,7 @@
       <div class="acoes-ficha">
         <button type="button" class="botao pequeno" id="demo-elemento">Demonstrar tradução</button>
         <button type="button" class="botao pequeno" id="usar-elemento">Abrir no playground</button>
+        <button type="button" class="botao pequeno primario" id="bancada-mais">+ adicionar à bancada</button>
       </div>`;
     document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo de ${e.nome}`));
     document.getElementById("usar-elemento").addEventListener("click", () => {
@@ -92,6 +93,7 @@
       location.hash = "#/playground";
       executar();
     });
+    document.getElementById("bancada-mais").addEventListener("click", () => { bancada.push(simbolo); desenharBancada(); });
     bohr.camadas = cam;
     bohr.simbolo = simbolo;
   }
@@ -132,12 +134,50 @@
     requestAnimationFrame(desenharBohr);
   }
 
+  /* Bancada: monta o código de uma molécula a partir dos elementos clicados */
+  const bancada = [];
+  function codigoDaBancada() {
+    const contagem = {};
+    bancada.forEach((s) => (contagem[s] = (contagem[s] || 0) + 1));
+    const linhas = Object.entries(contagem).map(([s, n]) => (n > 1 ? `    ${n}x atom ${s} as ${s.toLowerCase()}` : `    atom ${s} as ${s.toLowerCase()}1`));
+    return `species molecule "Minha molécula" {\n${linhas.join("\n")}\n\n    // ligue os átomos com bond, por exemplo: bond ${bancada[0] ? bancada[0].toLowerCase() + "1" : "a1"}-...\n}\n`;
+  }
+  function desenharBancada() {
+    const caixa = document.getElementById("bancada");
+    if (!bancada.length) {
+      caixa.innerHTML = `<p class="nota" style="margin:0">Clique num elemento e em “+ adicionar à bancada” para montar uma molécula. O código MoleculeDSL aparece aqui.</p>`;
+      return;
+    }
+    const valencias = bancada.map((s) => (DADOS.valencias.valencias[s] || [null])[0]);
+    const conhecidas = valencias.every((v) => v != null);
+    const soma = valencias.reduce((t, v) => t + (v || 0), 0);
+    const nota = !conhecidas
+      ? "Há elemento sem regra de valência: o compilador não confere a valência dele."
+      : soma % 2
+        ? `Soma das valências = ${soma}, ímpar: não fecha sem carga ou radical.`
+        : `Soma das valências = ${soma}: cabem ${soma / 2} ordens de ligação no total. Com --resolver o compilador tenta ligar os átomos sozinho.`;
+    caixa.innerHTML = `<div class="fichas">${bancada.map((s, i) => `<button type="button" class="ficha" data-tirar-bancada="${i}" title="Remover"><code>${s}</code><small>remover</small></button>`).join("")}</div>
+      <p class="nota">${escapar(nota)}</p>
+      <pre>${escapar(codigoDaBancada().trim())}</pre>
+      <div class="acoes-ficha"><button type="button" class="botao pequeno primario" id="bancada-abrir">Abrir no playground</button><button type="button" class="botao pequeno" id="bancada-limpar">Limpar</button></div>`;
+    caixa.querySelectorAll("[data-tirar-bancada]").forEach((b) => b.addEventListener("click", () => { bancada.splice(Number(b.dataset.tirarBancada), 1); desenharBancada(); }));
+    document.getElementById("bancada-limpar").addEventListener("click", () => { bancada.length = 0; desenharBancada(); });
+    document.getElementById("bancada-abrir").addEventListener("click", () => {
+      exemploAtual = null;
+      seletor.value = "";
+      codigo.value = codigoDaBancada();
+      location.hash = "#/playground";
+      executar();
+    });
+  }
+
   let tabelaPronta = false;
   function iniciarTabela() {
     if (tabelaPronta) return;
     tabelaPronta = true;
     montarTabela();
     mostrarElemento(simboloAtual);
+    desenharBancada();
     requestAnimationFrame(desenharBohr);
   }
 

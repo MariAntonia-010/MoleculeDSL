@@ -212,8 +212,9 @@
 
   function analisarSemantica(especie) {
     const erros = [], avisos = [];
-    const erro = (no, codigo, msg) => erros.push({ tipo: "erro", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg });
-    const aviso = (no, codigo, msg) => avisos.push({ tipo: "aviso", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg });
+    // atomos: ids dos átomos envolvidos, para destacá-los no desenho 3D
+    const erro = (no, codigo, msg, atomos = []) => erros.push({ tipo: "erro", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg, atomos });
+    const aviso = (no, codigo, msg, atomos = []) => avisos.push({ tipo: "aviso", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg, atomos });
     const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
     for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
       if (!DADOS.elementos[cmd.el]) { erro(cmd, "ELEM-001", `elemento desconhecido '${cmd.el}'`); continue; }
@@ -248,9 +249,9 @@
       for (let k = 0; k < cmd.rep; k++) {
         const a = resolver(cmd.origem), b = resolver(cmd.destino);
         if (!a || !b) break;
-        if (a.id === b.id) { erro(cmd, "STRUCT-005", `o átomo ${rotulo(a)} não pode se ligar a ele mesmo`); break; }
+        if (a.id === b.id) { erro(cmd, "STRUCT-005", `o átomo ${rotulo(a)} não pode se ligar a ele mesmo`, [a.id]); break; }
         const chave = Math.min(a.id, b.id) + "-" + Math.max(a.id, b.id);
-        if (pares.has(chave)) { erro(cmd, "STRUCT-006", `já existe uma ligação entre ${rotulo(a)} e ${rotulo(b)}; use = ou # para ligação múltipla`); break; }
+        if (pares.has(chave)) { erro(cmd, "STRUCT-006", `já existe uma ligação entre ${rotulo(a)} e ${rotulo(b)}; use = ou # para ligação múltipla`, [a.id, b.id]); break; }
         pares.add(chave);
         ligacoes.push({ a: a.id, b: b.id, op: cmd.op, ordem: OPERADORES[cmd.op] });
       }
@@ -279,8 +280,8 @@
         if (!permitidas) continue;
         const maximo = Math.max(...permitidas);
         const no = linhaAtomo.get(a.id) || { l: 1, c: 0 };
-        if (soma[a.id] > maximo) erro(no, "VAL-001", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`);
-        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`);
+        if (soma[a.id] > maximo) erro(no, "VAL-001", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`, [a.id]);
+        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`, [a.id]);
       }
       if (atomos.length > 1 && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
         erro({ l: 1, c: 0 }, "STRUCT-008", "a entidade tem partes desconectadas");
@@ -445,6 +446,7 @@
       this.arrastando = false;
       // velocidade da rotação automática; aoQuadro(t) anima posições (misturas e reações)
       this.velocidade = 0.006;
+      this.destaques = new Map(); // id do átomo -> "erro" ou "aviso"
       this.aoQuadro = null;
       const inicio = (x, y) => { this.arrastando = true; this.ultimo = [x, y]; canvas.style.cursor = "grabbing"; };
       const mover = (x, y) => {
@@ -537,6 +539,16 @@
           g.addColorStop(1, escuro ? "#141417" : "#8d89a0");
           ctx.fillStyle = g;
           ctx.beginPath(); ctx.arc(P.x, P.y, r, 0, Math.PI * 2); ctx.fill();
+          const destaque = this.destaques.get(item.i);
+          if (destaque) {
+            const cor = destaque === "erro" ? "#e5485f" : "#d9a531";
+            const pulso = 1.35 + Math.sin(performance.now() / 260) * 0.12;
+            ctx.strokeStyle = cor; ctx.lineWidth = 2.5;
+            ctx.beginPath(); ctx.arc(P.x, P.y, r * pulso, 0, Math.PI * 2); ctx.stroke();
+            ctx.globalAlpha = 0.18; ctx.fillStyle = cor;
+            ctx.beginPath(); ctx.arc(P.x, P.y, r * pulso * 1.3, 0, Math.PI * 2); ctx.fill();
+            ctx.globalAlpha = 1;
+          }
           if (this.rotulos && r > 7) {
             ctx.fillStyle = a.el === "H" ? "#2a2830" : "#ffffff";
             ctx.font = `600 ${Math.max(9, r * 0.75)}px ui-monospace, Menlo, monospace`;
@@ -557,13 +569,18 @@
   let exemploAtual = null;
   let tradPlay = null; // painel de tradução ao vivo, criado depois dos módulos
 
+  seletor.innerHTML = '<option value="" disabled>Código próprio (escolha um exemplo para carregar)</option>';
   DADOS.exemplos.forEach((ex, i) => {
     const op = document.createElement("option");
     op.value = i; op.textContent = `${ex.titulo} — ${ex.arquivo}`;
     seletor.appendChild(op);
   });
 
-  codigo.addEventListener("scroll", () => { numeros.style.transform = `translateY(${-codigo.scrollTop}px)`; });
+  codigo.addEventListener("scroll", () => {
+    numeros.style.transform = `translateY(${-codigo.scrollTop}px)`;
+    const realce = document.getElementById("realce");
+    realce.style.transform = `translate(${-codigo.scrollLeft}px, ${-codigo.scrollTop}px)`;
+  });
 
   function executar() {
     const r = compilar(codigo.value);
@@ -594,7 +611,50 @@
     else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
   }
 
+  function renderizarAlerta(r) {
+    // Faixa no topo do playground: erro em vermelho, aviso em âmbar
+    const alerta = document.getElementById("alerta");
+    const principal = r.erros[0] || r.avisos[0];
+    document.querySelector(".cena").classList.toggle("com-erro", r.erros.length > 0);
+    document.querySelector(".cena").classList.toggle("com-aviso", !r.erros.length && r.avisos.length > 0);
+    if (!principal) {
+      alerta.className = "alerta ok";
+      alerta.innerHTML = `<b>Compila sem erros</b><span>A análise semântica aceitou a espécie: o compilador sairia com código 0.</span>`;
+      return;
+    }
+    const [titulo, significa, corrigir] = EXPLICA[principal.codigo] || ["Diagnóstico", "", ""];
+    const erro = principal.tipo === "erro";
+    const saida = !erro ? "o compilador sairia com código 0, mas mostraria este aviso" : principal.fase === "semântico" ? "a compilação para na análise semântica (código de saída 2)" : "a compilação para antes da semântica (código de saída 1)";
+    const extras = r.erros.length + r.avisos.length - 1;
+    alerta.className = "alerta " + (erro ? "erro" : "aviso");
+    alerta.innerHTML = `<div class="alerta-titulo"><span class="selo"></span><b></b></div><p class="alerta-msg"></p>
+      <p class="alerta-ajuda"><span></span> <strong>Como corrigir:</strong> <span></span></p><p class="alerta-saida"></p>`;
+    alerta.querySelector(".selo").textContent = `${erro ? "Erro" : "Aviso"} ${principal.fase} · ${principal.codigo} · linha ${principal.linha}`;
+    alerta.querySelector(".alerta-titulo b").textContent = titulo;
+    alerta.querySelector(".alerta-msg").textContent = principal.mensagem;
+    const [sig, cor] = alerta.querySelectorAll(".alerta-ajuda span");
+    sig.textContent = significa; cor.textContent = corrigir;
+    alerta.querySelector(".alerta-saida").textContent = `Resultado: ${saida}.${extras > 0 ? ` Há mais ${extras} diagnóstico(s) na aba Diagnóstico.` : ""}`;
+    alerta.onclick = () => irParaLinha(principal.linha);
+  }
+
+  function realcarLinhas(r) {
+    const tipoPorLinha = new Map();
+    [...r.avisos, ...r.erros].forEach((d) => tipoPorLinha.set(d.linha, d.tipo));
+    document.getElementById("realce").innerHTML = codigo.value.split("\n").map((linha, i) => {
+      const tipo = tipoPorLinha.get(i + 1);
+      const texto = escaparHTML(linha) || " ";
+      return tipo ? `<mark class="${tipo}">${texto}</mark>` : texto;
+    }).join("\n") + "\n";
+  }
+  const escaparHTML = (t) => t.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+
   function renderizarDiagnosticos(r) {
+    renderizarAlerta(r);
+    realcarLinhas(r);
+    cena.destaques = new Map();
+    r.avisos.forEach((d) => (d.atomos || []).forEach((id) => cena.destaques.set(id, "aviso")));
+    r.erros.forEach((d) => (d.atomos || []).forEach((id) => cena.destaques.set(id, "erro")));
     const painel = document.getElementById("p-diag");
     painel.innerHTML = "";
     const lista = [...r.erros, ...r.avisos];
@@ -635,12 +695,17 @@
   document.querySelectorAll("[data-erro]").forEach((botao) => botao.addEventListener("click", () => {
     exemploAtual = null;
     codigo.value = EXEMPLOS_DE_ERRO[botao.dataset.erro];
+    seletor.value = "";
     executar();
+    document.getElementById("alerta").scrollIntoView({ behavior: "smooth", block: "center" });
     document.querySelector('[data-painel="p-diag"]').click();
   }));
 
   let espera;
-  codigo.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(executar, 250); });
+  codigo.addEventListener("input", () => {
+    if (exemploAtual && codigo.value !== exemploAtual.codigo) seletor.value = "";
+    clearTimeout(espera); espera = setTimeout(executar, 250);
+  });
   codigo.addEventListener("keydown", (e) => {
     if (e.key === "Tab") {
       e.preventDefault();
@@ -652,6 +717,7 @@
   seletor.addEventListener("change", () => carregarExemplo(Number(seletor.value)));
   document.getElementById("limpar").addEventListener("click", () => {
     exemploAtual = null;
+    seletor.value = "";
     codigo.value = 'species molecule "Nova" {\n    \n}\n';
     executar(); codigo.focus();
   });
@@ -782,13 +848,14 @@
   let primeiraVez = true;
   function rotear() {
     const partes = location.hash.replace(/^#\/?/, "").split("/");
-    const rota = ["conteudo", "uso", "doc", "playground", "laboratorio", "tabela"].includes(partes[0]) ? partes[0] : "inicio";
+    const rota = ["guia", "conteudo", "uso", "doc", "playground", "laboratorio", "tabela"].includes(partes[0]) ? partes[0] : "inicio";
     document.querySelectorAll(".pagina").forEach((p) => p.classList.toggle("ativa", p.id === "pg-" + rota));
     document.querySelectorAll(".rotas a").forEach((a) => a.classList.toggle("ativo", a.dataset.rota === rota));
     document.body.classList.toggle("no-inicio", rota === "inicio");
     document.querySelectorAll(".pontos a").forEach((a, i) => a.classList.toggle("ativo", i === 0));
     if (rota === "conteudo") mostrarSlide(Number(partes[1]));
     if (rota === "doc") mostrarTopico(partes[1]);
+    if (rota === "guia") mostrarLicao(partes[1]);
     if (rota === "playground") {
       if (!codigo.value) carregarExemplo(0);
       requestAnimationFrame(() => cena.desenhar());

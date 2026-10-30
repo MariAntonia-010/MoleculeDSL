@@ -392,3 +392,59 @@
       .demo-corpo, .duas-lentes { grid-template-columns: minmax(0, 1fr); }
       .tabela-periodica { grid-template-columns: repeat(18, 30px); }
     }
+
+    /* ---------- erro em destaque ---------- */
+    .alerta { display: grid; gap: 0.35rem; margin-bottom: 1.1rem; padding: 1.1rem 1.3rem; border-radius: 14px; border: 1px solid var(--borda); border-left-width: 6px; cursor: pointer; }
+    .alerta.ok { border-left-color: var(--ok); cursor: default; display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: baseline; }
+    .alerta.ok b { color: var(--ok); }
+    .alerta.ok span { color: var(--suave); font-size: 0.9rem; }
+    .alerta.erro { border-color: color-mix(in srgb, var(--erro) 55%, transparent); border-left-color: var(--erro); background: color-mix(in srgb, var(--erro) 11%, var(--superficie)); animation: estourar 0.45s ease; }
+    .alerta.aviso { border-color: color-mix(in srgb, var(--aviso) 50%, transparent); border-left-color: var(--aviso); background: color-mix(in srgb, var(--aviso) 10%, var(--superficie)); }
+    .alerta-titulo { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; }
+    .alerta-titulo b { font-size: clamp(1.2rem, 2.4vw, 1.6rem); letter-spacing: -0.02em; }
+    .alerta.erro .alerta-titulo b { color: var(--erro); }
+    .alerta.aviso .alerta-titulo b { color: var(--aviso); }
+    .alerta .selo { font: 700 0.72rem var(--mono); padding: 0.25rem 0.55rem; border-radius: 6px; color: #fff; background: var(--erro); }
+    .alerta.aviso .selo { background: var(--aviso); }
+    .alerta-msg { margin: 0; font: 600 0.92rem/1.5 var(--mono); color: var(--texto); }
+    .alerta-ajuda { margin: 0; color: var(--suave); font-size: 0.9rem; }
+    .alerta-ajuda strong { color: var(--texto); }
+    .alerta-saida { margin: 0; font-size: 0.8rem; color: var(--fraco); }
+    @keyframes estourar { 0% { transform: scale(0.98); opacity: 0.4; } 40% { transform: scale(1.01); } 100% { transform: none; opacity: 1; } }
+    .cena.com-erro { border: 2px solid var(--erro); box-shadow: 0 0 0 4px color-mix(in srgb, var(--erro) 15%, transparent); }
+    .cena.com-aviso { border: 2px solid var(--aviso); }
+    .area-codigo { position: relative; overflow: hidden; }
+    .area-codigo textarea { position: relative; z-index: 1; background: transparent; }
+    .realce { position: absolute; top: 0; left: 0; right: 0; margin: 0; padding: 0.9rem; border: 0; border-radius: 0; background: none; color: transparent; font: 0.8rem/1.6 var(--mono); white-space: pre; pointer-events: none; overflow: visible; max-height: none; tab-size: 4; }
+    .realce mark { color: transparent; border-radius: 3px; background: color-mix(in srgb, var(--erro) 22%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--erro) 22%, transparent); }
+    .realce mark.aviso { background: color-mix(in srgb, var(--aviso) 22%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--aviso) 22%, transparent); }
+
+    /* montador de reações e mistura */
+    .montador-topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+    .montador-lados { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .montador-lados h4 { margin: 0 0 0.5rem; font: 600 0.74rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--acento); }
+    .seta-reacao { align-self: center; font: 700 1.8rem var(--mono); color: var(--acento); }
+    .item-montador { display: grid; grid-template-columns: 3.4rem minmax(0, 1fr) auto; gap: 0.45rem; margin-bottom: 0.5rem; align-items: center; }
+    .item-montador input { width: 100%; padding: 0.5rem; border-radius: 10px; border: 1px solid var(--borda-forte); background: var(--superficie); color: var(--texto); font: 600 0.9rem var(--mono); text-align: center; }
+    .item-montador textarea, .codigo-curto { grid-column: 1 / -1; width: 100%; min-height: 150px; border-radius: 10px; border: 1px solid var(--borda); background: var(--bg); color: var(--texto); font: 0.76rem/1.55 var(--mono); padding: 0.7rem; resize: vertical; white-space: pre; }
+    .adicionar-mistura { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+    .codigo-curto { margin-top: 0.6rem; }
+    .item-mistura.invalido { border-color: var(--erro); }
+    .item-mistura.invalido small { color: var(--erro); }
+    @media (max-width: 760px) { .montador-lados { grid-template-columns: minmax(0, 1fr); } .seta-reacao { transform: rotate(90deg); justify-self: center; } }
+
+    /* guia */
+    .licao h3 { font-size: 1.5rem; margin: 0.5rem 0 0.6rem; }
+    .licao p { margin: 0 0 0.6rem; }
+    .licao .rotulo::before { display: none; }
+    .exemplo-guia { margin-top: 1rem; }
+    .exemplo-cabeca { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between; align-items: center; }
+    .exemplo-cabeca h4 { margin: 0; font-size: 1.05rem; }
+    .selo-saida { font: 700 0.72rem var(--mono); padding: 0.25rem 0.6rem; border-radius: 6px; }
+    .selo-saida.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+    .selo-saida.erro { color: #fff; background: var(--erro); }
+    .exemplo-guia > p { margin: 0.5rem 0 0; }
+    .exemplo-corpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; margin-top: 0.8rem; }
+    .exemplo-corpo .nota { margin: 0 0 0.3rem; }
+    .exemplo-corpo pre { margin: 0; max-height: 360px; }
+    @media (max-width: 1000px) { .exemplo-corpo { grid-template-columns: minmax(0, 1fr); } }

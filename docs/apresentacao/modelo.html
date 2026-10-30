@@ -15,6 +15,7 @@
     <a class="marca" href="#/">Molecule<b>DSL</b></a>
     <nav class="rotas" aria-label="Módulos">
       <a href="#/" data-rota="inicio">Início</a>
+      <a href="#/guia/primeiro" data-rota="guia">Guia</a>
       <a href="#/conteudo/1" data-rota="conteudo">Conteúdo</a>
       <a href="#/uso" data-rota="uso">Uso</a>
       <a href="#/doc/comandos" data-rota="doc">Doc</a>
@@ -46,6 +47,7 @@
           <p class="lema">a química das moléculas, <em>escrita como código</em>.<br>declare átomos e ligações — o compilador valida, resolve e explica.</p>
           <div class="acoes">
             <a class="botao primario" href="#/playground">Abrir o playground</a>
+            <a class="botao" href="#/guia/primeiro">Guia de uso</a>
             <a class="botao" href="#/conteudo/1">Ver a apresentação</a>
           </div>
           <div class="terminal"><span class="prompt">user@moleculedsl:~$</span><span>python3 src/main.py --modelo exemplos/benzeno.mol</span></div>
@@ -66,6 +68,7 @@
           <p class="lead">Entenda o compilador, aprenda a usar, consulte a referência, escreva moléculas, simule misturas e reações e explore os elementos.</p>
         </div>
         <div class="grade">
+          <a class="placa modulo c12" href="#/guia/primeiro"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Onze lições com código, saída real do compilador e variações: átomos, ligações, cargas, coordenação, anéis, radicais, stereo, erros semânticos, sólidos e o solver.</p></a>
           <a class="placa modulo c3" href="#/conteudo/1"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg></div><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
           <a class="placa modulo c3" href="#/uso"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
           <a class="placa modulo c3" href="#/doc/comandos"><div class="icone"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
@@ -499,6 +502,7 @@ charge unpaired atom bond as ring stereo</pre>
         </div>
       </div>
 
+      <div class="alerta" id="alerta" role="status" aria-live="assertive"></div>
       <div class="play">
         <div class="placa">
           <div class="barra-ferramentas">
@@ -508,7 +512,7 @@ charge unpaired atom bond as ring stereo</pre>
           </div>
           <div class="editor">
             <div class="numeros" id="numeros" aria-hidden="true">1</div>
-            <textarea id="codigo" spellcheck="false" aria-label="Código MoleculeDSL" autocapitalize="off" autocomplete="off"></textarea>
+            <div class="area-codigo"><pre class="realce" id="realce" aria-hidden="true"></pre><textarea id="codigo" spellcheck="false" aria-label="Código MoleculeDSL" autocapitalize="off" autocomplete="off"></textarea></div>
           </div>
           <p class="nota">Tab insere quatro espaços. Clique num erro para ir até a linha dele.</p>
         </div>
@@ -535,6 +539,26 @@ charge unpaired atom bond as ring stereo</pre>
         </div>
       </div>
     </section>
+    <!-- ================= GUIA ================= -->
+    <section class="pagina" id="pg-guia" aria-label="Guia de uso">
+      <div class="cabeca">
+        <span class="rotulo">guia de uso</span>
+        <h2>Aprenda a linguagem, recurso por recurso</h2>
+        <p class="lead">Cada lição mostra o código, a saída real do compilador e as variações de escrita. Abra qualquer exemplo no playground ou veja a tradução etapa por etapa.</p>
+      </div>
+      <div class="doc">
+        <nav class="sumario placa" id="sumario-guia" aria-label="Lições"></nav>
+        <div>
+          <div id="licao"></div>
+          <nav class="paginador" aria-label="Paginação do guia">
+            <button class="botao" type="button" data-guia-passo="-1">← Lição anterior</button>
+            <span class="contador"></span>
+            <button class="botao" type="button" data-guia-passo="1">Próxima lição →</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= LABORATÓRIO ================= -->
     <section class="pagina" id="pg-laboratorio" aria-label="Laboratório">
       <div class="cabeca">
@@ -546,17 +570,33 @@ charge unpaired atom bond as ring stereo</pre>
         <button class="aba" role="tab" aria-selected="true" data-painel="lab-reacao">Reação química</button>
         <button class="aba" role="tab" aria-selected="false" data-painel="lab-mistura">Mistura</button>
       </div>
-      <div id="lab-reacao" role="tabpanel" class="play" style="margin-top:1.4rem">
-        <div class="placa">
-          <div class="barra-ferramentas">
-            <select id="reacao" aria-label="Escolher reação"></select>
-            <button class="botao pequeno" type="button" id="tocar-reacao">❚❚ Pausar</button>
-            <button class="botao pequeno" type="button" id="reiniciar-reacao">Reiniciar</button>
+      <div id="lab-reacao" role="tabpanel" style="margin-top:1.4rem">
+        <div class="placa montador" id="montador">
+          <div class="montador-topo">
+            <div><h3>Monte a reação</h3><p class="nota" style="margin:0">Escolha espécies dos exemplos ou escreva o código MoleculeDSL de cada uma. Ajuste os coeficientes ou peça o balanceamento.</p></div>
+            <label class="alternar">partir de <select id="reacao" aria-label="Reação pronta"></select></label>
           </div>
-          <div class="cena"><canvas id="cena-reacao" aria-label="Animação da reação"></canvas><span class="fase-reacao" id="fase-reacao">Reagentes</span><span class="dica">arraste para girar</span></div>
-          <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+          <div class="montador-lados">
+            <div><h4>Reagentes</h4><div id="montador-reagentes"></div><button type="button" class="botao pequeno" id="mais-reagente">+ reagente</button></div>
+            <div class="seta-reacao" aria-hidden="true">→</div>
+            <div><h4>Produtos</h4><div id="montador-produtos"></div><button type="button" class="botao pequeno" id="mais-produto">+ produto</button></div>
+          </div>
+          <div class="acoes" style="justify-content:flex-start;margin-top:1rem">
+            <button type="button" class="botao primario" id="simular-reacao">Simular reação</button>
+            <button type="button" class="botao" id="balancear-reacao">Balancear e simular</button>
+          </div>
         </div>
-        <div class="placa" id="info-reacao"></div>
+        <div class="play" style="margin-top:1.1rem">
+          <div class="placa">
+            <div class="barra-ferramentas">
+              <button class="botao pequeno" type="button" id="tocar-reacao">❚❚ Pausar</button>
+              <button class="botao pequeno" type="button" id="reiniciar-reacao">Reiniciar</button>
+            </div>
+            <div class="cena"><canvas id="cena-reacao" aria-label="Animação da reação"></canvas><span class="fase-reacao" id="fase-reacao">Reagentes</span><span class="dica">arraste para girar</span></div>
+            <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+          </div>
+          <div class="placa" id="info-reacao"></div>
+        </div>
       </div>
       <div id="lab-mistura" role="tabpanel" class="play" style="margin-top:1.4rem" hidden>
         <div class="placa">
@@ -566,6 +606,11 @@ charge unpaired atom bond as ring stereo</pre>
         <div class="placa">
           <h3>Componentes</h3>
           <div id="lista-mistura" class="lista-mistura"></div>
+          <div class="adicionar-mistura">
+            <select id="nova-especie" aria-label="Espécie para adicionar"></select>
+            <button type="button" class="botao pequeno" id="adicionar-mistura">Adicionar</button>
+          </div>
+          <textarea id="codigo-mistura" class="codigo-curto" spellcheck="false" aria-label="Código MoleculeDSL do componente" hidden></textarea>
           <div id="info-mistura" style="margin-top:1rem"></div>
         </div>
       </div>
@@ -583,6 +628,7 @@ charge unpaired atom bond as ring stereo</pre>
         <div class="placa"><h3>Modelo atômico (Bohr)</h3><div class="cena cena-bohr"><canvas id="bohr" aria-label="Modelo de Bohr do elemento"></canvas></div><p class="nota">Camadas tiradas da configuração eletrônica de <code>regras/elementos.json</code>. O modelo de Bohr é didático: os elétrons não giram em órbitas fixas.</p></div>
         <div class="placa" id="ficha-elemento"></div>
       </div>
+      <div class="placa" style="margin-top:1.1rem"><h3>Bancada</h3><div id="bancada"></div></div>
     </section>
   </main>
 
