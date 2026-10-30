@@ -1,0 +1,10 @@
+// esperado: Erro semântico [STEREO-002] na linha 9, coluna 4: n1 (N#1)=n2 (N#2) aceita E ou Z, encontrado 'R'
+// Numa dupla N=N o descritor é E ou Z, não R
+species molecule "Diazene" {
+    2x atom N as n
+    2x atom H as h
+    bond n1=n2
+    bond n1-h1
+    bond n2-h2
+    stereo n1=n2 R
+}

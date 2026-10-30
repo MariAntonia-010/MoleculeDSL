@@ -1,0 +1,9 @@
+// (E)-diazeno, HN=NH: cada N tem um H e um par livre, então a dupla tem E/Z
+species molecule "(E)-Diazene" {
+    2x atom N as n
+    2x atom H as h
+    bond n1=n2
+    bond n1-h1
+    bond n2-h2
+    stereo n1=n2 E
+}

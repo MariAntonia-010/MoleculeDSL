@@ -1,0 +1,10 @@
+// esperado: Erro sintático [SIN-001] na linha 3, coluna 28: 'charge' só vale em 'species molecular_ion' e 'species monatomic_ion': molécula, átomo e sólido são neutros; para uma espécie com carga, use 'species molecular_ion'
+// Uma molécula é neutra; com carga, a espécie é molecular_ion
+species molecule "Ammonium" charge +1 {
+    atom N(+1) as n
+    4x atom H as h
+    bond n-h1
+    bond n-h2
+    bond n-h3
+    bond n-h4
+}

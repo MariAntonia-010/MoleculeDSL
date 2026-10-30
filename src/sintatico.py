@@ -220,6 +220,12 @@ class ErroSintatico(ColetorErrosANTLR):
 
         if regra == P.RULE_molecula:
             if P.ABRE_CHAVE in esperados:
+                if token.type == P.CHARGE:
+                    return (
+                        "'charge' só vale em 'species molecular_ion' e 'species monatomic_ion': "
+                        "molécula, átomo e sólido são neutros; para uma espécie com carga, "
+                        "use 'species molecular_ion'"
+                    ), True
                 return f"esperado '{{' depois do nome da molécula, encontrado {encontrado}", True
             if P.FECHA_CHAVE in esperados:
                 if token.type == Token.EOF:
@@ -235,6 +241,17 @@ class ErroSintatico(ColetorErrosANTLR):
             if P.IDENT in esperados:
                 return f"esperado símbolo de elemento depois de 'atom', encontrado {encontrado}", True
             if P.NOME in esperados:
+                if token.type == P.IDENT:
+                    # Maiúscula inicial: o lexer leu o começo como elemento
+                    # ('Agua' vira 'Ag' + 'ua'); junta o resto colado
+                    texto = token.text
+                    seguinte = recognizer.getTokenStream().get(token.tokenIndex + 1)
+                    if seguinte.type == P.NOME and seguinte.line == token.line and seguinte.column == token.column + len(texto):
+                        texto += seguinte.text
+                    return (
+                        f"o nome de átomo começa com letra minúscula; '{texto}' "
+                        f"começa como elemento (escreva '{texto.lower()}')"
+                    ), True
                 return (
                     f"esperado nome de átomo depois de 'as', encontrado {encontrado} "
                     "(palavras-chave e nomes como 'x4' são reservados)"

@@ -701,3 +701,17 @@ Hund, íons de metais de transição).
 - Uso: demonstrações de átomo (carbono-13), íon (Fe²⁺) e sólido (NaCl), e
   o comando `--estrutura-atomica`.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 4
+
+- Válidos: PF₆⁻, AlCl₄⁻, ácido sulfuroso, tiofosgênio, (E)-diazeno,
+  (E)-acetaldoxima, ciclobutadieno e germano (com `bond Ge-H x4`); os oito
+  entram nos grupos da página.
+- Inválidos: anel fora da ordem do ciclo, `x0`, `x5` com quatro H, P neutro
+  com seis ligações num íon, R numa dupla N=N, `charge` em `molecule` e
+  nome com maiúscula.
+- Mensagens: `charge` numa molécula aponta `species molecular_ion`, e nome
+  com maiúscula diz que o começo foi lido como elemento e sugere o nome em
+  minúsculas (juntando 'Ag' + 'ua' em 'agua').
+

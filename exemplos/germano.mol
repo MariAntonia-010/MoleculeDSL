@@ -1,0 +1,6 @@
+// Germano, GeH4: usa a repetição x4 para escrever as quatro ligações Ge-H de uma vez
+species molecule "Germane" {
+    atom Ge
+    4x atom H
+    bond Ge-H x4
+}

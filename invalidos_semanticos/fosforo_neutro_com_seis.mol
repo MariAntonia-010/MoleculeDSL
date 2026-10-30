@@ -1,0 +1,12 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é +0, mas a espécie declara carga total -1
+// Sem a carga -1, o fósforo com seis ligações passa do máximo (5)
+species molecular_ion "Hexafluorophosphate" charge -1 {
+    atom P as p
+    6x atom F as f
+    bond p-f1
+    bond p-f2
+    bond p-f3
+    bond p-f4
+    bond p-f5
+    bond p-f6
+}

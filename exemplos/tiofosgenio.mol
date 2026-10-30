@@ -1,0 +1,9 @@
+// Tiofosgênio, CSCl2: o análogo do fosgênio com enxofre no lugar do oxigênio
+species molecule "Thiophosgene" {
+    atom C as c
+    atom S as s
+    2x atom Cl as cl
+    bond c=s
+    bond c-cl1
+    bond c-cl2
+}

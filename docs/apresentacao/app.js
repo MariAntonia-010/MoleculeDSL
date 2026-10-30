@@ -133,6 +133,7 @@
       especie.desemparelhados = Number(pegar("INT", "número depois de 'unpaired'").valor);
       fechar();
     }
+    if (atual().tipo === "charge") falhar("'{': 'charge' só vale em molecular_ion e monatomic_ion; molécula, átomo e sólido são neutros, então use 'species molecular_ion'");
     pegar("{", "'{' depois do nome da espécie");
 
     const referencia = (onde) => {
@@ -170,7 +171,15 @@
           fechar();
         }
         let nome = null;
-        if (talvez("as")) nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
+        if (talvez("as")) {
+          if (atual().tipo === "IDENT") {
+            // 'Agua' vira 'Ag' + 'ua': junta o resto colado
+            const t = atual(), s = tokens[p + 1];
+            const texto = t.valor + (s && s.tipo === "NOME" && s.l === t.l && s.c === t.c + t.valor.length ? s.valor : "");
+            falhar(`nome de átomo com letra minúscula ('${texto}' começa como elemento; escreva '${texto.toLowerCase()}')`);
+          }
+          nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
+        }
         fechar();
         especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, massa: massaToken ? Number(massaToken.valor) : null, l: t.l, c: t.c });
       } else if (t.tipo === "bond") {

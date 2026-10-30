@@ -1,0 +1,9 @@
+// Tetracloroaluminato, AlCl4-: o alumínio recebe o quarto cloreto
+species molecular_ion "Tetrachloroaluminate" charge -1 {
+    atom Al(-1) as al
+    4x atom Cl as cl
+    bond al-cl1
+    bond al-cl2
+    bond al-cl3
+    bond al-cl4
+}

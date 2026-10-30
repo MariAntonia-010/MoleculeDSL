@@ -1,0 +1,14 @@
+// Ciclobutadieno: anel de 4 elétrons pi, o exemplo clássico de antiaromático
+species molecule "Cyclobutadiene" {
+    4x atom C as c
+    4x atom H as h
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c1
+    bond c1-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+    ring c1 c2 c3 c4
+}

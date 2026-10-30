@@ -87,4 +87,12 @@ ESPECIES = {
     "oxido_nitrico": "Monóxido de nitrogênio (NO•, radical)",
     "agua_trifluoreto_de_boro": "Água–trifluoreto de boro (coordenada)",
     "oxido_de_magnesio": "Óxido de magnésio (sólido iônico)",
+    "acido_sulfuroso": "Ácido sulfuroso (S com valência 4)",
+    "tiofosgenio": "Tiofosgênio (CSCl₂)",
+    "germano": "Germano (GeH₄, com repetição x4)",
+    "ciclobutadieno": "Ciclobutadieno (antiaromático)",
+    "hexafluorofosfato": "Íon hexafluorofosfato (PF₆⁻)",
+    "tetracloroaluminato": "Íon tetracloroaluminato (AlCl₄⁻)",
+    "e_diazeno": "(E)-diazeno (E/Z em N=N)",
+    "e_acetaldoxima": "(E)-acetaldoxima (E/Z em C=N)",
 }

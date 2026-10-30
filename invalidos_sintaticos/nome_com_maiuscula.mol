@@ -1,0 +1,8 @@
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 14: o nome de átomo começa com letra minúscula; 'Ox' começa como elemento (escreva 'ox')
+// Nomes de átomos começam com letra minúscula; maiúscula é lida como elemento
+species molecule "Water" {
+    atom O as Ox
+    2x atom H as h
+    bond Ox-h1
+    bond Ox-h2
+}

@@ -1,0 +1,19 @@
+// esperado: Erro semântico [RING-002] na linha 18, coluna 12: os átomos c1 e c3 do anel não estão ligados
+// O anel lista os átomos na ordem do ciclo: c1 e c3 não estão ligados
+species molecule "Cyclobutane" {
+    4x atom C as c
+    8x atom H as h
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c1
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+    ring c1 c3 c2 c4
+}

@@ -1,0 +1,12 @@
+// Ácido sulfuroso, H2SO3: enxofre com valência 4 (uma dupla e duas simples)
+species molecule "Sulfurous acid" {
+    atom S as s
+    atom O as od
+    2x atom O as o
+    2x atom H as h
+    bond s=od
+    bond s-o1
+    bond s-o2
+    bond o1-h1
+    bond o2-h2
+}
