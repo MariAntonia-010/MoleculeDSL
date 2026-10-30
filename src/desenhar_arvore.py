@@ -65,6 +65,7 @@ def ast_para_visual(molecula) -> NoVisual:
                         NoVisual(f"carga: {comando.carga}"),
                         NoVisual(f"nome: {descrever_nome(comando)}"),
                         *([NoVisual(f"massa: {comando.massa}")] if comando.massa is not None else []),
+                        *([NoVisual(f'bloco: "{comando.bloco}"')] if comando.bloco is not None else []),
                     ],
                 )
             )
@@ -277,10 +278,14 @@ def main() -> int:
         raiz_visual = parse_tree_para_visual(arvore_sintatica, arvore_sintatica.parser)
         tipo_titulo = "Árvore sintática (Parse Tree)"
     else:
-        from construtor_ast import construir
+        from construtor_ast import construir_programa
 
-        arvore_ast = construir(arvore_sintatica)
-        raiz_visual = ast_para_visual(arvore_ast)
+        blocos = construir_programa(arvore_sintatica)
+        if len(blocos) == 1:
+            raiz_visual = ast_para_visual(blocos[0])
+        else:
+            # Vários blocos: um nó Programa com uma Especie por bloco
+            raiz_visual = NoVisual("Programa", [ast_para_visual(b) for b in blocos])
         tipo_titulo = "Árvore Sintática Abstrata (AST)"
 
     destino = Path(args.saida) if args.saida else entrada.with_name(

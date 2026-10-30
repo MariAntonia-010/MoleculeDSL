@@ -229,8 +229,8 @@ LICOES = [
         "id": "primeiro",
         "titulo": "Primeiro programa",
         "texto": [
-            "Todo programa descreve uma única espécie química. O cabeçalho diz o tipo e o nome; "
-            "entre chaves vêm os átomos e as ligações, em qualquer ordem.",
+            "Cada bloco descreve uma espécie química. O cabeçalho diz o tipo e o nome; "
+            "entre chaves vêm os átomos e as ligações, em qualquer ordem. Um arquivo pode ter vários blocos (lição seguinte).",
             "O compilador lê o texto, monta a árvore, constrói o grafo da molécula e confere a química. "
             "Sem erro, ele responde que a análise foi concluída e sai com código 0.",
         ],
@@ -248,6 +248,59 @@ LICOES = [
                 "codigo": 'molecule "Water" {\n    atom O\n    atom H\n    atom H\n    bond H-O\n    bond O-H\n}\n',
                 "opcoes": [],
                 "saida": 0,
+            },
+        ],
+    },
+    {
+        "id": "blocos",
+        "titulo": "Vários blocos: declare os átomos, depois as moléculas",
+        "texto": [
+            "Um arquivo pode ter vários blocos species, um depois do outro. O compilador analisa cada bloco na ordem e "
+            "mostra o resultado de cada um; um bloco com erro não impede a análise dos outros.",
+            "Um átomo declarado num bloco species atom ou species monatomic_ion pode ser reaproveitado depois: "
+            "atom \"Nome do bloco\" traz o elemento, o número de massa e a carga daquele bloco. Assim o deutério ou o "
+            "carbono-13 são declarados uma vez e usados em várias moléculas.",
+            "O bloco citado precisa vir antes (BLOCK-001), ter um átomo só (BLOCK-002) e um nome que nenhum outro bloco "
+            "use (BLOCK-003). A configuração eletrônica não é herdada: dentro da molécula os elétrons ocupam orbitais "
+            "moleculares.",
+        ],
+        "anatomia": {
+            "codigo": '2x atom "Deuterio" as d',
+            "partes": [
+                ["2x", "quantidade, como em qualquer atom"],
+                ["atom", "palavra-chave da declaração de átomo"],
+                ['"Deuterio"', "nome de um bloco anterior, entre aspas: o átomo vem de lá (2H)"],
+                ["as d", "nome dos átomos nesta molécula: d1 e d2"],
+            ],
+        },
+        "exemplos": [
+            {
+                "titulo": "Carbono-13 declarado e reaproveitado",
+                "explicacao": "O bloco 1 declara o carbono-13 com a configuração; o bloco 2 usa atom \"Carbono-13\", e o modelo mostra A=13 e 7 nêutrons no carbono do metano.",
+                "codigo": 'species atom "Carbono-13" unpaired 2 {\n    atom 13C as c\n    configuration c [He] 2s2 2p2\n}\n\nspecies molecule "Metano-13C" {\n    atom "Carbono-13" as c\n    4x atom H as h\n    bond c-h1\n    bond c-h2\n    bond c-h3\n    bond c-h4\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Um átomo, duas moléculas",
+                "explicacao": "O deutério é declarado uma vez e usado na água pesada e no hidróxido deuterado.",
+                "codigo": 'species atom "Deuterio" unpaired 1 {\n    atom 2H\n}\n\nspecies molecule "Agua pesada" {\n    atom O as o\n    2x atom "Deuterio" as d\n    bond o-d1\n    bond o-d2\n}\n\nspecies molecular_ion "Hidroxido deuterado" charge -1 {\n    atom O(-1) as o\n    atom "Deuterio" as d\n    bond o-d\n}\n',
+                "opcoes": [],
+                "saida": 0,
+            },
+            {
+                "titulo": "Erro: o bloco vem depois",
+                "explicacao": "A molécula cita o deutério antes de ele ser declarado. Os blocos são lidos na ordem do arquivo.",
+                "codigo": 'species molecule "Agua pesada" {\n    atom O as o\n    2x atom "Deuterio" as d\n    bond o-d1\n    bond o-d2\n}\n\nspecies atom "Deuterio" unpaired 1 {\n    atom 2H\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+            {
+                "titulo": "Erro: o bloco citado não é um átomo",
+                "explicacao": "atom \"Nome\" reaproveita um átomo; um bloco de molécula tem vários átomos e não pode ser citado assim.",
+                "codigo": 'species molecule "Agua" {\n    atom O as o\n    2x atom H as h\n    bond o-h1\n    bond o-h2\n}\n\nspecies molecule "Dimero" {\n    2x atom "Agua" as a\n    bond a1-a2\n}\n',
+                "opcoes": [],
+                "saida": 2,
             },
         ],
     },

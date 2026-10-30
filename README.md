@@ -234,6 +234,31 @@ de Hund (³P₀ no carbono, ⁵D₄ no ferro). Os isótopos naturais cobrem os 1
 elementos, e o número de massa entra na regra CIP 2 do `--estereo`. Pesquisa e decisões em
 [docs/plano_atomo.md](docs/plano_atomo.md).
 
+### Vários blocos no mesmo arquivo
+
+Um arquivo pode ter vários blocos `species`. Os átomos declarados em blocos
+`species atom` ou `species monatomic_ion` podem ser reaproveitados depois,
+pelo nome do bloco entre aspas:
+
+```text
+species atom "Deuterio" unpaired 1 {
+    atom 2H
+}
+
+species molecule "Agua pesada" {
+    atom O as o
+    2x atom "Deuterio" as d
+    bond o-d1
+    bond o-d2
+}
+```
+
+`atom "Deuterio"` traz o elemento, o número de massa e a carga do bloco. O
+compilador analisa cada bloco na ordem (`Bloco 1/2: ...`) e sai com o pior
+código entre eles. O bloco citado precisa vir antes (BLOCK-001), ter um
+átomo só (BLOCK-002), e os nomes dos blocos não se repetem (BLOCK-003). As
+opções de resolução (`--resolver`) trabalham com um bloco por arquivo.
+
 ### Configuração estereoquímica
 
 O comando `stereo` declara a configuração de um elemento estereogênico:
@@ -280,7 +305,7 @@ pasta `docs/` da `main`, `docs/index.html` redireciona para a apresentação.
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
-- **Guia:** 15 lições, começando pela construção de um átomo passo a passo e por núcleo e eletrosfera, com código, saída real do compilador e variações de
+- **Guia:** 16 lições, começando pela construção de um átomo passo a passo e por núcleo e eletrosfera, com código, saída real do compilador e variações de
   escrita; cada exemplo é compilado pelo compilador real ao gerar a página;
 - **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
 - **Uso** e **Doc:** instalação, comandos, gramática real, erros e
@@ -407,6 +432,9 @@ O catálogo de códigos, causas e correções está em
 | `ATOM-006` | `configuration` fora de átomo isolado ou íon monoatômico, ou repetida | erro |
 | `ATOM-007` | `unpaired` diferente da regra de Hund | aviso |
 | `ATOM-008` | carga positiva maior que Z (o átomo não tem tantos elétrons para perder) | erro |
+| `BLOCK-001` | `atom "Nome"` cita um bloco inexistente, declarado depois ou o próprio bloco | erro |
+| `BLOCK-002` | o bloco citado não é `species atom` nem `species monatomic_ion` de um átomo | erro |
+| `BLOCK-003` | dois blocos com o mesmo nome no arquivo | erro |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e

@@ -160,6 +160,8 @@ class ErroSintatico(ColetorErrosANTLR):
         mensagem, falta_algo = self.traduzir_contexto(
             recognizer, offendingSymbol, e
         )
+        if mensagem is None:
+            return
 
         # Se falta algo no fim de uma linha, o erro fica logo depois do
         # token anterior, e não no primeiro token da linha seguinte
@@ -198,8 +200,20 @@ class ErroSintatico(ColetorErrosANTLR):
         esperados = set(recognizer.getExpectedTokens())
         encontrado = descrever_encontrado(token)
 
-        if regra == P.RULE_programa and esperados == {Token.EOF}:
-            return f"conteúdo depois do fim da molécula: {encontrado}", False
+        if regra == P.RULE_programa:
+            if Token.EOF in esperados:
+                if token.type == P.FECHA_CHAVE and self.erros:
+                    # '}' que sobra da recuperação de um erro já acusado
+                    return None, None
+                return (
+                    f"conteúdo depois do fim do bloco: {encontrado} (depois de um bloco "
+                    "só pode vir outro bloco 'species' ou o fim do arquivo)"
+                ), False
+            if esperados & {P.MOLECULE, P.SPECIES}:
+                return (
+                    f"o programa deve começar com 'molecule' ou 'species', "
+                    f"encontrado {encontrado}"
+                ), False
 
         if regra == P.RULE_cabecalho:
             if esperados & {P.MOLECULE, P.SPECIES}:

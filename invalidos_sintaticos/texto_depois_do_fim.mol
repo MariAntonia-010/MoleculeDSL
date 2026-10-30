@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-002] na linha 5, coluna 0: conteúdo depois do fim da molécula: 'atom'
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 0: conteúdo depois do fim do bloco: 'atom' (depois de um bloco só pode vir outro bloco 'species' ou o fim do arquivo)
 molecule "Water" {
     atom O
 }

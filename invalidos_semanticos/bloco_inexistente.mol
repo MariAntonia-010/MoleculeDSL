@@ -1,0 +1,8 @@
+// esperado: Erro semântico [BLOCK-001] na linha 5, coluna 4: não há bloco chamado 'Hidrogenio' neste arquivo
+// atom "Nome" cita um bloco do arquivo; não há bloco chamado "Hidrogenio"
+species molecule "Agua" {
+    atom O as o
+    2x atom "Hidrogenio" as h
+    bond o-h1
+    bond o-h2
+}

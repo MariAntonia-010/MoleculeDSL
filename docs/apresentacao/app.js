@@ -105,7 +105,11 @@
       return v;
     };
 
-    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [], arvore: raizArvore, legado: false };
+    // Um ou mais blocos no arquivo; cada bloco é uma espécie
+    const especies = [];
+    do {
+    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [], arvore: raizArvore, legado: false, l: atual().l };
+    especies.push(especie);
     abrir("molecula");
     abrir("cabecalho");
     if (talvez("molecule")) {
@@ -160,6 +164,14 @@
         abrir("atomo");
         const mult = t.tipo === "MULT" ? Number(consumir().valor.slice(0, -1)) : 1;
         pegar("atom", "'atom' depois do multiplicador");
+        if (atual().tipo === "TEXTO") {
+          // atom "Carbono-13": reaproveita o átomo de um bloco anterior
+          const bloco = consumir().valor.slice(1, -1);
+          let nome = null;
+          if (talvez("as")) nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
+          fechar();
+          especie.comandos.push({ tipo: "atom", mult, el: null, bloco, carga: 0, nome, massa: null, l: t.l, c: t.c });
+        } else {
         const massaToken = talvez("INT");
         if (atual().tipo === "MULT") falhar(`o multiplicador antes de 'atom': '${atual().valor} atom ...', não 'atom ${atual().valor} ...'`);
         if (atual().tipo === "NOME" && atual().valor.length <= 2) {
@@ -190,6 +202,7 @@
         }
         fechar();
         especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, massa: massaToken ? Number(massaToken.valor) : null, l: t.l, c: t.c });
+        }
       } else if (t.tipo === "bond") {
         abrir("ligacao");
         consumir();
@@ -257,9 +270,26 @@
     }
     consumir();
     fechar();
-    if (atual().tipo !== "EOF") falhar("fim do arquivo depois de '}'", "SIN-002");
+    if (!["EOF", "molecule", "species"].includes(atual().tipo)) falhar("outro bloco 'species' ou o fim do arquivo depois de '}'", "SIN-002");
+    } while (atual().tipo !== "EOF");
     consumir();
-    return especie;
+    return especies;
+  }
+
+  // atom "Nome": copia elemento, carga e massa de um bloco anterior; o que
+  // não resolve fica marcado para a semântica (BLOCK-001 e BLOCK-002)
+  function resolverBlocos(especies) {
+    const todos = especies.map((e) => e.nome);
+    especies.forEach((especie, i) => {
+      especie.comandos.filter((c) => c.tipo === "atom" && c.bloco != null).forEach((cmd) => {
+        if (cmd.bloco === especie.nome) { cmd.situacaoBloco = "proprio"; return; }
+        const anterior = especies.slice(0, i).find((e) => e.nome === cmd.bloco);
+        if (!anterior) { cmd.situacaoBloco = todos.includes(cmd.bloco) ? "depois" : "inexistente"; return; }
+        const atomos = anterior.comandos.filter((c) => c.tipo === "atom");
+        if (!["atom", "monatomic_ion"].includes(anterior.tipo) || atomos.length !== 1 || atomos[0].el == null) { cmd.situacaoBloco = "tipo"; return; }
+        Object.assign(cmd, { el: atomos[0].el, carga: atomos[0].carga, massa: atomos[0].massa, situacaoBloco: "ok" });
+      });
+    });
   }
 
   function analisarSemantica(especie) {
@@ -269,6 +299,16 @@
     const aviso = (no, codigo, msg, atomos = []) => avisos.push({ tipo: "aviso", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg, atomos });
     const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
     for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
+      if (cmd.bloco != null && cmd.situacaoBloco !== "ok") {
+        const b = cmd.bloco;
+        erro(cmd, cmd.situacaoBloco === "tipo" ? "BLOCK-002" : "BLOCK-001", {
+          tipo: `o bloco '${b}' não é um átomo isolado nem um íon monoatômico; atom "..." reaproveita só blocos species atom ou species monatomic_ion`,
+          proprio: `o bloco '${b}' não pode citar a si mesmo; cite um bloco de átomo declarado antes`,
+          depois: `o bloco '${b}' é declarado depois; declare o átomo antes da espécie que o usa`,
+          inexistente: `não há bloco chamado '${b}' neste arquivo`,
+        }[cmd.situacaoBloco]);
+        continue;
+      }
       if (!DADOS.elementos[cmd.el]) { erro(cmd, "ELEM-001", `elemento desconhecido '${cmd.el}'`); continue; }
       if (cmd.carga > DADOS.elementos[cmd.el].numero) {
         const z = DADOS.elementos[cmd.el].numero;
@@ -566,13 +606,33 @@
     }).join("");
   }
 
-  function compilar(texto) {
+  function compilar(texto, indiceBloco = null) {
     // Guarda o resultado de cada fase, para a demonstração da tradução
     let tokens = null;
     try {
       tokens = tokenizar(texto);
-      const especie = analisarSintaxe(tokens);
-      return { tokens, arvore: especie.arvore, especie, ...analisarSemantica(especie) };
+      const especies = analisarSintaxe(tokens);
+      resolverBlocos(especies);
+      // Cada bloco passa pela semântica; o desenhado é o escolhido (o
+      // último, por padrão), e os diagnósticos de todos aparecem juntos
+      const resultados = especies.map((especie, i) => {
+        const r = analisarSemantica(especie);
+        if (especies.slice(0, i).some((e) => e.nome === especie.nome)) {
+          r.erros.unshift({ tipo: "erro", fase: "semântico", codigo: "BLOCK-003", linha: especie.l, coluna: 0, mensagem: `já existe um bloco chamado '${especie.nome}' neste arquivo; cada bloco precisa de um nome próprio para ser citado`, atomos: [] });
+        }
+        return r;
+      });
+      const escolhido = indiceBloco == null || indiceBloco < 0 || indiceBloco >= especies.length ? especies.length - 1 : indiceBloco;
+      const varios = especies.length > 1;
+      const marcar = (lista, i) => lista.map((d) => (varios ? { ...d, bloco: especies[i].nome } : d));
+      const r = resultados[escolhido];
+      return {
+        tokens, arvore: especies[0].arvore, especie: especies[escolhido], ...r,
+        erros: resultados.flatMap((x, i) => marcar(x.erros, i)),
+        avisos: resultados.flatMap((x, i) => marcar(x.avisos, i)),
+        blocos: especies.map((e, i) => ({ nome: e.nome, tipo: e.tipo, erros: resultados[i].erros.length })),
+        indiceBloco: escolhido,
+      };
     } catch (e) {
       if (e instanceof ErroDSL) {
         return { tokens, arvore: e.arvore || null, falhaEm: e.fase, erros: [e.diagnostico()], avisos: [], atomos: [], ligacoes: [], configuracoes: [] };
@@ -603,6 +663,9 @@
     "ATOM-004": ["Estado excitado", "A configuração é possível, mas não é a de menor energia (estado fundamental medido).", "Se quis o estado fundamental, use a referência indicada; se quis um estado excitado, o aviso só registra isso."],
     "ATOM-005": ["Isótopo não natural", "O número de massa não está entre os isótopos de composição natural da CIAAW: pode ser radioativo ou artificial.", "Confira o número de massa; para a composição natural, omita-o (atom C)."],
     "ATOM-006": ["Configuração fora de lugar", "A configuração eletrônica descreve um átomo isolado ou um íon monoatômico; em moléculas os elétrons ocupam orbitais moleculares.", "Use configuration só com species atom ou species monatomic_ion, uma vez por átomo."],
+    "BLOCK-001": ["Bloco não encontrado", "atom \"Nome\" cita um bloco do mesmo arquivo, e não há bloco com esse nome antes deste (ou ele é o próprio bloco).", "Declare o átomo num bloco species atom antes da molécula, com o mesmo nome entre aspas."],
+    "BLOCK-002": ["Bloco não é um átomo", "Só um bloco species atom ou species monatomic_ion, com um átomo, pode ser reaproveitado por atom \"Nome\".", "Cite um bloco de um átomo, ou declare os átomos da molécula aqui mesmo."],
+    "BLOCK-003": ["Nome de bloco repetido", "Dois blocos do arquivo têm o mesmo nome, e a citação ficaria ambígua.", "Dê um nome diferente a cada bloco."],
     "ATOM-008": ["Elétrons a menos que zero", "Um cátion perde elétrons, e o átomo só tem Z deles (o número atômico). Carga maior que Z deixaria elétrons negativos.", "Use uma carga de no máximo +Z; +Z é o núcleo nu, como Li(+3) ou H(+1)."],
     "ATOM-007": ["Contra a regra de Hund", "Pela regra de Hund os elétrons ocupam orbitais de mesma energia um a um; isso fixa quantos ficam desemparelhados.", "Ajuste o unpaired para o valor indicado pela configuração."],
     "SPEC-001": ["Tipo de espécie incompatível", "O tipo do cabeçalho não combina com o conteúdo: atom e monatomic_ion descrevem um único átomo, sem ligações.", "Use species molecule para mais de um átomo, ou species monatomic_ion com charge para um átomo com carga."],
@@ -927,14 +990,30 @@
     realce.style.transform = `translate(${-codigo.scrollLeft}px, ${-codigo.scrollTop}px)`;
   });
 
+  // Arquivo com vários blocos: qual deles o desenho, o modelo e a aba
+  // Átomos mostram (null = o último)
+  let blocoEscolhido = null;
+  const seletorBloco = document.getElementById("bloco-play");
+  seletorBloco.addEventListener("change", () => { blocoEscolhido = Number(seletorBloco.value); executar(); });
+  function atualizarSeletorBloco(r) {
+    const blocos = r.blocos || [];
+    seletorBloco.hidden = blocos.length < 2;
+    if (blocos.length < 2) { blocoEscolhido = null; return; }
+    seletorBloco.innerHTML = blocos.map((b, i) => `<option value="${i}"${i === r.indiceBloco ? " selected" : ""}>Bloco ${i + 1}: ${escapar(b.nome)} (${b.tipo})${b.erros ? " · com erro" : ""}</option>`).join("");
+  }
+
   function executar() {
-    const r = compilar(codigo.value);
+    let r = compilar(codigo.value, blocoEscolhido);
+    if (blocoEscolhido != null && r.blocos && blocoEscolhido >= r.blocos.length) { blocoEscolhido = null; r = compilar(codigo.value); }
+    atualizarSeletorBloco(r);
+    // Erros do bloco desenhado (os dos outros blocos aparecem no diagnóstico)
+    const errosDoBloco = r.blocos ? r.blocos[r.indiceBloco].erros : r.erros.length;
     renderizarDiagnosticos(r);
     if (tradPlay) tradPlay.desenhar();
     if (arvoresProntas) atualizarArvores();
     const modelo = document.querySelector("#p-modelo pre");
     document.getElementById("legenda-ligacoes").innerHTML = legendaLigacoes(r);
-    if (r.atomos.length && !r.erros.length) {
+    if (r.atomos.length && !errosDoBloco) {
       const nomes = r.atomos.map(rotulo);
       const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
       modelo.textContent = [`Modelo '${r.especie.nome}' tipo=${r.especie.tipo}`, `Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}${a.massa ? ` A=${a.massa}` : ""}${textoMontado(a)}`),
@@ -963,7 +1042,7 @@
       resumo.innerHTML = "";
     }
     if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
-    else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
+    else { vazio.hidden = false; vazio.textContent = errosDoBloco ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
   }
 
   // Aba Átomos: de onde vêm prótons, nêutrons e elétrons de cada 'atom'
@@ -1064,7 +1143,7 @@
       item.innerHTML = `<div class="topo-diag"><span class="selo"></span><span class="titulo"></span><span class="onde"></span></div><p class="msg"></p><dl><dt>O que é</dt><dd class="significa"></dd><dt>Como corrigir</dt><dd class="corrigir"></dd></dl>`;
       item.querySelector(".selo").textContent = `${d.tipo === "aviso" ? "Aviso" : "Erro"} ${d.fase} · ${d.codigo}`;
       item.querySelector(".titulo").textContent = titulo;
-      item.querySelector(".onde").textContent = `linha ${d.linha}, coluna ${d.coluna}`;
+      item.querySelector(".onde").textContent = `linha ${d.linha}, coluna ${d.coluna}${d.bloco ? ` · bloco "${d.bloco}"` : ""}`;
       item.querySelector(".msg").textContent = d.mensagem;
       item.querySelector(".significa").textContent = significa;
       item.querySelector(".corrigir").textContent = corrigir;
@@ -1119,6 +1198,7 @@
     exemploAtual = DADOS.exemplos[i];
     seletor.value = i;
     codigo.value = exemploAtual.codigo;
+    blocoEscolhido = null;
     executar();
   }
 

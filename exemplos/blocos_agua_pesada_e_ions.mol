@@ -1,0 +1,22 @@
+// Vários blocos: o deutério e o íon óxido declarados uma vez e reaproveitados
+species atom "Deuterio" unpaired 1 {
+    atom 2H
+}
+
+species monatomic_ion "Oxido" charge -2 {
+    atom O(-2)
+    configuration O [Ne]
+}
+
+species molecule "Agua pesada" {
+    atom O as o
+    2x atom "Deuterio" as d
+    bond o-d1
+    bond o-d2
+}
+
+species molecular_ion "Hidroxido deuterado" charge -1 {
+    atom O(-1) as o
+    atom "Deuterio" as d
+    bond o-d
+}

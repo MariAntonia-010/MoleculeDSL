@@ -138,6 +138,9 @@ Plano e fontes em `docs/plano_atomo.md`.
 | ATOM-006 | `configuration` fora de `atom`/`monatomic_ion`, ou repetida | erro |
 | ATOM-007 | `unpaired` diferente da regra de Hund | aviso |
 | ATOM-008 | carga positiva maior que Z | erro |
+| BLOCK-001 | `atom "Nome"` cita bloco inexistente, declarado depois ou o próprio bloco | erro |
+| BLOCK-002 | bloco citado não é átomo isolado nem íon monoatômico de um átomo | erro |
+| BLOCK-003 | nome de bloco repetido no arquivo | erro |
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.

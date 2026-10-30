@@ -2,8 +2,10 @@ grammar MoleculeDSL;
 
 // ---------- PARSER ----------
 
+// Um ou mais blocos no mesmo arquivo: primeiro os átomos, depois as
+// moléculas que os reaproveitam pelo nome
 programa
-    : molecula EOF
+    : molecula+ EOF
     ;
 
 molecula
@@ -38,9 +40,10 @@ comando
     ;
 
 // Ex.: atom O, 4x atom H, atom N(+1), atom C as c1, atom 13C (número de
-// massa antes do símbolo, como na notação de nuclídeo da IUPAC)
+// massa antes do símbolo, como na notação de nuclídeo da IUPAC), ou
+// atom "Carbono-13", que reaproveita o átomo de um bloco anterior
 atomo
-    : MULTIPLICADOR_ATOMO? ATOM INTEIRO? IDENT carga? (AS NOME)?
+    : MULTIPLICADOR_ATOMO? ATOM (INTEIRO? IDENT carga? | TEXTO) (AS NOME)?
     ;
 
 // O sinal negativo reaproveita o token LIGACAO

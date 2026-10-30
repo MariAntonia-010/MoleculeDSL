@@ -4,7 +4,7 @@ import sys
 # sintatico.py (via lexico.py) adiciona a pasta "gerado" ao caminho
 from lexico import imprimir_tokens
 from sintatico import tokenizar, analisar_fluxo
-from construtor_ast import construir
+from construtor_ast import construir, construir_programa
 from ast_nos import formatar
 import modelo
 import semantico
@@ -187,7 +187,14 @@ def compilar(caminho, opcoes, configuracao=None):
         erros_sintaticos.imprimir()
         return ERRO_LEXICO_OU_SINTATICO
 
-    molecula = construir(arvore)
+    blocos = construir_programa(arvore)
+    molecula = blocos[0]
+
+    if len(blocos) > 1:
+        if opcoes & {"--resolver", "--resolver-todas"}:
+            print("A resolução de estruturas trabalha com um bloco por arquivo")
+            return ERRO_LEXICO_OU_SINTATICO
+        return analisar_blocos(blocos, opcoes)
 
     if "--resolver" in opcoes and "--resolver-todas" in opcoes:
         print("As opções --resolver e --resolver-todas são mutuamente exclusivas")
@@ -336,10 +343,14 @@ def compilar(caminho, opcoes, configuracao=None):
             return SUCESSO
         molecula = resultado.solutions[0]
 
+    return analisar_bloco(molecula, opcoes)
+
+
+def analisar_bloco(molecula, opcoes, nomes_anteriores=()):
     if "--ast" in opcoes:
         print(formatar(molecula))
 
-    modelo_molecula, mensagens = semantico.analisar(molecula)
+    modelo_molecula, mensagens = semantico.analisar(molecula, nomes_anteriores)
 
     # Avisos são mostrados, mas não impedem a compilação
     for mensagem in mensagens:
@@ -355,6 +366,18 @@ def compilar(caminho, opcoes, configuracao=None):
 
     print(f"Espécie {molecula.nome!r}: análise concluída sem erros")
     return SUCESSO
+
+
+def analisar_blocos(blocos, opcoes):
+    # Vários blocos no arquivo: cada um é analisado na ordem, com os nomes
+    # dos anteriores (para BLOCK-003). Um bloco com erro não impede os
+    # outros; o código de saída é o pior.
+    codigo = SUCESSO
+    for indice, bloco in enumerate(blocos):
+        print(f"Bloco {indice + 1}/{len(blocos)}: species {bloco.tipo.value} {bloco.nome!r}")
+        anteriores = [b.nome for b in blocos[:indice]]
+        codigo = max(codigo, analisar_bloco(bloco, opcoes, anteriores))
+    return codigo
 
 
 def imprimir_relatorios(modelo_molecula, opcoes):

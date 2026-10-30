@@ -208,6 +208,35 @@ class AnalisadorSemantico:
     # ---------- átomos ----------
 
     def declarar_atomo(self, decl):
+        # atom "Nome": o construtor já copiou o átomo do bloco; aqui só se
+        # acusa a citação que não deu certo
+        if decl.bloco is not None and decl.situacao_bloco != "ok":
+            if decl.situacao_bloco == "tipo":
+                self.erro(
+                    "BLOCK-002",
+                    decl,
+                    f"o bloco '{decl.bloco}' não é um átomo isolado nem um íon monoatômico; "
+                    "atom \"...\" reaproveita só blocos species atom ou species monatomic_ion",
+                )
+            elif decl.situacao_bloco == "proprio":
+                self.erro(
+                    "BLOCK-001",
+                    decl,
+                    f"o bloco '{decl.bloco}' não pode citar a si mesmo; cite um bloco de átomo "
+                    "declarado antes",
+                )
+            elif decl.situacao_bloco == "depois":
+                self.erro(
+                    "BLOCK-001",
+                    decl,
+                    f"o bloco '{decl.bloco}' é declarado depois; declare o átomo antes "
+                    "da espécie que o usa",
+                )
+            else:
+                self.erro("BLOCK-001", decl, f"não há bloco chamado '{decl.bloco}' neste arquivo")
+            self.marcar_invalido(decl)
+            return
+
         if decl.multiplicador < 1:
             self.erro("STRUCT-007", decl, "a quantidade de átomos precisa ser pelo menos 1")
             self.marcar_invalido(decl)
@@ -1290,12 +1319,21 @@ class AnalisadorSemantico:
         return ", ".join(textos[:-1]) + " ou " + textos[-1]
 
 
-def analisar(molecula):
-    # Devolve o modelo e a lista de mensagens semânticas (erros e avisos)
-    return AnalisadorSemantico(
+def analisar(molecula, nomes_anteriores=()):
+    # Devolve o modelo e a lista de mensagens semânticas (erros e avisos).
+    # nomes_anteriores: nomes dos blocos declarados antes no mesmo arquivo
+    analisador = AnalisadorSemantico(
         molecula,
         carregar_elementos(),
         carregar_valencias(),
         carregar_classificacao(),
         carregar_ligacoes_metalicas(),
-    ).analisar()
+    )
+    if molecula.nome in nomes_anteriores:
+        analisador.erro(
+            "BLOCK-003",
+            molecula,
+            f"já existe um bloco chamado '{molecula.nome}' neste arquivo; "
+            "cada bloco precisa de um nome próprio para ser citado",
+        )
+    return analisador.analisar()

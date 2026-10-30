@@ -201,6 +201,17 @@ uso só em `atom` e `monatomic_ion` (ATOM-006) e o `unpaired` contra a regra
 de Hund (ATOM-007, aviso). Uma carga positiva maior que Z é erro (ATOM-008):
 o átomo só tem Z elétrons para perder, e +Z já é o núcleo sem elétrons.
 
+### Vários blocos e `atom "Nome"`
+
+Um programa tem um ou mais blocos (`programa : molecula+ EOF`). Um átomo de
+um bloco `species atom` ou `species monatomic_ion` anterior pode ser citado
+em outro bloco por `atom "Nome do bloco"`, com quantidade e `as`
+(`2x atom "Deuterio" as d`). O átomo herda elemento, número de massa e carga
+do bloco; a configuração eletrônica não é herdada. A citação é resolvida na
+construção da AST (o `AtomoDecl` guarda `bloco`), e a semântica acusa
+BLOCK-001 (bloco inexistente, declarado depois ou o próprio), BLOCK-002
+(bloco que não é de um átomo) e BLOCK-003 (nome repetido).
+
 ### `stereo`
 
 Declara a configuração de um elemento estereogênico. Os átomos são citados

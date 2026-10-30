@@ -53,6 +53,12 @@ class AtomoDecl:
     nome_automatico: str = ""
     # Número de massa (isótopo), como em atom 13C; None é a composição natural
     massa: int | None = None
+    # atom "Carbono-13": nome do bloco reaproveitado e a situação da busca
+    # ("ok", "inexistente", "depois", "proprio" ou "tipo"); elemento, carga
+    # e massa
+    # vêm do bloco quando a situação é "ok"
+    bloco: str | None = None
+    situacao_bloco: str | None = None
 
 
 @dataclass
@@ -157,6 +163,7 @@ def formatar(molecula):
                 f"  AtomoDecl elemento={c.elemento} multiplicador={c.multiplicador} "
                 f"carga={c.carga:+d} nome={descrever_nome(c)}"
                 + (f" massa={c.massa}" if c.massa is not None else "")
+                + (f" bloco={c.bloco!r}" if c.bloco is not None else "")
                 + f" {pos(c)}"
             )
         elif isinstance(c, LigacaoDecl):

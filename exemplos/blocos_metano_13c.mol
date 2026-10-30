@@ -1,0 +1,18 @@
+// Primeiro o átomo, depois a molécula que o reaproveita pelo nome do bloco
+species atom "Carbono-13" unpaired 2 {
+    atom 13C as c
+    configuration c [He] 2s2 2p2
+}
+
+species monatomic_ion "Deuteron" charge +1 {
+    atom 2H(+1)
+}
+
+species molecule "Metano-13C" {
+    atom "Carbono-13" as c
+    4x atom H as h
+    bond c-h1
+    bond c-h2
+    bond c-h3
+    bond c-h4
+}

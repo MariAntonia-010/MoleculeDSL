@@ -1,0 +1,12 @@
+// esperado: Erro semântico [BLOCK-001] na linha 5, coluna 4: o bloco 'Deuterio' é declarado depois; declare o átomo antes da espécie que o usa
+// O bloco do átomo precisa vir antes da molécula que o usa
+species molecule "Agua pesada" {
+    atom O as o
+    2x atom "Deuterio" as d
+    bond o-d1
+    bond o-d2
+}
+
+species atom "Deuterio" unpaired 1 {
+    atom 2H
+}

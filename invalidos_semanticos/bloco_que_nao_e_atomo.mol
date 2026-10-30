@@ -1,0 +1,13 @@
+// esperado: Erro semântico [BLOCK-002] na linha 11, coluna 4: o bloco 'Agua' não é um átomo isolado nem um íon monoatômico; atom "..." reaproveita só blocos species atom ou species monatomic_ion
+// Só blocos de um átomo (species atom ou monatomic_ion) podem ser citados com atom "Nome"
+species molecule "Agua" {
+    atom O as o
+    2x atom H as h
+    bond o-h1
+    bond o-h2
+}
+
+species molecule "Peroxido" {
+    2x atom "Agua" as a
+    bond a1-a2
+}

@@ -862,3 +862,21 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
   apresentação na raiz; o redirecionamento fica como reserva.
 - Endereço: https://mariantonia-010.github.io/MoleculeDSL/
 
+---
+
+## 30/10/2026 — Vários blocos no mesmo arquivo
+
+Pedido da gerente: trabalhar com blocos da própria linguagem no mesmo
+código, declarando átomos e depois moléculas, sem estruturas de controle
+(for, if) — a linguagem é declarativa.
+
+- Gramática: `programa : molecula+ EOF` e `atom "Nome do bloco"`.
+- O construtor da AST resolve a citação contra os blocos anteriores: o
+  átomo herda elemento, número de massa e carga. Semântica: BLOCK-001
+  (inexistente, depois ou o próprio), BLOCK-002 (não é bloco de um átomo),
+  BLOCK-003 (nome repetido).
+- `main.py` analisa cada bloco (`Bloco 1/n`) e sai com o pior código; a
+  AST desenhada ganha o nó Programa. Arquivos de um bloco não mudam.
+- Navegador: mesmo comportamento, diagnósticos marcados com o bloco e um
+  seletor do bloco desenhado no playground. Guia: lição "Vários blocos".
+

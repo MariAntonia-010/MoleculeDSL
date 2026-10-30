@@ -116,4 +116,6 @@ ESPECIES = {
     "tetraaminocobre": "Tetra-aminocobre(II), [Cu(NH₃)₄]²⁺ (d⁹)",
     "hexaaminocobalto": "Hexa-aminocobalto(III), [Co(NH₃)₆]³⁺ (d⁶)",
     "ferrocianeto": "Ferrocianeto, [Fe(CN)₆]⁴⁻ (Fe(II), 18 e⁻)",
+    "blocos_metano_13c": "Carbono-13 declarado e reaproveitado no metano",
+    "blocos_agua_pesada_e_ions": "Deutério e óxido reaproveitados em D₂O e OD⁻",
 }

@@ -36,7 +36,31 @@ class ConstrutorAST(MoleculeDSLVisitor):
     # Só deve receber árvores sem erros léxicos ou sintáticos
 
     def visitPrograma(self, ctx):
-        return self.visit(ctx.molecula())
+        # Os nomes de todos os blocos, para distinguir um bloco inexistente
+        # de um declarado depois de quem o usa
+        self.todos_os_nomes = [m.cabecalho().TEXTO().getText()[1:-1] for m in ctx.molecula()]
+        self.blocos = []
+        for molecula in ctx.molecula():
+            self.blocos.append(self.visit(molecula))
+        return self.blocos
+
+    def resolver_bloco(self, decl, nome_proprio):
+        # atom "Nome": copia elemento, carga e massa do bloco anterior
+        if decl.bloco == nome_proprio:
+            decl.situacao_bloco = "proprio"
+            return
+        anterior = next((b for b in getattr(self, "blocos", []) if b.nome == decl.bloco), None)
+        if anterior is None:
+            todos = getattr(self, "todos_os_nomes", [])
+            decl.situacao_bloco = "depois" if decl.bloco in todos else "inexistente"
+            return
+        atomos = [c for c in anterior.comandos if isinstance(c, AtomoDecl)]
+        if anterior.tipo not in (TipoEspecie.ATOMO, TipoEspecie.ION_MONOATOMICO) or len(atomos) != 1:
+            decl.situacao_bloco = "tipo"
+            return
+        origem = atomos[0]
+        decl.elemento, decl.carga, decl.massa = origem.elemento, origem.carga, origem.massa
+        decl.situacao_bloco = "ok"
 
     def visitMolecula(self, ctx):
         cabecalho = ctx.cabecalho()
@@ -49,6 +73,9 @@ class ConstrutorAST(MoleculeDSLVisitor):
                 ctx.desemparelhados().INTEIRO().getText()
             )
         comandos = [self.visit(c) for c in ctx.comando()]
+        for comando in comandos:
+            if isinstance(comando, AtomoDecl) and comando.bloco is not None:
+                self.resolver_bloco(comando, nome)
         # Nome automático: o mesmo índice por elemento que o modelo usa
         contagem = {}
         for comando in comandos:
@@ -116,6 +143,14 @@ class ConstrutorAST(MoleculeDSLVisitor):
 
         nome = ctx.NOME().getText() if ctx.NOME() is not None else None
         massa = int(ctx.INTEIRO().getText()) if ctx.INTEIRO() is not None else None
+
+        if ctx.TEXTO() is not None:
+            # atom "Carbono-13": o elemento vem do bloco (resolver_bloco);
+            # até lá, '?' marca que ainda não se sabe
+            return AtomoDecl(
+                multiplicador, "?", 0, nome, ctx.start.line, ctx.start.column,
+                bloco=ctx.TEXTO().getText()[1:-1],
+            )
 
         return AtomoDecl(
             multiplicador,
@@ -195,8 +230,14 @@ class ConstrutorAST(MoleculeDSLVisitor):
         )
 
 
-def construir(arvore):
+def construir_programa(arvore):
+    """Lista de Especie, uma por bloco, na ordem do arquivo."""
     return ConstrutorAST().visit(arvore)
+
+
+def construir(arvore):
+    # Primeiro bloco: o formato de antes, para quem trata um bloco só
+    return construir_programa(arvore)[0]
 
 
 def main():

@@ -30,6 +30,7 @@ MAIN = os.path.join(RAIZ, "src", "main.py")
 # Exemplos da página, por grupo: o playground mostra cada grupo num
 # <optgroup>, e o laboratório e as demonstrações escolhem entre eles
 GRUPOS_EXEMPLOS = [
+    ("Vários blocos no mesmo arquivo", ["blocos_metano_13c", "blocos_agua_pesada_e_ions"]),
     ("Átomos isolados", ["atomo_de_hidrogenio", "helio", "neonio", "argonio", "carbono_13", "sodio_configuracao_completa",
                          "cromo", "cobre", "ferro_56", "uranio_235"]),
     ("Íons monoatômicos", ["proton", "sodio_1mais", "cloreto", "cloreto_37", "oxido", "ferro_2mais"]),

@@ -1,0 +1,8 @@
+// esperado: Erro semântico [BLOCK-001] na linha 5, coluna 4: o bloco 'Agua' não pode citar a si mesmo; cite um bloco de átomo declarado antes
+// Um bloco não pode citar a si mesmo
+species molecule "Agua" {
+    atom O as o
+    2x atom "Agua" as h
+    bond o-h1
+    bond o-h2
+}

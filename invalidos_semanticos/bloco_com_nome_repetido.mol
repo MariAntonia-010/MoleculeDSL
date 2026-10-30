@@ -1,0 +1,9 @@
+// esperado: Erro semântico [BLOCK-003] na linha 7, coluna 0: já existe um bloco chamado 'Deuterio' neste arquivo; cada bloco precisa de um nome próprio para ser citado
+// Dois blocos com o mesmo nome: a citação ficaria ambígua
+species atom "Deuterio" unpaired 1 {
+    atom 2H
+}
+
+species atom "Deuterio" unpaired 1 {
+    atom 2H
+}

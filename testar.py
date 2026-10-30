@@ -314,7 +314,7 @@ def testar_fases_solver():
     if src not in sys.path:
         sys.path.insert(0, src)
 
-    from construtor_ast import construir
+    from construtor_ast import construir, construir_programa
     from sintatico import analisar
     import semantico
     import solver
@@ -1127,7 +1127,7 @@ def testar_ast_de_todos_os_exemplos():
     if src not in sys.path:
         sys.path.insert(0, src)
     from ast_nos import AnelDecl, AtomoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl, formatar
-    from construtor_ast import construir
+    from construtor_ast import construir_programa
     import semantico
     from sintatico import analisar_fluxo, tokenizar
     from MoleculeDSLParser import MoleculeDSLParser as P
@@ -1147,20 +1147,21 @@ def testar_ast_de_todos_os_exemplos():
         if erros.erros or erros_sintaticos.erros:
             problemas.append(f"{nome}: não passou da sintaxe")
             continue
-        molecula = construir(arvore)
-        # Só os tokens depois do '{': o cabeçalho pode usar 'atom' como tipo
-        inicio = next(
-            i for i, token in enumerate(fluxo.tokens) if token.type == P.ABRE_CHAVE
-        )
-        esperados = [
-            tipos[token.type]
-            for token in fluxo.tokens[inicio:]
-            if token.type in tipos
-        ]
-        obtidos = [type(comando) for comando in molecula.comandos]
+        blocos = construir_programa(arvore)
+        comandos = [c for bloco in blocos for c in bloco.comandos]
+        # Só os tokens entre chaves: o cabeçalho pode usar 'atom' como tipo
+        esperados, profundidade = [], 0
+        for token in fluxo.tokens:
+            if token.type == P.ABRE_CHAVE:
+                profundidade += 1
+            elif token.type == P.FECHA_CHAVE:
+                profundidade -= 1
+            elif profundidade > 0 and token.type in tipos:
+                esperados.append(tipos[token.type])
+        obtidos = [type(comando) for comando in comandos]
         if obtidos != esperados:
             problemas.append(f"{nome}: nós {obtidos} para comandos {esperados}")
-        for comando in molecula.comandos:
+        for comando in comandos:
             referencias = []
             if isinstance(comando, LigacaoDecl):
                 referencias = [comando.origem, comando.destino]
@@ -1180,25 +1181,26 @@ def testar_ast_de_todos_os_exemplos():
         ]
         com_multiplicador = [
             c.multiplicador
-            for c in molecula.comandos
+            for c in comandos
             if isinstance(c, AtomoDecl) and c.multiplicador != 1
         ]
         if sorted(com_multiplicador) != sorted(m for m in multiplicadores if m != 1):
             problemas.append(f"{nome}: multiplicadores expandidos na AST")
-        # A saída da AST é para pessoas: o None interno do Python não aparece
-        if "None" in formatar(molecula):
-            problemas.append(f"{nome}: a saída da AST mostra 'None'")
-        # O nome automático da AST é o rótulo que o modelo dá ao átomo sem nome
-        esperados_auto = []
-        for c in molecula.comandos:
-            if isinstance(c, AtomoDecl) and c.nome is None:
-                primeiro = c.nome_automatico.split("…")[0]
-                indice = int(primeiro.split("#")[1])
-                esperados_auto += [f"{c.elemento}#{indice + k}" for k in range(c.multiplicador)]
-        modelo_ex, _ = semantico.analisar(molecula)
-        obtidos_auto = [a.rotulo() for a in modelo_ex.atomos if a.nome is None]
-        if esperados_auto != obtidos_auto:
-            problemas.append(f"{nome}: nomes automáticos da AST {esperados_auto} diferentes do modelo {obtidos_auto}")
+        for indice, molecula in enumerate(blocos):
+            # A saída da AST é para pessoas: o None interno do Python não aparece
+            if "None" in formatar(molecula):
+                problemas.append(f"{nome}: a saída da AST mostra 'None'")
+            # O nome automático da AST é o rótulo que o modelo dá ao átomo sem nome
+            esperados_auto = []
+            for c in molecula.comandos:
+                if isinstance(c, AtomoDecl) and c.nome is None:
+                    primeiro = c.nome_automatico.split("…")[0]
+                    indice_auto = int(primeiro.split("#")[1])
+                    esperados_auto += [f"{c.elemento}#{indice_auto + k}" for k in range(c.multiplicador)]
+            modelo_ex, _ = semantico.analisar(molecula, [b.nome for b in blocos[:indice]])
+            obtidos_auto = [a.rotulo() for a in modelo_ex.atomos if a.nome is None]
+            if esperados_auto != obtidos_auto:
+                problemas.append(f"{nome}: nomes automáticos da AST {esperados_auto} diferentes do modelo {obtidos_auto}")
     return problemas
 
 
