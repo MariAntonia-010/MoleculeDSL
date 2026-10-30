@@ -240,6 +240,23 @@ python3 src/construtor_ast.py exemplos/agua.mol
 | `1` | erro de entrada, configuração, léxico ou sintático |
 | `2` | erro semântico |
 
+## Página de apresentação
+
+[docs/apresentacao/index.html](docs/apresentacao/index.html) abre direto no
+navegador, sem servidor nem internet, em tema claro ou escuro. Ela tem
+quatro módulos com rotas: **Conteúdo** (a apresentação em 11 páginas, com
+setas do teclado), **Uso**, **Doc** (comandos, gramática real, erros e
+relatórios) e **Playground**. No playground, o código MoleculeDSL é analisado
+no navegador enquanto se digita e a molécula é desenhada em 3D. A aba
+"Compilador real" mostra a saída de `src/main.py --modelo` para os exemplos.
+
+Todas as saídas exibidas vêm de execuções reais. Depois de mudar o
+compilador, gere a página de novo:
+
+```bash
+python3 docs/apresentacao/gerar_apresentacao.py
+```
+
 ## Árvores em SVG
 
 `desenhar_arvore.py` gera a parse tree do ANTLR ou a AST sem depender de
@@ -361,7 +378,7 @@ invalidos_semanticos/       casos semânticos inválidos
 avisos_semanticos/          programas válidos que geram avisos
 resolver/                   entradas e snapshots do solver
 docs/                       especificação, planos e diagramas
-docs/apresentacao/          página de apresentação offline
+docs/apresentacao/          página de apresentação offline (index.html gerado a partir de modelo.html)
 gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 ```
 

@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MoleculeDSL — Linguagem química</title>
+  <meta name="description" content="MoleculeDSL: linguagem química com compilador em Python e ANTLR 4. Linguagens Formais e Compiladores, 2026.">
+  <style>
+    :root {
+      --bg: #141417;
+      --superficie: #1b1b1f;
+      --elevado: #222227;
+      --borda: rgba(255, 255, 255, 0.06);
+      --texto: #ececf1;
+      --suave: #9b99a6;
+      --fraco: #6d6b77;
+      --acento: #b9a3f7;
+      --acento-forte: #9a7ef0;
+      --acento-fundo: rgba(185, 163, 247, 0.12);
+      --erro: #e8899b;
+      --aviso: #d9b978;
+      --ok: #9fcfae;
+      --sombra: 9px 9px 20px #0c0c0e, -7px -7px 18px #1f1f24;
+      --sombra-dentro: inset 5px 5px 12px #0e0e10, inset -5px -5px 12px #212126;
+      --sombra-leve: 4px 4px 10px #0d0d0f, -3px -3px 9px #202025;
+      --mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: "Inter", "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+      --serif: "IBM Plex Serif", Georgia, serif;
+      --raio: 20px;
+    }
+    :root[data-theme="light"] {
+      --bg: #ecebf1;
+      --superficie: #ecebf1;
+      --elevado: #f3f2f7;
+      --borda: rgba(30, 20, 60, 0.07);
+      --texto: #1e1c25;
+      --suave: #5f5b6b;
+      --fraco: #8b8797;
+      --acento: #7a5ae0;
+      --acento-forte: #6a46d8;
+      --acento-fundo: rgba(122, 90, 224, 0.1);
+      --erro: #b3354f;
+      --aviso: #8f6a12;
+      --ok: #2f7a4a;
+      --sombra: 9px 9px 20px #cfcdd8, -9px -9px 20px #ffffff;
+      --sombra-dentro: inset 5px 5px 11px #d2d0db, inset -5px -5px 11px #ffffff;
+      --sombra-leve: 4px 4px 10px #d3d1dc, -4px -4px 10px #ffffff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--texto);
+      font: 400 clamp(16px, 0.6vw + 12px, 19px)/1.6 var(--sans);
+      overflow-x: hidden;
+    }
+    a { color: var(--acento); }
+    /* malha de nós interligados no fundo */
+    #malha { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+    code, pre, kbd, .mono { font-family: var(--mono); }
+    h1, h2, h3 { letter-spacing: -0.025em; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; }
+
+    /* ---------- barra superior ---------- */
+    .topo {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem clamp(16px, 4vw, 40px);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--borda);
+    }
+    .marca { font: 700 1.08rem var(--mono); color: var(--texto); text-decoration: none; white-space: nowrap; }
+    .marca b { color: var(--acento); font-weight: 700; }
+    .rotas {
+      display: flex;
+      gap: 0.35rem;
+      margin: 0 auto;
+      padding: 0.3rem;
+      border-radius: 14px;
+      box-shadow: var(--sombra-dentro);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .rotas::-webkit-scrollbar { display: none; }
+    .rotas a {
+      padding: 0.45rem 0.95rem;
+      border-radius: 10px;
+      color: var(--suave);
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .rotas a:hover { color: var(--texto); }
+    .rotas a.ativo { color: var(--acento); background: var(--elevado); box-shadow: var(--sombra-leve); }
+    .tema {
+      flex: none;
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--superficie);
+      box-shadow: var(--sombra-leve);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .tema svg { width: 19px; height: 19px; stroke: var(--suave); fill: none; stroke-width: 1.8; stroke-linecap: round; }
+
+    /* ---------- páginas ---------- */
+    .pagina { display: none; padding: clamp(1.5rem, 4vw, 3.5rem) clamp(16px, 4vw, 40px) 4rem; max-width: 1280px; margin: 0 auto; }
+    .pagina.ativa { display: block; animation: surgir 0.35s ease; }
+    @keyframes surgir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .rotulo { font: 500 0.72rem var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--acento); }
+    h2 { font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.15; margin: 0.4rem 0 0.8rem; }
+    .lead { color: var(--suave); font-family: var(--serif); font-size: 1.08em; max-width: 760px; margin: 0; }
+    .placa {
+      background: var(--superficie);
+      border-radius: var(--raio);
+      box-shadow: var(--sombra);
+      padding: clamp(1.1rem, 2.4vw, 1.8rem);
+      min-width: 0;
+    }
+    .grade { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.3rem; margin-top: 1.6rem; }
+    .c4 { grid-column: span 4; } .c6 { grid-column: span 6; } .c8 { grid-column: span 8; } .c12 { grid-column: 1 / -1; } .c3 { grid-column: span 3; }
+    .placa h3 { margin: 0 0 0.4rem; font-size: 1.08rem; }
+    .placa p { margin: 0; color: var(--suave); }
+    .icone {
+      width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center;
+      box-shadow: var(--sombra-dentro); color: var(--acento); margin-bottom: 0.9rem;
+    }
+    .icone svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+    pre {
+      margin: 0.8rem 0 0;
+      padding: 1rem 1.1rem;
+      border-radius: 14px;
+      background: var(--bg);
+      box-shadow: var(--sombra-dentro);
+      font-size: 0.78rem;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: var(--texto);
+    }
+    .kw { color: var(--acento); }
+    .str { color: var(--ok); }
+    .op { color: var(--acento-forte); font-weight: 700; }
+    .com { color: var(--fraco); font-style: italic; }
+    .erro-txt, pre.erro { color: var(--erro); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    th, td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--borda); vertical-align: top; }
+    th { font: 600 0.68rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fraco); }
+    td:first-child { font-family: var(--mono); color: var(--acento); white-space: nowrap; }
+    .tabela { overflow-x: auto; }
+    .erro-sev { color: var(--erro); } .aviso-sev { color: var(--aviso); }
+    .botao {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.8rem 1.35rem; border-radius: 14px; border: 0;
+      background: var(--superficie); box-shadow: var(--sombra-leve);
+      color: var(--texto); font-weight: 600; text-decoration: none; cursor: pointer;
+      transition: box-shadow 0.2s, color 0.2s;
+    }
+    .botao:hover { color: var(--acento); }
+    .botao:active { box-shadow: var(--sombra-dentro); }
+    .botao.primario { background: var(--acento-forte); color: #fff; box-shadow: var(--sombra-leve); }
+    .botao.primario:hover { color: #fff; filter: brightness(1.06); }
+    .botao[disabled] { opacity: 0.4; cursor: default; }
+
+    /* ---------- início ---------- */
+    .capa { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem; align-items: center; min-height: calc(100vh - 160px); }
+    .capa h1 { font: 700 clamp(2.4rem, 6.4vw, 5.6rem)/1 var(--mono); margin: 0.6rem 0; letter-spacing: -0.05em; white-space: nowrap; }
+    .capa h1 b { color: var(--acento); }
+    .cursor { display: inline-block; width: 0.45em; height: 0.8em; background: var(--acento); margin-left: 0.04em; vertical-align: -0.03em; animation: piscar 1.1s steps(1) infinite; border-radius: 2px; }
+    @keyframes piscar { 50% { opacity: 0; } }
+    .lema { font: 400 clamp(1.1rem, 2vw, 1.4rem)/1.5 var(--serif); color: var(--suave); margin: 0; }
+    .lema em { color: var(--texto); }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.6rem 0 0; padding: 0; list-style: none; }
+    .chips li { font: 500 0.8rem var(--mono); padding: 0.45rem 0.85rem; border-radius: 999px; box-shadow: var(--sombra-leve); color: var(--suave); }
+    .chips li.destaque { color: var(--acento); }
+    .acoes { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.8rem; }
+    .vitrine { position: relative; aspect-ratio: 1; border-radius: 28px; box-shadow: var(--sombra); background: var(--superficie); overflow: hidden; }
+    .vitrine canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+    .vitrine figcaption { position: absolute; left: 1rem; bottom: 0.8rem; font: 0.74rem var(--mono); color: var(--fraco); }
+    .modulos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.3rem; margin-top: 2.5rem; }
+    .modulo { text-decoration: none; color: inherit; transition: transform 0.2s; }
+    .modulo:hover { transform: translateY(-3px); }
+    .modulo .numero { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.15em; }
+
+    /* ---------- conteúdo (slides) ---------- */
+    .slide { display: none; }
+    .slide.ativo { display: block; animation: surgir 0.35s ease; }
+    .paginador {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      margin-top: 2rem; padding: 0.7rem; border-radius: 18px; box-shadow: var(--sombra-dentro);
+    }
+    .paginador .contador { font: 600 0.82rem var(--mono); color: var(--suave); }
+    .pontinhos { display: flex; gap: 0.45rem; flex-wrap: wrap; justify-content: center; }
+    .pontinhos button { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: var(--fraco); opacity: 0.45; cursor: pointer; }
+    .pontinhos button.ativo { background: var(--acento); opacity: 1; width: 26px; border-radius: 6px; }
+    .moldura-ast { border-radius: var(--raio); background: #f8fafc; padding: 0.8rem; overflow-x: auto; box-shadow: var(--sombra-dentro); }
+    .moldura-ast img { display: block; height: 280px; width: auto; max-width: none; }
+    .pipeline { width: 100%; height: auto; display: block; }
+    .pipeline rect { fill: var(--elevado); stroke: var(--borda); }
+    .pipeline .fim rect { stroke: var(--acento); }
+    .pipeline text { fill: var(--texto); font-family: var(--mono); }
+    .pipeline .sub { fill: var(--fraco); }
+    .pipeline path { stroke: var(--acento); stroke-width: 2; fill: none; stroke-dasharray: 5 6; animation: fluxo 1.4s linear infinite; }
+    @keyframes fluxo { to { stroke-dashoffset: -11; } }
+    .metrica { text-align: center; }
+    .metrica strong { display: block; font: 700 clamp(2.2rem, 4.5vw, 3.2rem)/1.1 var(--mono); color: var(--acento); }
+    .metrica span { color: var(--suave); font-size: 0.85rem; }
+    .abas { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+    .aba { border: 0; padding: 0.5rem 0.95rem; border-radius: 11px; background: var(--superficie); box-shadow: var(--sombra-leve); font: 600 0.8rem var(--mono); color: var(--suave); cursor: pointer; }
+    .aba[aria-selected="true"] { color: var(--acento); box-shadow: var(--sombra-dentro); }
+
+    /* ---------- documentação ---------- */
+    .doc { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 1.6rem; margin-top: 1.6rem; align-items: start; }
+    .sumario { position: sticky; top: 90px; display: grid; gap: 0.3rem; }
+    .sumario a { padding: 0.55rem 0.8rem; border-radius: 11px; text-decoration: none; color: var(--suave); font-size: 0.9rem; }
+    .sumario a.ativo { color: var(--acento); box-shadow: var(--sombra-dentro); }
+    .topico { display: none; }
+    .topico.ativo { display: block; animation: surgir 0.3s ease; }
+    .topico h3 { font-size: 1.3rem; margin: 0 0 0.6rem; }
+    .topico h4 { margin: 1.4rem 0 0.3rem; }
+    .topico p, .topico li { color: var(--suave); }
+
+    /* ---------- playground ---------- */
+    .play { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.3rem; margin-top: 1.4rem; }
+    .barra-ferramentas { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.9rem; }
+    select {
+      font: 500 0.85rem var(--sans); color: var(--texto); background: var(--superficie);
+      border: 0; border-radius: 12px; padding: 0.6rem 0.8rem; box-shadow: var(--sombra-leve); max-width: 100%;
+    }
+    .editor { display: grid; grid-template-columns: auto minmax(0, 1fr); border-radius: 16px; box-shadow: var(--sombra-dentro); background: var(--bg); overflow: hidden; }
+    .numeros { padding: 0.9rem 0.6rem; text-align: right; color: var(--fraco); font: 0.8rem/1.6 var(--mono); user-select: none; white-space: pre; }
+    textarea {
+      width: 100%; min-height: 430px; resize: vertical; border: 0; outline: 0; background: transparent;
+      color: var(--texto); font: 0.8rem/1.6 var(--mono); padding: 0.9rem 0.9rem 0.9rem 0.3rem; white-space: pre; overflow-x: auto; tab-size: 4;
+    }
+    .cena { position: relative; border-radius: 18px; box-shadow: var(--sombra-dentro); background: var(--bg); aspect-ratio: 4 / 3; overflow: hidden; }
+    .cena canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+    .cena .dica { position: absolute; right: 0.8rem; bottom: 0.6rem; font: 0.7rem var(--mono); color: var(--fraco); }
+    .cena .vazio { position: absolute; inset: 0; display: grid; place-items: center; color: var(--fraco); font: 0.85rem var(--mono); text-align: center; padding: 1rem; }
+    .resumo-mol { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
+    .resumo-mol span { font: 0.76rem var(--mono); padding: 0.35rem 0.7rem; border-radius: 999px; box-shadow: var(--sombra-leve); color: var(--suave); }
+    .resumo-mol span b { color: var(--acento); font-weight: 600; }
+    .saida { min-height: 170px; max-height: 340px; }
+    .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.7rem; }
+    .alternar { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
+    .alternar input { accent-color: var(--acento-forte); }
+
+    footer { text-align: center; padding: 2rem 16px 3rem; color: var(--fraco); font: 0.78rem var(--mono); border-top: 1px solid var(--borda); }
+    footer b { color: var(--acento); font-weight: 600; }
+
+    @media (max-width: 1000px) {
+      .capa, .play, .doc { grid-template-columns: minmax(0, 1fr); }
+      .capa { min-height: 0; }
+      .vitrine { max-width: 460px; width: 100%; margin: 0 auto; }
+      .modulos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .c4, .c6, .c8, .c3 { grid-column: 1 / -1; }
+      .sumario { position: static; grid-auto-flow: column; overflow-x: auto; }
+      .sumario a { white-space: nowrap; }
+    }
+    @media (max-width: 640px) {
+      .topo { flex-wrap: wrap; }
+      .rotas { order: 3; width: 100%; margin: 0; }
+      .tema { margin-left: auto; }
+      .modulos { grid-template-columns: minmax(0, 1fr); }
+      .paginador .contador { display: none; }
+      textarea { min-height: 320px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="malha" aria-hidden="true"></canvas>
+  <header class="topo">
+    <a class="marca" href="#/">Molecule<b>DSL</b></a>
+    <nav class="rotas" aria-label="Módulos">
+      <a href="#/" data-rota="inicio">Início</a>
+      <a href="#/conteudo/1" data-rota="conteudo">Conteúdo</a>
+      <a href="#/uso" data-rota="uso">Uso</a>
+      <a href="#/doc/comandos" data-rota="doc">Doc</a>
+      <a href="#/playground" data-rota="playground">Playground</a>
+    </nav>
+    <button class="tema" type="button" aria-label="Alternar tema claro e escuro">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <!-- ================= INÍCIO ================= -->
+    <section class="pagina" id="pg-inicio" aria-label="Início">
+      <div class="capa">
+        <div>
+          <span class="rotulo">Linguagem química</span>
+          <h1>Molecule<b>DSL</b><span class="cursor" aria-hidden="true"></span></h1>
+          <p class="lema">a química das moléculas, <em>escrita como código</em>.<br>declare átomos e ligações — o compilador valida, resolve e explica.</p>
+          <ul class="chips" aria-label="Equipe e disciplina">
+            <li class="destaque">Linguagens Formais e Compiladores · 2026</li>
+            <li>Geisbelly Victoria</li>
+            <li>Murilo</li>
+            <li>Maria Antonia</li>
+          </ul>
+          <div class="acoes">
+            <a class="botao primario" href="#/playground">Abrir o playground</a>
+            <a class="botao" href="#/conteudo/1">Ver a apresentação</a>
+          </div>
+        </div>
+        <figure class="vitrine" style="margin:0">
+          <canvas id="vitrine-3d" aria-label="Benzeno em 3D, gerado a partir de exemplos/benzeno.mol"></canvas>
+          <figcaption>exemplos/benzeno.mol · arraste para girar</figcaption>
+        </figure>
+      </div>
+      <div class="modulos">
+        <a class="placa modulo" href="#/conteudo/1"><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
+        <a class="placa modulo" href="#/uso"><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
+        <a class="placa modulo" href="#/doc/comandos"><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
+        <a class="placa modulo" href="#/playground"><span class="numero">04</span><h3>Playground</h3><p>Escreva MoleculeDSL e veja a molécula em 3D na hora.</p></a>
+      </div>
+    </section>
+
+    <!-- ================= CONTEÚDO ================= -->
+    <section class="pagina" id="pg-conteudo" aria-label="Conteúdo">
+      <article class="slide" data-titulo="Problema">
+        <span class="rotulo">01 — problema</span>
+        <h2>Química em texto, sem coordenadas</h2>
+        <p class="lead">A MoleculeDSL separa a intenção química da visualização. Quem escreve declara átomos e ligações; o compilador cuida da estrutura, da posição dos erros e das verificações químicas.</p>
+        <div class="grade">
+          <div class="placa c4"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/></svg></div><h3>Legível</h3><p>Programas curtos, próximos da notação usada em aula.</p></div>
+          <div class="placa c4"><div class="icone"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><h3>Precisa</h3><p>Todo diagnóstico aponta fase, código, linha, coluna e uma explicação em português.</p></div>
+          <div class="placa c4"><div class="icone"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></div><h3>Auditável</h3><p>Dados químicos só entram com fonte registrada no levantamento.</p></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Linguagem">
+        <span class="rotulo">02 — linguagem</span>
+        <h2>Um vocabulário pequeno, casos expressivos</h2>
+        <p class="lead">Espécie, átomos, ligações, anéis e configuração, em qualquer ordem dentro da espécie.</p>
+        <div class="grade">
+          <div class="placa c8"><h3>Água</h3><pre><code><span class="kw">species molecule</span> <span class="str">"Water"</span> {
+    <span class="kw">atom</span> O
+    <span class="kw">atom</span> H
+    <span class="kw">atom</span> H
+
+    <span class="kw">bond</span> H<span class="op">-</span>O
+    <span class="kw">bond</span> O<span class="op">-</span>H
+}</code></pre></div>
+          <div class="placa c4"><h3>Ligações</h3><div class="tabela"><table>
+            <tr><th>Símbolo</th><th>Ligação</th></tr>
+            <tr><td>-</td><td>simples</td></tr><tr><td>=</td><td>dupla</td></tr><tr><td>#</td><td>tripla</td></tr>
+            <tr><td>-&gt;</td><td>coordenada</td></tr><tr><td>~</td><td>metálica</td></tr>
+          </table></div></div>
+          <div class="placa c4"><h3>Anel nomeado</h3><pre><code><span class="kw">atom</span> C <span class="kw">as</span> c1
+<span class="kw">atom</span> C <span class="kw">as</span> c2
+<span class="kw">atom</span> C <span class="kw">as</span> c3
+<span class="kw">bond</span> c1<span class="op">-</span>c2
+<span class="kw">bond</span> c2<span class="op">-</span>c3
+<span class="kw">bond</span> c3<span class="op">-</span>c1
+<span class="kw">ring</span> c1 c2 c3</code></pre></div>
+          <div class="placa c4"><h3>Carga e coordenação</h3><pre><code><span class="kw">atom</span> N(<span class="op">+</span>1)
+<span class="kw">atom</span> B(<span class="op">-</span>1)
+3x <span class="kw">atom</span> H <span class="kw">as</span> hn
+3x <span class="kw">atom</span> H <span class="kw">as</span> hb
+<span class="kw">bond</span> N<span class="op">-&gt;</span>B</code></pre></div>
+          <div class="placa c4"><h3>Configuração</h3><pre><code><span class="kw">stereo</span> c1<span class="op">=</span>c2 E
+<span class="kw">stereo</span> c2 R
+<span class="kw">stereo</span> c3 Ra
+<span class="kw">stereo</span> r1 r2 trans</code></pre></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Pipeline">
+        <span class="rotulo">03 — pipeline</span>
+        <h2>Cada fase recebe uma entrada mais limpa</h2>
+        <p class="lead">Se uma fase falha, as seguintes não rodam: sem erros em cascata, com a origem real do problema preservada.</p>
+        <div class="placa c12" style="margin-top:1.6rem">
+          <svg class="pipeline" viewBox="0 0 1140 220" role="img" aria-label="Lexer, parser, visitor, modelo e semântica">
+            <g transform="translate(20 40)"><rect width="180" height="100" rx="18"/><text x="90" y="46" text-anchor="middle" font-size="21" font-weight="700">Lexer</text><text class="sub" x="90" y="72" text-anchor="middle" font-size="14">tokens</text></g>
+            <path d="M206 90 H246"/>
+            <g transform="translate(252 40)"><rect width="180" height="100" rx="18"/><text x="90" y="46" text-anchor="middle" font-size="21" font-weight="700">Parser</text><text class="sub" x="90" y="72" text-anchor="middle" font-size="14">parse tree</text></g>
+            <path d="M438 90 H478"/>
+            <g transform="translate(484 40)"><rect width="180" height="100" rx="18"/><text x="90" y="46" text-anchor="middle" font-size="21" font-weight="700">Visitor</text><text class="sub" x="90" y="72" text-anchor="middle" font-size="14">AST própria</text></g>
+            <path d="M670 90 H710"/>
+            <g transform="translate(716 40)"><rect width="180" height="100" rx="18"/><text x="90" y="46" text-anchor="middle" font-size="21" font-weight="700">Modelo</text><text class="sub" x="90" y="72" text-anchor="middle" font-size="14">grafo</text></g>
+            <path d="M902 90 H942"/>
+            <g class="fim" transform="translate(948 40)"><rect width="172" height="100" rx="18"/><text x="86" y="46" text-anchor="middle" font-size="21" font-weight="700">Semântica</text><text class="sub" x="86" y="72" text-anchor="middle" font-size="14">saída 0 · 2</text></g>
+            <text class="sub" x="20" y="190" font-size="15">ANTLR 4 gera lexer e parser · listeners, recuperação e mensagens são do projeto · saída 1 para erro léxico ou sintático</text>
+          </svg>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Léxico e sintático">
+        <span class="rotulo">04 — léxico e sintático</span>
+        <h2>ANTLR 4, sem mensagens opacas</h2>
+        <p class="lead">Nenhum texto interno em inglês chega ao usuário: cada erro vira um código estável em português.</p>
+        <div class="grade">
+          <div class="placa c6"><h3>O ANTLR entrega</h3><p>Lexer, parser LL(*), parse tree, visitor e recuperação por inserção, remoção e sincronização.</p></div>
+          <div class="placa c6"><h3>O projeto personaliza</h3><p>Listeners em português, IDs LEX/SIN, limite de dez erros por fase e recuperação que não apaga o início do próximo comando.</p></div>
+          <div class="placa c6"><h3>Erro léxico real</h3><pre class="erro">Erro léxico [LEX-001] na linha 4, coluna 4: caractere inválido '@'</pre></div>
+          <div class="placa c6"><h3>Erro sintático real</h3><pre class="erro">Erro sintático [SIN-004] na linha 3, coluna 10: esperado '}' para fechar a molécula</pre></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="AST">
+        <span class="rotulo">05 — AST</span>
+        <h2>A árvore contém conceitos, não pontuação</h2>
+        <p class="lead">Dataclasses próprias guardam linha, coluna e quantificadores; a expansão em átomos e ligações individuais só acontece no modelo.</p>
+        <div class="moldura-ast" style="margin-top:1.6rem"><img alt="AST real de exemplos/agua.mol, gerada por src/desenhar_arvore.py" src="{{AST_IMG}}"></div>
+      </article>
+
+      <article class="slide" data-titulo="Semântica">
+        <span class="rotulo">06 — semântica</span>
+        <h2>Estrutura primeiro, química depois</h2>
+        <p class="lead">As verificações avançam em etapas e só usam dados químicos com fonte registrada.</p>
+        <div class="grade">
+          <div class="placa c8"><div class="tabela"><table>
+            <tr><th>ID</th><th>Regra</th><th>Severidade</th></tr>
+            <tr><td>ELEM-001</td><td>Elemento desconhecido</td><td class="erro-sev">erro</td></tr>
+            <tr><td>STRUCT-001…008</td><td>Integridade, limites e componentes</td><td class="erro-sev">erro</td></tr>
+            <tr><td>BOND-001 / 002</td><td>Limite de H/F · ordem incomum em Cl/Br/I</td><td><span class="erro-sev">erro</span> / <span class="aviso-sev">aviso</span></td></tr>
+            <tr><td>VAL-001 / 002</td><td>Valência excedida · incompleta</td><td><span class="erro-sev">erro</span> / <span class="aviso-sev">aviso</span></td></tr>
+            <tr><td>CARGA-001 / 002</td><td>Carga formal · carga total</td><td class="erro-sev">erro</td></tr>
+            <tr><td>RAD-001 / 002</td><td>Radicais e paridade eletrônica</td><td><span class="aviso-sev">aviso</span> / <span class="erro-sev">erro</span></td></tr>
+            <tr><td>SPEC-001 / 002</td><td>Tipo e escopo da espécie</td><td><span class="erro-sev">erro</span> / <span class="aviso-sev">aviso</span></td></tr>
+            <tr><td>COORD-001…004</td><td>Doador e receptor da ligação coordenada</td><td class="aviso-sev">aviso</td></tr>
+            <tr><td>METAL-001 / 002</td><td>Composição e limite coletivo de ~</td><td class="aviso-sev">aviso</td></tr>
+            <tr><td>RING-001…004</td><td>Anéis válidos · ciclo sem ring (aviso)</td><td class="erro-sev">erro</td></tr>
+            <tr><td>STEREO-001…005</td><td>Configuração estereoquímica declarada</td><td class="erro-sev">erro</td></tr>
+          </table></div></div>
+          <div class="placa c4"><h3>Δχ, sem atalhos</h3><p>&lt; 0,4 apolar · até 1,7 polar · acima de 1,7 iônica. Nunca “metal + ametal = iônica”.</p></div>
+          <div class="placa c6"><h3>Erro real de valência</h3><pre class="erro">Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de C#1 é 5; o máximo para C é 4</pre></div>
+          <div class="placa c6"><h3>Erro real de configuração</h3><pre class="erro">{{ERRO_STEREO}}</pre></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Química">
+        <span class="rotulo">07 — além da validação</span>
+        <h2>O grafo validado vira química</h2>
+        <p class="lead">Com a análise sem erros, o compilador resolve fórmulas e gera relatórios. Saídas reais, pré-computadas.</p>
+        <div class="grade">
+          <div class="placa c6"><h3>Solver de estruturas</h3><p>Geração ordenada de Read-Faradzev: cada isômero sai uma vez, sem guardar chaves.</p><pre>{{BENCH}}</pre></div>
+          <div class="placa c6"><h3>Estereoquímica</h3><p>Contagem exata pelo grupo de automorfismos, com formas meso descontadas.</p><pre>{{ESTEREO}}</pre></div>
+          <div class="placa c6"><h3>Tautômeros</h3><pre>{{TAUTOMEROS}}</pre></div>
+          <div class="placa c6"><h3>Aromaticidade</h3><pre>{{AROMATICIDADE}}</pre></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Demonstração">
+        <span class="rotulo">08 — demonstração</span>
+        <h2>Saída real, pré-computada</h2>
+        <p class="lead">Os três painéis vieram da execução do compilador sobre <code>exemplos/agua.mol</code>.</p>
+        <div class="placa c12" style="margin-top:1.6rem">
+          <div class="abas" role="tablist" data-grupo="demo">
+            <button class="aba" role="tab" aria-selected="true" data-painel="d-tokens">--tokens</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="d-ast">--ast</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="d-modelo">--modelo</button>
+          </div>
+          <pre id="d-tokens" role="tabpanel">{{TOKENS}}</pre>
+          <pre id="d-ast" role="tabpanel" hidden>{{AST}}</pre>
+          <pre id="d-modelo" role="tabpanel" hidden>{{MODELO}}</pre>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Testes">
+        <span class="rotulo">09 — testes</span>
+        <h2>O contrato é executável</h2>
+        <p class="lead">Cada arquivo inválido declara a mensagem esperada; <code>testar.py</code> confere texto, ordem e código de saída.</p>
+        <div class="grade">
+          <div class="placa c3 metrica"><strong>{{TOTAL}}</strong><span>testes · 0 falhas</span></div>
+          <div class="placa c3 metrica"><strong>{{EXEMPLOS}}</strong><span>exemplos válidos</span></div>
+          <div class="placa c3 metrica"><strong>{{SNAPSHOTS}}</strong><span>snapshots de AST e modelo</span></div>
+          <div class="placa c3 metrica"><strong>{{SVGS}}</strong><span>árvores SVG validadas</span></div>
+          <div class="placa c12"><pre>python3 testar.py
+...
+{{RESUMO}}</pre></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Limites">
+        <span class="rotulo">10 — limites e futuro</span>
+        <h2>O que não foi fingido como resolvido</h2>
+        <div class="grade">
+          <div class="placa c4"><h3>Octeto</h3><p><code>OCT-001</code> foi removida: as regras de valência já cobrem os elementos com dados.</p></div>
+          <div class="placa c4"><h3>Ligação metálica</h3><p><code>METAL-002</code> lembra que uma aresta não valida o sólido metálico.</p></div>
+          <div class="placa c4"><h3>Fontes antes de regras</h3><p>Valências sem fonte (Be, Al, Si, metais de transição) não entram no código.</p></div>
+          <div class="placa c4"><h3>Solver</h3><p>Até 12 átomos pesados, com JSON/JSONL, timeout e busca isolada.</p></div>
+          <div class="placa c4"><h3>Geometria 3D</h3><p>O desenho 3D do playground é ilustrativo; quiralidade planar e barreiras de rotação ficam fora.</p></div>
+          <div class="placa c4"><h3>Isótopos</h3><p>Sem isótopos na linguagem, a regra CIP 2 nunca tem empate a resolver.</p></div>
+        </div>
+      </article>
+
+      <article class="slide" data-titulo="Referências">
+        <span class="rotulo">11 — referências</span>
+        <h2>Implementação rastreável</h2>
+        <div class="grade">
+          <div class="placa c6"><p>ANTLR 4.13.2 — lexer, parser, visitor e runtime Python.</p></div>
+          <div class="placa c6"><p>PubChem Periodic Table — elementos e eletronegatividade.</p></div>
+          <div class="placa c6"><p>IUPAC Gold Book — ligação coordenada, ordem de ligação e carga.</p></div>
+          <div class="placa c6"><p>IUPAC 2013 (P-92) — regras CIP e descritores r/s.</p></div>
+          <div class="placa c6"><p>Read (1978) e Faradzev (1978) — geração ordenada de grafos.</p></div>
+          <div class="placa c6"><p><code>docs/levantamento_quimica.md</code> e <code>docs/especificacao.md</code> — fontes e contrato.</p></div>
+        </div>
+      </article>
+
+      <nav class="paginador" aria-label="Paginação do conteúdo">
+        <button class="botao" type="button" data-passo="-1">← Anterior</button>
+        <div class="pontinhos" role="tablist"></div>
+        <span class="contador"></span>
+        <button class="botao" type="button" data-passo="1">Próximo →</button>
+      </nav>
+    </section>
+
+    <!-- ================= USO ================= -->
+    <section class="pagina" id="pg-uso" aria-label="Uso">
+      <span class="rotulo">uso</span>
+      <h2>Do clone à molécula analisada</h2>
+      <p class="lead">Requisitos: Python 3.10+, Java (para gerar o parser) e o pacote <code>antlr4-tools</code>.</p>
+      <div class="grade">
+        <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></div><h3>1. Instalar</h3><pre>python3 -m pip install -r requirements.txt
+python3 -m pip install -r requirements-solver.txt  <span class="com"># opcional: CP-SAT</span></pre></div>
+        <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><h3>2. Gerar o parser</h3><pre>sh gerar.sh</pre><p class="nota">Cria a pasta <code>gerado/</code> com lexer, parser e visitor do ANTLR.</p></div>
+        <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/></svg></div><h3>3. Compilar uma molécula</h3><pre>python3 src/main.py exemplos/agua.mol
+python3 src/main.py --tokens --ast --modelo exemplos/agua.mol
+python3 src/main.py --estereo exemplos/acido_tartarico_meso.mol</pre></div>
+        <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><h3>4. Rodar os testes</h3><pre>python3 testar.py
+python3 tests/benchmark_solver.py --backend=ambos</pre></div>
+        <div class="placa c8"><h3>Opções de linha de comando</h3><p class="nota">Texto real de <code>python3 src/main.py</code> sem argumentos:</p><pre>{{USO}}</pre></div>
+        <div class="placa c4"><h3>Códigos de saída</h3><div class="tabela"><table>
+          <tr><th>Código</th><th>Significado</th></tr>
+          <tr><td>0</td><td>sem erros (avisos não bloqueiam)</td></tr>
+          <tr><td>1</td><td>erro léxico, sintático ou de entrada</td></tr>
+          <tr><td>2</td><td>erro semântico ou de resolução</td></tr>
+        </table></div>
+        <h3 style="margin-top:1.4rem">Árvores em SVG</h3><pre>python3 src/desenhar_arvore.py \
+  exemplos/agua.mol --tipo ast</pre></div>
+      </div>
+    </section>
+
+    <!-- ================= DOC ================= -->
+    <section class="pagina" id="pg-doc" aria-label="Documentação">
+      <span class="rotulo">documentação</span>
+      <h2>Referência da linguagem</h2>
+      <div class="doc">
+        <nav class="sumario placa" aria-label="Tópicos">
+          <a href="#/doc/comandos" data-topico="comandos">Comandos</a>
+          <a href="#/doc/referencias" data-topico="referencias">Referências e nomes</a>
+          <a href="#/doc/estereo" data-topico="estereo">Configuração (stereo)</a>
+          <a href="#/doc/gramatica" data-topico="gramatica">Gramática ANTLR</a>
+          <a href="#/doc/erros" data-topico="erros">Erros</a>
+          <a href="#/doc/relatorios" data-topico="relatorios">Relatórios e solver</a>
+        </nav>
+        <div class="placa">
+          <article class="topico" data-topico="comandos">
+            <h3>Comandos</h3>
+            <p>Um arquivo contém uma única espécie. Dentro dela, <code>atom</code>, <code>bond</code>, <code>ring</code> e <code>stereo</code> aparecem em qualquer ordem.</p>
+            <h4>Cabeçalho</h4>
+            <pre><span class="kw">species</span> &lt;tipo&gt; <span class="str">"Nome"</span> [<span class="kw">charge</span> +N|-N] [<span class="kw">unpaired</span> N] { … }
+<span class="com">// tipos: molecule, molecular_ion (exige charge), ionic_solid,
+//        covalent_network, metallic_solid
+// legado: molecule "Nome" { … }</span></pre>
+            <h4>atom</h4>
+            <pre>[Nx] <span class="kw">atom</span> Elemento[(±carga)] [<span class="kw">as</span> nome]
+<span class="kw">atom</span> O
+<span class="kw">atom</span> N(<span class="op">+</span>1) <span class="kw">as</span> n1
+4x <span class="kw">atom</span> H <span class="kw">as</span> h      <span class="com">// cria h1, h2, h3, h4</span></pre>
+            <h4>bond</h4>
+            <pre><span class="kw">bond</span> ref operador ref [xN]
+<span class="kw">bond</span> H<span class="op">-</span>O
+<span class="kw">bond</span> C<span class="op">-</span>H x4         <span class="com">// repete com os próximos H livres</span>
+<span class="kw">bond</span> N<span class="op">-&gt;</span>B            <span class="com">// coordenada: doador -&gt; receptor</span></pre>
+            <h4>ring</h4>
+            <pre><span class="kw">ring</span> c1 c2 c3 c4 c5 c6  <span class="com">// pelo menos três nomes, na ordem do ciclo</span></pre>
+          </article>
+          <article class="topico" data-topico="referencias">
+            <h3>Referências e nomes</h3>
+            <p>Uma referência é um símbolo de elemento (<code>H</code>) ou um nome de átomo (<code>c1</code>).</p>
+            <ul>
+              <li>Pelo símbolo, a ligação usa o próximo átomo daquele elemento ainda não citado. Com um só átomo do elemento, é sempre ele.</li>
+              <li>Com <code>4x atom H as h</code>, o nome vira prefixo: <code>h1</code> a <code>h4</code>.</li>
+              <li>Nomes começam com letra minúscula. Palavras-chave e nomes como <code>x4</code> são reservados.</li>
+              <li>Em <code>stereo</code>, a referência precisa identificar um único átomo.</li>
+            </ul>
+            <h4>Palavras reservadas</h4>
+            <pre>molecule species molecular_ion ionic_solid covalent_network metallic_solid
+charge unpaired atom bond as ring stereo</pre>
+          </article>
+          <article class="topico" data-topico="estereo">
+            <h3>Configuração (stereo)</h3>
+            <pre><span class="kw">stereo</span> c2 R          <span class="com">// centro: R ou S; r ou s se pseudoassimétrico</span>
+<span class="kw">stereo</span> c2<span class="op">=</span>c3 Z       <span class="com">// ligação dupla: E ou Z</span>
+<span class="kw">stereo</span> c3 Ra         <span class="com">// aleno, pelo átomo central</span>
+<span class="kw">stereo</span> a1<span class="op">-</span>b1 Ra      <span class="com">// eixo de biarila (aviso STEREO-005)</span>
+<span class="kw">stereo</span> r1 r2 trans   <span class="com">// configuração relativa num anel</span></pre>
+            <p>A semântica confere se o elemento é estereogênico nesta constituição e nas demais configurações declaradas. Com tudo declarado, <code>--estereo</code> diz se o estereoisômero é quiral, aquiral ou meso e mostra o enantiômero.</p>
+            <div class="tabela"><table>
+              <tr><th>Código</th><th>Situação</th></tr>
+              <tr><td>STEREO-001</td><td>não é elemento estereogênico, ou referência ambígua</td></tr>
+              <tr><td>STEREO-002</td><td>descritor não combina com o elemento</td></tr>
+              <tr><td>STEREO-003</td><td>descritor repetido</td></tr>
+              <tr><td>STEREO-004</td><td>r/s sem a configuração dos ramos</td></tr>
+              <tr><td>STEREO-005</td><td>eixo de biarila sem verificação da barreira (aviso)</td></tr>
+            </table></div>
+          </article>
+          <article class="topico" data-topico="gramatica">
+            <h3>Gramática ANTLR</h3>
+            <p>Conteúdo real de <code>gramatica/MoleculeDSL.g4</code>:</p>
+            <pre>{{GRAMATICA}}</pre>
+          </article>
+          <article class="topico" data-topico="erros">
+            <h3>Erros</h3>
+            <pre>Erro &lt;fase&gt; [&lt;código&gt;] na linha &lt;linha&gt;, coluna &lt;coluna&gt;: &lt;mensagem&gt;</pre>
+            <div class="tabela"><table>
+              <tr><th>Código</th><th>Causa</th></tr>
+              <tr><td>LEX-001…005</td><td>caractere inválido, texto sem aspas, número malformado, caractere invisível, arquivo fora de UTF-8</td></tr>
+              <tr><td>SIN-001</td><td>faltou um token obrigatório</td></tr>
+              <tr><td>SIN-002</td><td>token inesperado ou sobrando</td></tr>
+              <tr><td>SIN-003</td><td>nenhuma alternativa aceita a entrada</td></tr>
+              <tr><td>SIN-004</td><td>o arquivo terminou antes da hora</td></tr>
+              <tr><td>ENT-001</td><td>arquivo não encontrado</td></tr>
+              <tr><td>CFG-001</td><td>parser não gerado (rode <code>sh gerar.sh</code>)</td></tr>
+              <tr><td>LIM-001</td><td>mais de dez erros na mesma fase</td></tr>
+            </table></div>
+            <p class="nota">Lista completa e regras semânticas em <code>docs/erros.md</code> e <code>docs/plano_semantico.md</code>.</p>
+          </article>
+          <article class="topico" data-topico="relatorios">
+            <h3>Relatórios e solver</h3>
+            <div class="tabela"><table>
+              <tr><th>Opção</th><th>Mostra</th></tr>
+              <tr><td>--eletronico</td><td>pares livres, elétrons não ligantes e ligações pi</td></tr>
+              <tr><td>--ressonancia</td><td>formas de ressonância, inclusive de radicais</td></tr>
+              <tr><td>--tautomeros</td><td>tautômeros por deslocamento de H</td></tr>
+              <tr><td>--aromaticidade</td><td>regra de Hückel nos ciclos</td></tr>
+              <tr><td>--estereo</td><td>elementos estereogênicos e contagem exata</td></tr>
+              <tr><td>--coordenacao</td><td>metais, ligantes e estados de oxidação</td></tr>
+              <tr><td>--resolver</td><td>infere as ligações de uma fórmula com solução única</td></tr>
+              <tr><td>--resolver-todas</td><td>enumera estruturas não equivalentes, com filtros</td></tr>
+            </table></div>
+          </article>
+          <nav class="paginador" aria-label="Paginação da documentação">
+            <button class="botao" type="button" data-doc-passo="-1">← Anterior</button>
+            <span class="contador"></span>
+            <button class="botao" type="button" data-doc-passo="1">Próximo →</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PLAYGROUND ================= -->
+    <section class="pagina" id="pg-playground" aria-label="Playground">
+      <span class="rotulo">playground</span>
+      <h2>Escreva MoleculeDSL, veja a molécula</h2>
+      <p class="lead">O código é analisado no navegador enquanto você digita e desenhado em 3D. Para a análise oficial completa, rode <code>python3 src/main.py</code>.</p>
+      <div class="play">
+        <div class="placa">
+          <div class="barra-ferramentas">
+            <select id="exemplo" aria-label="Carregar exemplo"></select>
+            <button class="botao" type="button" id="limpar">Limpar</button>
+          </div>
+          <div class="editor">
+            <div class="numeros" id="numeros" aria-hidden="true">1</div>
+            <textarea id="codigo" spellcheck="false" aria-label="Código MoleculeDSL" autocapitalize="off" autocomplete="off"></textarea>
+          </div>
+        </div>
+        <div class="placa">
+          <div class="barra-ferramentas">
+            <label class="alternar"><input type="checkbox" id="girar" checked> girar</label>
+            <label class="alternar"><input type="checkbox" id="rotulos"> rótulos</label>
+            <label class="alternar"><input type="checkbox" id="esconder-h"> ocultar H</label>
+            <button class="botao" type="button" id="recentrar">Recentrar</button>
+          </div>
+          <div class="cena"><canvas id="cena-3d" aria-label="Molécula em 3D"></canvas><div class="vazio" id="cena-vazia" hidden></div><span class="dica">arraste · role para zoom</span></div>
+          <div class="resumo-mol" id="resumo"></div>
+          <div class="abas" role="tablist" data-grupo="play">
+            <button class="aba" role="tab" aria-selected="true" data-painel="p-diag">Diagnóstico</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="p-modelo">Modelo</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="p-real">Compilador real</button>
+          </div>
+          <pre class="saida" id="p-diag" role="tabpanel"></pre>
+          <pre class="saida" id="p-modelo" role="tabpanel" hidden></pre>
+          <pre class="saida" id="p-real" role="tabpanel" hidden></pre>
+          <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve a constituição, não coordenadas. A verificação do navegador cobre sintaxe, nomes, anéis e valências das regras; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Molecule<b>DSL</b> · linguagem química · Linguagens Formais e Compiladores · Geisbelly Victoria, Murilo e Maria Antonia · 2026</footer>
+
+  <script type="application/json" id="dados">{{DADOS_JSON}}</script>
+  <script>
+  "use strict";
+  const DADOS = JSON.parse(document.getElementById("dados").textContent);
+  const raiz = document.documentElement;
+
+  /* ---------------- tema ---------------- */
+  try {
+    const salvo = localStorage.getItem("moleculedsl-tema");
+    if (salvo) raiz.dataset.theme = salvo;
+    else if (matchMedia("(prefers-color-scheme: light)").matches) raiz.dataset.theme = "light";
+  } catch (e) {}
+  document.querySelector(".tema").addEventListener("click", () => {
+    raiz.dataset.theme = raiz.dataset.theme === "light" ? "dark" : "light";
+    try { localStorage.setItem("moleculedsl-tema", raiz.dataset.theme); } catch (e) {}
+  });
+
+  /* ---------------- abas ---------------- */
+  document.querySelectorAll(".abas").forEach((grupo) => {
+    grupo.querySelectorAll(".aba").forEach((aba) => {
+      aba.addEventListener("click", () => {
+        grupo.querySelectorAll(".aba").forEach((outra) => {
+          outra.setAttribute("aria-selected", String(outra === aba));
+          document.getElementById(outra.dataset.painel).hidden = outra !== aba;
+        });
+      });
+    });
+  });
+
+  /* ================= compilador do navegador ================= */
+  const PALAVRAS = new Set(["molecule", "species", "molecular_ion", "ionic_solid", "covalent_network",
+    "metallic_solid", "charge", "unpaired", "atom", "bond", "as", "ring", "stereo"]);
+  const OPERADORES = { "-": 1, "=": 2, "#": 3, "->": 1, "~": 0 };
+
+  class ErroDSL extends Error {
+    constructor(fase, linha, coluna, mensagem) { super(mensagem); this.fase = fase; this.linha = linha; this.coluna = coluna; }
+    toString() { return `Erro ${this.fase} na linha ${this.linha}, coluna ${this.coluna}: ${this.message}`; }
+  }
+
+  function tokenizar(texto) {
+    const tokens = [];
+    let i = 0, linha = 1, coluna = 0;
+    const avancar = (n) => {
+      for (let k = 0; k < n; k++) {
+        if (texto[i] === "\n") { linha++; coluna = 0; } else { coluna++; }
+        i++;
+      }
+    };
+    while (i < texto.length) {
+      const resto = texto.slice(i);
+      let m;
+      if ((m = /^[ \t\r\n﻿]+/.exec(resto))) { avancar(m[0].length); continue; }
+      if (resto.startsWith("//")) { const fim = resto.indexOf("\n"); avancar(fim < 0 ? resto.length : fim); continue; }
+      const pos = { l: linha, c: coluna };
+      const empurrar = (tipo, valor) => { tokens.push({ tipo, valor, ...pos }); avancar(valor.length); };
+      if (resto[0] === '"') {
+        m = /^"[^"\r\n]*"/.exec(resto);
+        if (!m) throw new ErroDSL("léxico", linha, coluna, "texto sem aspas de fechamento na mesma linha");
+        empurrar("TEXTO", m[0]); continue;
+      }
+      if ((m = /^[0-9]+x/.exec(resto)) && !/^[0-9]+x[a-z0-9_]/.test(resto)) { empurrar("MULT", m[0]); continue; }
+      if ((m = /^[0-9]+\.[0-9]+/.exec(resto))) { empurrar("REAL", m[0]); continue; }
+      if ((m = /^[0-9]+/.exec(resto))) { empurrar("INT", m[0]); continue; }
+      if ((m = /^[a-z][a-z0-9_]*/.exec(resto))) {
+        const v = m[0];
+        empurrar(PALAVRAS.has(v) ? v : /^x[0-9]+$/.test(v) ? "REP" : "NOME", v); continue;
+      }
+      if ((m = /^[A-Z][a-z]?/.exec(resto))) { empurrar("IDENT", m[0]); continue; }
+      if (resto.startsWith("->")) { empurrar("OP", "->"); continue; }
+      if ("-=#~".includes(resto[0])) { empurrar("OP", resto[0]); continue; }
+      if ("+(){}".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
+      throw new ErroDSL("léxico", linha, coluna, `caractere inválido '${resto[0]}'`);
+    }
+    tokens.push({ tipo: "EOF", valor: "fim do arquivo", l: linha, c: coluna });
+    return tokens;
+  }
+
+  function analisarSintaxe(tokens) {
+    let p = 0;
+    const atual = () => tokens[p];
+    const descrever = (t) => (t.tipo === "EOF" ? "fim do arquivo" : `'${t.valor}'`);
+    const falhar = (esperado) => { const t = atual(); throw new ErroDSL("sintático", t.l, t.c, `esperado ${esperado}, encontrado ${descrever(t)}`); };
+    const pegar = (tipo, esperado) => { if (atual().tipo !== tipo) falhar(esperado); return tokens[p++]; };
+    const talvez = (tipo) => (atual().tipo === tipo ? tokens[p++] : null);
+
+    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [] };
+    if (talvez("molecule")) {
+      especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
+    } else if (talvez("species")) {
+      const tipo = atual().tipo;
+      if (!["molecule", "molecular_ion", "ionic_solid", "covalent_network", "metallic_solid"].includes(tipo)) falhar("tipo de espécie depois de 'species'");
+      p++;
+      especie.tipo = tipo;
+      especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
+      if (tipo === "molecular_ion") {
+        pegar("charge", "'charge' com a carga do íon");
+        const sinal = atual().valor === "+" ? 1 : atual().valor === "-" ? -1 : falhar("sinal da carga (+ ou -)");
+        p++;
+        especie.carga = sinal * Number(pegar("INT", "número inteiro na carga").valor);
+      }
+    } else {
+      falhar("'molecule' ou 'species' no início do programa");
+    }
+    if (talvez("unpaired")) especie.desemparelhados = Number(pegar("INT", "número depois de 'unpaired'").valor);
+    pegar("{", "'{' depois do nome da espécie");
+
+    const referencia = (onde) => {
+      const t = atual();
+      if (t.tipo !== "IDENT" && t.tipo !== "NOME") falhar(`elemento ou nome de átomo ${onde}`);
+      p++;
+      return { texto: t.valor, porNome: t.tipo === "NOME", l: t.l, c: t.c };
+    };
+
+    while (atual().tipo !== "}") {
+      const t = atual();
+      if (t.tipo === "EOF") falhar("'}' para fechar a molécula");
+      if (t.tipo === "MULT" || t.tipo === "atom") {
+        const mult = t.tipo === "MULT" ? Number(tokens[p++].valor.slice(0, -1)) : 1;
+        pegar("atom", "'atom' depois do multiplicador");
+        const el = pegar("IDENT", "símbolo de elemento depois de 'atom'");
+        let carga = 0;
+        if (talvez("(")) {
+          const s = atual().valor === "+" ? 1 : atual().valor === "-" ? -1 : falhar("sinal na carga, como (+1) ou (-1)");
+          p++;
+          carga = s * Number(pegar("INT", "número inteiro na carga").valor);
+          pegar(")", "')' para fechar a carga");
+        }
+        let nome = null;
+        if (talvez("as")) nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
+        especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, l: t.l, c: t.c });
+      } else if (t.tipo === "bond") {
+        p++;
+        const origem = referencia("na ligação");
+        const op = pegar("OP", "operador de ligação (-, =, #, -> ou ~)").valor;
+        const destino = referencia("na ligação");
+        const rep = talvez("REP");
+        especie.comandos.push({ tipo: "bond", origem, op, destino, rep: rep ? Number(rep.valor.slice(1)) : 1, l: t.l, c: t.c });
+      } else if (t.tipo === "ring") {
+        p++;
+        const nomes = [];
+        while (atual().tipo === "NOME") { const n = tokens[p++]; nomes.push({ texto: n.valor, porNome: true, l: n.l, c: n.c }); }
+        if (nomes.length < 3) falhar("pelo menos três nomes de átomos no anel");
+        especie.comandos.push({ tipo: "ring", nomes, l: t.l, c: t.c });
+      } else if (t.tipo === "stereo") {
+        p++;
+        const refs = [referencia("em 'stereo'")];
+        let op = null;
+        if (atual().tipo === "OP") { op = tokens[p++].valor; refs.push(referencia("em 'stereo'")); }
+        else if ((atual().tipo === "NOME" || atual().tipo === "IDENT") && ["NOME", "IDENT"].includes(tokens[p + 1].tipo)) refs.push(referencia("em 'stereo'"));
+        const d = atual();
+        if (d.tipo !== "IDENT" && d.tipo !== "NOME") falhar("descritor (R, S, r, s, E, Z, Ra, Sa, cis ou trans)");
+        p++;
+        especie.comandos.push({ tipo: "stereo", refs, op, descritor: d.valor, l: t.l, c: t.c });
+      } else {
+        falhar("'atom', 'bond', 'ring', 'stereo' ou '}'");
+      }
+    }
+    p++;
+    if (atual().tipo !== "EOF") falhar("fim do arquivo depois de '}'");
+    return especie;
+  }
+
+  function analisarSemantica(especie) {
+    const erros = [], avisos = [];
+    const erro = (no, msg) => erros.push(`Erro semântico na linha ${no.l}, coluna ${no.c}: ${msg}`);
+    const aviso = (no, msg) => avisos.push(`Aviso semântico na linha ${no.l}, coluna ${no.c}: ${msg}`);
+    const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
+      if (!DADOS.elementos[cmd.el]) { erro(cmd, `elemento desconhecido '${cmd.el}'`); continue; }
+      for (let k = 1; k <= cmd.mult; k++) {
+        const nome = cmd.nome == null ? null : cmd.mult > 1 ? cmd.nome + k : cmd.nome;
+        if (nome && porNome.has(nome)) { erro(cmd, `o nome '${nome}' já foi usado`); continue; }
+        contagem.set(cmd.el, (contagem.get(cmd.el) || 0) + 1);
+        const atomo = { id: atomos.length, el: cmd.el, carga: cmd.carga, nome, indice: contagem.get(cmd.el) };
+        atomos.push(atomo);
+        if (nome) porNome.set(nome, atomo);
+        if (!porElemento.has(cmd.el)) porElemento.set(cmd.el, []);
+        porElemento.get(cmd.el).push(atomo);
+      }
+    }
+    const citados = new Set();
+    const resolver = (ref, fixo) => {
+      if (ref.porNome) {
+        const a = porNome.get(ref.texto);
+        if (!a) { erro(ref, `nenhum átomo se chama '${ref.texto}'`); return null; }
+        citados.add(a.id); return a;
+      }
+      const lista = porElemento.get(ref.texto) || [];
+      if (!lista.length) { erro(ref, DADOS.elementos[ref.texto] ? `nenhum átomo de ${ref.texto} foi declarado` : `elemento desconhecido '${ref.texto}'`); return null; }
+      if (lista.length === 1) { citados.add(lista[0].id); return lista[0]; }
+      if (fixo) { erro(ref, `'${ref.texto}' não identifica um único átomo; use o nome do átomo`); return null; }
+      const livre = lista.find((a) => !citados.has(a.id));
+      if (!livre) { erro(ref, `todos os ${lista.length} átomos de ${ref.texto} já foram citados; use nomes`); return null; }
+      citados.add(livre.id); return livre;
+    };
+    const ligacoes = [], pares = new Set();
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "bond")) {
+      for (let k = 0; k < cmd.rep; k++) {
+        const a = resolver(cmd.origem), b = resolver(cmd.destino);
+        if (!a || !b) break;
+        if (a.id === b.id) { erro(cmd, `o átomo ${rotulo(a)} não pode se ligar a ele mesmo`); break; }
+        const chave = Math.min(a.id, b.id) + "-" + Math.max(a.id, b.id);
+        if (pares.has(chave)) { erro(cmd, `já existe uma ligação entre ${rotulo(a)} e ${rotulo(b)}; use = ou # para ligação múltipla`); break; }
+        pares.add(chave);
+        ligacoes.push({ a: a.id, b: b.id, op: cmd.op, ordem: OPERADORES[cmd.op] });
+      }
+    }
+    const temPar = (x, y) => pares.has(Math.min(x, y) + "-" + Math.max(x, y));
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "ring")) {
+      const lista = cmd.nomes.map((r) => resolver(r));
+      if (lista.includes(null)) continue;
+      for (let k = 0; k < lista.length; k++) {
+        const x = lista[k], y = lista[(k + 1) % lista.length];
+        if (!temPar(x.id, y.id)) { erro(cmd.nomes[(k + 1) % lista.length], `os átomos ${x.nome} e ${y.nome} do anel não estão ligados`); break; }
+      }
+    }
+    const configuracoes = [];
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "stereo")) {
+      const lista = cmd.refs.map((r) => resolver(r, true));
+      if (!lista.includes(null)) configuracoes.push({ atomos: lista, op: cmd.op, descritor: cmd.descritor });
+    }
+    if (!erros.length) {
+      const soma = atomos.map(() => 0);
+      for (const lig of ligacoes) { soma[lig.a] += lig.ordem; soma[lig.b] += lig.ordem; }
+      const linhaAtomo = new Map();
+      especie.comandos.filter((c) => c.tipo === "atom").forEach((c) => (porElemento.get(c.el) || []).forEach((a) => { if (!linhaAtomo.has(a.id)) linhaAtomo.set(a.id, c); }));
+      for (const a of atomos) {
+        const permitidas = valenciasDe(a);
+        if (!permitidas) continue;
+        const maximo = Math.max(...permitidas);
+        const no = linhaAtomo.get(a.id) || { l: 1, c: 0 };
+        if (soma[a.id] > maximo) erro(no, `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`);
+        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`);
+      }
+      if (atomos.length > 1 && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
+        erro({ l: 1, c: 0 }, "a entidade tem partes desconectadas");
+      }
+    }
+    return { atomos, ligacoes, configuracoes, erros, avisos };
+  }
+
+  function valenciasDe(a) {
+    const v = DADOS.valencias;
+    if (a.carga) {
+      const tabela = (v.valencias_com_carga[a.el] || {})[(a.carga > 0 ? "+" : "") + a.carga];
+      return tabela || null;
+    }
+    const base = v.valencias[a.el];
+    if (!base) return null;
+    const expandidas = (v.valencias_expandidas[a.el] || {}).valencias || [];
+    return [...new Set([...base, ...expandidas])];
+  }
+
+  function componentes(atomos, ligacoes) {
+    const pai = atomos.map((_, i) => i);
+    const achar = (x) => (pai[x] === x ? x : (pai[x] = achar(pai[x])));
+    ligacoes.forEach((l) => { pai[achar(l.a)] = achar(l.b); });
+    return new Set(atomos.map((_, i) => achar(i))).size;
+  }
+
+  function rotulo(a) { return a.nome ? `${a.nome} (${a.el}#${a.indice})` : `${a.el}#${a.indice}`; }
+
+  function formulaHill(atomos) {
+    const n = {};
+    atomos.forEach((a) => (n[a.el] = (n[a.el] || 0) + 1));
+    const ordem = Object.keys(n).sort((x, y) => {
+      const p = (e) => (n.C ? (e === "C" ? 0 : e === "H" ? 1 : 2) : 2);
+      return p(x) - p(y) || x.localeCompare(y);
+    });
+    return ordem.map((e) => e + (n[e] > 1 ? n[e] : "")).join("");
+  }
+
+  function compilar(texto) {
+    try {
+      const especie = analisarSintaxe(tokenizar(texto));
+      return { especie, ...analisarSemantica(especie) };
+    } catch (e) {
+      if (e instanceof ErroDSL) return { erros: [e.toString()], avisos: [], atomos: [], ligacoes: [] };
+      throw e;
+    }
+  }
+
+  /* ================= desenho 3D ================= */
+  const CORES = { H: "#e4e3ea", C: "#5d5b66", N: "#8c95d8", O: "#d68c9a", S: "#d7c47a", P: "#d9a36f",
+    F: "#8fc7a4", Cl: "#86bf9a", Br: "#b08470", I: "#9a80bd", B: "#d3b39a", Na: "#b1a2e6", K: "#b1a2e6" };
+  const corDe = (el) => CORES[el] || "#b9a3f7";
+  const raioDe = (el) => (el === "H" ? 0.36 : 0.56);
+
+  function aleatorio(semente) {
+    let s = semente >>> 0 || 1;
+    return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  }
+
+  function layout(atomosReais, ligacoesReais) {
+    // Pares livres entram como pontos invisíveis que se repelem (VSEPR):
+    // assim a água sai angular e a amônia piramidal
+    const atomos = [...atomosReais];
+    const ligacoes = [...ligacoesReais];
+    const soma = atomosReais.map(() => 0);
+    ligacoesReais.forEach((l) => { soma[l.a] += l.ordem; soma[l.b] += l.ordem; });
+    atomosReais.forEach((a, i) => {
+      const eletrons = (DADOS.elementos[a.el] || {}).valencia;
+      if (eletrons == null || a.el === "H" || !soma[i]) return;
+      const pares = Math.floor((eletrons - a.carga - soma[i]) / 2);
+      for (let k = 0; k < Math.min(pares, 3); k++) {
+        atomos.push({ el: "par", fantasma: true });
+        ligacoes.push({ a: i, b: atomos.length - 1, ordem: 1, fantasma: true });
+      }
+    });
+    const n = atomos.length;
+    const rnd = aleatorio(n * 7919 + ligacoes.length * 104729);
+    const pos = atomos.map(() => [rnd() - 0.5, rnd() - 0.5, rnd() - 0.5].map((v) => v * Math.cbrt(n) * 1.6));
+    const vizinhos = atomos.map(() => new Set());
+    ligacoes.forEach((l) => { vizinhos[l.a].add(l.b); vizinhos[l.b].add(l.a); });
+    const repouso = (l) => {
+      if (l.fantasma) return 0.75;
+      const h = atomos[l.a].el === "H" || atomos[l.b].el === "H";
+      if (l.ordem === 0) return 2.2;
+      return (h ? 1.05 : 1.5) * ({ 1: 1, 2: 0.88, 3: 0.79 }[l.ordem] || 1);
+    };
+    let passo = 0.12;
+    const iteracoes = n > 60 ? 500 : 900;
+    for (let it = 0; it < iteracoes; it++) {
+      const forca = pos.map(() => [0, 0, 0]);
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          const d = [0, 1, 2].map((k) => pos[i][k] - pos[j][k]);
+          const r2 = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + 0.01;
+          const r = Math.sqrt(r2);
+          let k = 0.9 / r2;
+          if (vizinhos[i].has(j)) k *= 0.2;
+          else for (const v of vizinhos[i]) if (vizinhos[v].has(j)) { k *= 2.4; break; }
+          if (r > 6) continue;
+          for (let c = 0; c < 3; c++) { forca[i][c] += (d[c] / r) * k; forca[j][c] -= (d[c] / r) * k; }
+        }
+      }
+      for (const l of ligacoes) {
+        const d = [0, 1, 2].map((k) => pos[l.b][k] - pos[l.a][k]);
+        const r = Math.hypot(...d) + 1e-6;
+        const k = 2.2 * (r - repouso(l));
+        for (let c = 0; c < 3; c++) { forca[l.a][c] += (d[c] / r) * k; forca[l.b][c] -= (d[c] / r) * k; }
+      }
+      for (let i = 0; i < n; i++) {
+        for (let c = 0; c < 3; c++) pos[i][c] += Math.max(-0.4, Math.min(0.4, forca[i][c] * passo));
+      }
+      passo *= 0.997;
+    }
+    const reais = pos.slice(0, atomosReais.length);
+    const centro = [0, 1, 2].map((k) => reais.reduce((s, p) => s + p[k], 0) / Math.max(reais.length, 1));
+    reais.forEach((p) => { for (let k = 0; k < 3; k++) p[k] -= centro[k]; });
+    return reais;
+  }
+
+  class Cena {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext("2d");
+      this.atomos = []; this.ligacoes = []; this.pos = [];
+      this.rx = -0.35; this.ry = 0.5; this.zoom = 1;
+      this.girar = true; this.rotulos = false; this.semH = false;
+      this.arrastando = false;
+      const inicio = (x, y) => { this.arrastando = true; this.ultimo = [x, y]; canvas.style.cursor = "grabbing"; };
+      const mover = (x, y) => {
+        if (!this.arrastando) return;
+        this.ry += (x - this.ultimo[0]) * 0.01; this.rx += (y - this.ultimo[1]) * 0.01;
+        this.ultimo = [x, y]; this.desenhar();
+      };
+      const fim = () => { this.arrastando = false; canvas.style.cursor = "grab"; };
+      canvas.addEventListener("pointerdown", (e) => { canvas.setPointerCapture(e.pointerId); inicio(e.clientX, e.clientY); });
+      canvas.addEventListener("pointermove", (e) => mover(e.clientX, e.clientY));
+      canvas.addEventListener("pointerup", fim);
+      canvas.addEventListener("pointercancel", fim);
+      canvas.addEventListener("wheel", (e) => { e.preventDefault(); this.zoom = Math.min(3, Math.max(0.4, this.zoom * (e.deltaY > 0 ? 0.92 : 1.08))); this.desenhar(); }, { passive: false });
+      new ResizeObserver(() => this.desenhar()).observe(canvas);
+      const quadro = () => {
+        if (this.girar && !this.arrastando && this.atomos.length && this.visivel()) { this.ry += 0.006; this.desenhar(); }
+        requestAnimationFrame(quadro);
+      };
+      requestAnimationFrame(quadro);
+    }
+    visivel() { return this.canvas.offsetParent !== null; }
+    carregar(atomos, ligacoes) {
+      this.atomos = atomos; this.ligacoes = ligacoes; this.pos = layout(atomos, ligacoes);
+      const raio = Math.max(1.5, ...this.pos.map((p) => Math.hypot(...p)));
+      this.escalaBase = 1 / (raio + 0.8);
+      this.desenhar();
+    }
+    desenhar() {
+      const c = this.canvas, ctx = this.ctx;
+      const dpr = window.devicePixelRatio || 1;
+      const w = c.clientWidth, h = c.clientHeight;
+      if (!w || !h) return;
+      if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      if (!this.atomos.length) return;
+      const escuro = raiz.dataset.theme !== "light";
+      const cy = Math.cos(this.ry), sy = Math.sin(this.ry), cx = Math.cos(this.rx), sx = Math.sin(this.rx);
+      const escala = Math.min(w, h) * 0.46 * this.escalaBase * this.zoom;
+      const proj = this.pos.map(([x, y, z]) => {
+        const x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
+        const y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx;
+        const f = 6 / (6 - z2 * this.escalaBase * 2.2);
+        return { x: w / 2 + x1 * escala * f, y: h / 2 + y1 * escala * f, z: z2, f };
+      });
+      const oculto = (i) => this.semH && this.atomos[i].el === "H";
+      const itens = [];
+      this.ligacoes.forEach((l) => { if (!oculto(l.a) && !oculto(l.b)) itens.push({ t: "l", l, z: (proj[l.a].z + proj[l.b].z) / 2 - 0.01 }); });
+      this.atomos.forEach((a, i) => { if (!oculto(i)) itens.push({ t: "a", i, z: proj[i].z }); });
+      itens.sort((p, q) => p.z - q.z);
+      const corLigacao = escuro ? "rgba(200, 196, 214, 0.55)" : "rgba(70, 64, 88, 0.5)";
+      for (const item of itens) {
+        if (item.t === "l") {
+          const { l } = item, A = proj[l.a], B = proj[l.b];
+          const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy) || 1;
+          const nx = -dy / len, ny = dx / len;
+          const largura = Math.max(1.2, 0.09 * escala * (A.f + B.f) / 2);
+          ctx.strokeStyle = l.op === "->" ? (escuro ? "#b9a3f7" : "#7a5ae0") : corLigacao;
+          ctx.lineWidth = l.ordem > 1 ? largura * 0.7 : largura;
+          ctx.lineCap = "round";
+          ctx.setLineDash(l.op === "->" ? [largura * 1.6, largura * 1.4] : l.op === "~" ? [1, largura * 1.8] : []);
+          const linhas = l.ordem <= 1 ? [0] : l.ordem === 2 ? [-0.5, 0.5] : [-1, 0, 1];
+          const sep = largura * 1.35;
+          for (const o of linhas) {
+            ctx.beginPath();
+            ctx.moveTo(A.x + nx * o * sep, A.y + ny * o * sep);
+            ctx.lineTo(B.x + nx * o * sep, B.y + ny * o * sep);
+            ctx.stroke();
+          }
+          ctx.setLineDash([]);
+        } else {
+          const a = this.atomos[item.i], P = proj[item.i];
+          const r = raioDe(a.el) * escala * P.f * 0.62;
+          const g = ctx.createRadialGradient(P.x - r * 0.35, P.y - r * 0.4, r * 0.1, P.x, P.y, r);
+          const base = corDe(a.el);
+          g.addColorStop(0, "#ffffff");
+          g.addColorStop(0.25, base);
+          g.addColorStop(1, escuro ? "#141417" : "#8d89a0");
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(P.x, P.y, r, 0, Math.PI * 2); ctx.fill();
+          if (this.rotulos && r > 7) {
+            ctx.fillStyle = a.el === "H" ? "#2a2830" : "#ffffff";
+            ctx.font = `600 ${Math.max(9, r * 0.75)}px ui-monospace, Menlo, monospace`;
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.fillText(a.el, P.x, P.y + 0.5);
+          }
+        }
+      }
+    }
+  }
+
+  /* ================= playground ================= */
+  const codigo = document.getElementById("codigo");
+  const numeros = document.getElementById("numeros");
+  const seletor = document.getElementById("exemplo");
+  const cena = new Cena(document.getElementById("cena-3d"));
+  const vazio = document.getElementById("cena-vazia");
+  let exemploAtual = null;
+
+  DADOS.exemplos.forEach((ex, i) => {
+    const op = document.createElement("option");
+    op.value = i; op.textContent = `${ex.titulo} — ${ex.arquivo}`;
+    seletor.appendChild(op);
+  });
+
+  function atualizarNumeros() {
+    const total = codigo.value.split("\n").length;
+    numeros.textContent = Array.from({ length: total }, (_, i) => i + 1).join("\n");
+  }
+  codigo.addEventListener("scroll", () => { numeros.style.transform = `translateY(${-codigo.scrollTop}px)`; });
+
+  function executar() {
+    atualizarNumeros();
+    const r = compilar(codigo.value);
+    const diag = document.getElementById("p-diag");
+    const linhas = [...r.erros, ...r.avisos];
+    if (!r.erros.length) linhas.push(`Espécie '${r.especie.nome}': análise do navegador concluída sem erros`);
+    diag.textContent = linhas.join("\n");
+    diag.classList.toggle("erro", r.erros.length > 0);
+    const modelo = document.getElementById("p-modelo");
+    if (r.atomos.length && !r.erros.length) {
+      const nomes = r.atomos.map(rotulo);
+      const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
+      modelo.textContent = [`Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}`),
+        `Ligações (${r.ligacoes.length})`, ...r.ligacoes.map((l) => `  ${nomes[l.a]} ${simbolo[l.op]} ${nomes[l.b]}`),
+        ...(r.configuracoes.length ? [`Configurações (${r.configuracoes.length})`, ...r.configuracoes.map((c) => `  ${c.atomos.map(rotulo).join(c.op || " ")} ${c.descritor}`)] : [])].join("\n");
+    } else {
+      modelo.textContent = "Corrija os erros para ver o modelo.";
+    }
+    const real = document.getElementById("p-real");
+    const intacto = exemploAtual && codigo.value === exemploAtual.codigo;
+    real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo; rode python3 src/main.py --modelo no arquivo para a análise oficial.";
+    const resumo = document.getElementById("resumo");
+    if (r.atomos.length) {
+      const multiplas = r.ligacoes.filter((l) => l.ordem >= 2).length;
+      const aneis = r.ligacoes.filter((l) => l.ordem > 0).length - r.atomos.length + componentes(r.atomos, r.ligacoes.filter((l) => l.ordem > 0));
+      resumo.innerHTML = `<span>fórmula <b>${formulaHill(r.atomos)}</b></span><span><b>${r.atomos.length}</b> átomos</span><span><b>${r.ligacoes.length}</b> ligações</span><span><b>${multiplas}</b> múltiplas</span><span><b>${Math.max(0, aneis)}</b> anéis</span>`;
+    } else {
+      resumo.innerHTML = "";
+    }
+    if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
+    else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
+  }
+
+  let espera;
+  codigo.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(executar, 250); });
+  codigo.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const i = codigo.selectionStart;
+      codigo.setRangeText("    ", i, codigo.selectionEnd, "end");
+      codigo.dispatchEvent(new Event("input"));
+    }
+  });
+  seletor.addEventListener("change", () => carregarExemplo(Number(seletor.value)));
+  document.getElementById("limpar").addEventListener("click", () => {
+    exemploAtual = null;
+    codigo.value = 'species molecule "Nova" {\n    \n}\n';
+    executar(); codigo.focus();
+  });
+  document.getElementById("girar").addEventListener("change", (e) => { cena.girar = e.target.checked; });
+  document.getElementById("rotulos").addEventListener("change", (e) => { cena.rotulos = e.target.checked; cena.desenhar(); });
+  document.getElementById("esconder-h").addEventListener("change", (e) => { cena.semH = e.target.checked; cena.desenhar(); });
+  document.getElementById("recentrar").addEventListener("click", () => { cena.rx = -0.35; cena.ry = 0.5; cena.zoom = 1; cena.desenhar(); });
+
+  function carregarExemplo(i) {
+    exemploAtual = DADOS.exemplos[i];
+    seletor.value = i;
+    codigo.value = exemploAtual.codigo;
+    executar();
+  }
+
+  /* vitrine do início */
+  const vitrine = new Cena(document.getElementById("vitrine-3d"));
+  const benzeno = DADOS.exemplos.find((e) => e.arquivo.endsWith("benzeno.mol")) || DADOS.exemplos[0];
+  const rb = compilar(benzeno.codigo);
+  vitrine.rx = -0.9;
+  vitrine.carregar(rb.atomos, rb.ligacoes);
+
+  /* ================= malha do fundo ================= */
+  (() => {
+    const tela = document.getElementById("malha");
+    const ctx = tela.getContext("2d");
+    const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let nos = [], largura = 0, altura = 0;
+    const DISTANCIA = 150;
+    function montar() {
+      const dpr = window.devicePixelRatio || 1;
+      largura = innerWidth; altura = innerHeight;
+      tela.width = largura * dpr; tela.height = altura * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const quantidade = Math.round(Math.min(90, (largura * altura) / 16000));
+      const rnd = aleatorio(42);
+      nos = Array.from({ length: quantidade }, () => ({
+        x: rnd() * largura, y: rnd() * altura,
+        vx: (rnd() - 0.5) * 0.25, vy: (rnd() - 0.5) * 0.25,
+        r: 1.6 + rnd() * 2.2,
+      }));
+    }
+    function quadro() {
+      const claro = raiz.dataset.theme === "light";
+      const cor = claro ? "122, 90, 224" : "185, 163, 247";
+      ctx.clearRect(0, 0, largura, altura);
+      for (const no of nos) {
+        if (!parado) {
+          no.x += no.vx; no.y += no.vy;
+          if (no.x < 0 || no.x > largura) no.vx *= -1;
+          if (no.y < 0 || no.y > altura) no.vy *= -1;
+        }
+      }
+      for (let i = 0; i < nos.length; i++) {
+        for (let j = i + 1; j < nos.length; j++) {
+          const d = Math.hypot(nos[i].x - nos[j].x, nos[i].y - nos[j].y);
+          if (d < DISTANCIA) {
+            ctx.strokeStyle = `rgba(${cor}, ${(1 - d / DISTANCIA) * (claro ? 0.22 : 0.18)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(nos[i].x, nos[i].y); ctx.lineTo(nos[j].x, nos[j].y); ctx.stroke();
+          }
+        }
+      }
+      ctx.fillStyle = `rgba(${cor}, ${claro ? 0.32 : 0.3})`;
+      for (const no of nos) { ctx.beginPath(); ctx.arc(no.x, no.y, no.r, 0, Math.PI * 2); ctx.fill(); }
+      if (!parado && !document.hidden) requestAnimationFrame(quadro);
+    }
+    addEventListener("resize", () => { montar(); if (parado) quadro(); });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && !parado) requestAnimationFrame(quadro); });
+    new MutationObserver(() => { if (parado) quadro(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+    montar();
+    quadro();
+  })();
+
+  /* ================= rotas e paginação ================= */
+  const slides = [...document.querySelectorAll(".slide")];
+  const pontinhos = document.querySelector("#pg-conteudo .pontinhos");
+  slides.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-label", `${i + 1}: ${s.dataset.titulo}`);
+    b.addEventListener("click", () => (location.hash = `#/conteudo/${i + 1}`));
+    pontinhos.appendChild(b);
+  });
+  const topicos = [...document.querySelectorAll(".topico")].map((t) => t.dataset.topico);
+  let slideAtual = 1, topicoAtual = topicos[0];
+
+  function mostrarSlide(n) {
+    slideAtual = Math.min(slides.length, Math.max(1, n || 1));
+    slides.forEach((s, i) => s.classList.toggle("ativo", i === slideAtual - 1));
+    pontinhos.querySelectorAll("button").forEach((b, i) => b.classList.toggle("ativo", i === slideAtual - 1));
+    const pag = document.querySelector("#pg-conteudo .paginador");
+    pag.querySelector(".contador").textContent = `${slideAtual} / ${slides.length} · ${slides[slideAtual - 1].dataset.titulo}`;
+    pag.querySelector('[data-passo="-1"]').disabled = slideAtual === 1;
+    pag.querySelector('[data-passo="1"]').disabled = slideAtual === slides.length;
+  }
+  function mostrarTopico(nome) {
+    topicoAtual = topicos.includes(nome) ? nome : topicos[0];
+    document.querySelectorAll(".topico").forEach((t) => t.classList.toggle("ativo", t.dataset.topico === topicoAtual));
+    document.querySelectorAll(".sumario a").forEach((a) => a.classList.toggle("ativo", a.dataset.topico === topicoAtual));
+    const i = topicos.indexOf(topicoAtual);
+    const pag = document.querySelector("#pg-doc .paginador");
+    pag.querySelector(".contador").textContent = `${i + 1} / ${topicos.length}`;
+    pag.querySelector('[data-doc-passo="-1"]').disabled = i === 0;
+    pag.querySelector('[data-doc-passo="1"]').disabled = i === topicos.length - 1;
+  }
+  document.querySelectorAll("[data-passo]").forEach((b) => b.addEventListener("click", () => {
+    location.hash = `#/conteudo/${slideAtual + Number(b.dataset.passo)}`;
+  }));
+  document.querySelectorAll("[data-doc-passo]").forEach((b) => b.addEventListener("click", () => {
+    location.hash = `#/doc/${topicos[topicos.indexOf(topicoAtual) + Number(b.dataset.docPasso)]}`;
+  }));
+
+  let primeiraVez = true;
+  function rotear() {
+    const partes = location.hash.replace(/^#\/?/, "").split("/");
+    const rota = ["conteudo", "uso", "doc", "playground"].includes(partes[0]) ? partes[0] : "inicio";
+    document.querySelectorAll(".pagina").forEach((p) => p.classList.toggle("ativa", p.id === "pg-" + rota));
+    document.querySelectorAll(".rotas a").forEach((a) => a.classList.toggle("ativo", a.dataset.rota === rota));
+    if (rota === "conteudo") mostrarSlide(Number(partes[1]));
+    if (rota === "doc") mostrarTopico(partes[1]);
+    if (rota === "playground") {
+      if (!codigo.value) carregarExemplo(0);
+      requestAnimationFrame(() => cena.desenhar());
+    }
+    if (rota === "inicio") requestAnimationFrame(() => vitrine.desenhar());
+    if (!primeiraVez) window.scrollTo({ top: 0 });
+    primeiraVez = false;
+  }
+  addEventListener("hashchange", rotear);
+  addEventListener("keydown", (e) => {
+    if (e.target.closest("textarea, select, input")) return;
+    if (!document.getElementById("pg-conteudo").classList.contains("ativa")) return;
+    if (e.key === "ArrowRight" && slideAtual < slides.length) location.hash = `#/conteudo/${slideAtual + 1}`;
+    if (e.key === "ArrowLeft" && slideAtual > 1) location.hash = `#/conteudo/${slideAtual - 1}`;
+  });
+  new MutationObserver(() => { cena.desenhar(); vitrine.desenhar(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+  rotear();
+  </script>
+</body>
+</html>

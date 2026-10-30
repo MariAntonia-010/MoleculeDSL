@@ -1,0 +1,170 @@
+"""Gera docs/apresentacao/index.html a partir de modelo.html.
+
+Todo trecho de saída da página vem de uma execução real do projeto feita
+por este script, para a apresentação não ficar defasada em relação ao
+compilador. Uso, a partir da raiz do repositório:
+
+    python3 docs/apresentacao/gerar_apresentacao.py
+"""
+
+import base64
+import glob
+import html
+import json
+import os
+import re
+import subprocess
+import sys
+import tempfile
+
+PASTA = os.path.dirname(os.path.abspath(__file__))
+RAIZ = os.path.dirname(os.path.dirname(PASTA))
+MAIN = os.path.join(RAIZ, "src", "main.py")
+
+# Exemplos do playground, na ordem do seletor
+EXEMPLOS = [
+    "agua",
+    "metano",
+    "amonia",
+    "etanol",
+    "acetona",
+    "acido_acetico",
+    "ureia",
+    "dioxido_carbono",
+    "benzeno",
+    "naftaleno",
+    "pirrol",
+    "ciclohexano",
+    "acido_tartarico_meso",
+    "e_1_2_dicloroeteno",
+    "penta_2_3_dieno",
+    "amonio_por_ligacao_coordenada",
+]
+
+
+def rodar(*argumentos, script=MAIN):
+    ambiente = dict(os.environ, PYTHONIOENCODING="utf-8")
+    resultado = subprocess.run(
+        [sys.executable, script, *argumentos],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        cwd=RAIZ,
+        env=ambiente,
+    )
+    return resultado.stdout
+
+
+def sem_conclusao(saida):
+    # Tira a linha "Espécie ...: análise concluída sem erros"
+    linhas = [l for l in saida.splitlines() if not l.startswith("Espécie ")]
+    return "\n".join(linhas).strip()
+
+
+def esperado(caminho):
+    with open(os.path.join(RAIZ, caminho), encoding="utf-8") as arquivo:
+        primeira = arquivo.readline()
+    return primeira.removeprefix("// esperado:").strip()
+
+
+def main():
+    with open(os.path.join(PASTA, "modelo.html"), encoding="utf-8") as arquivo:
+        pagina = arquivo.read()
+
+    with tempfile.TemporaryDirectory() as pasta:
+        svg = os.path.join(pasta, "agua.svg")
+        rodar(
+            "exemplos/agua.mol",
+            "--tipo",
+            "ast",
+            "-o",
+            svg,
+            script=os.path.join(RAIZ, "src", "desenhar_arvore.py"),
+        )
+        with open(svg, "rb") as arquivo:
+            imagem = "data:image/svg+xml;base64," + base64.b64encode(
+                arquivo.read()
+            ).decode("ascii")
+
+    testes = rodar(script=os.path.join(RAIZ, "testar.py"))
+    resumo = testes.strip().splitlines()[-1]
+    total = re.match(r"(\d+) testes", resumo).group(1)
+    exemplos = len(glob.glob(os.path.join(RAIZ, "exemplos", "*.mol")))
+    snapshots = len(glob.glob(os.path.join(RAIZ, "exemplos", "*.ast.txt"))) + len(
+        glob.glob(os.path.join(RAIZ, "exemplos", "*.modelo.txt"))
+    )
+    bench = next(
+        l.strip()
+        for l in rodar(script=os.path.join(RAIZ, "tests", "benchmark_solver.py")).splitlines()
+        if l.strip().startswith("C6H6")
+    )
+    estereo = sem_conclusao(rodar("--estereo", "exemplos/acido_tartarico_meso.mol"))
+    estereo = "\n".join(l.strip() for l in estereo.splitlines()[-2:])
+
+    lista_exemplos = []
+    for nome in EXEMPLOS:
+        arquivo = f"exemplos/{nome}.mol"
+        with open(os.path.join(RAIZ, arquivo), encoding="utf-8") as entrada:
+            texto = entrada.read()
+        titulo = re.search(r'"([^"]*)"', texto).group(1)
+        lista_exemplos.append(
+            {
+                "titulo": titulo,
+                "arquivo": arquivo,
+                "codigo": texto,
+                "saida": rodar("--modelo", arquivo).strip(),
+            }
+        )
+    with open(os.path.join(RAIZ, "regras", "elementos.json"), encoding="utf-8") as entrada:
+        elementos = {
+            simbolo: {"valencia": dados.get("eletrons_valencia")}
+            for simbolo, dados in json.load(entrada)["elementos"].items()
+        }
+    with open(os.path.join(RAIZ, "regras", "valencias.json"), encoding="utf-8") as entrada:
+        regras = json.load(entrada)
+    dados = {
+        "exemplos": lista_exemplos,
+        "elementos": elementos,
+        "valencias": {
+            chave: regras[chave]
+            for chave in ("valencias", "valencias_expandidas", "valencias_com_carga")
+        },
+    }
+    with open(os.path.join(RAIZ, "gramatica", "MoleculeDSL.g4"), encoding="utf-8") as entrada:
+        gramatica = entrada.read().strip()
+
+    valores = {
+        "DADOS_JSON": json.dumps(dados, ensure_ascii=False).replace("</", "<\\/"),
+        "USO": rodar().strip(),
+        "GRAMATICA": gramatica,
+        "AST_IMG": imagem,
+        "TOKENS": sem_conclusao(rodar("--tokens", "exemplos/agua.mol")),
+        "AST": sem_conclusao(rodar("--ast", "exemplos/agua.mol")),
+        "MODELO": rodar("--modelo", "exemplos/agua.mol").strip(),
+        "ERRO_STEREO": esperado("invalidos_semanticos/estereo_descritor_errado.mol"),
+        "BENCH": bench,
+        "ESTEREO": estereo,
+        "TAUTOMEROS": sem_conclusao(rodar("--tautomeros", "exemplos/acetona.mol")),
+        "AROMATICIDADE": sem_conclusao(rodar("--aromaticidade", "exemplos/pirrol.mol")),
+        "TOTAL": total,
+        "EXEMPLOS": str(exemplos),
+        "SNAPSHOTS": str(snapshots),
+        "SVGS": str(2 * exemplos),
+        "RESUMO": resumo,
+    }
+    for chave, valor in valores.items():
+        cru = chave in ("AST_IMG", "DADOS_JSON")
+        texto = valor if cru else html.escape(valor, quote=False)
+        pagina = pagina.replace("{{" + chave + "}}", texto)
+    restantes = re.findall(r"\{\{[A-Z_]+\}\}", pagina)
+    if restantes:
+        sys.exit(f"marcadores sem valor: {restantes}")
+
+    destino = os.path.join(PASTA, "index.html")
+    with open(destino, "w", encoding="utf-8") as arquivo:
+        arquivo.write(pagina)
+    print(f"Página gerada: {os.path.relpath(destino, RAIZ)} ({resumo})")
+
+
+if __name__ == "__main__":
+    main()

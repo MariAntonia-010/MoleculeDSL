@@ -472,3 +472,21 @@ Próxima Etapa" (28/10/2026).
 - Pendente com o grupo: nomes dos integrantes e da disciplina na capa,
   descrição e tópicos do repositório no GitHub e o aval da Maria para a
   mudança de sintaxe (`stereo`).
+
+---
+
+## 30/10/2026 — Nova página de apresentação
+
+- `docs/apresentacao/` virou um app de página única, com rotas para Início,
+  Conteúdo (11 páginas com paginação), Uso, Doc e Playground. Tons neutros
+  com destaque lilás, temas claro e escuro, responsivo e sem dependências
+  externas. O fundo é uma malha de nós interligados.
+- Playground: lexer, parser e verificação semântica em JavaScript (nomes,
+  anéis, valências de `regras/valencias.json`) e desenho 3D próprio em
+  canvas, por layout de forças com pares livres (a água sai angular). A aba
+  "Compilador real" mostra a saída de `src/main.py --modelo` dos exemplos.
+- `gerar_apresentacao.py` monta `index.html` a partir de `modelo.html`, com
+  saídas reais do compilador, da suíte e do benchmark. Isso corrigiu um
+  painel de tokens antigo que mostrava 18 tokens em vez dos 19 reais.
+- Capa com a equipe (Geisbelly Victoria, Murilo e Maria Antonia) e a
+  disciplina (Linguagens Formais e Compiladores).
