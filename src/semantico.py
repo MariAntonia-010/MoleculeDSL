@@ -3,6 +3,7 @@ import os
 from dataclasses import dataclass
 
 import atomo as estrutura_atomica
+import eletronico
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
@@ -938,6 +939,10 @@ class AnalisadorSemantico:
             else:
                 lig.classificacao = "iônica"
 
+    def estados_aceitos(self, atomo, eletrons_valencia):
+        # Pares (carga, soma das ordens) permitidos pelas regras de valência
+        return eletronico.estados_permitidos(atomo, eletrons_valencia, self.valencias)
+
     def conferir_coordenadas(self):
         """Confere o par livre do doador e o espaço eletrônico do receptor."""
         por_id = {a.id: a for a in self.modelo.atomos}
@@ -979,6 +984,22 @@ class AnalisadorSemantico:
                         lig,
                         f"o doador {doador.rotulo()} não possui um par de "
                         "elétrons livre para a ligação coordenada",
+                    )
+                elif (
+                    doador.carga < 0
+                    and doador.elemento in self.valencias["valencias"]
+                    and (carga_antes, ordem_antes)
+                    not in self.estados_aceitos(doador, eletrons_valencia)
+                ):
+                    # Ex.: 'B(-1) -> N(+1)': o doador termina positivo, então
+                    # um doador negativo cujo estado antes da doação as
+                    # regras não aceitam indica a seta invertida
+                    self.aviso(
+                        "COORD-001",
+                        lig,
+                        f"antes de doar, {doador.rotulo()} teria carga {carga_antes:+d} "
+                        f"com {ordem_antes} ligação(ões), estado que as regras não aceitam; "
+                        "confira o sentido da seta (do doador para o receptor)",
                     )
 
             receptor = por_id[lig.destino]

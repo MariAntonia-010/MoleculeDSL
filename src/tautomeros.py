@@ -81,6 +81,15 @@ def passos(modelo, dados_elementos, valencias):
         for h, doador in ((lig.origem, lig.destino), (lig.destino, lig.origem)):
             if por_id[h].elemento != "H" or por_id[doador].elemento == "H":
                 continue
+            # Um carbono só doa o H se for saturado (o carbono alfa da
+            # ceto-enol, o CH3 da imina-enamina); tirar o H de um C sp2,
+            # como os da piridina, daria alenos cíclicos sem sentido
+            if por_id[doador].elemento == "C" and any(
+                x.operador in (Operador.DUPLA, Operador.TRIPLA)
+                and doador in (x.origem, x.destino)
+                for x in modelo.ligacoes
+            ):
+                continue
             # Base conjugada: sem a ligação doador-H e com carga -1 no doador
             base = replace(
                 modelo,
@@ -105,6 +114,10 @@ def passos(modelo, dados_elementos, valencias):
                         por_id[doador].elemento,
                         por_id[receptor].elemento,
                     }:
+                        continue
+                    # O H só volta para um átomo com regra de valência
+                    # (não para um metal como a prata do [Ag(NH3)2]+)
+                    if por_id[receptor].elemento not in valencias["valencias"]:
                         continue
                     nova = com_forma(base, forma)
                     atomos = [

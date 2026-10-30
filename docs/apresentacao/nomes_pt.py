@@ -108,4 +108,9 @@ ESPECIES = {
     "ciclopropenila": "Cátion ciclopropenila (aromático, 2 e⁻ pi)",
     "ciclopentadienila": "Ânion ciclopentadienila (aromático, 6 e⁻ pi)",
     "tropilio": "Cátion tropílio (aromático, 6 e⁻ pi)",
+    "etanimina": "Etanimina (tautomeria imina–enamina)",
+    "piridin_2_ona": "Piridin-2-ona (tautomeria com a 2-hidroxipiridina)",
+    "cation_alila": "Cátion alila (ressonância da carga +)",
+    "enolato": "Enolato da acetona (ressonância da carga −)",
+    "diaminoprata": "Íon diaminoprata, [Ag(NH₃)₂]⁺",
 }

@@ -1,0 +1,15 @@
+// esperado: Aviso semântico [COORD-001] na linha 14, coluna 4: antes de doar, b (B#1) teria carga -2 com 3 ligação(ões), estado que as regras não aceitam; confira o sentido da seta (do doador para o receptor)
+// A coordenada vai do doador para o receptor: o BF3 não tem par para doar ao N
+species molecule "Ammonia borane" {
+    atom N(+1) as n
+    atom B(-1) as b
+    3x atom H as h
+    3x atom F as f
+    bond n-h1
+    bond n-h2
+    bond n-h3
+    bond b-f1
+    bond b-f2
+    bond b-f3
+    bond b->n
+}

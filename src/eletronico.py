@@ -216,6 +216,14 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
     ordens = dict(fixas)
     encontradas = []
     truncado = False
+    # Uma forma com mais octetos incompletos que a declarada (C+ ao lado de
+    # C- no eteno ou no benzeno) é contribuinte menor e fica de fora já na
+    # busca, sem gastar o limite; o C+ do cátion alila, que está na forma
+    # declarada, continua
+    limite_incompletos = octetos_incompletos(
+        modelo, eletrons, declarada, {a.id: a.carga for a in modelo.atomos}
+    )
+    menores = 0
 
     def nao_ligantes(atomo_id, carga):
         if eletrons[atomo_id] is None:
@@ -231,11 +239,14 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
         ]
 
         def escolher(indice, atuais, total, abertos):
-            nonlocal truncado
+            nonlocal truncado, menores
             if truncado:
                 return
             if indice == len(ids):
                 if total == carga_total and abertos == desemparelhados_declarados:
+                    if octetos_incompletos(modelo, eletrons, ordens, atuais) > limite_incompletos:
+                        menores += 1
+                        return
                     if len(encontradas) >= limite:
                         truncado = True
                         return
@@ -286,6 +297,12 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
     ):
         visitar(0)
 
+    if menores:
+        observacoes.append(
+            f"{menores} forma(s) com mais octetos incompletos que a declarada "
+            "ficam de fora (contribuintes menores)"
+        )
+
     # A forma declarada vai primeiro; as demais, por quantidade de átomos
     # com carga formal (critério exibido na saída, não uma estabilidade)
     cargas_declaradas = {a.id: a.carga for a in modelo.atomos}
@@ -299,6 +316,26 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
         )
     )
     return encontradas, observacoes, truncado
+
+
+SEGUNDO_PERIODO = {"B", "C", "N", "O", "F"}
+
+
+def octetos_incompletos(modelo, eletrons, ordens, cargas):
+    # Átomos do segundo período com menos de 8 elétrons em volta:
+    # elétrons de valência − carga + soma das ordens (cada ligação traz
+    # um elétron do vizinho)
+    soma = {a.id: 0 for a in modelo.atomos}
+    for (a, b), valor in ordens.items():
+        soma[a] += valor
+        soma[b] += valor
+    return sum(
+        1
+        for atomo in modelo.atomos
+        if atomo.elemento in SEGUNDO_PERIODO
+        and eletrons.get(atomo.id) is not None
+        and eletrons[atomo.id] - cargas[atomo.id] + soma[atomo.id] < 8
+    )
 
 
 def atomos_com_carga(forma):

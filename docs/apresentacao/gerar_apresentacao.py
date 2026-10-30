@@ -36,14 +36,14 @@ GRUPOS_EXEMPLOS = [
     ("Substâncias simples", ["hidrogenio", "oxigenio", "nitrogenio", "cloro", "ozonio"]),
     ("Moléculas", ["agua", "metano", "amonia", "etanol", "metanol", "acetona", "acido_acetico", "ureia",
                    "dioxido_carbono", "monoxido_de_carbono", "cloreto_de_hidrogenio", "peroxido_de_hidrogenio",
-                   "berilio", "glicina_zwitterion", "acido_sulfuroso", "tiofosgenio", "germano"]),
+                   "berilio", "glicina_zwitterion", "acido_sulfuroso", "tiofosgenio", "germano", "etanimina", "piridin_2_ona"]),
     ("Anéis e aromáticos", ["benzeno", "naftaleno", "pirrol", "imidazol", "ciclohexano", "ciclobutadieno", "ciclopropenila", "ciclopentadienila", "tropilio"]),
     ("Íons moleculares", ["amonio_por_ligacao_coordenada", "hidronio", "hidroxido", "nitrato", "sulfato",
-                          "carbonato", "cianato", "azida", "nitronio", "hexafluorofosfato", "tetracloroaluminato"]),
+                          "carbonato", "cianato", "azida", "nitronio", "hexafluorofosfato", "tetracloroaluminato", "cation_alila", "enolato"]),
     ("Isótopos em moléculas", ["agua_pesada", "metano_deuterado", "etano_13c2", "etanol_1_deuterado", "propan_2_ol_d3"]),
     ("Estereoquímica", ["acido_tartarico_meso", "e_1_2_dicloroeteno", "e_pent_2_eno", "r_2_clorobutano",
                         "penta_2_3_dieno", "hexa_2_3_dieno", "cis_1_3_dimetilciclohexano", "e_diazeno", "e_acetaldoxima"]),
-    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro"]),
+    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro", "diaminoprata"]),
     ("Sólidos", ["cloreto_de_sodio", "oxido_de_magnesio", "cloreto_de_magnesio", "dioxido_de_silicio", "sodio_metalico", "cobre_metalico"]),
 ]
 EXEMPLOS = [nome for _, nomes in GRUPOS_EXEMPLOS for nome in nomes]

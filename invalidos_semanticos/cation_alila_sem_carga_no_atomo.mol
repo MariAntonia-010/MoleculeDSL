@@ -1,0 +1,15 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é +0, mas a espécie declara carga total +1
+// Sem C(+1), a carga declarada +1 não aparece em nenhum átomo
+species molecular_ion "Allyl cation" charge +1 {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    5x atom H as h
+    bond c1=c2
+    bond c2-c3
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c3-h4
+    bond c3-h5
+}

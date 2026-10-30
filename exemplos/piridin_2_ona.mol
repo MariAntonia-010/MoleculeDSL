@@ -1,0 +1,20 @@
+// 2-piridona: tautômero da 2-hidroxipiridina (o H passa do N para o O)
+species molecule "Pyridin-2(1H)-one" {
+    5x atom C as c
+    atom N as n
+    atom O as o
+    5x atom H as h
+    bond n-c1
+    bond c1=o
+    bond c1-c2
+    bond c2=c3
+    bond c3-c4
+    bond c4=c5
+    bond c5-n
+    bond n-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+    bond c5-h5
+    ring n c1 c2 c3 c4 c5
+}

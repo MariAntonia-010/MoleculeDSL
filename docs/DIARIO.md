@@ -787,3 +787,24 @@ virava só "O#1 carga=+0" no modelo.
   `:`. As duas mensagens agora dizem como escrever na DSL (`atom C`,
   simples e duplas alternadas); `atom na` sugere `atom Na`.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 9 (relatórios químicos)
+
+Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
+[Ag(NH₃)₂]⁺) expuseram quatro problemas nos relatórios:
+
+- Ressonância do cátion alila com 1 forma: faltava o carbocátion (C⁺ com 3
+  ligações) nos dados. Entrou em `regras/valencias.json`, derivado de C1
+  como os outros estados de C3. Para não encher alcenos e benzeno de
+  formas C⁺/C⁻, a busca descarta formas com mais octetos incompletos que
+  a declarada (contribuintes menores), sem gastar o limite de formas:
+  eteno 1, benzeno 2, naftaleno 3, cátion alila 2.
+- Imina ⇌ enamina não aparecia: faltava N⁻ com 2 ligações (amideto).
+  Entrou nos dados; um carbono só doa H se for saturado (o C sp² da
+  piridina daria aleno cíclico), e o H não vai para metais.
+- `B(-1) -> N(+1)` passava em silêncio: doador negativo com estado
+  inválido antes da doação gera COORD-001 com dica de seta invertida.
+- O fixture do COORD-003 (N⁻ com 4 ligações) agora também dá CARGA-001 e
+  foi para `invalidos_semanticos`; `radical_amino` ganhou a dica de N(−1).
+

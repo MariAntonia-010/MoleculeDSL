@@ -1,0 +1,17 @@
+// esperado: Erro semântico [CARGA-001] na linha 6, coluna 4: receptor (N#2) com carga -1 deveria ter soma das ordens de ligação 2, mas tem 4
+// esperado: Aviso semântico [COORD-003] na linha 16, coluna 4: o modelo de dueto/octeto não identificou capacidade receptora em receptor (N#2) para receber o par
+// N- só tem 2 ligações (amideto): com três H e a seta ele passa da conta, e o octeto já estava completo antes de receber o par
+molecule "Receptor coordenado sem orbital vazio" {
+    atom N(+1) as doador
+    atom N(-1) as receptor
+    3x atom H as hd
+    3x atom H as hr
+
+    bond doador-hd1
+    bond doador-hd2
+    bond doador-hd3
+    bond receptor-hr1
+    bond receptor-hr2
+    bond receptor-hr3
+    bond doador->receptor
+}

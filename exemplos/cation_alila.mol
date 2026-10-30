@@ -1,0 +1,14 @@
+// Cátion alila, C3H5+: a carga se distribui pelas duas pontas por ressonância
+species molecular_ion "Allyl cation" charge +1 {
+    atom C as c1
+    atom C as c2
+    atom C(+1) as c3
+    5x atom H as h
+    bond c1=c2
+    bond c2-c3
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c3-h4
+    bond c3-h5
+}

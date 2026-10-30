@@ -1,0 +1,14 @@
+// Etanimina, CH3CH=NH: tautômero imina da etenamina (enamina)
+species molecule "Ethanimine" {
+    atom C as c1
+    atom C as c2
+    atom N as n
+    5x atom H as h
+    bond c1-c2
+    bond c2=n
+    bond n-h1
+    bond c2-h2
+    bond c1-h3
+    bond c1-h4
+    bond c1-h5
+}

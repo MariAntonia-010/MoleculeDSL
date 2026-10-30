@@ -1,0 +1,16 @@
+// Enolato da acetona: a carga negativa passa do O para o carbono por ressonância
+species molecular_ion "Acetone enolate" charge -1 {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom O(-1) as o
+    5x atom H as h
+    bond c1=c2
+    bond c2-o
+    bond c2-c3
+    bond c1-h1
+    bond c1-h2
+    bond c3-h3
+    bond c3-h4
+    bond c3-h5
+}

@@ -1,4 +1,4 @@
-// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de N#1 é 2; o esperado para N é 3
+// esperado: Aviso semântico [VAL-002] na linha 3, coluna 4: a soma das ordens de ligação de N#1 é 2; o esperado para N é 3 (se for um íon, declare atom N(-1))
 molecule "Amino radical" {
     atom N
     2x atom H

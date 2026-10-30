@@ -107,7 +107,7 @@ Implementado em parte:
 
 - Ligações são classificadas pela diferença de eletronegatividade como covalente apolar, covalente polar ou iônica. Os limites padrão 0,4 e 1,7 ficam em `regras/classificacao_ligacoes.json`; o resultado é informativo e aparece em `--modelo`.
 - Elemento sem eletronegatividade na fonte produz `não classificada`. Não se usa a regra "metal + ametal = sempre iônica".
-- O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
+- O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002. Um doador declarado com carga negativa cujo estado antes da doação as regras não aceitam (`B(-1) -> N(+1)`, que daria B²⁻) também gera COORD-001, com a dica de conferir o sentido da seta.
 - Para H, He e elementos do segundo período, o receptor é conferido pela capacidade de dueto/octeto antes da doação. Falta de espaço gera COORD-003. Períodos posteriores geram COORD-004, pois expansão de valência e orbitais disponíveis exigem dados que a base não possui.
 - Ligações metálicas são identificadas no modelo e mantidas como informação de referência. Todo `~` gera METAL-002, pois uma aresta não valida o comportamento coletivo do sólido; METAL-001 acrescenta o aviso de participante não metálico. A aresta não soma ordem, mas outras ligações do mesmo átomo continuam sendo verificadas.
 

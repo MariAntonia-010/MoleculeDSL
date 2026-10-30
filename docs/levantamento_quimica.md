@@ -51,7 +51,7 @@ Arquivo gerado: `regras/elementos.json`, com os 118 elementos.
 |---|---|---|---|
 | C1 | Carga formal = elétrons de valência − elétrons não ligantes − (elétrons ligantes ÷ 2) | FONTE | [Pearson](https://pearson.com/channels/general-chemistry/learn/jules/ch-9-bonding-molecular-structure/formal-charge?isTpi=Y), [RevisionDojo](https://www.revisiondojo.com/blog/formal-charge-formula-ib-chemistry) |
 | C2 | A soma das cargas formais de todos os átomos deve ser igual à carga total da espécie | FONTE | mesmas fontes de C1 |
-| C3 | Ligações por átomo quando a carga formal muda: N⁺ com 4 ligações e sem par livre; O⁺ com 3 e 1 par; O⁻ com 1 e 3 pares; C⁻ com 3 e 1 par; B⁻ com 4 e sem par | DERIVADA | Aplicação de C1 (a busca confirmou que não há uma tabela única publicada) |
+| C3 | Ligações por átomo quando a carga formal muda: N⁺ com 4 ligações e sem par livre; O⁺ com 3 e 1 par; O⁻ com 1 e 3 pares; C⁻ com 3 e 1 par; C⁺ com 3 e sem par (carbocátion, como no cátion alila e no tropílio); N⁻ com 2 e 2 pares (amideto, a base conjugada de amina e imina); B⁻ com 4 e sem par | DERIVADA | Aplicação de C1 (a busca confirmou que não há uma tabela única publicada) |
 | C4 | Elétrons não ligantes de um átomo neutro com ordem total de ligação *b*: V − *b* (resulta de C1 com carga formal 0) | DERIVADA | Álgebra de C1 |
 
 ## D. Octeto
