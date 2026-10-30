@@ -11,7 +11,9 @@ Erro <fase> [<código>] na linha <linha>, coluna <coluna>: <mensagem>
 ```
 
 As linhas começam em 1 e as colunas em 0, seguindo a convenção do ANTLR.
-Erros léxicos e sintáticos encerram o programa com código 1. A análise
+Erros de entrada, configuração, léxicos e sintáticos encerram o programa com
+código 1; erros semânticos e de resolução, com código 2. Avisos não mudam o
+código de saída. A análise
 sintática não é executada quando há erro léxico, evitando mensagens em
 cascata.
 
@@ -64,6 +66,26 @@ possui atualmente uma opção de diagnóstico.
 A variável `MOLECULEDSL_GERADO` pode apontar para outra pasta de código
 gerado. Ela é usada pelo teste automatizado de `CFG-001`; no uso normal, a
 pasta é `gerado/`.
+
+## Erros semânticos e avisos
+
+A análise semântica usa os prefixos `ELEM`, `STRUCT`, `BOND`, `VAL`, `CARGA`,
+`COORD`, `METAL`, `RAD`, `SPEC`, `RING`, `STEREO`, `ATOM` e `BLOCK`. A tabela
+completa, com a severidade de cada regra (erro ou aviso), está em
+[plano_semantico.md](plano_semantico.md), e o resumo está no README.
+
+## Erros de resolução
+
+Usados só com `--resolver` e `--resolver-todas`. Saem com código 2.
+
+| Código | Causa |
+|---|---|
+| `SOLVER-001` | a entrada já tem ligações, anéis ou outros comandos além de `atom`, está vazia ou passa do limite de 40 átomos (12 pesados) |
+| `SOLVER-002` | algum átomo não tem valência confirmada em `regras/valencias.json` |
+| `SOLVER-003` | nenhuma estrutura satisfaz as regras |
+| `SOLVER-004` | a fórmula admite mais de uma estrutura; declare as ligações ou use `--resolver-todas` |
+| `SOLVER-005` | a busca foi interrompida (tempo limite ou cancelamento) antes de provar a unicidade |
+| `SOLVER-006` | falha da própria busca: backend desconhecido, erro do backend ou processo isolado que terminou sem resultado |
 
 ## Exemplos
 

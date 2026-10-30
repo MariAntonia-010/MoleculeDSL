@@ -184,7 +184,9 @@ C₂H₄O produz três alternativas formais.
 - `SOLVER-001`: entrada já tem ligações/anéis, está vazia ou excede o limite;
 - `SOLVER-002`: falta valência confirmada;
 - `SOLVER-003`: nenhuma estrutura satisfaz as regras;
-- `SOLVER-004`: existem múltiplas estruturas.
+- `SOLVER-004`: existem múltiplas estruturas;
+- `SOLVER-005`: a busca foi interrompida (tempo limite ou cancelamento) antes de provar a unicidade;
+- `SOLVER-006`: falha da própria busca (backend desconhecido, erro do backend ou processo isolado sem resultado).
 
 C₆H₁₂ já entra no backend por ter seis átomos pesados; sua enumeração é
 truncada no limite padrão. A escolha química entre alternativas continua

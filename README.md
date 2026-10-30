@@ -292,7 +292,7 @@ python3 src/construtor_ast.py exemplos/agua.mol
 |---|---|
 | `0` | análise concluída; avisos não bloqueiam |
 | `1` | erro de entrada, configuração, léxico ou sintático |
-| `2` | erro semântico |
+| `2` | erro semântico ou de resolução (`--resolver`) |
 
 ## Página de apresentação
 
@@ -458,7 +458,9 @@ químicos estão implementados e testados.
 
 Continuam pendentes:
 
-- valências ainda sem fonte para Be, Al, Si e metais de transição;
+- valências ainda sem fonte para todos os elementos fora de H, B, C, N, O, F,
+  P, S e Cl (por exemplo Be, Al, Si, Br, I e metais de transição): a valência
+  deles não é conferida;
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
   `METAL-001` verifica a composição e `METAL-002` informa a limitação
   coletiva de todo uso de `~`.
