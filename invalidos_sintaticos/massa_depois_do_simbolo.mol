@@ -1,0 +1,5 @@
+// esperado: Erro sintático [SIN-002] na linha 4, coluna 10: o número de massa vem antes do símbolo: escreva 'atom 13C' em vez de 'atom C13'
+// O número de massa vem antes do símbolo (atom 13C), não depois
+species atom "Carbon-13" unpaired 2 {
+    atom C13
+}

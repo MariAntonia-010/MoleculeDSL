@@ -1,0 +1,21 @@
+// Propan-2-ol com um CD3: pela regra CIP 2, CD3 > CH3 e o C2 vira centro quiral
+species molecule "(1,1,1-2H3)propan-2-ol" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom O as o
+    3x atom 2H as d
+    5x atom H as h
+    bond c1-c2
+    bond c2-c3
+    bond c2-o
+    bond o-h1
+    bond c2-h2
+    bond c1-d1
+    bond c1-d2
+    bond c1-d3
+    bond c3-h3
+    bond c3-h4
+    bond c3-h5
+    stereo c2 S
+}

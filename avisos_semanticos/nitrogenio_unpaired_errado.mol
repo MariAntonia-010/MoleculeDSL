@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=1, mas a configuração 1s2 2s2 2p3 tem 3 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: 2p3 tem três elétrons desemparelhados pela regra de Hund, não um
+species atom "Nitrogen" unpaired 1 {
+    atom N as n
+    configuration n [He] 2s2 2p3
+}

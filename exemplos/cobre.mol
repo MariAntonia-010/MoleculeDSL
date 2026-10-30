@@ -1,0 +1,5 @@
+// Outra exceção real ao Aufbau: o cobre completa 3d10 e fica com 4s1
+species atom "Copper" unpaired 1 {
+    atom Cu as cu
+    configuration cu [Ar] 3d10 4s1
+}

@@ -1,0 +1,14 @@
+// Tioéter: o enxofre com duas ligações simples, como o oxigênio de um éter
+molecule "Dimethyl sulfide" {
+    atom S as s
+    2x atom C as c
+    6x atom H as h
+    bond s-c1
+    bond s-c2
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c2-h6
+}

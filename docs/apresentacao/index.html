@@ -786,7 +786,7 @@ Espécie 'Water': análise concluída sem erros</pre></div>
           <p class="lead">Com a análise sem erros, o compilador resolve fórmulas e gera relatórios. Saídas reais, pré-computadas.</p>
         </div>
         <div class="grade">
-          <div class="placa c6"><h3>Solver de estruturas</h3><p>Geração ordenada de Read-Faradzev: cada isômero sai uma vez, sem guardar chaves.</p><pre>C6H6       217 (esperado 217)    0.08s</pre></div>
+          <div class="placa c6"><h3>Solver de estruturas</h3><p>Geração ordenada de Read-Faradzev: cada isômero sai uma vez, sem guardar chaves.</p><pre>C6H6       217 (esperado 217)    0.09s</pre></div>
           <div class="placa c6"><h3>Estereoquímica</h3><p>Contagem exata pelo grupo de automorfismos, com formas meso descontadas.</p><pre>Estereoisômeros desta constituição: 3 (1 aquiral(is), 1 par(es) de enantiômeros)
 Estereoisômero declarado: aquiral (forma meso)</pre></div>
           <div class="placa c6"><h3>Tautômeros</h3><pre>Tautômeros: 2 estrutura(s), a declarada primeiro
@@ -859,13 +859,13 @@ Espécie 'Water': análise concluída sem erros</pre>
           <p class="lead">Cada arquivo inválido declara a mensagem esperada; <code>testar.py</code> confere texto, ordem e código de saída.</p>
         </div>
         <div class="grade">
-          <div class="placa c3 metrica"><strong>384</strong><span>testes · 0 falhas</span></div>
-          <div class="placa c3 metrica"><strong>175</strong><span>exemplos válidos</span></div>
+          <div class="placa c3 metrica"><strong>400</strong><span>testes · 0 falhas</span></div>
+          <div class="placa c3 metrica"><strong>183</strong><span>exemplos válidos</span></div>
           <div class="placa c3 metrica"><strong>11</strong><span>snapshots de AST e modelo</span></div>
-          <div class="placa c3 metrica"><strong>350</strong><span>árvores SVG validadas</span></div>
+          <div class="placa c3 metrica"><strong>366</strong><span>árvores SVG validadas</span></div>
           <div class="placa c12"><pre>python3 testar.py
 ...
-384 testes, 0 falha(s)</pre></div>
+400 testes, 0 falha(s)</pre></div>
         </div>
       </article>
 
@@ -1749,6 +1749,12 @@ ESPACO
       } else {
         if (atual().tipo === "INT" && tokens[p + 1] && ["s", "p", "d", "f"].includes(tokens[p + 1].valor)) {
           falhar(`a quantidade de elétrons da subcamada, como ${atual().valor}${tokens[p + 1].valor}2`, "SIN-002");
+        }
+        if (atual().tipo === "INT" && p > 1 && tokens[p - 1].tipo === "IDENT" && tokens[p - 2].tipo === "atom" && tokens[p - 1].l === atual().l && tokens[p - 1].c + tokens[p - 1].valor.length === atual().c) {
+          falhar(`o número de massa antes do símbolo, como 'atom ${atual().valor}${tokens[p - 1].valor}'`, "SIN-002");
+        }
+        if (atual().tipo === "[" && p > 0 && tokens[p - 1].tipo === "SUBCAMADA") {
+          falhar("o núcleo de gás nobre logo depois do átomo, antes das subcamadas, como 'configuration c [He] 2s2 2p2'", "SIN-002");
         }
         falhar("'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'", "SIN-002");
       }

@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: a subcamada 3f não existe: na camada 3, l vai de 0 a 2
+// Não existe 3f: na camada 3, l vai só até 2 (s, p, d)
+species atom "Scandium" unpaired 1 {
+    atom Sc as sc
+    configuration sc [Ar] 3f1 4s2
+}

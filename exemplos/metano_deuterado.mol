@@ -1,0 +1,9 @@
+// Metano totalmente deuterado (CD4): o número de massa vale em todos os quatro
+species molecule "Tetradeuteriomethane" {
+    atom C as c
+    4x atom 2H as d
+    bond c-d1
+    bond c-d2
+    bond c-d3
+    bond c-d4
+}

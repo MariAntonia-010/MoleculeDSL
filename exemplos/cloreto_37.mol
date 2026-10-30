@@ -1,0 +1,5 @@
+// Ânion de cloro-37: 17 prótons, 20 nêutrons, 18 elétrons
+species monatomic_ion "Chloride-37" charge -1 {
+    atom 37Cl(-1) as cl
+    configuration cl [Ne] 3s2 3p6
+}

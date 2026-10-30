@@ -70,6 +70,19 @@ def explicar_quantificador(fluxo, token):
 
     if token.type == P.INTEIRO:
         n = token.text
+        if (
+            anterior is not None
+            and anterior.type == P.IDENT
+            and i > 1
+            and fluxo.get(i - 2).type == P.ATOM
+            and anterior.line == token.line
+            and anterior.column + len(anterior.text) == token.column
+        ):
+            # Número colado no símbolo, como 'atom C13'
+            return (
+                f"o número de massa vem antes do símbolo: escreva 'atom {n}{anterior.text}' "
+                f"em vez de 'atom {anterior.text}{n}'"
+            )
         if seguinte.type == P.NOME and seguinte.text in ("s", "p", "d", "f"):
             return (
                 f"subcamada sem o número de elétrons: escreva '{n}{seguinte.text}' "
@@ -89,6 +102,12 @@ def explicar_quantificador(fluxo, token):
             )
         if depois_de_ligacao:
             return f"repetição sem x: escreva 'x{n}'"
+
+    if token.type == P.ABRE_COLCHETE and anterior is not None and anterior.type == P.SUBCAMADA:
+        return (
+            "o núcleo de gás nobre vem logo depois do átomo, antes das subcamadas, "
+            "como 'configuration c [He] 2s2 2p2'"
+        )
 
     if token.type == P.NOME and token.text == "x":
         if seguinte.type == P.INTEIRO:

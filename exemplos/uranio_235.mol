@@ -1,0 +1,5 @@
+// Urânio-235: isótopo natural físsil; termo fundamental 5L6
+species atom "Uranium-235" unpaired 4 {
+    atom 235U as u
+    configuration u [Rn] 5f3 6d1 7s2
+}

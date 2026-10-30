@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de cr (Cr#1) (referência: 1s2 2s2 2p6 3s2 3p6 3d5 4s1); descreve um estado excitado
+// Aviso: 3d4 4s2 é o que a regra de Madelung prevê, mas o crômio medido é 3d5 4s1
+species atom "Chromium" unpaired 4 {
+    atom Cr as cr
+    configuration cr [Ar] 3d4 4s2
+}

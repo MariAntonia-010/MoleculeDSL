@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 0 é menor que o número atômico de H (1): daria -1 nêutrons
+// Número de massa 0: o hidrogênio tem 1 próton, então A não pode ser menor que 1
+species atom "Hydrogen-0" unpaired 1 {
+    atom 0H
+}

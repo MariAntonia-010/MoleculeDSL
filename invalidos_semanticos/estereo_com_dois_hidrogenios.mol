@@ -1,0 +1,16 @@
+// esperado: Erro semântico [STEREO-001] na linha 15, coluna 4: c1 (C#1) não é um elemento estereogênico
+// Etano com um deutério: o C1 tem H, H, D e C; dois H iguais, então não há centro
+species molecule "(2H1)ethane" {
+    atom C as c1
+    atom C as c2
+    atom 2H as d
+    5x atom H as h
+    bond c1-c2
+    bond c1-d
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+    bond c2-h5
+    stereo c1 R
+}

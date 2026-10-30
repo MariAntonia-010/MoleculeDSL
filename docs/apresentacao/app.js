@@ -226,6 +226,12 @@
         if (atual().tipo === "INT" && tokens[p + 1] && ["s", "p", "d", "f"].includes(tokens[p + 1].valor)) {
           falhar(`a quantidade de elétrons da subcamada, como ${atual().valor}${tokens[p + 1].valor}2`, "SIN-002");
         }
+        if (atual().tipo === "INT" && p > 1 && tokens[p - 1].tipo === "IDENT" && tokens[p - 2].tipo === "atom" && tokens[p - 1].l === atual().l && tokens[p - 1].c + tokens[p - 1].valor.length === atual().c) {
+          falhar(`o número de massa antes do símbolo, como 'atom ${atual().valor}${tokens[p - 1].valor}'`, "SIN-002");
+        }
+        if (atual().tipo === "[" && p > 0 && tokens[p - 1].tipo === "SUBCAMADA") {
+          falhar("o núcleo de gás nobre logo depois do átomo, antes das subcamadas, como 'configuration c [He] 2s2 2p2'", "SIN-002");
+        }
         falhar("'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'", "SIN-002");
       }
       fechar();

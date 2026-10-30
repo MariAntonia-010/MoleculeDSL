@@ -1,0 +1,6 @@
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 28: o núcleo de gás nobre vem logo depois do átomo, antes das subcamadas, como 'configuration c [He] 2s2 2p2'
+// O núcleo de gás nobre vem antes das subcamadas
+species atom "Carbon" unpaired 2 {
+    atom C as c
+    configuration c 2s2 2p2 [He]
+}

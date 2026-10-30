@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 26 elétrons, mas fe (Fe#1) (Z=26, carga +2) tem 24
+// Erro comum: escrever o Fe2+ com a configuração do Fe neutro (26 elétrons em vez de 24)
+species monatomic_ion "Iron(2+)" charge +2 unpaired 4 {
+    atom Fe(+2) as fe
+    configuration fe [Ar] 3d6 4s2
+}
