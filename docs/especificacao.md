@@ -52,7 +52,7 @@ Há um exemplo para cada construção da linguagem na pasta `exemplos/`.
 
 A MoleculeDSL trabalha com os seguintes tipos de dados:
 
-- **Texto:** utilizado para representar o nome de uma molécula. Os textos são escritos entre aspas duplas, como `"Water"`, e não podem ter quebra de linha.
+- **Texto:** utilizado para o nome de uma espécie e, em `atom "Nome"`, para citar um bloco anterior. Os textos são escritos entre aspas duplas, como `"Water"`, e não podem ter quebra de linha.
 - **Número inteiro:** utilizado em quantidades, repetições e cargas, como `4` em `4x atom H` e `1` em `atom N(+1)`.
 - **Número real:** reconhecido pela linguagem para representar valores numéricos com parte decimal, embora ainda não seja utilizado por nenhum comando.
 - **Identificador de elemento:** representa o símbolo de um elemento químico, com uma letra maiúscula e, opcionalmente, uma minúscula, como `H`, `O`, `C`, `Na` ou `Cl`.
@@ -62,8 +62,9 @@ A MoleculeDSL trabalha com os seguintes tipos de dados:
 
 ## 4. Comandos
 
-Um programa contém uma única espécie. Dentro dela, os comandos `atom`, `bond`,
-`ring` e `stereo` podem aparecer em qualquer ordem.
+Um programa contém uma ou mais espécies, cada uma num bloco (ver "Vários
+blocos e `atom "Nome"`" abaixo). Dentro de cada bloco, os comandos `atom`,
+`bond`, `ring`, `stereo` e `configuration` podem aparecer em qualquer ordem.
 
 O cabeçalho recomendado é:
 
@@ -273,7 +274,26 @@ atom O // átomo de oxigênio
 
 ---
 
-## 7. Palavras reservadas
+## 7. O que a linguagem deliberadamente não faz?
+
+A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deliberadamente:
+
+1. **Não permite definir manualmente coordenadas ou posições 3D dos átomos.**
+   A linguagem descreve apenas quais átomos existem e como estão ligados. Uma possível
+   visualização 3D é responsabilidade de uma etapa posterior, que poderá calcular
+   automaticamente o posicionamento dos átomos. Por isso a quiralidade planar e as
+   barreiras de rotação de biarilas não são decididas pelo compilador; um eixo de
+   biarila só entra quando declarado com `stereo`.
+
+2. **Não tem notação de aromaticidade.** Um anel aromático é escrito com ligações simples e duplas alternadas; a opção `--aromaticidade` aplica a regra de Hückel sobre essa forma.
+
+3. **Não tem ordem de ligação fracionária.** Só existem as ligações simples, dupla, tripla, coordenada e metálica. A ressonância é escrita por uma das formas, e a opção `--ressonancia` calcula as demais.
+
+4. **Não tem variáveis, expressões nem estruturas de controle.** A linguagem é declarativa: não há `if`, laços nem operadores aritméticos (ver seção 5). Repetições são escritas só com os quantificadores `4x` e `x4`.
+
+---
+
+## 8. Palavras reservadas
 
 As palavras `molecule`, `species`, `molecular_ion`, `monatomic_ion`, `ionic_solid`, `covalent_network`, `metallic_solid`, `charge`, `unpaired`, `atom`, `bond`, `as`, `ring`, `stereo` e `configuration` são reservadas e não podem ser usadas como nome de átomo.
 
@@ -281,13 +301,13 @@ Também ficam reservados os nomes formados por `x` seguido só de dígitos, como
 
 ---
 
-## 8. Gramática
+## 9. Gramática
 
 A gramática completa, em EBNF. Na implementação, ela está em `gramatica/MoleculeDSL.g4`, escrita para o ANTLR.
 
 ```ebnf
 (* Regras sintáticas *)
-programa      = molecula ;
+programa      = molecula , { molecula } ;
 molecula      = cabecalho , [ desemparelhados ] , "{" , { comando } , "}" ;
 cabecalho     = "molecule" , texto
               | "species" , "molecule" , texto
@@ -300,20 +320,26 @@ cabecalho     = "molecule" , texto
 carga_especie = "charge" , ( "+" | "-" ) , inteiro ;
 desemparelhados = "unpaired" , inteiro ;
 comando       = atomo | ligacao | anel | estereo | configuracao ;
-atomo         = [ multiplicador ] , "atom" , [ inteiro ] , elemento , [ carga ] , [ "as" , nome ] ;
+atomo         = [ multiplicador ] , "atom" ,
+                ( [ inteiro ] , elemento , [ carga ]   (* atom O, atom 13C, atom N(+1) *)
+                | texto ) ,                            (* atom "Nome": átomo de um bloco anterior *)
+                [ "as" , nome ] ;
 carga         = "(" , ( "+" | "-" ) , inteiro , ")" ;
 ligacao       = "bond" , referencia , operador , referencia , [ repeticao ] ;
 referencia    = elemento | nome ;
 operador      = "-" | "=" | "#" | "->" | "~" ;
 anel          = "ring" , nome , nome , nome , { nome } ;
-configuracao  = "configuration" , referencia , [ "[" , elemento , "]" ] , subcamada , { subcamada } ;
-subcamada     = ( "1" | ... | "7" ) , ( "s" | "p" | "d" | "f" ) , inteiro ;
+configuracao  = "configuration" , referencia ,
+                ( nucleo , { subcamada }               (* configuration na [Ne] *)
+                | subcamada , { subcamada } ) ;        (* configuration h 1s1 *)
+nucleo        = "[" , elemento , "]" ;
 estereo       = "stereo" , referencia , [ [ operador ] , referencia ] , descritor ;
 descritor     = elemento | nome ;  (* R, S, E, Z, Ra, Sa, r, s, cis ou trans *)
 
 (* Regras léxicas *)
 multiplicador = digito , { digito } , "x" ;
 repeticao     = "x" , digito , { digito } ;
+subcamada     = ( "1" | ... | "7" ) , ( "s" | "p" | "d" | "f" ) , digito , { digito } ;
 inteiro       = digito , { digito } ;
 real          = inteiro , "." , inteiro ;
 texto         = '"' , { ? qualquer caractere exceto aspas e quebra de linha ? } , '"' ;
@@ -332,7 +358,7 @@ O arquivo deve estar salvo em UTF-8. O BOM que alguns editores colocam no iníci
 
 A gramática só define se o programa está bem formado. Se a molécula é quimicamente válida, por exemplo se `Xx` é um elemento que existe ou se `c1` foi declarado, é decidido pela análise semântica (ver `plano_semantico.md`).
 
-### 8.1 Modelo e classificação das ligações
+### 9.1 Modelo e classificação das ligações
 
 Depois da AST, a análise semântica expande multiplicadores e repetições num
 grafo de átomos e ligações. A opção `--modelo` exibe esse grafo.
@@ -379,7 +405,7 @@ Uma declaração `ring` identifica explicitamente um ciclo. Se o posto cíclico
 do grafo indicar mais ciclos independentes do que anéis declarados, o
 compilador produz o aviso `RING-004`, sem bloquear a análise.
 
-### 8.2 Resolução automática
+### 9.2 Resolução automática
 
 Com `--resolver`, uma entrada que contém apenas declarações `atom` pode ter
 suas ligações inferidas. O solver:
@@ -404,20 +430,3 @@ busca sobre a matriz dos átomos pesados.
 `--formato=json` devolve um documento completo; `jsonl` emite uma solução
 por linha e termina com o sumário. Uma busca interrompida usa `TIMEOUT` ou
 `CANCELLED`, preservando `complete=false` e unicidade desconhecida.
-
----
-
-## 9. O que a linguagem deliberadamente não faz?
-
-A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deliberadamente:
-
-1. **Não permite definir manualmente coordenadas ou posições 3D dos átomos.**
-   A linguagem descreve apenas quais átomos existem e como estão ligados. Uma possível
-   visualização 3D é responsabilidade de uma etapa posterior, que poderá calcular
-   automaticamente o posicionamento dos átomos.
-
-2. **Não tem notação de aromaticidade.** Um anel aromático é escrito com ligações simples e duplas alternadas; a opção `--aromaticidade` aplica a regra de Hückel sobre essa forma.
-
-3. **Não representa isótopos nem geometria 3D.** Por isso a quiralidade planar e as barreiras de rotação de biarilas não são decididas pelo compilador; um eixo de biarila só entra quando declarado com `stereo`.
-
-4. **Não aceita mais de uma espécie por arquivo.**

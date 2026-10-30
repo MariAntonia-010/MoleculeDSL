@@ -275,6 +275,9 @@
     .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.8rem; }
     .alternar { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
     .alternar input { accent-color: var(--acento-forte); }
+    /* no celular, o seletor de reação encolhe em vez de passar da tela */
+    .montador-topo .alternar { max-width: 100%; }
+    .alternar select { min-width: 0; max-width: 100%; }
 
     footer { text-align: center; padding: 2rem 16px 3rem; color: var(--fraco); font: 0.78rem var(--mono); border-top: 1px solid var(--borda); }
     footer b { color: var(--acento); font-weight: 600; }
