@@ -271,11 +271,10 @@ python3 src/construtor_ast.py exemplos/agua.mol
 
 ## Página de apresentação
 
-Publicada em **<https://mariantonia-010.github.io/MoleculeDSL/>**. O GitHub
-Pages serve a pasta `docs/` da `main`; `docs/index.html` redireciona para a
-apresentação, em `docs/apresentacao/`. Cada push na `main` atualiza o site.
-O workflow `.github/workflows/pages.yml` faz o mesmo caso a fonte do Pages
-seja trocada para *GitHub Actions*.
+Publicada em **<https://mariantonia-010.github.io/MoleculeDSL/>** pelo
+workflow `.github/workflows/pages.yml` (fonte do Pages: *GitHub Actions*),
+a cada push na `main` que altere a página. Se a fonte for trocada para a
+pasta `docs/` da `main`, `docs/index.html` redireciona para a apresentação.
 
 [docs/apresentacao/index.html](docs/apresentacao/index.html) também abre direto no
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm

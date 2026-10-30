@@ -855,8 +855,10 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
 
 ## 30/10/2026 — Site no ar
 
-- O Pages foi ativado com a fonte "branch `main`, pasta `/docs`". A raiz
-  dava 404, porque a apresentação está em `docs/apresentacao/`;
-  `docs/index.html` redireciona para ela.
+- O Pages foi ativado primeiro com a fonte "branch `main`, pasta `/docs`",
+  e a raiz dava 404 (a apresentação está em `docs/apresentacao/`). Entrou
+  `docs/index.html`, que redireciona para ela. Logo depois a fonte foi
+  trocada para *GitHub Actions*, e o workflow `pages.yml` publica a
+  apresentação na raiz; o redirecionamento fica como reserva.
 - Endereço: https://mariantonia-010.github.io/MoleculeDSL/
 
