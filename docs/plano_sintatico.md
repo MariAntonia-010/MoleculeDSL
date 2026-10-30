@@ -45,7 +45,7 @@ cabecalho  : MOLECULE TEXTO
            | SPECIES METALLIC_SOLID TEXTO ;
 cargaEspecie : CHARGE sinal INTEIRO ;
 desemparelhados : UNPAIRED INTEIRO ;
-comando    : atomo | ligacao | anel ;
+comando    : atomo | ligacao | anel | estereo ;
 
 atomo      : MULTIPLICADOR_ATOMO? ATOM IDENT carga? (AS NOME)? ;
 carga      : ABRE_PAREN sinal INTEIRO FECHA_PAREN ;
@@ -56,6 +56,9 @@ referencia : IDENT | NOME ;
 operador   : LIGACAO | DUPLA | TRIPLA | COORDENADA | METALICA ;
 
 anel       : RING NOME NOME NOME+ ;
+
+estereo    : STEREO referencia (operador? referencia)? descritor ;
+descritor  : IDENT | NOME ;
 ```
 
 ## Marcos
@@ -124,6 +127,13 @@ Um `src/main.py` com etapas encadeadas (léxico, sintático, semântico) e opç�
 
 ### S8: Documentação
 Escrever a gramática em EBNF na `especificacao.md`, entrada no `DIARIO.md`, README com o novo fluxo e novos slides.
+
+### S9: Configuração estereoquímica (`stereo`)
+Comando adicionado depois do plano de limites (`docs/plano_limites.md`, L9).
+`STEREO` é palavra-chave; os descritores R, S, E, Z, Ra e Sa chegam como
+`IDENT` e r, s, cis e trans como `NOME`, sem tokens novos. Erros dentro do
+comando têm mensagem própria ("esperado nome de átomo em 'stereo'",
+"esperado átomo ou descritor ..."), com casos em `invalidos_sintaticos/`.
 
 ## Ligação com o plano semântico
 S1 a S5 cobrem o M1 e alimentam o M3 do `plano_semantico.md`, porque a AST com posições é a entrada do modelo interno. A ordem sugerida é S1 → S2 → S3 → S4 → S5 → S6 → S7 → S8.

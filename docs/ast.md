@@ -31,13 +31,18 @@ Molecula
     │   ├── operador: Operador
     │   ├── destino: Referencia
     │   └── repeticoes: int
-    └── AnelDecl
-        └── nomes: list[Referencia]
+    ├── AnelDecl
+    │   └── nomes: list[Referencia]
+    └── EstereoDecl
+        ├── referencias: list[Referencia]   (uma ou duas)
+        ├── operador: Operador | None       (=, - ou nenhum)
+        ├── descritor: str                  (R, S, r, s, E, Z, Ra, Sa, cis, trans)
+        └── coluna_descritor: int
 ```
 
 `TipoEspecie` distingue molécula, íon molecular, sólido iônico, rede
-covalente e sólido metálico. `AtomoDecl`, `LigacaoDecl`, `AnelDecl` e
-`Referencia` também guardam linha e
+covalente e sólido metálico. `AtomoDecl`, `LigacaoDecl`, `AnelDecl`,
+`EstereoDecl` e `Referencia` também guardam linha e
 coluna. `TipoReferencia` distingue `ELEMENTO` de `NOME`, sem strings livres.
 `Operador` é um enum com `SIMPLES`, `DUPLA`, `TRIPLA`, `COORDENADA` e
 `METALICA`.
@@ -55,13 +60,19 @@ modelo semântico.
 | `molecula` | `Molecula` |
 | `cabecalho` | tipo, nome e carga total de `Molecula` |
 | `desemparelhados` | `eletrons_desemparelhados` de `Molecula` |
-| `comando` | encaminha `AtomoDecl`, `LigacaoDecl` ou `AnelDecl` |
+| `comando` | encaminha `AtomoDecl`, `LigacaoDecl`, `AnelDecl` ou `EstereoDecl` |
 | `atomo` | `AtomoDecl` |
 | `carga` | inteiro positivo ou negativo dentro de `AtomoDecl` |
 | `ligacao` | `LigacaoDecl` |
 | `referencia` | `Referencia` com `TipoReferencia` |
 | `operador` | `Operador` |
 | `anel` | `AnelDecl` |
+| `estereo` | `EstereoDecl` |
+| `descritor` | texto do descritor dentro de `EstereoDecl` |
+
+O descritor fica como texto na AST: conferir se ele combina com o elemento
+(R/S num centro, E/Z numa dupla) depende do grafo e pertence à semântica
+(`STEREO-002`).
 
 O visitor está em `src/construtor_ast.py`; as dataclasses e os enums ficam em
 `src/ast_nos.py`.
@@ -101,8 +112,21 @@ Versão visual gerada pelo projeto:
 ![AST da água](ast-agua.svg)
 
 Há também uma referência com anel em
-[ast-ciclopropano.svg](ast-ciclopropano.svg) e a parse tree da água em
-[arvore-sintatica-agua.svg](arvore-sintatica-agua.svg).
+[ast-ciclopropano.svg](ast-ciclopropano.svg), a parse tree da água em
+[arvore-sintatica-agua.svg](arvore-sintatica-agua.svg) e um exemplo com
+configuração declarada (`stereo c1=c2 E`) em
+[ast-dicloroeteno.svg](ast-dicloroeteno.svg) e
+[arvore-sintatica-dicloroeteno.svg](arvore-sintatica-dicloroeteno.svg).
+
+## Exemplo: configuração declarada
+
+Trecho de `python src/main.py --ast exemplos/e_1_2_dicloroeteno.mol`:
+
+```text
+  EstereoDecl descritor=E operador=DUPLA [14:4]
+    c1 (nome) [14:11]
+    c2 (nome) [14:14]
+```
 
 ## Testes
 
@@ -111,7 +135,14 @@ Há também uma referência com anel em
 - água;
 - amônio;
 - ciclopropano;
-- aminoborano.
+- aminoborano;
+- (E)-1,2-dicloroeteno, com `stereo`.
+
+Para todos os exemplos de `exemplos/`, o caso `ast/todos_os_exemplos` confere
+que cada comando do código vira exatamente um nó do tipo certo, na mesma
+ordem, com linha e coluna, e que os multiplicadores continuam no nó.
 
 O mesmo script gera, em uma pasta temporária, a parse tree e a AST em SVG de
-todos os exemplos válidos e valida a estrutura básica de cada arquivo.
+todos os exemplos válidos e valida a estrutura básica de cada arquivo. O caso
+`arvores/estereo_nas_arvores` confere que `EstereoDecl` aparece na AST e a
+regra `estereo` na parse tree.

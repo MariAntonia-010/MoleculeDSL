@@ -1,0 +1,5 @@
+// esperado: Erro sintático [SIN-002] na linha 4, coluna 11: esperado nome de átomo em 'stereo', encontrado '='
+molecule "Broken" {
+    atom C as c1
+    stereo = c1 R
+}

@@ -1089,6 +1089,90 @@ def testar_svgs_das_arvores():
     return problemas
 
 
+def testar_estereo_nas_arvores():
+    # O comando stereo aparece como nó próprio na AST em SVG e como regra
+    # estereo na parse tree
+    caminho = os.path.join(PASTA_RAIZ, "exemplos", "e_1_2_dicloroeteno.mol")
+    esperados = {
+        "ast": ["EstereoDecl", "descritor: E", "operador: DUPLA"],
+        "sintatica": ["estereo", "descritor", "stereo"],
+    }
+    problemas = []
+    with tempfile.TemporaryDirectory() as pasta:
+        for tipo, trechos in esperados.items():
+            destino = os.path.join(pasta, f"{tipo}.svg")
+            codigo, saida = rodar_comando(
+                [caminho, "--tipo", tipo, "-o", destino], script=DESENHAR_ARVORE
+            )
+            if codigo != 0 or not os.path.isfile(destino):
+                problemas.append(f"SVG {tipo} não foi gerado: {saida}")
+                continue
+            with open(destino, encoding="utf-8") as arquivo:
+                svg = arquivo.read()
+            for trecho in trechos:
+                if trecho not in svg:
+                    problemas.append(f"SVG {tipo} sem '{trecho}'")
+    return problemas
+
+
+def testar_ast_de_todos_os_exemplos():
+    # Cada comando do código vira exatamente um nó do tipo certo, com
+    # posição; os quantificadores ficam no nó, sem expansão
+    src = os.path.join(PASTA_RAIZ, "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+    from ast_nos import AnelDecl, AtomoDecl, EstereoDecl, LigacaoDecl
+    from construtor_ast import construir
+    from sintatico import analisar_fluxo, tokenizar
+    from MoleculeDSLParser import MoleculeDSLParser as P
+
+    tipos = {
+        P.ATOM: AtomoDecl,
+        P.BOND: LigacaoDecl,
+        P.RING: AnelDecl,
+        P.STEREO: EstereoDecl,
+    }
+    problemas = []
+    for caminho in arquivos("exemplos"):
+        nome = os.path.basename(caminho)
+        _, fluxo, erros = tokenizar(caminho)
+        arvore, erros_sintaticos = analisar_fluxo(fluxo)
+        if erros.erros or erros_sintaticos.erros:
+            problemas.append(f"{nome}: não passou da sintaxe")
+            continue
+        molecula = construir(arvore)
+        esperados = [
+            tipos[token.type] for token in fluxo.tokens if token.type in tipos
+        ]
+        obtidos = [type(comando) for comando in molecula.comandos]
+        if obtidos != esperados:
+            problemas.append(f"{nome}: nós {obtidos} para comandos {esperados}")
+        for comando in molecula.comandos:
+            referencias = []
+            if isinstance(comando, LigacaoDecl):
+                referencias = [comando.origem, comando.destino]
+            elif isinstance(comando, AnelDecl):
+                referencias = comando.nomes
+            elif isinstance(comando, EstereoDecl):
+                referencias = comando.referencias
+            for no in (comando, *referencias):
+                if no.linha < 1 or no.coluna < 0:
+                    problemas.append(f"{nome}: nó sem posição {no}")
+        multiplicadores = [
+            int(token.text[:-1])
+            for token in fluxo.tokens
+            if token.type == P.MULTIPLICADOR_ATOMO
+        ]
+        com_multiplicador = [
+            c.multiplicador
+            for c in molecula.comandos
+            if isinstance(c, AtomoDecl) and c.multiplicador != 1
+        ]
+        if sorted(com_multiplicador) != sorted(m for m in multiplicadores if m != 1):
+            problemas.append(f"{nome}: multiplicadores expandidos na AST")
+    return problemas
+
+
 def main():
     casos = []
     for pasta in PASTAS_VALIDOS:
@@ -1147,6 +1231,12 @@ def main():
             ),
         ),
         (
+            "ast/e_1_2_dicloroeteno",
+            lambda: testar_ast(
+                os.path.join(PASTA_RAIZ, "exemplos", "e_1_2_dicloroeteno.mol")
+            ),
+        ),
+        (
             "modelo/agua",
             lambda: testar_modelo(
                 os.path.join(PASTA_RAIZ, "exemplos", "agua.mol")
@@ -1176,7 +1266,15 @@ def main():
                 os.path.join(PASTA_RAIZ, "exemplos", "sodio_metalico.mol")
             ),
         ),
+        (
+            "modelo/e_1_2_dicloroeteno",
+            lambda: testar_modelo(
+                os.path.join(PASTA_RAIZ, "exemplos", "e_1_2_dicloroeteno.mol")
+            ),
+        ),
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
+        ("arvores/estereo_nas_arvores", testar_estereo_nas_arvores),
+        ("ast/todos_os_exemplos", testar_ast_de_todos_os_exemplos),
         ("solver/contrato_estruturado", testar_contrato_solver),
         ("solver/cli_estruturada", testar_cli_solver_estruturado),
         ("solver/fases_do_plano", testar_fases_solver),

@@ -1,0 +1,17 @@
+Modelo '(E)-1,2-Dichloroethene' tipo=molecule carga_total=+0 desemparelhados=não declarado
+  Átomos (6)
+    c1 (C#1) carga=+0 [2:4]
+    c2 (C#2) carga=+0 [3:4]
+    cl1 (Cl#1) carga=+0 [4:4]
+    cl2 (Cl#2) carga=+0 [5:4]
+    h1 (H#1) carga=+0 [6:4]
+    h2 (H#2) carga=+0 [6:4]
+  Ligações (5)
+    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]
+    c1 (C#1) SIMPLES cl1 (Cl#1) classificação=covalente polar Δχ=0.61 [9:4]
+    c2 (C#2) SIMPLES cl2 (Cl#2) classificação=covalente polar Δχ=0.61 [10:4]
+    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [11:4]
+    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [12:4]
+  Configurações declaradas (1)
+    c1 (C#1)=c2 (C#2) E [14:4]
+Espécie '(E)-1,2-Dichloroethene': análise concluída sem erros

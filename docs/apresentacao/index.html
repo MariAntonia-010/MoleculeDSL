@@ -305,6 +305,7 @@
       <a href="#pipeline">Pipeline</a>
       <a href="#ast">AST</a>
       <a href="#semantica">Semântica</a>
+      <a href="#quimica">Química</a>
       <a href="#demo">Demo</a>
       <a href="#testes">Testes</a>
     </nav>
@@ -321,7 +322,7 @@
           <span class="pill">Equipe MoleculeDSL</span>
           <span class="pill">Python 3.10+</span>
           <span class="pill">ANTLR 4.13.2</span>
-          <span class="pill status"><span class="dot"></span>118 testes passando</span>
+          <span class="pill status"><span class="dot"></span>354 testes passando</span>
         </div>
       </div>
       <div class="molecule" aria-label="Ilustração abstrata de uma molécula">
@@ -399,6 +400,13 @@
 3x <span class="kw">atom</span> H <span class="kw">as</span> hn
 3x <span class="kw">atom</span> H <span class="kw">as</span> hb
 <span class="kw">bond</span> N<span class="op">-&gt;</span>B</code></pre>
+        </article>
+        <article class="card wide">
+          <h3>Configuração estereoquímica</h3>
+          <pre><code><span class="kw">bond</span> c1<span class="op">=</span>c2
+<span class="kw">bond</span> c1-cl1
+<span class="kw">bond</span> c2-cl2
+<span class="kw">stereo</span> c1<span class="op">=</span>c2 E      <span class="str">// também: stereo c2 R, stereo c3 Ra, stereo r1 r2 trans</span></code></pre>
         </article>
       </div>
     </section>
@@ -492,6 +500,8 @@
             <tr><td>METAL-001 / 002</td><td>Composição e limite coletivo de ~</td><td>aviso</td></tr>
             <tr><td>RING-001…003</td><td>Validade e duplicidade de anéis</td><td>erro</td></tr>
             <tr><td>RING-004</td><td>Ciclo independente sem ring</td><td>aviso</td></tr>
+            <tr><td>STEREO-001…004</td><td>Configuração inválida, descritor errado, repetido ou sem desempate</td><td>erro</td></tr>
+            <tr><td>STEREO-005</td><td>Eixo de biarila sem verificação da barreira</td><td>aviso</td></tr>
           </table>
         </article>
         <article class="card">
@@ -509,9 +519,44 @@
       </div>
     </section>
 
+    <section id="quimica">
+      <div class="section-head">
+        <p class="eyebrow">07 · além da validação</p>
+        <h2>O grafo validado vira química.</h2>
+        <p>Com a análise sem erros, o compilador resolve fórmulas e gera relatórios. Saídas reais, pré-computadas.</p>
+      </div>
+      <div class="grid">
+        <article class="card half">
+          <h3>Solver de estruturas</h3>
+          <p>Geração ordenada de Read-Faradzev: cada classe sai uma vez, sem conjunto de chaves. Backend próprio e CP-SAT opcional, comparados na suíte.</p>
+          <pre>C6H6       217 (esperado 217)    0.08s</pre>
+        </article>
+        <article class="card half">
+          <h3>Estereoquímica</h3>
+          <p>Contagem exata pelo grupo de automorfismos: formas meso já descontadas.</p>
+          <pre>Estereoisômeros desta constituição: 3 (1 aquiral(is), 1 par(es) de enantiômeros)
+Estereoisômero declarado: aquiral (forma meso)</pre>
+        </article>
+        <article class="card half">
+          <h3>Tautômeros</h3>
+          <pre>Tautômeros: 2 estrutura(s), a declarada primeiro
+  Tautômero 1: forma declarada
+  Tautômero 2: H#1 em O#1; ligações c1 (C#1)=c2 (C#2), c2 (C#2)-O#1</pre>
+        </article>
+        <article class="card half">
+          <h3>Aromaticidade</h3>
+          <pre>Aromaticidade (1 sistema(s) cíclico(s))
+  [n (N#1) c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4)] 6 elétron(s) pi, aromático (Hückel)</pre>
+        </article>
+        <article class="card wide">
+          <p><code>--eletronico</code> · <code>--ressonancia</code> · <code>--tautomeros</code> · <code>--aromaticidade</code> · <code>--estereo</code> · <code>--coordenacao</code> · <code>--resolver</code> · <code>--resolver-todas</code></p>
+        </article>
+      </div>
+    </section>
+
     <section id="demo">
       <div class="section-head">
-        <p class="eyebrow">07 · demonstração</p>
+        <p class="eyebrow">08 · demonstração</p>
         <h2>Saída real, pré-computada.</h2>
         <p>Os três painéis abaixo vieram da execução do projeto sobre <code>exemplos/agua.mol</code>.</p>
       </div>
@@ -569,38 +614,38 @@ Espécie 'Water': análise concluída sem erros</pre>
 
     <section id="testes">
       <div class="section-head">
-        <p class="eyebrow">08 · testes</p>
+        <p class="eyebrow">09 · testes</p>
         <h2>O contrato é executável.</h2>
       </div>
       <div class="grid">
-        <article class="card metric"><span>Suíte total</span><strong>118</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
-        <article class="card metric"><span>Exemplos válidos</span><strong>17</strong><span>espécies</span></article>
-        <article class="card metric"><span>Snapshots</span><strong>9</strong><span>AST + modelo</span></article>
-        <article class="card metric"><span>SVGs validados</span><strong>34</strong><span>2 árvores × 17 exemplos</span></article>
+        <article class="card metric"><span>Suíte total</span><strong>354</strong><span class="status"><span class="dot"></span>0 falhas</span></article>
+        <article class="card metric"><span>Exemplos válidos</span><strong>164</strong><span>espécies</span></article>
+        <article class="card metric"><span>Snapshots</span><strong>11</strong><span>AST + modelo</span></article>
+        <article class="card metric"><span>SVGs validados</span><strong>328</strong><span>2 árvores × 164 exemplos</span></article>
       </div>
       <pre style="margin-top:1rem">python3 testar.py
 ...
-118 testes, 0 falha(s)</pre>
+354 testes, 0 falha(s)</pre>
     </section>
 
     <section id="futuro">
       <div class="section-head">
-        <p class="eyebrow">09 · limites e futuro</p>
+        <p class="eyebrow">10 · limites e futuro</p>
         <h2>O que não foi fingido como resolvido.</h2>
       </div>
       <div class="grid">
         <article class="card"><h3>Octeto</h3><p><code>OCT-001</code> foi removida: as regras de valência já cobrem os elementos com dados.</p></article>
         <article class="card"><h3>Ciclos</h3><p>Ciclos independentes sem uma declaração <code>ring</code> agora geram <code>RING-004</code>.</p></article>
         <article class="card"><h3>Ligação metálica</h3><p><code>METAL-001</code> verifica participantes e <code>METAL-002</code> informa que uma aresta não valida o sólido.</p></article>
-        <article class="card"><h3>Solver</h3><p>H é distribuído antes da matriz pesada; JSON/JSONL registram completude, unicidade, limite e timeout.</p></article>
-        <article class="card"><h3>Mais química</h3><p>Aromaticidade, estereoquímica, isótopos, geometria e visualização 3D estão fora do escopo.</p></article>
+        <article class="card"><h3>Solver</h3><p>Até 12 átomos pesados; JSON/JSONL registram completude, unicidade, limite e timeout, e <code>--isolar</code> roda a busca em outro processo.</p></article>
+        <article class="card"><h3>Geometria 3D</h3><p>Quiralidade planar e barreiras de rotação dependem de 3D, que a linguagem não descreve; biarilas só entram quando declaradas.</p></article>
         <article class="card"><h3>Fontes antes de regras</h3><p>Valências ainda pendentes não entram no código até serem sustentadas pelo levantamento.</p></article>
       </div>
     </section>
 
     <section id="referencias">
       <div class="section-head">
-        <p class="eyebrow">10 · referências</p>
+        <p class="eyebrow">11 · referências</p>
         <h2>Implementação rastreável.</h2>
       </div>
       <div class="sources">
@@ -608,6 +653,8 @@ Espécie 'Water': análise concluída sem erros</pre>
         <p>PubChem Periodic Table — elementos e eletronegatividade.</p>
         <p>IUPAC Gold Book — ligação coordenada, ordem de ligação, deslocalização e carga.</p>
         <p>Pearson e LibreTexts — convenções didáticas de valência e classificação.</p>
+        <p>IUPAC 2013 (P-92) — regras CIP, centros pseudoassimétricos e descritores r/s.</p>
+        <p>Read (1978) e Faradzev (1978) — geração ordenada de grafos.</p>
         <p><code>docs/levantamento_quimica.md</code> — matriz de fontes e pendências.</p>
         <p><code>docs/especificacao.md</code> — contrato da linguagem.</p>
       </div>

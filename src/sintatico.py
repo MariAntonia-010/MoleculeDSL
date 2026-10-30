@@ -221,6 +221,16 @@ class ErroSintatico(ColetorErrosANTLR):
             if P.FECHA_PAREN in esperados:
                 return f"esperado ')' para fechar a carga, encontrado {encontrado}", True
 
+        # Dentro de 'stereo', referência e operador ganham mensagem própria
+        pai = ctx
+        while pai is not None and pai.getRuleIndex() not in (P.RULE_estereo, P.RULE_ligacao):
+            pai = pai.parentCtx
+        if pai is not None and pai.getRuleIndex() == P.RULE_estereo:
+            if regra == P.RULE_referencia and esperados & REFERENCIAS:
+                return (
+                    f"esperado nome de átomo em 'stereo', encontrado {encontrado}"
+                ), True
+
         if regra in (P.RULE_ligacao, P.RULE_operador) and esperados & OPERADORES:
             return f"esperado operador de ligação (-, =, #, -> ou ~), encontrado {encontrado}", True
 

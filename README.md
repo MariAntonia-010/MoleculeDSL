@@ -328,7 +328,11 @@ O script verifica:
 - avisos em `avisos_semanticos/`;
 - arquivo inexistente e código ANTLR ausente;
 - snapshots textuais da AST e do modelo;
-- soluções únicas e rejeições do solver;
+- tipo, ordem e posição dos nós da AST em todos os exemplos;
+- soluções únicas e rejeições do solver, contrato JSON/JSONL, filtros,
+  isolamento e comparação com o CP-SAT quando o OR-Tools está instalado;
+- relatórios químicos (ressonância, tautômeros, aromaticidade,
+  estereoquímica e coordenação);
 - geração de parse tree e AST em SVG para todos os exemplos.
 
 Casos inválidos e avisos declaram as mensagens esperadas no próprio arquivo:
@@ -346,7 +350,9 @@ saída 0.
 ```text
 gramatica/                  gramática combinada do ANTLR
 src/                        lexer, parser, AST, modelo, semântica e relatórios químicos
-src/solver/                 solver de estruturas (backends, filtros, geração canônica)
+                            (eletronico, tautomeros, aromaticidade, estereo, complexos)
+src/solver/                 solver de estruturas (backends, filtros, geração ordenada, isolamento)
+tests/benchmark_solver.py   medição dos backends numa lista fixa de fórmulas
 regras/                     dados químicos e limites configuráveis
 exemplos/                   programas válidos e snapshots
 invalidos/                  casos léxicos inválidos
@@ -376,8 +382,9 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 
 Léxico, sintaxe, AST, modelo, tipos de espécie, carga total, radicais,
 regras estruturais, valência, carga formal,
-classificação por eletronegatividade, validação do doador coordenado e anéis
-estão implementados e testados.
+classificação por eletronegatividade, validação do doador coordenado, anéis,
+configuração estereoquímica (`stereo`), solver de estruturas e relatórios
+químicos estão implementados e testados.
 
 Continuam pendentes:
 

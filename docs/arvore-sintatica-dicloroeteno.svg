@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="6512" height="532" viewBox="0 0 6512 532">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;font-size:13px;fill:#172033}.no{fill:#ffffff;stroke:#64748b;stroke-width:1.3}.aresta{fill:none;stroke:#94a3b8;stroke-width:1.3}.titulo{font-size:19px;font-weight:700;fill:#0f172a}</style>
+<text class="titulo" x="30" y="27">MoleculeDSL — Árvore sintática (Parse Tree)</text>
+<path class="aresta" d="M 3255.9 92.0 L 3255.9 114.0 L 3206.9 114.0 L 3206.9 136.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 331.5 196.0 L 331.5 218.0"/>
+<path class="aresta" d="M 331.5 256.0 L 331.5 278.0 L 102.2 278.0 L 102.2 300.0"/>
+<path class="aresta" d="M 331.5 256.0 L 331.5 278.0 L 276.0 278.0 L 276.0 300.0"/>
+<path class="aresta" d="M 331.5 256.0 L 331.5 278.0 L 505.3 278.0 L 505.3 300.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 716.1 196.0 L 716.1 218.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 1005.4 196.0 L 1005.4 218.0"/>
+<path class="aresta" d="M 1005.4 256.0 L 1005.4 278.0 L 1005.4 278.0 L 1005.4 300.0"/>
+<path class="aresta" d="M 1005.4 338.0 L 1005.4 360.0 L 849.2 360.0 L 849.2 382.0"/>
+<path class="aresta" d="M 1005.4 338.0 L 1005.4 360.0 L 963.8 360.0 L 963.8 382.0"/>
+<path class="aresta" d="M 1005.4 338.0 L 1005.4 360.0 L 1066.4 360.0 L 1066.4 382.0"/>
+<path class="aresta" d="M 1005.4 338.0 L 1005.4 360.0 L 1169.0 360.0 L 1169.0 382.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 1439.8 196.0 L 1439.8 218.0"/>
+<path class="aresta" d="M 1439.8 256.0 L 1439.8 278.0 L 1439.8 278.0 L 1439.8 300.0"/>
+<path class="aresta" d="M 1439.8 338.0 L 1439.8 360.0 L 1283.6 360.0 L 1283.6 382.0"/>
+<path class="aresta" d="M 1439.8 338.0 L 1439.8 360.0 L 1398.2 360.0 L 1398.2 382.0"/>
+<path class="aresta" d="M 1439.8 338.0 L 1439.8 360.0 L 1500.8 360.0 L 1500.8 382.0"/>
+<path class="aresta" d="M 1439.8 338.0 L 1439.8 360.0 L 1603.4 360.0 L 1603.4 382.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 1881.6 196.0 L 1881.6 218.0"/>
+<path class="aresta" d="M 1881.6 256.0 L 1881.6 278.0 L 1881.6 278.0 L 1881.6 300.0"/>
+<path class="aresta" d="M 1881.6 338.0 L 1881.6 360.0 L 1718.0 360.0 L 1718.0 382.0"/>
+<path class="aresta" d="M 1881.6 338.0 L 1881.6 360.0 L 1836.3 360.0 L 1836.3 382.0"/>
+<path class="aresta" d="M 1881.6 338.0 L 1881.6 360.0 L 1942.6 360.0 L 1942.6 382.0"/>
+<path class="aresta" d="M 1881.6 338.0 L 1881.6 360.0 L 2048.9 360.0 L 2048.9 382.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 2330.8 196.0 L 2330.8 218.0"/>
+<path class="aresta" d="M 2330.8 256.0 L 2330.8 278.0 L 2330.8 278.0 L 2330.8 300.0"/>
+<path class="aresta" d="M 2330.8 338.0 L 2330.8 360.0 L 2167.2 360.0 L 2167.2 382.0"/>
+<path class="aresta" d="M 2330.8 338.0 L 2330.8 360.0 L 2285.5 360.0 L 2285.5 382.0"/>
+<path class="aresta" d="M 2330.8 338.0 L 2330.8 360.0 L 2391.8 360.0 L 2391.8 382.0"/>
+<path class="aresta" d="M 2330.8 338.0 L 2330.8 360.0 L 2498.1 360.0 L 2498.1 382.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 2878.0 196.0 L 2878.0 218.0"/>
+<path class="aresta" d="M 2878.0 256.0 L 2878.0 278.0 L 2878.0 278.0 L 2878.0 300.0"/>
+<path class="aresta" d="M 2878.0 338.0 L 2878.0 360.0 L 2664.5 360.0 L 2664.5 382.0"/>
+<path class="aresta" d="M 2878.0 338.0 L 2878.0 360.0 L 2834.6 360.0 L 2834.6 382.0"/>
+<path class="aresta" d="M 2878.0 338.0 L 2878.0 360.0 L 2949.2 360.0 L 2949.2 382.0"/>
+<path class="aresta" d="M 2878.0 338.0 L 2878.0 360.0 L 3051.8 360.0 L 3051.8 382.0"/>
+<path class="aresta" d="M 2878.0 338.0 L 2878.0 360.0 L 3150.7 360.0 L 3150.7 382.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 3437.2 196.0 L 3437.2 218.0"/>
+<path class="aresta" d="M 3437.2 256.0 L 3437.2 278.0 L 3437.2 278.0 L 3437.2 300.0"/>
+<path class="aresta" d="M 3437.2 338.0 L 3437.2 360.0 L 3261.6 360.0 L 3261.6 382.0"/>
+<path class="aresta" d="M 3437.2 338.0 L 3437.2 360.0 L 3383.6 360.0 L 3383.6 382.0"/>
+<path class="aresta" d="M 3383.6 420.0 L 3383.6 442.0 L 3383.6 442.0 L 3383.6 464.0"/>
+<path class="aresta" d="M 3437.2 338.0 L 3437.2 360.0 L 3498.2 360.0 L 3498.2 382.0"/>
+<path class="aresta" d="M 3498.2 420.0 L 3498.2 442.0 L 3498.2 442.0 L 3498.2 464.0"/>
+<path class="aresta" d="M 3437.2 338.0 L 3437.2 360.0 L 3612.8 360.0 L 3612.8 382.0"/>
+<path class="aresta" d="M 3612.8 420.0 L 3612.8 442.0 L 3612.8 442.0 L 3612.8 464.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 3917.8 196.0 L 3917.8 218.0"/>
+<path class="aresta" d="M 3917.8 256.0 L 3917.8 278.0 L 3917.8 278.0 L 3917.8 300.0"/>
+<path class="aresta" d="M 3917.8 338.0 L 3917.8 360.0 L 3734.8 360.0 L 3734.8 382.0"/>
+<path class="aresta" d="M 3917.8 338.0 L 3917.8 360.0 L 3856.8 360.0 L 3856.8 382.0"/>
+<path class="aresta" d="M 3856.8 420.0 L 3856.8 442.0 L 3856.8 442.0 L 3856.8 464.0"/>
+<path class="aresta" d="M 3917.8 338.0 L 3917.8 360.0 L 3978.8 360.0 L 3978.8 382.0"/>
+<path class="aresta" d="M 3978.8 420.0 L 3978.8 442.0 L 3978.8 442.0 L 3978.8 464.0"/>
+<path class="aresta" d="M 3917.8 338.0 L 3917.8 360.0 L 4100.8 360.0 L 4100.8 382.0"/>
+<path class="aresta" d="M 4100.8 420.0 L 4100.8 442.0 L 4100.8 442.0 L 4100.8 464.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 4405.8 196.0 L 4405.8 218.0"/>
+<path class="aresta" d="M 4405.8 256.0 L 4405.8 278.0 L 4405.8 278.0 L 4405.8 300.0"/>
+<path class="aresta" d="M 4405.8 338.0 L 4405.8 360.0 L 4222.8 360.0 L 4222.8 382.0"/>
+<path class="aresta" d="M 4405.8 338.0 L 4405.8 360.0 L 4344.8 360.0 L 4344.8 382.0"/>
+<path class="aresta" d="M 4344.8 420.0 L 4344.8 442.0 L 4344.8 442.0 L 4344.8 464.0"/>
+<path class="aresta" d="M 4405.8 338.0 L 4405.8 360.0 L 4466.8 360.0 L 4466.8 382.0"/>
+<path class="aresta" d="M 4466.8 420.0 L 4466.8 442.0 L 4466.8 442.0 L 4466.8 464.0"/>
+<path class="aresta" d="M 4405.8 338.0 L 4405.8 360.0 L 4588.8 360.0 L 4588.8 382.0"/>
+<path class="aresta" d="M 4588.8 420.0 L 4588.8 442.0 L 4588.8 442.0 L 4588.8 464.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 4893.8 196.0 L 4893.8 218.0"/>
+<path class="aresta" d="M 4893.8 256.0 L 4893.8 278.0 L 4893.8 278.0 L 4893.8 300.0"/>
+<path class="aresta" d="M 4893.8 338.0 L 4893.8 360.0 L 4710.8 360.0 L 4710.8 382.0"/>
+<path class="aresta" d="M 4893.8 338.0 L 4893.8 360.0 L 4832.8 360.0 L 4832.8 382.0"/>
+<path class="aresta" d="M 4832.8 420.0 L 4832.8 442.0 L 4832.8 442.0 L 4832.8 464.0"/>
+<path class="aresta" d="M 4893.8 338.0 L 4893.8 360.0 L 4954.8 360.0 L 4954.8 382.0"/>
+<path class="aresta" d="M 4954.8 420.0 L 4954.8 442.0 L 4954.8 442.0 L 4954.8 464.0"/>
+<path class="aresta" d="M 4893.8 338.0 L 4893.8 360.0 L 5076.8 360.0 L 5076.8 382.0"/>
+<path class="aresta" d="M 5076.8 420.0 L 5076.8 442.0 L 5076.8 442.0 L 5076.8 464.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 5381.8 196.0 L 5381.8 218.0"/>
+<path class="aresta" d="M 5381.8 256.0 L 5381.8 278.0 L 5381.8 278.0 L 5381.8 300.0"/>
+<path class="aresta" d="M 5381.8 338.0 L 5381.8 360.0 L 5198.8 360.0 L 5198.8 382.0"/>
+<path class="aresta" d="M 5381.8 338.0 L 5381.8 360.0 L 5320.8 360.0 L 5320.8 382.0"/>
+<path class="aresta" d="M 5320.8 420.0 L 5320.8 442.0 L 5320.8 442.0 L 5320.8 464.0"/>
+<path class="aresta" d="M 5381.8 338.0 L 5381.8 360.0 L 5442.8 360.0 L 5442.8 382.0"/>
+<path class="aresta" d="M 5442.8 420.0 L 5442.8 442.0 L 5442.8 442.0 L 5442.8 464.0"/>
+<path class="aresta" d="M 5381.8 338.0 L 5381.8 360.0 L 5564.8 360.0 L 5564.8 382.0"/>
+<path class="aresta" d="M 5564.8 420.0 L 5564.8 442.0 L 5564.8 442.0 L 5564.8 464.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 5934.5 196.0 L 5934.5 218.0"/>
+<path class="aresta" d="M 5934.5 256.0 L 5934.5 278.0 L 5934.5 278.0 L 5934.5 300.0"/>
+<path class="aresta" d="M 5934.5 338.0 L 5934.5 360.0 L 5701.6 360.0 L 5701.6 382.0"/>
+<path class="aresta" d="M 5934.5 338.0 L 5934.5 360.0 L 5838.4 360.0 L 5838.4 382.0"/>
+<path class="aresta" d="M 5838.4 420.0 L 5838.4 442.0 L 5838.4 442.0 L 5838.4 464.0"/>
+<path class="aresta" d="M 5934.5 338.0 L 5934.5 360.0 L 5953.0 360.0 L 5953.0 382.0"/>
+<path class="aresta" d="M 5953.0 420.0 L 5953.0 442.0 L 5953.0 442.0 L 5953.0 464.0"/>
+<path class="aresta" d="M 5934.5 338.0 L 5934.5 360.0 L 6067.6 360.0 L 6067.6 382.0"/>
+<path class="aresta" d="M 6067.6 420.0 L 6067.6 442.0 L 6067.6 442.0 L 6067.6 464.0"/>
+<path class="aresta" d="M 5934.5 338.0 L 5934.5 360.0 L 6185.9 360.0 L 6185.9 382.0"/>
+<path class="aresta" d="M 6185.9 420.0 L 6185.9 442.0 L 6185.9 442.0 L 6185.9 464.0"/>
+<path class="aresta" d="M 3206.9 174.0 L 3206.9 196.0 L 6319.0 196.0 L 6319.0 218.0"/>
+<path class="aresta" d="M 3255.9 92.0 L 3255.9 114.0 L 6443.8 114.0 L 6443.8 136.0"/>
+<rect class="no" x="3213.3" y="54.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3255.9" y="77.0" text-anchor="middle">programa</text>
+<rect class="no" x="3164.3" y="136.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3206.9" y="159.0" text-anchor="middle">molecula</text>
+<rect class="no" x="285.2" y="218.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="331.5" y="241.0" text-anchor="middle">cabecalho</text>
+<rect class="no" x="30.0" y="300.0" width="144.4" height="38" rx="8" ry="8"/>
+<text x="102.2" y="323.0" text-anchor="middle">SPECIES: species</text>
+<rect class="no" x="196.4" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="276.0" y="323.0" text-anchor="middle">MOLECULE: molecule</text>
+<rect class="no" x="377.6" y="300.0" width="255.4" height="38" rx="8" ry="8"/>
+<text x="505.3" y="323.0" text-anchor="middle">TEXTO: &quot;(E)-1,2-Dichloroethene&quot;</text>
+<rect class="no" x="655.0" y="218.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="716.1" y="241.0" text-anchor="middle">ABRE_CHAVE: {</text>
+<rect class="no" x="966.5" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="1005.4" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="967.4" y="300.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="1005.4" y="323.0" text-anchor="middle">atomo</text>
+<rect class="no" x="799.2" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="849.2" y="405.0" text-anchor="middle">ATOM: atom</text>
+<rect class="no" x="921.2" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="963.8" y="405.0" text-anchor="middle">IDENT: C</text>
+<rect class="no" x="1028.4" y="382.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="1066.4" y="405.0" text-anchor="middle">AS: as</text>
+<rect class="no" x="1126.4" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="1169.0" y="405.0" text-anchor="middle">NOME: c1</text>
+<rect class="no" x="1400.9" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="1439.8" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="1401.8" y="300.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="1439.8" y="323.0" text-anchor="middle">atomo</text>
+<rect class="no" x="1233.6" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="1283.6" y="405.0" text-anchor="middle">ATOM: atom</text>
+<rect class="no" x="1355.6" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="1398.2" y="405.0" text-anchor="middle">IDENT: C</text>
+<rect class="no" x="1462.8" y="382.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="1500.8" y="405.0" text-anchor="middle">AS: as</text>
+<rect class="no" x="1560.8" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="1603.4" y="405.0" text-anchor="middle">NOME: c2</text>
+<rect class="no" x="1842.7" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="1881.6" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="1843.6" y="300.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="1881.6" y="323.0" text-anchor="middle">atomo</text>
+<rect class="no" x="1668.0" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="1718.0" y="405.0" text-anchor="middle">ATOM: atom</text>
+<rect class="no" x="1790.0" y="382.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="1836.3" y="405.0" text-anchor="middle">IDENT: Cl</text>
+<rect class="no" x="1904.6" y="382.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="1942.6" y="405.0" text-anchor="middle">AS: as</text>
+<rect class="no" x="2002.6" y="382.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="2048.9" y="405.0" text-anchor="middle">NOME: cl1</text>
+<rect class="no" x="2291.9" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="2330.8" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="2292.8" y="300.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="2330.8" y="323.0" text-anchor="middle">atomo</text>
+<rect class="no" x="2117.2" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="2167.2" y="405.0" text-anchor="middle">ATOM: atom</text>
+<rect class="no" x="2239.2" y="382.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="2285.5" y="405.0" text-anchor="middle">IDENT: Cl</text>
+<rect class="no" x="2353.8" y="382.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="2391.8" y="405.0" text-anchor="middle">AS: as</text>
+<rect class="no" x="2451.8" y="382.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="2498.1" y="405.0" text-anchor="middle">NOME: cl2</text>
+<rect class="no" x="2839.1" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="2878.0" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="2840.0" y="300.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="2878.0" y="323.0" text-anchor="middle">atomo</text>
+<rect class="no" x="2566.4" y="382.0" width="196.2" height="38" rx="8" ry="8"/>
+<text x="2664.5" y="405.0" text-anchor="middle">MULTIPLICADOR_ATOMO: 2x</text>
+<rect class="no" x="2784.6" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="2834.6" y="405.0" text-anchor="middle">ATOM: atom</text>
+<rect class="no" x="2906.6" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="2949.2" y="405.0" text-anchor="middle">IDENT: H</text>
+<rect class="no" x="3013.8" y="382.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="3051.8" y="405.0" text-anchor="middle">AS: as</text>
+<rect class="no" x="3111.8" y="382.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="3150.7" y="405.0" text-anchor="middle">NOME: h</text>
+<rect class="no" x="3398.3" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="3437.2" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="3398.3" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="3437.2" y="323.0" text-anchor="middle">ligacao</text>
+<rect class="no" x="3211.6" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="3261.6" y="405.0" text-anchor="middle">BOND: bond</text>
+<rect class="no" x="3333.6" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="3383.6" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="3341.0" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3383.6" y="487.0" text-anchor="middle">NOME: c1</text>
+<rect class="no" x="3455.6" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3498.2" y="405.0" text-anchor="middle">operador</text>
+<rect class="no" x="3455.6" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3498.2" y="487.0" text-anchor="middle">DUPLA: =</text>
+<rect class="no" x="3562.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="3612.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="3570.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3612.8" y="487.0" text-anchor="middle">NOME: c2</text>
+<rect class="no" x="3878.9" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="3917.8" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="3878.9" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="3917.8" y="323.0" text-anchor="middle">ligacao</text>
+<rect class="no" x="3684.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="3734.8" y="405.0" text-anchor="middle">BOND: bond</text>
+<rect class="no" x="3806.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="3856.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="3814.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3856.8" y="487.0" text-anchor="middle">NOME: c1</text>
+<rect class="no" x="3936.2" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="3978.8" y="405.0" text-anchor="middle">operador</text>
+<rect class="no" x="3928.8" y="464.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="3978.8" y="487.0" text-anchor="middle">LIGACAO: -</text>
+<rect class="no" x="4050.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4100.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="4054.5" y="464.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="4100.8" y="487.0" text-anchor="middle">NOME: cl1</text>
+<rect class="no" x="4366.9" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="4405.8" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="4366.9" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="4405.8" y="323.0" text-anchor="middle">ligacao</text>
+<rect class="no" x="4172.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4222.8" y="405.0" text-anchor="middle">BOND: bond</text>
+<rect class="no" x="4294.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4344.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="4302.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="4344.8" y="487.0" text-anchor="middle">NOME: c2</text>
+<rect class="no" x="4424.2" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="4466.8" y="405.0" text-anchor="middle">operador</text>
+<rect class="no" x="4416.8" y="464.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4466.8" y="487.0" text-anchor="middle">LIGACAO: -</text>
+<rect class="no" x="4538.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4588.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="4542.5" y="464.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="4588.8" y="487.0" text-anchor="middle">NOME: cl2</text>
+<rect class="no" x="4854.9" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="4893.8" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="4854.9" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="4893.8" y="323.0" text-anchor="middle">ligacao</text>
+<rect class="no" x="4660.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4710.8" y="405.0" text-anchor="middle">BOND: bond</text>
+<rect class="no" x="4782.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4832.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="4790.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="4832.8" y="487.0" text-anchor="middle">NOME: c1</text>
+<rect class="no" x="4912.2" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="4954.8" y="405.0" text-anchor="middle">operador</text>
+<rect class="no" x="4904.8" y="464.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="4954.8" y="487.0" text-anchor="middle">LIGACAO: -</text>
+<rect class="no" x="5026.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="5076.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="5034.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5076.8" y="487.0" text-anchor="middle">NOME: h1</text>
+<rect class="no" x="5342.9" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="5381.8" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="5342.9" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="5381.8" y="323.0" text-anchor="middle">ligacao</text>
+<rect class="no" x="5148.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="5198.8" y="405.0" text-anchor="middle">BOND: bond</text>
+<rect class="no" x="5270.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="5320.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="5278.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5320.8" y="487.0" text-anchor="middle">NOME: c2</text>
+<rect class="no" x="5400.2" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5442.8" y="405.0" text-anchor="middle">operador</text>
+<rect class="no" x="5392.8" y="464.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="5442.8" y="487.0" text-anchor="middle">LIGACAO: -</text>
+<rect class="no" x="5514.8" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="5564.8" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="5522.2" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5564.8" y="487.0" text-anchor="middle">NOME: h2</text>
+<rect class="no" x="5895.6" y="218.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="5934.5" y="241.0" text-anchor="middle">comando</text>
+<rect class="no" x="5895.6" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
+<text x="5934.5" y="323.0" text-anchor="middle">estereo</text>
+<rect class="no" x="5636.8" y="382.0" width="129.6" height="38" rx="8" ry="8"/>
+<text x="5701.6" y="405.0" text-anchor="middle">STEREO: stereo</text>
+<rect class="no" x="5788.4" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="5838.4" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="5795.8" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5838.4" y="487.0" text-anchor="middle">NOME: c1</text>
+<rect class="no" x="5910.4" y="382.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5953.0" y="405.0" text-anchor="middle">operador</text>
+<rect class="no" x="5910.4" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="5953.0" y="487.0" text-anchor="middle">DUPLA: =</text>
+<rect class="no" x="6017.6" y="382.0" width="100.0" height="38" rx="8" ry="8"/>
+<text x="6067.6" y="405.0" text-anchor="middle">referencia</text>
+<rect class="no" x="6025.0" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="6067.6" y="487.0" text-anchor="middle">NOME: c2</text>
+<rect class="no" x="6139.6" y="382.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="6185.9" y="405.0" text-anchor="middle">descritor</text>
+<rect class="no" x="6143.3" y="464.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="6185.9" y="487.0" text-anchor="middle">IDENT: E</text>
+<rect class="no" x="6254.2" y="218.0" width="129.6" height="38" rx="8" ry="8"/>
+<text x="6319.0" y="241.0" text-anchor="middle">FECHA_CHAVE: }</text>
+<rect class="no" x="6405.8" y="136.0" width="76.0" height="38" rx="8" ry="8"/>
+<text x="6443.8" y="159.0" text-anchor="middle">EOF</text>
+</svg>

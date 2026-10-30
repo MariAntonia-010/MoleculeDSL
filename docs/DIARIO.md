@@ -448,3 +448,27 @@ Plano em `docs/plano_limites.md`.
 - Ficam fora, por dependerem de geometria 3D: quiralidade planar e cálculo
   de barreira de rotação.
 
+
+---
+
+## 30/10/2026 — Auditoria contra o planejamento da próxima etapa
+
+Conferência item por item do documento "MoleculeDSL — Planejamento da
+Próxima Etapa" (28/10/2026).
+
+- Pauta 5 (erros do ANTLR): todos os tipos da tabela têm caso de teste;
+  SIN-003 e SIN-005 seguem mapeados, sem entrada alcançável, como já estava
+  em `docs/erros.md`. Erros dentro de `stereo` ganharam mensagem própria, em
+  vez de citar "ligação".
+- Pauta 2 (AST): `EstereoDecl` documentado em `docs/ast.md`, snapshot de AST
+  e modelo para `exemplos/e_1_2_dicloroeteno.mol`, SVGs em `docs/` e teste
+  de tipo, ordem e posição dos nós em todos os exemplos.
+- Pauta 1 (semântica): todas as regras têm caso de teste; OCT-001 e RING-004
+  estão registrados na especificação.
+- Pauta 3 (apresentação): contagem de testes, regras STEREO, seção com
+  solver e relatórios químicos e limites atualizados, com saídas reais.
+- Pauta 4 (README): estrutura e testes atualizados; os 22 comandos do
+  README rodam numa cópia limpa, com `sh gerar.sh` do zero.
+- Pendente com o grupo: nomes dos integrantes e da disciplina na capa,
+  descrição e tópicos do repositório no GitHub e o aval da Maria para a
+  mudança de sintaxe (`stereo`).
