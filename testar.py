@@ -19,7 +19,7 @@ PASTA_RAIZ = os.path.dirname(os.path.abspath(__file__))
 MAIN = os.path.join(PASTA_RAIZ, "src", "main.py")
 DESENHAR_ARVORE = os.path.join(PASTA_RAIZ, "src", "desenhar_arvore.py")
 
-# corpus/ tem os 300 exemplos gerados por corpus/gerar_corpus.py
+# corpus/ tem os 1000 exemplos gerados por corpus/gerar_corpus.py
 PASTAS_VALIDOS = ["exemplos", "corpus/exemplos"]
 # Pasta e código de saída esperado
 PASTAS_COM_MENSAGENS = {

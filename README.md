@@ -441,6 +441,39 @@ As regras completas, suas fontes e as limitações estão em
 [docs/levantamento_quimica.md](docs/levantamento_quimica.md). Dados químicos
 sem fonte não são inferidos.
 
+## Estado atual e limitações
+
+O projeto está na etapa **E4**. A entrega da E2 (especificação e analisador
+léxico, com a gramática só de lexer) está marcada pela tag `e2`:
+
+```bash
+git checkout e2
+```
+
+Léxico, sintaxe, AST, modelo, tipos de espécie, carga total, radicais,
+regras estruturais, valência, carga formal,
+classificação por eletronegatividade, validação do doador coordenado, anéis,
+configuração estereoquímica (`stereo`), solver de estruturas e relatórios
+químicos estão implementados e testados.
+
+Continuam pendentes:
+
+- valências ainda sem fonte para Be, Al, Si e metais de transição;
+- modelo semântico próprio para sólidos metálicos; nesta iteração,
+  `METAL-001` verifica a composição e `METAL-002` informa a limitação
+  coletiva de todo uso de `~`.
+
+`OCT-001` foi removida: para elementos com dados, octeto e dueto já são
+refletidos pelas regras de valência. Ciclos independentes sem `ring` agora
+geram o aviso `RING-004`.
+
+Ficam fora por dependerem da geometria 3D, que a linguagem não descreve:
+quiralidade planar (ferrocenos substituídos, ciclofanos) e o cálculo da
+barreira de rotação de biarilas, que por isso só entram quando declaradas.
+A regra CIP 2 (IUPAC P-92.3) desempata ramos iguais pelo número atômico
+usando o número de massa: no (1-²H)etanol a ordem é O > C > ²H > H. Um átomo
+sem número de massa conta com a massa atômica natural (⁸¹Br > Br > ⁷⁹Br).
+
 ## Testes
 
 Execute:
@@ -528,32 +561,6 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 - [Plano da estrutura do átomo](docs/plano_atomo.md)
 - [Diário do projeto](docs/DIARIO.md)
 - [Página de apresentação](docs/apresentacao/index.html)
-
-## Estado atual e limitações
-
-Léxico, sintaxe, AST, modelo, tipos de espécie, carga total, radicais,
-regras estruturais, valência, carga formal,
-classificação por eletronegatividade, validação do doador coordenado, anéis,
-configuração estereoquímica (`stereo`), solver de estruturas e relatórios
-químicos estão implementados e testados.
-
-Continuam pendentes:
-
-- valências ainda sem fonte para Be, Al, Si e metais de transição;
-- modelo semântico próprio para sólidos metálicos; nesta iteração,
-  `METAL-001` verifica a composição e `METAL-002` informa a limitação
-  coletiva de todo uso de `~`.
-
-`OCT-001` foi removida: para elementos com dados, octeto e dueto já são
-refletidos pelas regras de valência. Ciclos independentes sem `ring` agora
-geram o aviso `RING-004`.
-
-Ficam fora por dependerem da geometria 3D, que a linguagem não descreve:
-quiralidade planar (ferrocenos substituídos, ciclofanos) e o cálculo da
-barreira de rotação de biarilas, que por isso só entram quando declaradas.
-A regra CIP 2 (IUPAC P-92.3) desempata ramos iguais pelo número atômico
-usando o número de massa: no (1-²H)etanol a ordem é O > C > ²H > H. Um átomo
-sem número de massa conta com a massa atômica natural (⁸¹Br > Br > ⁷⁹Br).
 
 ## Solução de problemas
 

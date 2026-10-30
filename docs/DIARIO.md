@@ -719,7 +719,7 @@ Hund, íons de metais de transição).
 
 ## 30/10/2026 — O átomo montado: prótons, nêutrons e elétrons
 
-Pergunta da gerente: "o átomo nasce por mágica?". Até aqui, `atom O`
+Pergunta que motivou a mudança: "o átomo nasce por mágica?". Até aqui, `atom O`
 virava só "O#1 carga=+0" no modelo.
 
 - `montar_atomos` (semântica) dá a cada átomo Z prótons, os nêutrons do
@@ -866,7 +866,7 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
 
 ## 30/10/2026 — Vários blocos no mesmo arquivo
 
-Pedido da gerente: trabalhar com blocos da própria linguagem no mesmo
+Objetivo: trabalhar com blocos da própria linguagem no mesmo
 código, declarando átomos e depois moléculas, sem estruturas de controle
 (for, if) — a linguagem é declarativa.
 
