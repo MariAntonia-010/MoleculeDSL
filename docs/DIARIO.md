@@ -880,3 +880,43 @@ código, declarando átomos e depois moléculas, sem estruturas de controle
 - Navegador: mesmo comportamento, diagnósticos marcados com o bloco e um
   seletor do bloco desenhado no playground. Guia: lição "Vários blocos".
 
+
+---
+
+## 30/10/2026 — Balanço do processo e revisão da E2
+
+### Como o trabalho andou
+
+- As regras de química serviram de embasamento em todas as etapas da
+  construção da lógica semântica. Isso nos obrigou a voltar e ajustar o
+  lexer e a sintaxe várias vezes, à medida que a semântica pedia
+  construções novas.
+- A estrutura do átomo também mudou no caminho. Depois de um teste, vimos
+  que `atom O` virar só "O#1" no modelo não bastava, e passamos a montar
+  um átomo mais completo (prótons, nêutrons, elétrons e configuração).
+- Por fim, ajustamos a linguagem para trabalhar em blocos: os átomos
+  criados num bloco são reaproveitados nas moléculas do mesmo arquivo,
+  como numa linguagem comum, o que dá mais variação na forma de escrever.
+- A parte de solução (o solver) exigiu várias pesquisas para fundamentar
+  e construir uma lógica semântica estruturada, baseada principalmente
+  nas regras de química. Foram precisas três iterações para melhorar e
+  estruturar a semântica das soluções.
+- Para aproveitar melhor o que foi construído, colocamos ferramentas
+  visuais na página de apresentação, que complementam o uso da linguagem.
+- A partir das soluções, aprofundamos os átomos e os compostos. Foi
+  preciso ajustar termos para seguirem o padrão atual da química e
+  facilitar o entendimento.
+
+### Revisão da E2
+
+- A especificação voltou à ordem pedida no enunciado, com o item 7 sendo
+  "o que a linguagem deliberadamente não faz", e o EBNF passou a seguir o
+  `.g4`.
+- O README passou a dizer que o projeto está na etapa E4, e a tag `e2`
+  marca a entrega da E2 (commit `eca8161`, de 16/09).
+
+### Decisões tomadas
+
+- O `corpus/` gerado por script continua no repositório, ao lado dos
+  exemplos escritos à mão em `exemplos/`.
+- O diário continua em `docs/DIARIO.md`.
