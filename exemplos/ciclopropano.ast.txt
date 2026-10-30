@@ -2,7 +2,7 @@ Especie 'Cyclopropane' tipo=molecule carga_total=não declarada desemparelhados=
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c1 [3:4]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c2 [4:4]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c3 [5:4]
-  AtomoDecl elemento=H multiplicador=6 carga=+0 nome=h [6:4]
+  AtomoDecl elemento=H multiplicador=6 carga=+0 nome=h1…h6 [6:4]
   LigacaoDecl SIMPLES repeticoes=1 [8:4]
     origem:  c1 (nome) [8:9]
     destino: c2 (nome) [8:12]

@@ -183,12 +183,23 @@
     return { rotulo: no.regra, detalhe: lente === "comp" ? comp : quim, filhos: no.filhos.map((f) => arvoreSintaticaNo(f, lente)) };
   }
 
+  // Mesma regra do compilador (ast_nos.descrever_nome): sem `as`, o nome
+  // automático do modelo (O#1); com multiplicador, os nomes gerados
+  function descreverNome(c, automatico) {
+    if (c.nome == null) return `${automatico} (automático)`;
+    return c.mult > 1 ? `${c.nome}1…${c.nome}${c.mult}` : c.nome;
+  }
+
   function astNo(especie, lente) {
     const q = lente === "quim";
+    const contagem = {}; // rótulos automáticos do modelo, por elemento
     const filhos = especie.comandos.map((c) => {
       if (c.tipo === "atom") {
+        const primeiro = (contagem[c.el] || 0) + 1;
+        contagem[c.el] = primeiro + c.mult - 1;
+        const rotulos = c.mult > 1 ? `${c.el}#${primeiro}…${c.el}#${primeiro + c.mult - 1}` : `${c.el}#${primeiro}`;
         return { rotulo: "AtomoDecl", detalhe: q ? `${c.mult > 1 ? c.mult + " átomos" : "átomo"} de ${(DADOS.elementos[c.el] || {}).nome || c.el}${c.carga ? `, carga ${c.carga > 0 ? "+" : ""}${c.carga}` : ""}` : `[${c.l}:${c.c}]`,
-          campos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", c.nome ?? "None"]].map(([k, v]) => `${k}: ${v}`) };
+          campos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", descreverNome(c, rotulos)]].map(([k, v]) => `${k}: ${v}`) };
       }
       if (c.tipo === "bond") {
         const op = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" }[c.op];

@@ -3,7 +3,7 @@ Especie '(E)-1,2-Dichloroethene' tipo=molecule carga_total=+0 desemparelhados=n√
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c2 [3:4]
   AtomoDecl elemento=Cl multiplicador=1 carga=+0 nome=cl1 [4:4]
   AtomoDecl elemento=Cl multiplicador=1 carga=+0 nome=cl2 [5:4]
-  AtomoDecl elemento=H multiplicador=2 carga=+0 nome=h [6:4]
+  AtomoDecl elemento=H multiplicador=2 carga=+0 nome=h1‚Ä¶h2 [6:4]
   LigacaoDecl DUPLA repeticoes=1 [8:4]
     origem:  c1 (nome) [8:9]
     destino: c2 (nome) [8:12]

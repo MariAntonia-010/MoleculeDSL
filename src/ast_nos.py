@@ -48,6 +48,9 @@ class AtomoDecl:
     nome: str | None
     linha: int
     coluna: int
+    # Nome automático dos átomos sem `as`, igual ao rótulo do modelo e das
+    # mensagens: O#1, ou H#1…H#4 com multiplicador
+    nome_automatico: str = ""
 
 
 @dataclass
@@ -98,6 +101,20 @@ class Especie:
 Molecula = Especie
 
 
+def descrever_nome(decl):
+    """Nome de um AtomoDecl para leitura humana.
+
+    Com `as`, é o nome declarado; com multiplicador, o nome é prefixo
+    (4x atom H as h cria h1…h4). Sem `as`, é o nome automático que o modelo
+    e as mensagens usam, como O#1.
+    """
+    if decl.nome is None:
+        return f"{decl.nome_automatico} (automático)" if decl.nome_automatico else "automático"
+    if decl.multiplicador > 1:
+        return f"{decl.nome}1…{decl.nome}{decl.multiplicador}"
+    return decl.nome
+
+
 def formatar(molecula):
     """Texto legível da AST, um nó por linha, para a opção de depuração"""
 
@@ -126,7 +143,7 @@ def formatar(molecula):
         if isinstance(c, AtomoDecl):
             linhas.append(
                 f"  AtomoDecl elemento={c.elemento} multiplicador={c.multiplicador} "
-                f"carga={c.carga:+d} nome={c.nome} {pos(c)}"
+                f"carga={c.carga:+d} nome={descrever_nome(c)} {pos(c)}"
             )
         elif isinstance(c, LigacaoDecl):
             linhas.append(

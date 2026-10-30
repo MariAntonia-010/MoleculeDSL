@@ -1121,8 +1121,9 @@ def testar_ast_de_todos_os_exemplos():
     src = os.path.join(PASTA_RAIZ, "src")
     if src not in sys.path:
         sys.path.insert(0, src)
-    from ast_nos import AnelDecl, AtomoDecl, EstereoDecl, LigacaoDecl
+    from ast_nos import AnelDecl, AtomoDecl, EstereoDecl, LigacaoDecl, formatar
     from construtor_ast import construir
+    import semantico
     from sintatico import analisar_fluxo, tokenizar
     from MoleculeDSLParser import MoleculeDSLParser as P
 
@@ -1176,6 +1177,20 @@ def testar_ast_de_todos_os_exemplos():
         ]
         if sorted(com_multiplicador) != sorted(m for m in multiplicadores if m != 1):
             problemas.append(f"{nome}: multiplicadores expandidos na AST")
+        # A saída da AST é para pessoas: o None interno do Python não aparece
+        if "None" in formatar(molecula):
+            problemas.append(f"{nome}: a saída da AST mostra 'None'")
+        # O nome automático da AST é o rótulo que o modelo dá ao átomo sem nome
+        esperados_auto = []
+        for c in molecula.comandos:
+            if isinstance(c, AtomoDecl) and c.nome is None:
+                primeiro = c.nome_automatico.split("…")[0]
+                indice = int(primeiro.split("#")[1])
+                esperados_auto += [f"{c.elemento}#{indice + k}" for k in range(c.multiplicador)]
+        modelo_ex, _ = semantico.analisar(molecula)
+        obtidos_auto = [a.rotulo() for a in modelo_ex.atomos if a.nome is None]
+        if esperados_auto != obtidos_auto:
+            problemas.append(f"{nome}: nomes automáticos da AST {esperados_auto} diferentes do modelo {obtidos_auto}")
     return problemas
 
 

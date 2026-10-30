@@ -48,6 +48,18 @@ class ConstrutorAST(MoleculeDSLVisitor):
                 ctx.desemparelhados().INTEIRO().getText()
             )
         comandos = [self.visit(c) for c in ctx.comando()]
+        # Nome automático: o mesmo índice por elemento que o modelo usa
+        contagem = {}
+        for comando in comandos:
+            if isinstance(comando, AtomoDecl) and comando.multiplicador >= 1:
+                primeiro = contagem.get(comando.elemento, 0) + 1
+                contagem[comando.elemento] = primeiro + comando.multiplicador - 1
+                ultimo = contagem[comando.elemento]
+                comando.nome_automatico = (
+                    f"{comando.elemento}#{primeiro}"
+                    if primeiro == ultimo
+                    else f"{comando.elemento}#{primeiro}…{comando.elemento}#{ultimo}"
+                )
         return Especie(
             nome=nome,
             linha=ctx.start.line,

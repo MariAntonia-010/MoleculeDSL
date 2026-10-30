@@ -576,3 +576,16 @@ O₃ trioxigênio; cátion monoatômico "sódio(1+)", ânion "cloreto"). O limit
   de espécie.
 - Teste `apresentacao/sincronizada`: falha se a página não reflete a
   gramática e as regras atuais.
+
+---
+
+## 30/10/2026 — Nome de todo átomo na AST
+
+- A AST mostrava `nome=None` para átomos sem `as`. Agora todo AtomoDecl tem
+  nome: o declarado; os gerados pelo multiplicador (`h1…h4`); ou, sem `as`,
+  o nome automático que o modelo e as mensagens usam (`O#1 (automático)`),
+  guardado em `AtomoDecl.nome_automatico` pelo construtor da AST.
+- Vale para `--ast`, para o SVG do `desenhar_arvore.py` e para a página.
+  Snapshots de AST, `docs/ast.md` e os SVGs de `docs/` foram atualizados.
+- Teste: nenhum exemplo mostra `None` na AST, e o nome automático de cada
+  átomo é o mesmo rótulo do modelo.

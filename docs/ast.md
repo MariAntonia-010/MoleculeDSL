@@ -49,6 +49,13 @@ coluna. `TipoReferencia` distingue `ELEMENTO` de `NOME`, sem strings livres.
 `Operador` é um enum com `SIMPLES`, `DUPLA`, `TRIPLA`, `COORDENADA` e
 `METALICA`.
 
+Todo átomo tem nome. Com `as`, é o nome declarado; com multiplicador, o nome é
+um prefixo e a saída mostra os nomes gerados (`nome=h1…h4`). Sem `as`, é o
+nome automático que o modelo e as mensagens de erro usam, formado pelo
+elemento e pela ordem de declaração: `nome=O#1 (automático)`. O nome
+automático aparece na AST (`AtomoDecl.nome_automatico`), mas não pode ser
+citado no código, porque `#` é o operador de ligação tripla.
+
 Quantificadores permanecem explícitos na AST: `4x atom H` produz um
 `AtomoDecl` com `multiplicador=4`, e `bond C-H x4` produz um `LigacaoDecl`
 com `repeticoes=4`. A expansão em átomos e ligações individuais pertence ao
@@ -98,9 +105,9 @@ Saída de `python src/main.py --ast exemplos/agua.mol`:
 
 ```text
 Especie 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
-  AtomoDecl elemento=O multiplicador=1 carga=+0 nome=None [2:4]
-  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [3:4]
-  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [4:4]
+  AtomoDecl elemento=O multiplicador=1 carga=+0 nome=O#1 (automático) [2:4]
+  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=H#1 (automático) [3:4]
+  AtomoDecl elemento=H multiplicador=1 carga=+0 nome=H#2 (automático) [4:4]
   LigacaoDecl SIMPLES repeticoes=1 [6:4]
     origem:  H (elemento) [6:9]
     destino: O (elemento) [6:11]

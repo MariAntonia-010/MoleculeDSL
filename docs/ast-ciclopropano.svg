@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="9267" height="368" viewBox="0 0 9267 368">
+<svg xmlns="http://www.w3.org/2000/svg" width="9297" height="368" viewBox="0 0 9297 368">
 <rect width="100%" height="100%" fill="#f8fafc"/>
 <style>text{font-family:Arial,Helvetica,sans-serif;font-size:13px;fill:#172033}.no{fill:#ffffff;stroke:#64748b;stroke-width:1.3}.aresta{fill:none;stroke:#94a3b8;stroke-width:1.3}.titulo{font-size:19px;font-weight:700;fill:#0f172a}</style>
 <text class="titulo" x="30" y="27">MoleculeDSL — Árvore Sintática Abstrata (AST)</text>
-<path class="aresta" d="M 4633.7 92.0 L 4633.7 114.0 L 94.8 114.0 L 94.8 136.0"/>
-<path class="aresta" d="M 4633.7 92.0 L 4633.7 114.0 L 290.8 114.0 L 290.8 136.0"/>
-<path class="aresta" d="M 4633.7 92.0 L 4633.7 114.0 L 546.0 114.0 L 546.0 136.0"/>
-<path class="aresta" d="M 4633.7 92.0 L 4633.7 114.0 L 4964.7 114.0 L 4964.7 136.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 936.1 196.0 L 936.1 218.0"/>
+<path class="aresta" d="M 4648.5 92.0 L 4648.5 114.0 L 94.8 114.0 L 94.8 136.0"/>
+<path class="aresta" d="M 4648.5 92.0 L 4648.5 114.0 L 290.8 114.0 L 290.8 136.0"/>
+<path class="aresta" d="M 4648.5 92.0 L 4648.5 114.0 L 546.0 114.0 L 546.0 136.0"/>
+<path class="aresta" d="M 4648.5 92.0 L 4648.5 114.0 L 4979.5 114.0 L 4979.5 136.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 936.1 196.0 L 936.1 218.0"/>
 <path class="aresta" d="M 936.1 256.0 L 936.1 278.0 L 745.7 278.0 L 745.7 300.0"/>
 <path class="aresta" d="M 936.1 256.0 L 936.1 278.0 L 893.6 278.0 L 893.6 300.0"/>
 <path class="aresta" d="M 936.1 256.0 L 936.1 278.0 L 1030.4 278.0 L 1030.4 300.0"/>
 <path class="aresta" d="M 936.1 256.0 L 936.1 278.0 L 1137.6 278.0 L 1137.6 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 1446.3 196.0 L 1446.3 218.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 1446.3 196.0 L 1446.3 218.0"/>
 <path class="aresta" d="M 1446.3 256.0 L 1446.3 278.0 L 1255.9 278.0 L 1255.9 300.0"/>
 <path class="aresta" d="M 1446.3 256.0 L 1446.3 278.0 L 1403.8 278.0 L 1403.8 300.0"/>
 <path class="aresta" d="M 1446.3 256.0 L 1446.3 278.0 L 1540.6 278.0 L 1540.6 300.0"/>
 <path class="aresta" d="M 1446.3 256.0 L 1446.3 278.0 L 1647.8 278.0 L 1647.8 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 1956.5 196.0 L 1956.5 218.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 1956.5 196.0 L 1956.5 218.0"/>
 <path class="aresta" d="M 1956.5 256.0 L 1956.5 278.0 L 1766.1 278.0 L 1766.1 300.0"/>
 <path class="aresta" d="M 1956.5 256.0 L 1956.5 278.0 L 1914.0 278.0 L 1914.0 300.0"/>
 <path class="aresta" d="M 1956.5 256.0 L 1956.5 278.0 L 2050.8 278.0 L 2050.8 300.0"/>
 <path class="aresta" d="M 1956.5 256.0 L 1956.5 278.0 L 2158.0 278.0 L 2158.0 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 2463.0 196.0 L 2463.0 218.0"/>
-<path class="aresta" d="M 2463.0 256.0 L 2463.0 278.0 L 2276.3 278.0 L 2276.3 300.0"/>
-<path class="aresta" d="M 2463.0 256.0 L 2463.0 278.0 L 2424.2 278.0 L 2424.2 300.0"/>
-<path class="aresta" d="M 2463.0 256.0 L 2463.0 278.0 L 2561.0 278.0 L 2561.0 300.0"/>
-<path class="aresta" d="M 2463.0 256.0 L 2463.0 278.0 L 2664.5 278.0 L 2664.5 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 3050.9 196.0 L 3050.9 218.0"/>
-<path class="aresta" d="M 3050.9 256.0 L 3050.9 278.0 L 2801.3 278.0 L 2801.3 300.0"/>
-<path class="aresta" d="M 3050.9 256.0 L 3050.9 278.0 L 2975.1 278.0 L 2975.1 300.0"/>
-<path class="aresta" d="M 3050.9 256.0 L 3050.9 278.0 L 3152.6 278.0 L 3152.6 300.0"/>
-<path class="aresta" d="M 3050.9 256.0 L 3050.9 278.0 L 3315.3 278.0 L 3315.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 3723.9 196.0 L 3723.9 218.0"/>
-<path class="aresta" d="M 3723.9 256.0 L 3723.9 278.0 L 3474.3 278.0 L 3474.3 300.0"/>
-<path class="aresta" d="M 3723.9 256.0 L 3723.9 278.0 L 3648.1 278.0 L 3648.1 300.0"/>
-<path class="aresta" d="M 3723.9 256.0 L 3723.9 278.0 L 3825.6 278.0 L 3825.6 300.0"/>
-<path class="aresta" d="M 3723.9 256.0 L 3723.9 278.0 L 3988.3 278.0 L 3988.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 4396.9 196.0 L 4396.9 218.0"/>
-<path class="aresta" d="M 4396.9 256.0 L 4396.9 278.0 L 4147.3 278.0 L 4147.3 300.0"/>
-<path class="aresta" d="M 4396.9 256.0 L 4396.9 278.0 L 4321.1 278.0 L 4321.1 300.0"/>
-<path class="aresta" d="M 4396.9 256.0 L 4396.9 278.0 L 4498.6 278.0 L 4498.6 300.0"/>
-<path class="aresta" d="M 4396.9 256.0 L 4396.9 278.0 L 4661.3 278.0 L 4661.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 5069.9 196.0 L 5069.9 218.0"/>
-<path class="aresta" d="M 5069.9 256.0 L 5069.9 278.0 L 4820.3 278.0 L 4820.3 300.0"/>
-<path class="aresta" d="M 5069.9 256.0 L 5069.9 278.0 L 4994.1 278.0 L 4994.1 300.0"/>
-<path class="aresta" d="M 5069.9 256.0 L 5069.9 278.0 L 5171.6 278.0 L 5171.6 300.0"/>
-<path class="aresta" d="M 5069.9 256.0 L 5069.9 278.0 L 5334.3 278.0 L 5334.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 5742.9 196.0 L 5742.9 218.0"/>
-<path class="aresta" d="M 5742.9 256.0 L 5742.9 278.0 L 5493.3 278.0 L 5493.3 300.0"/>
-<path class="aresta" d="M 5742.9 256.0 L 5742.9 278.0 L 5667.1 278.0 L 5667.1 300.0"/>
-<path class="aresta" d="M 5742.9 256.0 L 5742.9 278.0 L 5844.6 278.0 L 5844.6 300.0"/>
-<path class="aresta" d="M 5742.9 256.0 L 5742.9 278.0 L 6007.3 278.0 L 6007.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 6415.9 196.0 L 6415.9 218.0"/>
-<path class="aresta" d="M 6415.9 256.0 L 6415.9 278.0 L 6166.3 278.0 L 6166.3 300.0"/>
-<path class="aresta" d="M 6415.9 256.0 L 6415.9 278.0 L 6340.1 278.0 L 6340.1 300.0"/>
-<path class="aresta" d="M 6415.9 256.0 L 6415.9 278.0 L 6517.6 278.0 L 6517.6 300.0"/>
-<path class="aresta" d="M 6415.9 256.0 L 6415.9 278.0 L 6680.3 278.0 L 6680.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 7088.9 196.0 L 7088.9 218.0"/>
-<path class="aresta" d="M 7088.9 256.0 L 7088.9 278.0 L 6839.3 278.0 L 6839.3 300.0"/>
-<path class="aresta" d="M 7088.9 256.0 L 7088.9 278.0 L 7013.1 278.0 L 7013.1 300.0"/>
-<path class="aresta" d="M 7088.9 256.0 L 7088.9 278.0 L 7190.6 278.0 L 7190.6 300.0"/>
-<path class="aresta" d="M 7088.9 256.0 L 7088.9 278.0 L 7353.3 278.0 L 7353.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 7761.9 196.0 L 7761.9 218.0"/>
-<path class="aresta" d="M 7761.9 256.0 L 7761.9 278.0 L 7512.3 278.0 L 7512.3 300.0"/>
-<path class="aresta" d="M 7761.9 256.0 L 7761.9 278.0 L 7686.1 278.0 L 7686.1 300.0"/>
-<path class="aresta" d="M 7761.9 256.0 L 7761.9 278.0 L 7863.6 278.0 L 7863.6 300.0"/>
-<path class="aresta" d="M 7761.9 256.0 L 7761.9 278.0 L 8026.3 278.0 L 8026.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 8434.9 196.0 L 8434.9 218.0"/>
-<path class="aresta" d="M 8434.9 256.0 L 8434.9 278.0 L 8185.3 278.0 L 8185.3 300.0"/>
-<path class="aresta" d="M 8434.9 256.0 L 8434.9 278.0 L 8359.1 278.0 L 8359.1 300.0"/>
-<path class="aresta" d="M 8434.9 256.0 L 8434.9 278.0 L 8536.6 278.0 L 8536.6 300.0"/>
-<path class="aresta" d="M 8434.9 256.0 L 8434.9 278.0 L 8699.3 278.0 L 8699.3 300.0"/>
-<path class="aresta" d="M 4964.7 174.0 L 4964.7 196.0 L 9009.9 196.0 L 9009.9 218.0"/>
-<path class="aresta" d="M 9009.9 256.0 L 9009.9 278.0 L 8850.9 278.0 L 8850.9 300.0"/>
-<path class="aresta" d="M 9009.9 256.0 L 9009.9 278.0 L 9009.9 278.0 L 9009.9 300.0"/>
-<path class="aresta" d="M 9009.9 256.0 L 9009.9 278.0 L 9168.9 278.0 L 9168.9 300.0"/>
-<rect class="no" x="4535.6" y="54.0" width="196.2" height="38" rx="8" ry="8"/>
-<text x="4633.7" y="77.0" text-anchor="middle">Especie: &quot;Cyclopropane&quot;</text>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 2477.8 196.0 L 2477.8 218.0"/>
+<path class="aresta" d="M 2477.8 256.0 L 2477.8 278.0 L 2276.3 278.0 L 2276.3 300.0"/>
+<path class="aresta" d="M 2477.8 256.0 L 2477.8 278.0 L 2424.2 278.0 L 2424.2 300.0"/>
+<path class="aresta" d="M 2477.8 256.0 L 2477.8 278.0 L 2561.0 278.0 L 2561.0 300.0"/>
+<path class="aresta" d="M 2477.8 256.0 L 2477.8 278.0 L 2679.3 278.0 L 2679.3 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 3080.5 196.0 L 3080.5 218.0"/>
+<path class="aresta" d="M 3080.5 256.0 L 3080.5 278.0 L 2830.9 278.0 L 2830.9 300.0"/>
+<path class="aresta" d="M 3080.5 256.0 L 3080.5 278.0 L 3004.7 278.0 L 3004.7 300.0"/>
+<path class="aresta" d="M 3080.5 256.0 L 3080.5 278.0 L 3182.2 278.0 L 3182.2 300.0"/>
+<path class="aresta" d="M 3080.5 256.0 L 3080.5 278.0 L 3344.9 278.0 L 3344.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 3753.5 196.0 L 3753.5 218.0"/>
+<path class="aresta" d="M 3753.5 256.0 L 3753.5 278.0 L 3503.9 278.0 L 3503.9 300.0"/>
+<path class="aresta" d="M 3753.5 256.0 L 3753.5 278.0 L 3677.7 278.0 L 3677.7 300.0"/>
+<path class="aresta" d="M 3753.5 256.0 L 3753.5 278.0 L 3855.2 278.0 L 3855.2 300.0"/>
+<path class="aresta" d="M 3753.5 256.0 L 3753.5 278.0 L 4017.9 278.0 L 4017.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 4426.5 196.0 L 4426.5 218.0"/>
+<path class="aresta" d="M 4426.5 256.0 L 4426.5 278.0 L 4176.9 278.0 L 4176.9 300.0"/>
+<path class="aresta" d="M 4426.5 256.0 L 4426.5 278.0 L 4350.7 278.0 L 4350.7 300.0"/>
+<path class="aresta" d="M 4426.5 256.0 L 4426.5 278.0 L 4528.2 278.0 L 4528.2 300.0"/>
+<path class="aresta" d="M 4426.5 256.0 L 4426.5 278.0 L 4690.9 278.0 L 4690.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 5099.5 196.0 L 5099.5 218.0"/>
+<path class="aresta" d="M 5099.5 256.0 L 5099.5 278.0 L 4849.9 278.0 L 4849.9 300.0"/>
+<path class="aresta" d="M 5099.5 256.0 L 5099.5 278.0 L 5023.7 278.0 L 5023.7 300.0"/>
+<path class="aresta" d="M 5099.5 256.0 L 5099.5 278.0 L 5201.2 278.0 L 5201.2 300.0"/>
+<path class="aresta" d="M 5099.5 256.0 L 5099.5 278.0 L 5363.9 278.0 L 5363.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 5772.5 196.0 L 5772.5 218.0"/>
+<path class="aresta" d="M 5772.5 256.0 L 5772.5 278.0 L 5522.9 278.0 L 5522.9 300.0"/>
+<path class="aresta" d="M 5772.5 256.0 L 5772.5 278.0 L 5696.7 278.0 L 5696.7 300.0"/>
+<path class="aresta" d="M 5772.5 256.0 L 5772.5 278.0 L 5874.2 278.0 L 5874.2 300.0"/>
+<path class="aresta" d="M 5772.5 256.0 L 5772.5 278.0 L 6036.9 278.0 L 6036.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 6445.5 196.0 L 6445.5 218.0"/>
+<path class="aresta" d="M 6445.5 256.0 L 6445.5 278.0 L 6195.9 278.0 L 6195.9 300.0"/>
+<path class="aresta" d="M 6445.5 256.0 L 6445.5 278.0 L 6369.7 278.0 L 6369.7 300.0"/>
+<path class="aresta" d="M 6445.5 256.0 L 6445.5 278.0 L 6547.2 278.0 L 6547.2 300.0"/>
+<path class="aresta" d="M 6445.5 256.0 L 6445.5 278.0 L 6709.9 278.0 L 6709.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 7118.5 196.0 L 7118.5 218.0"/>
+<path class="aresta" d="M 7118.5 256.0 L 7118.5 278.0 L 6868.9 278.0 L 6868.9 300.0"/>
+<path class="aresta" d="M 7118.5 256.0 L 7118.5 278.0 L 7042.7 278.0 L 7042.7 300.0"/>
+<path class="aresta" d="M 7118.5 256.0 L 7118.5 278.0 L 7220.2 278.0 L 7220.2 300.0"/>
+<path class="aresta" d="M 7118.5 256.0 L 7118.5 278.0 L 7382.9 278.0 L 7382.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 7791.5 196.0 L 7791.5 218.0"/>
+<path class="aresta" d="M 7791.5 256.0 L 7791.5 278.0 L 7541.9 278.0 L 7541.9 300.0"/>
+<path class="aresta" d="M 7791.5 256.0 L 7791.5 278.0 L 7715.7 278.0 L 7715.7 300.0"/>
+<path class="aresta" d="M 7791.5 256.0 L 7791.5 278.0 L 7893.2 278.0 L 7893.2 300.0"/>
+<path class="aresta" d="M 7791.5 256.0 L 7791.5 278.0 L 8055.9 278.0 L 8055.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 8464.5 196.0 L 8464.5 218.0"/>
+<path class="aresta" d="M 8464.5 256.0 L 8464.5 278.0 L 8214.9 278.0 L 8214.9 300.0"/>
+<path class="aresta" d="M 8464.5 256.0 L 8464.5 278.0 L 8388.7 278.0 L 8388.7 300.0"/>
+<path class="aresta" d="M 8464.5 256.0 L 8464.5 278.0 L 8566.2 278.0 L 8566.2 300.0"/>
+<path class="aresta" d="M 8464.5 256.0 L 8464.5 278.0 L 8728.9 278.0 L 8728.9 300.0"/>
+<path class="aresta" d="M 4979.5 174.0 L 4979.5 196.0 L 9039.5 196.0 L 9039.5 218.0"/>
+<path class="aresta" d="M 9039.5 256.0 L 9039.5 278.0 L 8880.5 278.0 L 8880.5 300.0"/>
+<path class="aresta" d="M 9039.5 256.0 L 9039.5 278.0 L 9039.5 278.0 L 9039.5 300.0"/>
+<path class="aresta" d="M 9039.5 256.0 L 9039.5 278.0 L 9198.5 278.0 L 9198.5 300.0"/>
+<rect class="no" x="4550.4" y="54.0" width="196.2" height="38" rx="8" ry="8"/>
+<text x="4648.5" y="77.0" text-anchor="middle">Especie: &quot;Cyclopropane&quot;</text>
 <rect class="no" x="30.0" y="136.0" width="129.6" height="38" rx="8" ry="8"/>
 <text x="94.8" y="159.0" text-anchor="middle">tipo: molecule</text>
 <rect class="no" x="181.6" y="136.0" width="218.4" height="38" rx="8" ry="8"/>
 <text x="290.8" y="159.0" text-anchor="middle">carga total: não declarada</text>
 <rect class="no" x="422.0" y="136.0" width="248.0" height="38" rx="8" ry="8"/>
 <text x="546.0" y="159.0" text-anchor="middle">desemparelhados: não declarado</text>
-<rect class="no" x="4922.1" y="136.0" width="85.2" height="38" rx="8" ry="8"/>
-<text x="4964.7" y="159.0" text-anchor="middle">comandos</text>
+<rect class="no" x="4936.9" y="136.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="4979.5" y="159.0" text-anchor="middle">comandos</text>
 <rect class="no" x="889.8" y="218.0" width="92.6" height="38" rx="8" ry="8"/>
 <text x="936.1" y="241.0" text-anchor="middle">AtomoDecl</text>
 <rect class="no" x="692.0" y="300.0" width="107.4" height="38" rx="8" ry="8"/>
@@ -116,112 +116,112 @@
 <text x="2050.8" y="323.0" text-anchor="middle">carga: 0</text>
 <rect class="no" x="2115.4" y="300.0" width="85.2" height="38" rx="8" ry="8"/>
 <text x="2158.0" y="323.0" text-anchor="middle">nome: c3</text>
-<rect class="no" x="2416.7" y="218.0" width="92.6" height="38" rx="8" ry="8"/>
-<text x="2463.0" y="241.0" text-anchor="middle">AtomoDecl</text>
+<rect class="no" x="2431.5" y="218.0" width="92.6" height="38" rx="8" ry="8"/>
+<text x="2477.8" y="241.0" text-anchor="middle">AtomoDecl</text>
 <rect class="no" x="2222.6" y="300.0" width="107.4" height="38" rx="8" ry="8"/>
 <text x="2276.3" y="323.0" text-anchor="middle">elemento: H</text>
 <rect class="no" x="2352.0" y="300.0" width="144.4" height="38" rx="8" ry="8"/>
 <text x="2424.2" y="323.0" text-anchor="middle">multiplicador: 6</text>
 <rect class="no" x="2518.4" y="300.0" width="85.2" height="38" rx="8" ry="8"/>
 <text x="2561.0" y="323.0" text-anchor="middle">carga: 0</text>
-<rect class="no" x="2625.6" y="300.0" width="77.8" height="38" rx="8" ry="8"/>
-<text x="2664.5" y="323.0" text-anchor="middle">nome: h</text>
-<rect class="no" x="2997.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="3050.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="2725.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="2801.3" y="323.0" text-anchor="middle">origem: c1 (nome)</text>
-<rect class="no" x="2899.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="2975.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="3073.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="3152.6" y="323.0" text-anchor="middle">destino: c2 (nome)</text>
-<rect class="no" x="3254.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="3315.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="3670.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="3723.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="3398.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="3474.3" y="323.0" text-anchor="middle">origem: c2 (nome)</text>
-<rect class="no" x="3572.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="3648.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="3746.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="3825.6" y="323.0" text-anchor="middle">destino: c3 (nome)</text>
-<rect class="no" x="3927.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="3988.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="4343.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="4396.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="4071.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="4147.3" y="323.0" text-anchor="middle">origem: c3 (nome)</text>
-<rect class="no" x="4245.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="4321.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="4419.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="4498.6" y="323.0" text-anchor="middle">destino: c1 (nome)</text>
-<rect class="no" x="4600.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="4661.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="5016.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="5069.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="4744.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="4820.3" y="323.0" text-anchor="middle">origem: c1 (nome)</text>
-<rect class="no" x="4918.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="4994.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="5092.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="5171.6" y="323.0" text-anchor="middle">destino: h1 (nome)</text>
-<rect class="no" x="5273.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="5334.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="5689.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="5742.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="5417.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="5493.3" y="323.0" text-anchor="middle">origem: c1 (nome)</text>
-<rect class="no" x="5591.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="5667.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="5765.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="5844.6" y="323.0" text-anchor="middle">destino: h2 (nome)</text>
-<rect class="no" x="5946.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="6007.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="6362.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="6415.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="6090.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="6166.3" y="323.0" text-anchor="middle">origem: c2 (nome)</text>
-<rect class="no" x="6264.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="6340.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="6438.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="6517.6" y="323.0" text-anchor="middle">destino: h3 (nome)</text>
-<rect class="no" x="6619.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="6680.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="7035.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="7088.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="6763.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="6839.3" y="323.0" text-anchor="middle">origem: c2 (nome)</text>
-<rect class="no" x="6937.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="7013.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="7111.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="7190.6" y="323.0" text-anchor="middle">destino: h4 (nome)</text>
-<rect class="no" x="7292.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="7353.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="7708.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="7761.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="7436.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="7512.3" y="323.0" text-anchor="middle">origem: c3 (nome)</text>
-<rect class="no" x="7610.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="7686.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="7784.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="7863.6" y="323.0" text-anchor="middle">destino: h5 (nome)</text>
-<rect class="no" x="7965.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="8026.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="8381.2" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
-<text x="8434.9" y="241.0" text-anchor="middle">LigacaoDecl</text>
-<rect class="no" x="8109.4" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="8185.3" y="323.0" text-anchor="middle">origem: c3 (nome)</text>
-<rect class="no" x="8283.2" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
-<text x="8359.1" y="323.0" text-anchor="middle">operador: SIMPLES</text>
-<rect class="no" x="8457.0" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
-<text x="8536.6" y="323.0" text-anchor="middle">destino: h6 (nome)</text>
-<rect class="no" x="8638.2" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
-<text x="8699.3" y="323.0" text-anchor="middle">repeticoes: 1</text>
-<rect class="no" x="8967.3" y="218.0" width="85.2" height="38" rx="8" ry="8"/>
-<text x="9009.9" y="241.0" text-anchor="middle">AnelDecl</text>
-<rect class="no" x="8782.4" y="300.0" width="137.0" height="38" rx="8" ry="8"/>
-<text x="8850.9" y="323.0" text-anchor="middle">nome: c1 (nome)</text>
-<rect class="no" x="8941.4" y="300.0" width="137.0" height="38" rx="8" ry="8"/>
-<text x="9009.9" y="323.0" text-anchor="middle">nome: c2 (nome)</text>
-<rect class="no" x="9100.4" y="300.0" width="137.0" height="38" rx="8" ry="8"/>
-<text x="9168.9" y="323.0" text-anchor="middle">nome: c3 (nome)</text>
+<rect class="no" x="2625.6" y="300.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="2679.3" y="323.0" text-anchor="middle">nome: h1…h6</text>
+<rect class="no" x="3026.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="3080.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="2755.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="2830.9" y="323.0" text-anchor="middle">origem: c1 (nome)</text>
+<rect class="no" x="2928.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="3004.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="3102.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="3182.2" y="323.0" text-anchor="middle">destino: c2 (nome)</text>
+<rect class="no" x="3283.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="3344.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="3699.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="3753.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="3428.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="3503.9" y="323.0" text-anchor="middle">origem: c2 (nome)</text>
+<rect class="no" x="3601.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="3677.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="3775.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="3855.2" y="323.0" text-anchor="middle">destino: c3 (nome)</text>
+<rect class="no" x="3956.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="4017.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="4372.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="4426.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="4101.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="4176.9" y="323.0" text-anchor="middle">origem: c3 (nome)</text>
+<rect class="no" x="4274.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="4350.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="4448.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="4528.2" y="323.0" text-anchor="middle">destino: c1 (nome)</text>
+<rect class="no" x="4629.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="4690.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="5045.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="5099.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="4774.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="4849.9" y="323.0" text-anchor="middle">origem: c1 (nome)</text>
+<rect class="no" x="4947.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="5023.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="5121.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="5201.2" y="323.0" text-anchor="middle">destino: h1 (nome)</text>
+<rect class="no" x="5302.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="5363.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="5718.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="5772.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="5447.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="5522.9" y="323.0" text-anchor="middle">origem: c1 (nome)</text>
+<rect class="no" x="5620.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="5696.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="5794.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="5874.2" y="323.0" text-anchor="middle">destino: h2 (nome)</text>
+<rect class="no" x="5975.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="6036.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="6391.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="6445.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="6120.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="6195.9" y="323.0" text-anchor="middle">origem: c2 (nome)</text>
+<rect class="no" x="6293.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="6369.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="6467.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="6547.2" y="323.0" text-anchor="middle">destino: h3 (nome)</text>
+<rect class="no" x="6648.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="6709.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="7064.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="7118.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="6793.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="6868.9" y="323.0" text-anchor="middle">origem: c2 (nome)</text>
+<rect class="no" x="6966.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="7042.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="7140.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="7220.2" y="323.0" text-anchor="middle">destino: h4 (nome)</text>
+<rect class="no" x="7321.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="7382.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="7737.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="7791.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="7466.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="7541.9" y="323.0" text-anchor="middle">origem: c3 (nome)</text>
+<rect class="no" x="7639.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="7715.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="7813.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="7893.2" y="323.0" text-anchor="middle">destino: h5 (nome)</text>
+<rect class="no" x="7994.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="8055.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="8410.8" y="218.0" width="107.4" height="38" rx="8" ry="8"/>
+<text x="8464.5" y="241.0" text-anchor="middle">LigacaoDecl</text>
+<rect class="no" x="8139.0" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="8214.9" y="323.0" text-anchor="middle">origem: c3 (nome)</text>
+<rect class="no" x="8312.8" y="300.0" width="151.8" height="38" rx="8" ry="8"/>
+<text x="8388.7" y="323.0" text-anchor="middle">operador: SIMPLES</text>
+<rect class="no" x="8486.6" y="300.0" width="159.2" height="38" rx="8" ry="8"/>
+<text x="8566.2" y="323.0" text-anchor="middle">destino: h6 (nome)</text>
+<rect class="no" x="8667.8" y="300.0" width="122.2" height="38" rx="8" ry="8"/>
+<text x="8728.9" y="323.0" text-anchor="middle">repeticoes: 1</text>
+<rect class="no" x="8996.9" y="218.0" width="85.2" height="38" rx="8" ry="8"/>
+<text x="9039.5" y="241.0" text-anchor="middle">AnelDecl</text>
+<rect class="no" x="8812.0" y="300.0" width="137.0" height="38" rx="8" ry="8"/>
+<text x="8880.5" y="323.0" text-anchor="middle">nome: c1 (nome)</text>
+<rect class="no" x="8971.0" y="300.0" width="137.0" height="38" rx="8" ry="8"/>
+<text x="9039.5" y="323.0" text-anchor="middle">nome: c2 (nome)</text>
+<rect class="no" x="9130.0" y="300.0" width="137.0" height="38" rx="8" ry="8"/>
+<text x="9198.5" y="323.0" text-anchor="middle">nome: c3 (nome)</text>
 </svg>
