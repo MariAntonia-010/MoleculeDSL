@@ -1,0 +1,5 @@
+// Átomo de hidrogênio: 1 elétron, um desemparelhado
+species atom "Hydrogen atom" unpaired 1 {
+    atom H as h
+    configuration h 1s1
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico [RAD-002] na linha 3, coluna 0: unpaired=3 é incompatível com 1 elétron
+// unpaired não pode passar do número de elétrons: H tem 1
+species atom "Hydrogen atom" unpaired 3 {
+    atom H as h
+}

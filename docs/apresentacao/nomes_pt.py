@@ -95,4 +95,9 @@ ESPECIES = {
     "tetracloroaluminato": "Íon tetracloroaluminato (AlCl₄⁻)",
     "e_diazeno": "(E)-diazeno (E/Z em N=N)",
     "e_acetaldoxima": "(E)-acetaldoxima (E/Z em C=N)",
+    "atomo_de_hidrogenio": "Átomo de hidrogênio (1s¹)",
+    "dioxigenio_tripleto": "Dioxigênio tripleto (O₂, unpaired 2)",
+    "metileno_tripleto": "Metileno tripleto (CH₂, carbeno)",
+    "dioxido_de_nitrogenio": "Dióxido de nitrogênio (NO₂•)",
+    "hidroperoxila": "Radical hidroperoxila (HOO•)",
 }

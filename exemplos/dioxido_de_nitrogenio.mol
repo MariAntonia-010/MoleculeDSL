@@ -1,0 +1,8 @@
+// Dióxido de nitrogênio, NO2: radical com 23 elétrons
+species molecule "Nitrogen dioxide" unpaired 1 {
+    atom N(+1) as n
+    atom O as od
+    atom O(-1) as o
+    bond n=od
+    bond n-o
+}

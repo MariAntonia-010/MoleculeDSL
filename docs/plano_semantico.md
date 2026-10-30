@@ -97,7 +97,7 @@ Detalhes da implementação:
   avisos contextuais.
 - A coordenada conta como ordem 1. Arestas metálicas não somam ordem; outras ligações do mesmo átomo continuam sendo conferidas.
 - Átomo neutro acima da valência: se a soma bate com uma carga da tabela C3, é CARGA-001 com a sugestão da carga (ex.: N com 4 ligações → `N(+1)`); senão, VAL-001.
-- Átomo neutro abaixo da valência: é só aviso (VAL-002), porque pode ser um radical (D5). Se a soma bate com uma carga conhecida, o aviso sugere a carga. Quando a espécie declara `unpaired` e o total de ligações que faltam é igual a ele (CH₃• com `unpaired 1`, NO• com `unpaired 1`), o aviso não sai: o radical declarado já explica a valência baixa.
+- Átomo neutro abaixo da valência: é só aviso (VAL-002), porque pode ser um radical (D5). Se a soma bate com uma carga conhecida, o aviso sugere a carga. Quando a espécie declara `unpaired` e o total de ligações que faltam é igual a ele (CH₃• com `unpaired 1`, NO• com `unpaired 1`), o aviso não sai: o radical declarado já explica a valência baixa. A conta inclui átomos com carga abaixo da valência da carga: no NO₂ com cargas formais, o N⁺ com três ligações não dá CARGA-001 porque o `unpaired 1` explica a ligação que falta.
 - Átomo com carga: CARGA-001 se a soma não bate com a tabela C3. Carga fora da tabela não é conferida.
 - A soma das cargas (C2) não é conferida, porque a linguagem não declara a carga total da molécula.
 

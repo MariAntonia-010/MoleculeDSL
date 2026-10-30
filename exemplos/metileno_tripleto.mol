@@ -1,0 +1,7 @@
+// Metileno tripleto, CH2: o carbono tem só duas ligações e dois elétrons desemparelhados
+species molecule "Triplet methylene" unpaired 2 {
+    atom C as c
+    2x atom H as h
+    bond c-h1
+    bond c-h2
+}

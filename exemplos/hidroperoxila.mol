@@ -1,0 +1,7 @@
+// Radical hidroperoxila, HOO: intermediário da combustão
+species molecule "Hydroperoxyl" unpaired 1 {
+    atom H as h
+    2x atom O as o
+    bond h-o1
+    bond o1-o2
+}

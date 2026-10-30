@@ -1,0 +1,6 @@
+// esperado: Erro sintático [SIN-001] na linha 5, coluna 19: esperada subcamada como 2p4 (camada 1 a 7, tipo s, p, d ou f e número de elétrons), encontrado '}'
+// configuration sem nenhuma subcamada e sem núcleo
+species atom "Carbon" unpaired 2 {
+    atom C as c
+    configuration c
+}

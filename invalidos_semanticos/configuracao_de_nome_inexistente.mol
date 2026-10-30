@@ -1,0 +1,6 @@
+// esperado: Erro semântico [STRUCT-001] na linha 5, coluna 18: nenhum átomo se chama 'x'
+// configuration cita um nome que não foi declarado
+species atom "Carbon" unpaired 2 {
+    atom C as c
+    configuration x [He] 2s2 2p2
+}

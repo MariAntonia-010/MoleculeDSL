@@ -1,0 +1,9 @@
+// esperado: Aviso semântico [BOND-002] na linha 7, coluna 4: ligação dupla com Cl é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+// esperado: Aviso semântico [BOND-002] na linha 8, coluna 4: ligação dupla com Cl é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+// Dióxido de cloro, ClO2: radical estável, com cloro de valência expandida
+species molecule "Chlorine dioxide" unpaired 1 {
+    atom Cl as cl
+    2x atom O as o
+    bond cl=o1
+    bond cl=o2
+}

@@ -1,0 +1,5 @@
+// Dioxigênio tripleto: no estado fundamental o O2 tem dois elétrons desemparelhados (paramagnético)
+species molecule "Triplet dioxygen" unpaired 2 {
+    2x atom O as o
+    bond o1=o2
+}

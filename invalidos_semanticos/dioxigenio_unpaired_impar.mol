@@ -1,0 +1,6 @@
+// esperado: Erro semântico [RAD-002] na linha 3, coluna 0: unpaired=1 é incompatível com 16 elétrons
+// O2 tem 16 elétrons (par): unpaired 1 é impossível
+species molecule "Dioxygen" unpaired 1 {
+    2x atom O as o
+    bond o1=o2
+}

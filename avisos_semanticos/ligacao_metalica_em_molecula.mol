@@ -1,0 +1,7 @@
+// esperado: Aviso semântico [METAL-002] na linha 6, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-001] na linha 6, coluna 4: a ligação metálica envolve participante não metálico: h1 (H#1) (Nonmetal), h2 (H#2) (Nonmetal)
+// Ligação metálica (~) dentro de uma molécula covalente
+species molecule "Hydrogen" {
+    2x atom H as h
+    bond h1~h2
+}

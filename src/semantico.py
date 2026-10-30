@@ -792,7 +792,7 @@ class AnalisadorSemantico:
                 "RAD-002",
                 self.molecula,
                 f"unpaired={desemparelhados} é incompatível com "
-                f"{total_eletrons} elétrons",
+                f"{total_eletrons} {'elétron' if total_eletrons == 1 else 'elétrons'}",
             )
 
     def conferir_conexoes(self):
@@ -1097,6 +1097,7 @@ class AnalisadorSemantico:
         metalicos = set()
         com_ligacao_contavel = set()
         self.avisos_valencia = {}
+        self.carregados_abaixo = []
         for lig in self.modelo.ligacoes:
             if lig.operador is Operador.METALICA:
                 metalicos.update((lig.origem, lig.destino))
@@ -1141,6 +1142,15 @@ class AnalisadorSemantico:
 
         if atomo.carga != 0:
             aceitas = com_carga.get(atomo.carga)
+            if (
+                aceitas is not None
+                and total < min(aceitas)
+                and self.molecula.eletrons_desemparelhados
+            ):
+                # Pode ser o radical declarado (N+ do NO2 com três
+                # ligações): decide em emitir_avisos_valencia
+                self.carregados_abaixo.append((atomo, total, aceitas))
+                return
             if aceitas is not None and total not in aceitas:
                 self.erro(
                     "CARGA-001",
@@ -1202,9 +1212,16 @@ class AnalisadorSemantico:
         faltam = sum(
             (min(v for v in aceitas if v > total) - total) * len(atomos)
             for (_, _, _, total, aceitas, _), atomos in self.avisos_valencia.items()
-        )
+        ) + sum(min(aceitas) - total for _, total, aceitas in self.carregados_abaixo)
         if unpaired and faltam == unpaired:
             return
+        for atomo, total, aceitas in self.carregados_abaixo:
+            self.erro(
+                "CARGA-001",
+                atomo,
+                f"{atomo.rotulo()} com carga {atomo.carga:+d} deveria ter soma das "
+                f"ordens de ligação {self.listar(aceitas)}, mas tem {total}",
+            )
         for chave, atomos in self.avisos_valencia.items():
             _, _, elemento, total, aceitas, carga_possivel = chave
             if len(atomos) == 1:

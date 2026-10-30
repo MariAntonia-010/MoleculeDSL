@@ -749,3 +749,16 @@ virava só "O#1 carga=+0" no modelo.
   He(+3), Na⁺ e Cl⁻ com a configuração do átomo neutro, Ca sem a carga no
   átomo.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 6 (radicais)
+
+- Válidos: O₂ tripleto (`unpaired 2`), metileno tripleto, NO₂ com cargas
+  formais, átomo de H (1s¹) e hidroperoxila; entram no grupo de radicais
+  da página. Avisos: ClO₂ (Cl=O) e ligação `~` numa molécula.
+- Inválidos: unpaired maior que o número de elétrons, unpaired ímpar no O₂,
+  configuration com nome inexistente, núcleo [C] e configuration vazia.
+- O NO₂ com N⁺ de três ligações dava erro CARGA-001 mesmo com
+  `unpaired 1`. Agora a conta do radical declarado inclui os átomos com
+  carga; sem unpaired, o erro continua. "1 elétrons" virou "1 elétron".
+

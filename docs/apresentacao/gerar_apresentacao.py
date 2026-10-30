@@ -30,7 +30,7 @@ MAIN = os.path.join(RAIZ, "src", "main.py")
 # Exemplos da página, por grupo: o playground mostra cada grupo num
 # <optgroup>, e o laboratório e as demonstrações escolhem entre eles
 GRUPOS_EXEMPLOS = [
-    ("Átomos isolados", ["helio", "neonio", "argonio", "carbono_13", "sodio_configuracao_completa",
+    ("Átomos isolados", ["atomo_de_hidrogenio", "helio", "neonio", "argonio", "carbono_13", "sodio_configuracao_completa",
                          "cromo", "cobre", "ferro_56", "uranio_235"]),
     ("Íons monoatômicos", ["proton", "sodio_1mais", "cloreto", "cloreto_37", "oxido", "ferro_2mais"]),
     ("Substâncias simples", ["hidrogenio", "oxigenio", "nitrogenio", "cloro", "ozonio"]),
@@ -43,7 +43,7 @@ GRUPOS_EXEMPLOS = [
     ("Isótopos em moléculas", ["agua_pesada", "metano_deuterado", "etanol_1_deuterado", "propan_2_ol_d3"]),
     ("Estereoquímica", ["acido_tartarico_meso", "e_1_2_dicloroeteno", "e_pent_2_eno", "r_2_clorobutano",
                         "penta_2_3_dieno", "hexa_2_3_dieno", "cis_1_3_dimetilciclohexano", "e_diazeno", "e_acetaldoxima"]),
-    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "agua_trifluoreto_de_boro"]),
+    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro"]),
     ("Sólidos", ["cloreto_de_sodio", "oxido_de_magnesio", "sodio_metalico"]),
 ]
 EXEMPLOS = [nome for _, nomes in GRUPOS_EXEMPLOS for nome in nomes]
