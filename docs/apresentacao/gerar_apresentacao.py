@@ -185,6 +185,7 @@ def main():
         "exemplos": lista_exemplos,
         "elementos": elementos,
         "isotopos": json.load(open(os.path.join(RAIZ, "regras", "isotopos.json"), encoding="utf-8"))["isotopos_naturais"],
+        "mais_abundante": json.load(open(os.path.join(RAIZ, "regras", "isotopos.json"), encoding="utf-8"))["mais_abundante"],
         "classificacao": json.load(open(os.path.join(RAIZ, "regras", "classificacao_ligacoes.json"), encoding="utf-8")),
         "valencias": {
             chave: regras[chave]

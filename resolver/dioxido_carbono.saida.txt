@@ -1,8 +1,8 @@
 Modelo 'Carbon dioxide solved' tipo=molecule carga_total=+0 desemparelhados=não declarado
   Átomos (3)
-    r1 (C#1) carga=+0 [2:4]
-    r2 (O#1) carga=+0 [3:4]
-    r3 (O#2) carga=+0 [3:4]
+    r1 (C#1) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [2:4]
+    r2 (O#1) carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4 [3:4]
+    r3 (O#2) carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4 [3:4]
   Ligações (2)
     r1 (C#1) DUPLA r2 (O#1) classificação=covalente polar Δχ=0.89 [1:0]
     r1 (C#1) DUPLA r3 (O#2) classificação=covalente polar Δχ=0.89 [1:0]

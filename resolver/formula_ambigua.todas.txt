@@ -1,13 +1,13 @@
 Solução 1/3
 Modelo 'Ambiguous formula' tipo=molecule carga_total=+0 desemparelhados=não declarado
   Átomos (7)
-    r1 (C#1) carga=+0 [3:4]
-    r2 (C#2) carga=+0 [3:4]
-    r3 (O#1) carga=+0 [4:4]
-    r4 (H#1) carga=+0 [5:4]
-    r5 (H#2) carga=+0 [5:4]
-    r6 (H#3) carga=+0 [5:4]
-    r7 (H#4) carga=+0 [5:4]
+    r1 (C#1) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [3:4]
+    r2 (C#2) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [3:4]
+    r3 (O#1) carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4 [4:4]
+    r4 (H#1) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r5 (H#2) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r6 (H#3) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r7 (H#4) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
   Ligações (6)
     r1 (C#1) DUPLA r2 (C#2) classificação=covalente apolar Δχ=0.00 [2:0]
     r1 (C#1) SIMPLES r3 (O#1) classificação=covalente polar Δχ=0.89 [2:0]
@@ -19,13 +19,13 @@ Solução 2/3
 Aviso semântico [RING-004] na linha 2, coluna 0: o grafo contém 1 ciclo não declarado; use 'ring' para identificá-lo
 Modelo 'Ambiguous formula' tipo=molecule carga_total=+0 desemparelhados=não declarado
   Átomos (7)
-    r1 (C#1) carga=+0 [3:4]
-    r2 (C#2) carga=+0 [3:4]
-    r3 (O#1) carga=+0 [4:4]
-    r4 (H#1) carga=+0 [5:4]
-    r5 (H#2) carga=+0 [5:4]
-    r6 (H#3) carga=+0 [5:4]
-    r7 (H#4) carga=+0 [5:4]
+    r1 (C#1) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [3:4]
+    r2 (C#2) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [3:4]
+    r3 (O#1) carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4 [4:4]
+    r4 (H#1) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r5 (H#2) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r6 (H#3) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r7 (H#4) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
   Ligações (7)
     r1 (C#1) SIMPLES r2 (C#2) classificação=covalente apolar Δχ=0.00 [2:0]
     r1 (C#1) SIMPLES r3 (O#1) classificação=covalente polar Δχ=0.89 [2:0]
@@ -37,13 +37,13 @@ Modelo 'Ambiguous formula' tipo=molecule carga_total=+0 desemparelhados=não dec
 Solução 3/3
 Modelo 'Ambiguous formula' tipo=molecule carga_total=+0 desemparelhados=não declarado
   Átomos (7)
-    r1 (C#1) carga=+0 [3:4]
-    r2 (C#2) carga=+0 [3:4]
-    r3 (O#1) carga=+0 [4:4]
-    r4 (H#1) carga=+0 [5:4]
-    r5 (H#2) carga=+0 [5:4]
-    r6 (H#3) carga=+0 [5:4]
-    r7 (H#4) carga=+0 [5:4]
+    r1 (C#1) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [3:4]
+    r2 (C#2) carga=+0 p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2 [3:4]
+    r3 (O#1) carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4 [4:4]
+    r4 (H#1) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r5 (H#2) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r6 (H#3) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
+    r7 (H#4) carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [5:4]
   Ligações (6)
     r1 (C#1) SIMPLES r2 (C#2) classificação=covalente apolar Δχ=0.00 [2:0]
     r1 (C#1) DUPLA r3 (O#1) classificação=covalente polar Δχ=0.89 [2:0]

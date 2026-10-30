@@ -160,6 +160,20 @@ Os átomos são citados na ordem em que aparecem no anel: cada um precisa estar 
 ring c1 c2 c3
 ```
 
+### O átomo montado
+
+Cada `atom X` produz um átomo completo, sem nada implícito. O `--modelo`
+mostra cada parte:
+
+| Parte | Valor padrão | Como mudar |
+|---|---|---|
+| prótons | Z, o número atômico de X | não muda: define o elemento |
+| nêutrons | A − Z do isótopo natural mais abundante (CIAAW); elemento sem isótopo natural fica sem nêutrons definidos | número de massa: `atom 13C` |
+| elétrons | Z − carga; sem carga, o átomo é neutro | carga: `atom O(-2)` ganha 2, `atom Na(+1)` perde 1 |
+| configuração | estado fundamental do átomo ou íon isolado | `configuration` |
+
+Exemplo: `atom C` vira `p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2`.
+
 ### Número de massa e `configuration`
 
 O número de massa vem antes do símbolo, como na notação de nuclídeo:

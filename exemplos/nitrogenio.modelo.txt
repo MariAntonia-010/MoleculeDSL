@@ -1,7 +1,7 @@
 Modelo 'Dinitrogen' tipo=molecule carga_total=não declarada desemparelhados=não declarado
   Átomos (2)
-    n1 (N#1) carga=+0 [3:4]
-    n2 (N#2) carga=+0 [4:4]
+    n1 (N#1) carga=+0 p=7 n=7 (14N, mais abundante) e=7 [He] 2s2 2p3 [3:4]
+    n2 (N#2) carga=+0 p=7 n=7 (14N, mais abundante) e=7 [He] 2s2 2p3 [4:4]
   Ligações (1)
     n1 (N#1) TRIPLA n2 (N#2) classificação=covalente apolar Δχ=0.00 [6:4]
 Espécie 'Dinitrogen': análise concluída sem erros

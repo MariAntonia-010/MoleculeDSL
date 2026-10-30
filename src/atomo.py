@@ -107,6 +107,16 @@ def texto_configuracao(config):
     return " ".join(f"{n}{LETRA_DO_L[l]}{e}" for (n, l), e in partes) or "(sem elétrons)"
 
 
+def texto_com_nucleo(config):
+    """Configuração abreviada com o maior núcleo de gás nobre: [He] 2s2 2p4."""
+    for gas in reversed(list(NUCLEOS)):
+        nucleo = normalizar(ler_subcamadas(f"[{gas}]"))
+        if len(config) > len(nucleo) and all(config.get(c) == e for c, e in nucleo.items()):
+            resto = {c: e for c, e in config.items() if c not in nucleo}
+            return f"[{gas}] {texto_configuracao(resto)}"
+    return texto_configuracao(config)
+
+
 def desemparelhados(config):
     # Regra de Hund, subcamada por subcamada
     total = 0

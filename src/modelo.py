@@ -22,6 +22,14 @@ class Atomo:
     # declarada, como lista de (n, l, elétrons)
     massa: int | None = None
     configuracao: list | None = None
+    # Átomo montado pela semântica (montar_atomos): todo 'atom X' nasce
+    # com Z prótons, os nêutrons do isótopo declarado ou do natural mais
+    # abundante, e Z − carga elétrons no estado fundamental
+    protons: int | None = None
+    neutrons: int | None = None
+    eletrons: int | None = None
+    origem_nucleo: str | None = None
+    eletrosfera: dict | None = None
 
     def rotulo(self):
         # Ex.: "H#2" ou "c1 (C#1)"
@@ -65,6 +73,20 @@ class Modelo:
     estereo: list[Estereo] = field(default_factory=list)
 
 
+def texto_montado(a):
+    # " p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4", ou "" sem dados
+    if a.protons is None:
+        return ""
+    import atomo as estrutura_atomica
+
+    if a.neutrons is None:
+        nucleo = f" p={a.protons} n=? (sem isótopo natural)"
+    else:
+        nucleo = f" p={a.protons} n={a.neutrons} ({a.protons + a.neutrons}{a.elemento}, {a.origem_nucleo})"
+    config = f" {estrutura_atomica.texto_com_nucleo(a.eletrosfera)}" if a.eletrosfera is not None else ""
+    return f"{nucleo} e={a.eletrons}{config}"
+
+
 def formatar(modelo):
     """Texto legível do modelo, para a opção de depuração"""
     por_id = {a.id: a for a in modelo.atomos}
@@ -87,7 +109,7 @@ def formatar(modelo):
     linhas.append(f"  Átomos ({len(modelo.atomos)})")
     for a in modelo.atomos:
         massa = f" A={a.massa}" if a.massa is not None else ""
-        linhas.append(f"    {a.rotulo()} carga={a.carga:+d}{massa} [{a.linha}:{a.coluna}]")
+        linhas.append(f"    {a.rotulo()} carga={a.carga:+d}{massa}{texto_montado(a)} [{a.linha}:{a.coluna}]")
 
     linhas.append(f"  Ligações ({len(modelo.ligacoes)})")
     for lig in modelo.ligacoes:

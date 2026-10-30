@@ -220,6 +220,11 @@ species atom "Carbon-13" unpaired 2 {
 }
 ```
 
+Todo `atom X` nasce montado: Z prótons, os nêutrons do isótopo declarado
+ou do natural mais abundante (CIAAW) e Z − carga elétrons no estado
+fundamental. Sem carga, o átomo é neutro. O `--modelo` mostra, por exemplo,
+`O#1 carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4`.
+
 O compilador confere o número de massa (ATOM-001), as regras de Pauli e de
 l < n (ATOM-002), o total de elétrons (ATOM-003), o estado fundamental de
 referência (ATOM-004), os isótopos naturais da CIAAW (ATOM-005) e o

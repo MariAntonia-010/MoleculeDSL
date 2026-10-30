@@ -465,6 +465,33 @@
     const dobroJ = decideJ === null || decideJ ? Math.abs(2 * totalL - dobroS) : 2 * totalL + dobroS;
     return `${dobroS + 1}${"SPDFGHIKLMNOQRTUV"[totalL] || "L=" + totalL}${dobroJ % 2 ? dobroJ + "/2" : dobroJ / 2}`;
   }
+  // Configuração abreviada com o maior núcleo de gás nobre: [He] 2s2 2p4
+  function textoComNucleo(m) {
+    for (const gas of Object.keys(NUCLEOS_GAS).reverse()) {
+      const nucleo = paraMapa(lerSubcamadas(`[${gas}]`));
+      if (m.size > nucleo.size && [...nucleo].every(([c, e]) => m.get(c) === e)) {
+        return `[${gas}] ${textoConfig(new Map([...m].filter(([c]) => !nucleo.has(c))))}`;
+      }
+    }
+    return textoConfig(m) || "(sem elétrons)";
+  }
+  // Átomo montado (igual a montar_atomos do compilador): Z prótons, nêutrons
+  // do isótopo declarado ou do natural mais abundante, Z − carga elétrons
+  function montarAtomo(a) {
+    const z = DADOS.elementos[a.el].numero;
+    const massa = a.massa || DADOS.mais_abundante[a.el] || null;
+    const m = a.configuracao || fundamental(a.el, a.carga);
+    return {
+      z, eletrons: z - a.carga, massa, neutrons: massa ? massa - z : null,
+      origem: a.massa ? "declarado" : massa ? "mais abundante" : "sem isótopo natural",
+      config: m ? textoComNucleo(m) : "—", declarada: Boolean(a.configuracao),
+    };
+  }
+  const textoMontado = (a) => {
+    const t = montarAtomo(a);
+    const nucleo = t.neutrons == null ? `p=${t.z} n=? (sem isótopo natural)` : `p=${t.z} n=${t.neutrons} (${t.massa}${a.el}, ${t.origem})`;
+    return ` ${nucleo} e=${t.eletrons} ${t.config}`;
+  };
   const camadasDeMapa = (m) => { const v = []; m.forEach((e, c) => { const n = Number(c.split(",")[0]); v[n - 1] = (v[n - 1] || 0) + e; }); return Array.from(v, (x) => x || 0); };
   const mapasIguais = (a, b) => a.size === b.size && [...a].every(([c, e]) => b.get(c) === e);
 
@@ -890,7 +917,7 @@
     if (r.atomos.length && !r.erros.length) {
       const nomes = r.atomos.map(rotulo);
       const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
-      modelo.textContent = [`Modelo '${r.especie.nome}' tipo=${r.especie.tipo}`, `Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}`),
+      modelo.textContent = [`Modelo '${r.especie.nome}' tipo=${r.especie.tipo}`, `Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}${a.massa ? ` A=${a.massa}` : ""}${textoMontado(a)}`),
         `Ligações (${r.ligacoes.length})`, ...r.ligacoes.map((l) => {
           const { classe, dx } = classificar(l, r.atomos);
           return `  ${nomes[l.a]} ${simbolo[l.op]} ${nomes[l.b]} classificação=${classe}${dx != null ? ` Δχ=${dx.toFixed(2)}` : ""}`;
@@ -899,6 +926,7 @@
     } else {
       modelo.textContent = "Corrija os erros para ver o modelo.";
     }
+    desenharAtomosMontados(r);
     const real = document.querySelector("#p-real pre");
     const intacto = exemploAtual && codigo.value === exemploAtual.codigo;
     real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo. Para a análise oficial, salve num arquivo .mol e rode python3 src/main.py --modelo arquivo.mol.";
@@ -916,6 +944,21 @@
     }
     if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
     else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
+  }
+
+  // Aba Átomos: de onde vêm prótons, nêutrons e elétrons de cada 'atom'
+  function desenharAtomosMontados(r) {
+    const alvo = document.getElementById("p-atomos");
+    if (!r.atomos.length) { alvo.innerHTML = `<p class="nota">Declare átomos para ver como cada um é montado.</p>`; return; }
+    const estado = (q) => (q === 0 ? "neutro" : q > 0 ? `cátion (perdeu ${q} e⁻)` : `ânion (ganhou ${-q} e⁻)`);
+    const linhas = r.atomos.map((a) => {
+      const t = montarAtomo(a);
+      const nucleo = t.neutrons == null ? `${t.z} p · n indefinido` : `${t.z} p · ${t.neutrons} n <small>(${t.massa}${a.el}, ${t.origem})</small>`;
+      return `<tr><td>${escapar(rotulo(a))}</td><td>${nucleo}</td><td>${t.eletrons} e⁻ <small>${estado(a.carga)}</small></td><td>${escapar(t.config)}${t.declarada ? " <small>(declarada)</small>" : ""}</td></tr>`;
+    }).join("");
+    alvo.innerHTML = `<p class="nota">Nenhum átomo nasce do nada: <code>atom X</code> monta Z prótons (o número atômico), os nêutrons do isótopo declarado (<code>atom 13C</code>) ou do natural mais abundante (CIAAW) e Z − carga elétrons. Sem carga declarada o átomo é neutro; <code>atom O(-2)</code> ganha dois elétrons. Os elétrons ficam no estado fundamental, a menos que <code>configuration</code> diga outra coisa.</p>
+      <div class="tabela"><table><tr><th>Átomo</th><th>Núcleo</th><th>Eletrosfera</th><th>Configuração</th></tr>${linhas}</table></div>
+      ${r.atomos.length > 1 ? `<p class="nota">Numa molécula, os elétrons de valência passam a ocupar orbitais moleculares; a configuração mostrada é a do átomo isolado.</p>` : ""}`;
   }
 
   function legendaLigacoes(r) {

@@ -554,11 +554,13 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
           <div class="abas" role="tablist" data-grupo="play">
             <button class="aba" role="tab" aria-selected="true" data-painel="p-diag">Diagnóstico</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-trad">Tradução</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="p-atomos">Átomos</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-modelo">Modelo</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-real">Compilador real</button>
           </div>
           <div class="painel diagnosticos" id="p-diag" role="tabpanel" aria-live="polite"></div>
           <div class="painel traducao" id="p-trad" role="tabpanel" hidden></div>
+          <div class="painel" id="p-atomos" role="tabpanel" hidden></div>
           <div class="painel" id="p-modelo" role="tabpanel" hidden><pre></pre></div>
           <div class="painel" id="p-real" role="tabpanel" hidden><pre></pre></div>
           <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve quais átomos se ligam, não coordenadas. A verificação do navegador cobre sintaxe, nomes, anéis e valências; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>

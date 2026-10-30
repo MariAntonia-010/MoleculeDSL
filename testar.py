@@ -1293,6 +1293,24 @@ def testar_estrutura_atomica():
     if codigo != 0 or "termo fundamental (regras de Hund): 5D4" not in saida or "nêutrons=30" not in saida:
         problemas.append("--estrutura-atomica do ferro-56 sem termo 5D4 ou 30 nêutrons")
 
+    # Todo 'atom' nasce montado: Z prótons, nêutrons do isótopo mais
+    # abundante (ou declarado) e Z − carga elétrons no estado fundamental
+    with tempfile.TemporaryDirectory() as pasta:
+        casos_montados = {
+            "atom C": "p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2",
+            "atom 13C": "p=6 n=7 (13C, declarado) e=6 [He] 2s2 2p2",
+            "atom O(-2)": "p=8 n=8 (16O, mais abundante) e=10 [He] 2s2 2p6",
+            "atom Na(+1)": "p=11 n=12 (23Na, mais abundante) e=10 [He] 2s2 2p6",
+        }
+        for declaracao, esperado in casos_montados.items():
+            tipo = "atom" if "(" not in declaracao else "monatomic_ion"
+            carga = declaracao[declaracao.find("(") + 1:-1] if "(" in declaracao else ""
+            cabecalho = f'species {tipo} "X"' + (f" charge {carga}" if carga else "")
+            arquivo = escrever_mol(pasta, "montado.mol", [cabecalho + " {", f"    {declaracao}", "}"])
+            _, saida = rodar_comando(["--modelo", arquivo])
+            if esperado not in saida:
+                problemas.append(f"átomo montado de '{declaracao}': esperado '{esperado}' no modelo")
+
     # Isótopos naturais dos 118 elementos (CIAAW)
     isotopos = semantico.carregar_isotopos()
     if set(isotopos) != set(dados) or isotopos["Sn"][0] != 112 or isotopos["Tc"]:

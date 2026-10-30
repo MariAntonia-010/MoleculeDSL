@@ -715,3 +715,21 @@ Hund, íons de metais de transição).
   com maiúscula diz que o começo foi lido como elemento e sugere o nome em
   minúsculas (juntando 'Ag' + 'ua' em 'agua').
 
+---
+
+## 30/10/2026 — O átomo montado: prótons, nêutrons e elétrons
+
+Pergunta da gerente: "o átomo nasce por mágica?". Até aqui, `atom O`
+virava só "O#1 carga=+0" no modelo.
+
+- `montar_atomos` (semântica) dá a cada átomo Z prótons, os nêutrons do
+  isótopo declarado ou do natural mais abundante e Z − carga elétrons, com
+  a configuração declarada ou a do estado fundamental. O isótopo mais
+  abundante vem da composição representativa da CIAAW
+  (`mais_abundante` em `regras/isotopos.json`).
+- `--modelo` mostra `p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4`;
+  snapshots do modelo e do solver atualizados (só as linhas de átomo).
+- Página: aba Átomos no playground (núcleo, eletrosfera, configuração e se
+  é neutro, cátion ou ânion), a aba Modelo com as mesmas contas, e dois
+  passos novos na lição "Construindo um átomo".
+

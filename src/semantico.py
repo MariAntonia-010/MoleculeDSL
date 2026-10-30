@@ -70,6 +70,11 @@ def carregar_isotopos():
         return json.load(arquivo)["isotopos_naturais"]
 
 
+def carregar_mais_abundante():
+    with open(ARQUIVO_ISOTOPOS, encoding="utf-8") as arquivo:
+        return json.load(arquivo)["mais_abundante"]
+
+
 def carregar_ligacoes_metalicas():
     with open(ARQUIVO_LIGACOES_METALICAS, encoding="utf-8") as arquivo:
         return json.load(arquivo)
@@ -115,6 +120,7 @@ class AnalisadorSemantico:
         )
         self.mensagens = []
         self.isotopos = carregar_isotopos()
+        self.mais_abundante = carregar_mais_abundante()
         self.modelo = Modelo(
             molecula.nome,
             tipo=molecula.tipo,
@@ -166,6 +172,8 @@ class AnalisadorSemantico:
         for c in comandos:
             if isinstance(c, ConfiguracaoDecl):
                 self.declarar_configuracao(c)
+
+        self.montar_atomos()
 
         if not self.tem_erro():
             self.conferir_tipo_carga_e_radical()
@@ -435,6 +443,37 @@ class AnalisadorSemantico:
         self.modelo.aneis.append([a.id for a in atomos])
 
     # ---------- estrutura do átomo ----------
+
+    def montar_atomos(self):
+        """Núcleo e eletrosfera de cada átomo, sem nada implícito.
+
+        - prótons: o número atômico Z do elemento;
+        - nêutrons: A − Z, com A declarado (atom 13C) ou, sem ele, o do
+          isótopo natural mais abundante (CIAAW); elemento sem isótopo
+          natural fica sem nêutrons definidos;
+        - elétrons: Z − carga, então 'atom O' é neutro e 'atom O(-2)'
+          ganha dois;
+        - eletrosfera: a configuration declarada ou o estado fundamental
+          de referência do átomo (ou do íon) isolado.
+        """
+        for atomo in self.modelo.atomos:
+            dados = self.dados_elementos.get(atomo.elemento)
+            if not dados:
+                continue
+            z = dados["numero_atomico"]
+            atomo.protons = z
+            atomo.eletrons = z - atomo.carga
+            if atomo.massa is not None:
+                atomo.neutrons, atomo.origem_nucleo = atomo.massa - z, "declarado"
+            elif atomo.elemento in self.mais_abundante:
+                atomo.neutrons = self.mais_abundante[atomo.elemento] - z
+                atomo.origem_nucleo = "mais abundante"
+            if atomo.configuracao is not None:
+                atomo.eletrosfera = estrutura_atomica.normalizar(atomo.configuracao)
+            elif atomo.eletrons >= 0:
+                atomo.eletrosfera = estrutura_atomica.configuracao_fundamental(
+                    atomo.elemento, atomo.carga, self.dados_elementos
+                )
 
     def declarar_configuracao(self, decl):
         """configuration: confere Pauli, a contagem de elétrons e o estado."""
