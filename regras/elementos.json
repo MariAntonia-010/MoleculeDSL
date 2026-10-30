@@ -4,7 +4,8 @@
   "eletrons_valencia foi DERIVADO da configuracao eletronica (eletrons s e p na camada mais externa) e so para blocos principais; null = nao derivado.",
   "estados_oxidacao NAO e valencia: sao estados de oxidacao informados pela fonte.",
   "eletronegatividade: valores da fonte (coincidem com a escala de Pauling para H, C, O e F); null = sem valor na fonte.",
-  "valencias permitidas NAO constam aqui: nao vem desta fonte (ver docs/levantamento_quimica.md)."
+  "valencias permitidas NAO constam aqui: nao vem desta fonte (ver docs/levantamento_quimica.md).",
+  "massa_atomica: massa atômica (composição natural) da fonte, em u; usada pela regra CIP 2 para o átomo sem número de massa declarado."
  ],
  "elementos": {
   "H": {
@@ -17,7 +18,8 @@
    "estados_oxidacao": [
     "+1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 1.008
   },
   "He": {
    "numero_atomico": 2,
@@ -28,7 +30,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "0"
-   ]
+   ],
+   "massa_atomica": 4.0026
   },
   "Li": {
    "numero_atomico": 3,
@@ -39,7 +42,8 @@
    "eletronegatividade": 0.98,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 7.0
   },
   "Be": {
    "numero_atomico": 4,
@@ -50,7 +54,8 @@
    "eletronegatividade": 1.57,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 9.012183
   },
   "B": {
    "numero_atomico": 5,
@@ -61,7 +66,8 @@
    "eletronegatividade": 2.04,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 10.81
   },
   "C": {
    "numero_atomico": 6,
@@ -74,7 +80,8 @@
     "+4",
     "+2",
     "-4"
-   ]
+   ],
+   "massa_atomica": 12.011
   },
   "N": {
    "numero_atomico": 7,
@@ -92,7 +99,8 @@
     "-1",
     "-2",
     "-3"
-   ]
+   ],
+   "massa_atomica": 14.007
   },
   "O": {
    "numero_atomico": 8,
@@ -103,7 +111,8 @@
    "eletronegatividade": 3.44,
    "estados_oxidacao": [
     "-2"
-   ]
+   ],
+   "massa_atomica": 15.999
   },
   "F": {
    "numero_atomico": 9,
@@ -114,7 +123,8 @@
    "eletronegatividade": 3.98,
    "estados_oxidacao": [
     "-1"
-   ]
+   ],
+   "massa_atomica": 18.99840316
   },
   "Ne": {
    "numero_atomico": 10,
@@ -125,7 +135,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "0"
-   ]
+   ],
+   "massa_atomica": 20.18
   },
   "Na": {
    "numero_atomico": 11,
@@ -136,7 +147,8 @@
    "eletronegatividade": 0.93,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 22.9897693
   },
   "Mg": {
    "numero_atomico": 12,
@@ -147,7 +159,8 @@
    "eletronegatividade": 1.31,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 24.305
   },
   "Al": {
    "numero_atomico": 13,
@@ -158,7 +171,8 @@
    "eletronegatividade": 1.61,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 26.981538
   },
   "Si": {
    "numero_atomico": 14,
@@ -171,7 +185,8 @@
     "+4",
     "+2",
     "-4"
-   ]
+   ],
+   "massa_atomica": 28.085
   },
   "P": {
    "numero_atomico": 15,
@@ -184,7 +199,8 @@
     "+5",
     "+3",
     "-3"
-   ]
+   ],
+   "massa_atomica": 30.973762
   },
   "S": {
    "numero_atomico": 16,
@@ -197,7 +213,8 @@
     "+6",
     "+4",
     "-2"
-   ]
+   ],
+   "massa_atomica": 32.07
   },
   "Cl": {
    "numero_atomico": 17,
@@ -211,7 +228,8 @@
     "+5",
     "+1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 35.45
   },
   "Ar": {
    "numero_atomico": 18,
@@ -222,7 +240,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "0"
-   ]
+   ],
+   "massa_atomica": 39.9
   },
   "K": {
    "numero_atomico": 19,
@@ -233,7 +252,8 @@
    "eletronegatividade": 0.82,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 39.0983
   },
   "Ca": {
    "numero_atomico": 20,
@@ -244,7 +264,8 @@
    "eletronegatividade": 1.0,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 40.08
   },
   "Sc": {
    "numero_atomico": 21,
@@ -255,7 +276,8 @@
    "eletronegatividade": 1.36,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 44.95591
   },
   "Ti": {
    "numero_atomico": 22,
@@ -268,7 +290,8 @@
     "+4",
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 47.867
   },
   "V": {
    "numero_atomico": 23,
@@ -282,7 +305,8 @@
     "+4",
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 50.9415
   },
   "Cr": {
    "numero_atomico": 24,
@@ -295,7 +319,8 @@
     "+6",
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 51.996
   },
   "Mn": {
    "numero_atomico": 25,
@@ -309,7 +334,8 @@
     "+4",
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 54.93804
   },
   "Fe": {
    "numero_atomico": 26,
@@ -321,7 +347,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 55.84
   },
   "Co": {
    "numero_atomico": 27,
@@ -333,7 +360,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 58.93319
   },
   "Ni": {
    "numero_atomico": 28,
@@ -345,7 +373,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 58.693
   },
   "Cu": {
    "numero_atomico": 29,
@@ -357,7 +386,8 @@
    "estados_oxidacao": [
     "+2",
     "+1"
-   ]
+   ],
+   "massa_atomica": 63.55
   },
   "Zn": {
    "numero_atomico": 30,
@@ -368,7 +398,8 @@
    "eletronegatividade": 1.65,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 65.4
   },
   "Ga": {
    "numero_atomico": 31,
@@ -379,7 +410,8 @@
    "eletronegatividade": 1.81,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 69.723
   },
   "Ge": {
    "numero_atomico": 32,
@@ -391,7 +423,8 @@
    "estados_oxidacao": [
     "+4",
     "+2"
-   ]
+   ],
+   "massa_atomica": 72.63
   },
   "As": {
    "numero_atomico": 33,
@@ -404,7 +437,8 @@
     "+5",
     "+3",
     "-3"
-   ]
+   ],
+   "massa_atomica": 74.92159
   },
   "Se": {
    "numero_atomico": 34,
@@ -417,7 +451,8 @@
     "+6",
     "+4",
     "-2"
-   ]
+   ],
+   "massa_atomica": 78.97
   },
   "Br": {
    "numero_atomico": 35,
@@ -430,7 +465,8 @@
     "+5",
     "+1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 79.9
   },
   "Kr": {
    "numero_atomico": 36,
@@ -441,7 +477,8 @@
    "eletronegatividade": 3.0,
    "estados_oxidacao": [
     "0"
-   ]
+   ],
+   "massa_atomica": 83.8
   },
   "Rb": {
    "numero_atomico": 37,
@@ -452,7 +489,8 @@
    "eletronegatividade": 0.82,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 85.468
   },
   "Sr": {
    "numero_atomico": 38,
@@ -463,7 +501,8 @@
    "eletronegatividade": 0.95,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 87.62
   },
   "Y": {
    "numero_atomico": 39,
@@ -474,7 +513,8 @@
    "eletronegatividade": 1.22,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 88.90584
   },
   "Zr": {
    "numero_atomico": 40,
@@ -485,7 +525,8 @@
    "eletronegatividade": 1.33,
    "estados_oxidacao": [
     "+4"
-   ]
+   ],
+   "massa_atomica": 91.22
   },
   "Nb": {
    "numero_atomico": 41,
@@ -497,7 +538,8 @@
    "estados_oxidacao": [
     "+5",
     "+3"
-   ]
+   ],
+   "massa_atomica": 92.90637
   },
   "Mo": {
    "numero_atomico": 42,
@@ -508,7 +550,8 @@
    "eletronegatividade": 2.16,
    "estados_oxidacao": [
     "+6"
-   ]
+   ],
+   "massa_atomica": 95.95
   },
   "Tc": {
    "numero_atomico": 43,
@@ -521,7 +564,8 @@
     "+7",
     "+6",
     "+4"
-   ]
+   ],
+   "massa_atomica": 96.90636
   },
   "Ru": {
    "numero_atomico": 44,
@@ -532,7 +576,8 @@
    "eletronegatividade": 2.2,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 101.1
   },
   "Rh": {
    "numero_atomico": 45,
@@ -543,7 +588,8 @@
    "eletronegatividade": 2.28,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 102.9055
   },
   "Pd": {
    "numero_atomico": 46,
@@ -555,7 +601,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 106.42
   },
   "Ag": {
    "numero_atomico": 47,
@@ -566,7 +613,8 @@
    "eletronegatividade": 1.93,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 107.868
   },
   "Cd": {
    "numero_atomico": 48,
@@ -577,7 +625,8 @@
    "eletronegatividade": 1.69,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 112.41
   },
   "In": {
    "numero_atomico": 49,
@@ -588,7 +637,8 @@
    "eletronegatividade": 1.78,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 114.818
   },
   "Sn": {
    "numero_atomico": 50,
@@ -600,7 +650,8 @@
    "estados_oxidacao": [
     "+4",
     "+2"
-   ]
+   ],
+   "massa_atomica": 118.71
   },
   "Sb": {
    "numero_atomico": 51,
@@ -613,7 +664,8 @@
     "+5",
     "+3",
     "-3"
-   ]
+   ],
+   "massa_atomica": 121.76
   },
   "Te": {
    "numero_atomico": 52,
@@ -626,7 +678,8 @@
     "+6",
     "+4",
     "-2"
-   ]
+   ],
+   "massa_atomica": 127.6
   },
   "I": {
    "numero_atomico": 53,
@@ -640,7 +693,8 @@
     "+5",
     "+1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 126.9045
   },
   "Xe": {
    "numero_atomico": 54,
@@ -651,7 +705,8 @@
    "eletronegatividade": 2.6,
    "estados_oxidacao": [
     "0"
-   ]
+   ],
+   "massa_atomica": 131.29
   },
   "Cs": {
    "numero_atomico": 55,
@@ -662,7 +717,8 @@
    "eletronegatividade": 0.79,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 132.905452
   },
   "Ba": {
    "numero_atomico": 56,
@@ -673,7 +729,8 @@
    "eletronegatividade": 0.89,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 137.33
   },
   "La": {
    "numero_atomico": 57,
@@ -684,7 +741,8 @@
    "eletronegatividade": 1.1,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 138.9055
   },
   "Ce": {
    "numero_atomico": 58,
@@ -696,7 +754,8 @@
    "estados_oxidacao": [
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 140.116
   },
   "Pr": {
    "numero_atomico": 59,
@@ -707,7 +766,8 @@
    "eletronegatividade": 1.13,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 140.90766
   },
   "Nd": {
    "numero_atomico": 60,
@@ -718,7 +778,8 @@
    "eletronegatividade": 1.14,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 144.24
   },
   "Pm": {
    "numero_atomico": 61,
@@ -729,7 +790,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 144.91276
   },
   "Sm": {
    "numero_atomico": 62,
@@ -741,7 +803,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 150.4
   },
   "Eu": {
    "numero_atomico": 63,
@@ -753,7 +816,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 151.964
   },
   "Gd": {
    "numero_atomico": 64,
@@ -764,7 +828,8 @@
    "eletronegatividade": 1.2,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 157.25
   },
   "Tb": {
    "numero_atomico": 65,
@@ -775,7 +840,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 158.92535
   },
   "Dy": {
    "numero_atomico": 66,
@@ -786,7 +852,8 @@
    "eletronegatividade": 1.22,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 162.5
   },
   "Ho": {
    "numero_atomico": 67,
@@ -797,7 +864,8 @@
    "eletronegatividade": 1.23,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 164.93033
   },
   "Er": {
    "numero_atomico": 68,
@@ -808,7 +876,8 @@
    "eletronegatividade": 1.24,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 167.26
   },
   "Tm": {
    "numero_atomico": 69,
@@ -819,7 +888,8 @@
    "eletronegatividade": 1.25,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 168.93422
   },
   "Yb": {
    "numero_atomico": 70,
@@ -831,7 +901,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 173.05
   },
   "Lu": {
    "numero_atomico": 71,
@@ -842,7 +913,8 @@
    "eletronegatividade": 1.27,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 174.9667
   },
   "Hf": {
    "numero_atomico": 72,
@@ -853,7 +925,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+4"
-   ]
+   ],
+   "massa_atomica": 178.49
   },
   "Ta": {
    "numero_atomico": 73,
@@ -864,7 +937,8 @@
    "eletronegatividade": 1.5,
    "estados_oxidacao": [
     "+5"
-   ]
+   ],
+   "massa_atomica": 180.9479
   },
   "W": {
    "numero_atomico": 74,
@@ -875,7 +949,8 @@
    "eletronegatividade": 2.36,
    "estados_oxidacao": [
     "+6"
-   ]
+   ],
+   "massa_atomica": 183.84
   },
   "Re": {
    "numero_atomico": 75,
@@ -888,7 +963,8 @@
     "+7",
     "+6",
     "+4"
-   ]
+   ],
+   "massa_atomica": 186.207
   },
   "Os": {
    "numero_atomico": 76,
@@ -900,7 +976,8 @@
    "estados_oxidacao": [
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 190.2
   },
   "Ir": {
    "numero_atomico": 77,
@@ -912,7 +989,8 @@
    "estados_oxidacao": [
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 192.22
   },
   "Pt": {
    "numero_atomico": 78,
@@ -924,7 +1002,8 @@
    "estados_oxidacao": [
     "+4",
     "+2"
-   ]
+   ],
+   "massa_atomica": 195.08
   },
   "Au": {
    "numero_atomico": 79,
@@ -936,7 +1015,8 @@
    "estados_oxidacao": [
     "+3",
     "+1"
-   ]
+   ],
+   "massa_atomica": 196.96657
   },
   "Hg": {
    "numero_atomico": 80,
@@ -948,7 +1028,8 @@
    "estados_oxidacao": [
     "+2",
     "+1"
-   ]
+   ],
+   "massa_atomica": 200.59
   },
   "Tl": {
    "numero_atomico": 81,
@@ -960,7 +1041,8 @@
    "estados_oxidacao": [
     "+3",
     "+1"
-   ]
+   ],
+   "massa_atomica": 204.383
   },
   "Pb": {
    "numero_atomico": 82,
@@ -972,7 +1054,8 @@
    "estados_oxidacao": [
     "+4",
     "+2"
-   ]
+   ],
+   "massa_atomica": 207.0
   },
   "Bi": {
    "numero_atomico": 83,
@@ -984,7 +1067,8 @@
    "estados_oxidacao": [
     "+5",
     "+3"
-   ]
+   ],
+   "massa_atomica": 208.9804
   },
   "Po": {
    "numero_atomico": 84,
@@ -996,7 +1080,8 @@
    "estados_oxidacao": [
     "+4",
     "+2"
-   ]
+   ],
+   "massa_atomica": 208.98243
   },
   "At": {
    "numero_atomico": 85,
@@ -1011,7 +1096,8 @@
     "3",
     "1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 209.98715
   },
   "Rn": {
    "numero_atomico": 86,
@@ -1022,7 +1108,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "0"
-   ]
+   ],
+   "massa_atomica": 222.01758
   },
   "Fr": {
    "numero_atomico": 87,
@@ -1033,7 +1120,8 @@
    "eletronegatividade": 0.7,
    "estados_oxidacao": [
     "+1"
-   ]
+   ],
+   "massa_atomica": 223.01973
   },
   "Ra": {
    "numero_atomico": 88,
@@ -1044,7 +1132,8 @@
    "eletronegatividade": 0.9,
    "estados_oxidacao": [
     "+2"
-   ]
+   ],
+   "massa_atomica": 226.02541
   },
   "Ac": {
    "numero_atomico": 89,
@@ -1055,7 +1144,8 @@
    "eletronegatividade": 1.1,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 227.02775
   },
   "Th": {
    "numero_atomico": 90,
@@ -1066,7 +1156,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+4"
-   ]
+   ],
+   "massa_atomica": 232.038
   },
   "Pa": {
    "numero_atomico": 91,
@@ -1078,7 +1169,8 @@
    "estados_oxidacao": [
     "+5",
     "+4"
-   ]
+   ],
+   "massa_atomica": 231.03588
   },
   "U": {
    "numero_atomico": 92,
@@ -1092,7 +1184,8 @@
     "+5",
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 238.0289
   },
   "Np": {
    "numero_atomico": 93,
@@ -1106,7 +1199,8 @@
     "+5",
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 237.048172
   },
   "Pu": {
    "numero_atomico": 94,
@@ -1120,7 +1214,8 @@
     "+5",
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 244.0642
   },
   "Am": {
    "numero_atomico": 95,
@@ -1134,7 +1229,8 @@
     "+5",
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 243.06138
   },
   "Cm": {
    "numero_atomico": 96,
@@ -1145,7 +1241,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 247.07035
   },
   "Bk": {
    "numero_atomico": 97,
@@ -1157,7 +1254,8 @@
    "estados_oxidacao": [
     "+4",
     "+3"
-   ]
+   ],
+   "massa_atomica": 247.07031
   },
   "Cf": {
    "numero_atomico": 98,
@@ -1168,7 +1266,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 251.07959
   },
   "Es": {
    "numero_atomico": 99,
@@ -1179,7 +1278,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 252.083
   },
   "Fm": {
    "numero_atomico": 100,
@@ -1190,7 +1290,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 257.09511
   },
   "Md": {
    "numero_atomico": 101,
@@ -1202,7 +1303,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 258.09843
   },
   "No": {
    "numero_atomico": 102,
@@ -1214,7 +1316,8 @@
    "estados_oxidacao": [
     "+3",
     "+2"
-   ]
+   ],
+   "massa_atomica": 259.101
   },
   "Lr": {
    "numero_atomico": 103,
@@ -1225,7 +1328,8 @@
    "eletronegatividade": 1.3,
    "estados_oxidacao": [
     "+3"
-   ]
+   ],
+   "massa_atomica": 266.12
   },
   "Rf": {
    "numero_atomico": 104,
@@ -1236,7 +1340,8 @@
    "eletronegatividade": null,
    "estados_oxidacao": [
     "+4"
-   ]
+   ],
+   "massa_atomica": 267.122
   },
   "Db": {
    "numero_atomico": 105,
@@ -1249,7 +1354,8 @@
     "5",
     "4",
     "3"
-   ]
+   ],
+   "massa_atomica": 268.126
   },
   "Sg": {
    "numero_atomico": 106,
@@ -1264,7 +1370,8 @@
     "4",
     "3",
     "0"
-   ]
+   ],
+   "massa_atomica": 269.128
   },
   "Bh": {
    "numero_atomico": 107,
@@ -1278,7 +1385,8 @@
     "5",
     "4",
     "3"
-   ]
+   ],
+   "massa_atomica": 270.133
   },
   "Hs": {
    "numero_atomico": 108,
@@ -1294,7 +1402,8 @@
     "4",
     "3",
     "2"
-   ]
+   ],
+   "massa_atomica": 269.1336
   },
   "Mt": {
    "numero_atomico": 109,
@@ -1310,7 +1419,8 @@
     "4",
     "3",
     "1"
-   ]
+   ],
+   "massa_atomica": 277.154
   },
   "Ds": {
    "numero_atomico": 110,
@@ -1325,7 +1435,8 @@
     "4",
     "2",
     "0"
-   ]
+   ],
+   "massa_atomica": 282.166
   },
   "Rg": {
    "numero_atomico": 111,
@@ -1339,7 +1450,8 @@
     "3",
     "1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 282.169
   },
   "Cn": {
    "numero_atomico": 112,
@@ -1352,7 +1464,8 @@
     "2",
     "1",
     "0"
-   ]
+   ],
+   "massa_atomica": 286.179
   },
   "Nh": {
    "numero_atomico": 113,
@@ -1361,7 +1474,8 @@
    "configuracao_eletronica": "[Rn]5f14 6d10 7s2 7p1 (predicted)",
    "eletrons_valencia": 3,
    "eletronegatividade": null,
-   "estados_oxidacao": []
+   "estados_oxidacao": [],
+   "massa_atomica": 286.182
   },
   "Fl": {
    "numero_atomico": 114,
@@ -1376,7 +1490,8 @@
     "2",
     "1",
     "0"
-   ]
+   ],
+   "massa_atomica": 290.192
   },
   "Mc": {
    "numero_atomico": 115,
@@ -1388,7 +1503,8 @@
    "estados_oxidacao": [
     "3",
     "1"
-   ]
+   ],
+   "massa_atomica": 290.196
   },
   "Lv": {
    "numero_atomico": 116,
@@ -1401,7 +1517,8 @@
     "+4",
     "+2",
     "-2"
-   ]
+   ],
+   "massa_atomica": 293.205
   },
   "Ts": {
    "numero_atomico": 117,
@@ -1415,7 +1532,8 @@
     "+3",
     "+1",
     "-1"
-   ]
+   ],
+   "massa_atomica": 294.211
   },
   "Og": {
    "numero_atomico": 118,
@@ -1431,7 +1549,8 @@
     "+1",
     "0",
     "-1"
-   ]
+   ],
+   "massa_atomica": 295.216
   }
  }
 }

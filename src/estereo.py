@@ -31,8 +31,11 @@ import eletronico
 # duplicatas para ligações múltiplas e fechamentos de anel). Empates
 # entre ramos de mesma constituição usam as regras 3 (Z > E), 4
 # (semelhante antes de diferente) e 5 (R > S) sobre os descritores
-# declarados. A regra 2 (massa atômica) não se aplica: a linguagem não
-# tem isótopos.
+# declarados. A regra 2 (número de massa, IUPAC P-92.3) só entra depois
+# da regra 1 esgotada: a chave de cada ramo é o par (esferas de números
+# atômicos, esferas de massas). Um átomo sem número de massa declarado
+# conta com a massa atômica da composição natural, como no exemplo da
+# IUPAC '81Br > Br > 79Br'; a duplicata tem a massa do átomo duplicado.
 
 TAMANHO_MINIMO_ANEL_E_Z = 8
 PIRAMIDAIS = {"P", "S", "As", "Se"}
@@ -108,16 +111,18 @@ def grafo(modelo, valencias):
 class Arvore:
     """Dígrafo hierárquico de CIP, explorado até uma profundidade."""
 
-    def __init__(self, vizinhos, numero_atomico):
+    def __init__(self, vizinhos, numero_atomico, massa=None):
         self.vizinhos = vizinhos
         self.z = numero_atomico
+        self.massa = massa or {}
 
-    def esferas(self, atomo, pai, ordem_pai, caminho, profundidade):
-        # Esferas do ramo como tuplas de números atômicos, cada uma em
-        # ordem decrescente de prioridade
+    def esferas(self, atomo, pai, ordem_pai, caminho, profundidade, valor=None):
+        # Esferas do ramo como tuplas de valores (número atômico na regra
+        # 1, massa na regra 2), cada uma em ordem decrescente de prioridade
+        valor = valor if valor is not None else self.z
         if isinstance(atomo, tuple):
             return [(0,)]
-        resultado = [(self.z[atomo],)]
+        resultado = [(valor[atomo],)]
         if profundidade == 0:
             return resultado
         filhos = []
@@ -126,19 +131,19 @@ class Arvore:
                 continue
             if vizinho in caminho:
                 # Fechamento de anel: átomo duplicado, sem filhos
-                filhos.append([(self.z[vizinho],)])
+                filhos.append([(valor[vizinho],)])
             else:
                 filhos.append(
                     self.esferas(
-                        vizinho, atomo, ordem, caminho | {vizinho}, profundidade - 1
+                        vizinho, atomo, ordem, caminho | {vizinho}, profundidade - 1, valor
                     )
                 )
             # Ligação múltipla: duplicatas do vizinho
             for _ in range(ordem - 1):
-                filhos.append([(self.z[vizinho],)])
+                filhos.append([(valor[vizinho],)])
         if pai is not None:
             for _ in range(ordem_pai - 1):
-                filhos.append([(self.z[pai],)])
+                filhos.append([(valor[pai],)])
         filhos.sort(key=chave_esferas, reverse=True)
         maior = max((len(f) for f in filhos), default=0)
         for nivel in range(maior):
@@ -161,15 +166,22 @@ class Arvore:
                     if isinstance(vizinho, int)
                     else 1
                 )
-                chaves[vizinho] = chave_esferas(
-                    self.esferas(vizinho, centro, ordem, {centro, vizinho}, profundidade)
-                    if isinstance(vizinho, int)
-                    else [(0,)]
-                )
+                chaves[vizinho] = self.chave_ramo(vizinho, centro, ordem, profundidade)
             if len(set(chaves.values())) == len(chaves) or chaves == anteriores:
                 return chaves
             anteriores = chaves
         return anteriores or {}
+
+    def chave_ramo(self, vizinho, centro, ordem, profundidade):
+        # Regra 1 inteira antes da regra 2: o par compara primeiro os
+        # números atômicos e só no empate as massas
+        if not isinstance(vizinho, int):
+            return (((0,),), ((0,),))
+        argumentos = (vizinho, centro, ordem, {centro, vizinho}, profundidade)
+        return (
+            chave_esferas(self.esferas(*argumentos, self.z)),
+            chave_esferas(self.esferas(*argumentos, self.massa or self.z)),
+        )
 
 
 def chave_esferas(esferas):
@@ -234,6 +246,20 @@ def cadeias_cumuladas(vizinhos):
                 cadeia.append(seguinte)
             cadeias.append(cadeia)
     return cadeias
+
+
+def massas_cip(modelo, dados_elementos):
+    # Massa de cada átomo para a regra 2: o número de massa declarado ou,
+    # sem ele, a massa atômica da composição natural (ou o número
+    # atômico, se a fonte não tem a massa)
+    massas = {}
+    for atomo in modelo.atomos:
+        dados = dados_elementos.get(atomo.elemento, {})
+        natural = dados.get("massa_atomica")
+        if natural is None:
+            natural = dados.get("numero_atomico", 0)
+        massas[atomo.id] = atomo.massa if getattr(atomo, "massa", None) is not None else natural
+    return massas
 
 
 def candidatos(modelo, vizinhos, pares_livres, arvore, declarados_atropo):
@@ -377,6 +403,11 @@ def prioridades_constitucionais(elemento, arvore):
 # ---------- simetria ----------
 
 
+def massa_do_atomo(atomo):
+    # Número de massa declarado; 0 para a composição natural
+    return getattr(atomo, "massa", None) or 0
+
+
 def automorfismos(modelo, vizinhos, limite=LIMITE_AUTOMORFISMOS):
     """Automorfismos do grafo, com os H terminais recolhidos no dono.
 
@@ -390,12 +421,26 @@ def automorfismos(modelo, vizinhos, limite=LIMITE_AUTOMORFISMOS):
         if a.elemento == "H" and len(vizinhos[a.id]) == 1
     }
     pesados = [a.id for a in modelo.atomos if a.id not in terminal]
-    hidrogenios = {x: sorted(h for h in vizinhos[x] if h in terminal) for x in pesados}
+    # H terminais em ordem de massa, para o deutério só trocar com deutério
+    hidrogenios = {
+        x: sorted(
+            (h for h in vizinhos[x] if h in terminal),
+            key=lambda h: (massa_do_atomo(por_id[h]), h),
+        )
+        for x in pesados
+    }
     ligacoes = {
         x: {y: o for y, o in vizinhos[x].items() if y not in terminal} for x in pesados
     }
     cor = {
-        x: repr((por_id[x].elemento, por_id[x].carga, len(hidrogenios[x])))
+        x: repr(
+            (
+                por_id[x].elemento,
+                por_id[x].carga,
+                massa_do_atomo(por_id[x]),
+                [massa_do_atomo(por_id[h]) for h in hidrogenios[x]],
+            )
+        )
         for x in pesados
     }
     while True:
@@ -576,7 +621,7 @@ def analisar(modelo, dados_elementos, valencias, declaracoes=None):
         if numero is None:
             return None, f"falta o número atômico de {atomo.elemento}", []
         z[atomo.id] = numero
-    arvore = Arvore(vizinhos, z)
+    arvore = Arvore(vizinhos, z, massas_cip(modelo, dados_elementos))
     pares_livres = {
         estado.atomo.id: estado.pares_livres
         for estado in eletronico.estados(modelo, dados_elementos, valencias)

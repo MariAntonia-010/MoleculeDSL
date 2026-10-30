@@ -116,6 +116,48 @@ def desemparelhados(config):
     return total
 
 
+LETRA_DO_TERMO = "SPDFGHIKLMNOQRTUV"
+
+
+def termo_fundamental(config):
+    """Termo espectroscópico de menor energia da configuração, 2S+1 L J.
+
+    Regras de Hund, subcamada aberta por subcamada aberta: S máximo
+    (elétrons de spin paralelo um por orbital), depois L máximo (orbitais
+    de maior ml primeiro) e, para J, |L − S| se a subcamada está menos que
+    meio cheia e L + S se está mais. Com várias subcamadas abertas, os
+    spins se somam e J segue a subcamada de maior l que não está meio
+    cheia: é uma aproximação, que falha em alguns átomos pesados (Ce, por
+    exemplo, é ¹G₄ e não ³H₄). Devolve (multiplicidade, L, J em dobro).
+    """
+    dobro_s = 0
+    total_l = 0
+    decide_j = None
+    for (n, l), e in sorted(config.items(), key=lambda item: (item[0][1], item[0][0])):
+        orbitais = 2 * l + 1
+        if e >= capacidade(l):
+            continue
+        acima = min(e, orbitais)
+        abaixo = e - acima
+        dobro_s += acima - abaixo
+        # ml de l até −l: os de spin acima e depois os de spin abaixo
+        total_l += sum(range(l, l - acima, -1)) + sum(range(l, l - abaixo, -1))
+        if e != orbitais:
+            decide_j = e < orbitais
+    if decide_j is None or decide_j:
+        dobro_j = abs(2 * total_l - dobro_s)
+    else:
+        dobro_j = 2 * total_l + dobro_s
+    return dobro_s + 1, total_l, dobro_j
+
+
+def texto_termo(termo):
+    multiplicidade, l, dobro_j = termo
+    j = str(dobro_j // 2) if dobro_j % 2 == 0 else f"{dobro_j}/2"
+    letra = LETRA_DO_TERMO[l] if l < len(LETRA_DO_TERMO) else f"L={l}"
+    return f"{multiplicidade}{letra}{j}"
+
+
 def camadas(config):
     maior = max((n for n, _ in config), default=0)
     return [sum(e for (n, _), e in config.items() if n == k) for k in range(1, maior + 1)]
@@ -160,6 +202,7 @@ def formatar(modelo, dados_elementos):
         linhas.append(f"    configuração ({origem}): {texto_configuracao(config)}")
         linhas.append(f"    camadas: {', '.join(str(c) for c in camadas(config))}")
         linhas.append(f"    desemparelhados (Hund): {desemparelhados(config)}")
+        linhas.append(f"    termo fundamental (regras de Hund): {texto_termo(termo_fundamental(config))}")
         for caixa in diagrama(config):
             linhas.append(f"    {caixa}")
     if len(modelo.atomos) > 1:

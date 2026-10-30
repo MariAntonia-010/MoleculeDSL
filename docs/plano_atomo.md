@@ -23,7 +23,9 @@ fonte usada.
 - **Isótopos naturais:** a CIAAW/IUPAC publica os isótopos de composição
   natural de cada elemento
   ([CIAAW, Isotopic Abundances](https://www.ciaaw.org/isotopic-abundances.htm)).
-  O projeto guarda os de Z = 1 a 20 em `regras/isotopos.json`.
+  O projeto guarda os dos 118 elementos em `regras/isotopos.json`, conferidos
+  com a tabela da CIAAW; Tc, Pm, Po a Ac e os de Z > 92 têm lista vazia (não
+  há composição natural).
 - **Contagem de partículas:** A = Z + N, então N = A − Z. Um número de
   massa menor que Z daria número negativo de nêutrons.
 
@@ -134,7 +136,7 @@ de Madelung.
 - **Playground:** o compilador do navegador lê o número de massa e a
   configuração, aplica as regras ATOM, e o modelo de Bohr usa a configuração
   declarada, com prótons e nêutrons no núcleo.
-- **Tabela periódica:** isótopos naturais de cada elemento (Z ≤ 20), notação
+- **Tabela periódica:** isótopos naturais de cada elemento, notação
   de nuclídeo e exemplos `atom 13C` e `configuration`.
 - **Guia:** a lição "Construindo um átomo" ganha o núcleo (isótopo) e a
   eletrosfera (configuração, Pauli, Aufbau, Hund), com exemplos conferidos
@@ -152,10 +154,31 @@ de Madelung.
   Hund.
 - O teste de sincronia da página cobre as palavras e regras novas.
 
-## 7. Fora do escopo
+## 7. Segunda etapa (entregue)
 
-- **Regra CIP 2 com isótopos:** a comparação de um átomo marcado com um não
-  marcado exige a massa média da composição natural, que ainda não está nos
-  dados. Fica registrada como próximo passo.
-- **Estados excitados com termo espectroscópico** (²S+¹L_J) e orbitais
-  moleculares.
+- **Regra CIP 2 com isótopos** (IUPAC P-92.3): a regra 1 é aplicada inteira
+  ignorando isótopos; só no empate o número de massa decide, em ordem
+  decrescente ('³H > ²H > ¹H (ou H)' e '⁸¹Br > Br > ⁷⁹Br'). O exemplo do
+  bromo mostra que o átomo sem número de massa conta com a massa atômica
+  natural; ela vem da PubChem (`massa_atomica` em `regras/elementos.json`).
+  A duplicata de ligação múltipla ou de anel recebe a massa do átomo
+  duplicado. A simetria (automorfismos) também separa isótopos, então
+  CHD(CH₃)OH tem um centro e CD₃CH(OH)CH₃ também
+  ([IUPAC P-92.3](https://iupac.qmul.ac.uk/BlueBook/P9.html)).
+- **Isótopos de todos os elementos:** a lista de `regras/isotopos.json` foi
+  conferida automaticamente com a tabela da CIAAW (84 elementos com isótopos
+  naturais, todos iguais).
+- **Termo espectroscópico fundamental** (²S⁺¹L_J) pelas três regras de Hund:
+  S máximo, L máximo e J = |L − S| com a subcamada menos que meio cheia ou
+  L + S com mais. Com várias subcamadas abertas, os spins se somam e J segue
+  a subcamada de maior l que não está meio cheia. Conferido com os termos
+  medidos de 26 elementos (C ³P₀, O ³P₂, Cr ⁷S₃, Fe ⁵D₄, Nb ⁶D₁/₂, Gd ⁹D₂,
+  U ⁵L₆...). É uma aproximação: o Ce dá ³H₄ pelas regras, e o medido é ¹G₄
+  ([termo espectroscópico](https://en.wikipedia.org/wiki/Term_symbol)).
+  Aparece no `--estrutura-atomica`, na legenda do modelo de Bohr e na ficha
+  da tabela periódica.
+
+## 8. Fora do escopo
+
+- Orbitais moleculares e termos de estados excitados além do de menor
+  energia de cada configuração.

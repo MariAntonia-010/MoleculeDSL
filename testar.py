@@ -1276,6 +1276,50 @@ def testar_estrutura_atomica():
         )
         if len(resultado.solutions) != 2:
             problemas.append(f"isotopômeros do propano-13C: {len(resultado.solutions)}, esperado 2")
+
+    # Termo fundamental pelas regras de Hund, conferido com os termos medidos
+    termos = {"H": "2S1/2", "C": "3P0", "N": "4S3/2", "O": "3P2", "Cr": "7S3",
+              "Fe": "5D4", "Ni": "3F4", "Nb": "6D1/2", "Gd": "9D2", "U": "5L6"}
+    for simbolo, esperado in termos.items():
+        obtido = atomo.texto_termo(atomo.termo_fundamental(atomo.configuracao_fundamental(simbolo, 0, dados)))
+        if obtido != esperado:
+            problemas.append(f"termo de {simbolo}: {obtido}, esperado {esperado}")
+    codigo, saida = rodar_comando(["--estrutura-atomica", os.path.join(PASTA_RAIZ, "exemplos", "ferro_56.mol")])
+    if codigo != 0 or "termo fundamental (regras de Hund): 5D4" not in saida or "nêutrons=30" not in saida:
+        problemas.append("--estrutura-atomica do ferro-56 sem termo 5D4 ou 30 nêutrons")
+
+    # Isótopos naturais dos 118 elementos (CIAAW)
+    isotopos = semantico.carregar_isotopos()
+    if set(isotopos) != set(dados) or isotopos["Sn"][0] != 112 or isotopos["Tc"]:
+        problemas.append("regras/isotopos.json não cobre os 118 elementos")
+
+    # Regra CIP 2: o deutério cria o centro e fica entre C e H
+    import estereo
+    valencias = semantico.carregar_valencias()
+
+    def modelo_de(caminho):
+        return semantico.analisar(construir(analisar(caminho)))[0]
+
+    texto = estereo.formatar(
+        modelo_de(os.path.join(PASTA_RAIZ, "exemplos", "etanol_1_deuterado.mol")), dados, valencias
+    )
+    if "o (O#1) > c2 (C#2) > d (H#1) > h1 (H#2)" not in texto:
+        problemas.append("regra CIP 2: ordem do (1-2H)etanol errada")
+    with tempfile.TemporaryDirectory() as pasta:
+        for nome, deuterios, centros in (("propanol", 0, 0), ("propanol_d3", 3, 1)):
+            linhas = ['species molecule "P" {', "    atom C as c1", "    atom C as c2",
+                      "    atom C as c3", "    atom O as o"]
+            if deuterios:
+                linhas.append(f"    {deuterios}x atom 2H as d")
+            linhas.append(f"    {8 - deuterios}x atom H as h")
+            linhas += ["    bond c1-c2", "    bond c2-c3", "    bond c2-o", "    bond o-h1", "    bond c2-h2"]
+            pontas = [f"d{k}" for k in range(1, deuterios + 1)] + [f"h{k}" for k in range(3, 9 - deuterios)]
+            linhas += [f"    bond c1-{x}" for x in pontas[:3]] + [f"    bond c3-{x}" for x in pontas[3:]]
+            linhas.append("}")
+            modelo = modelo_de(escrever_mol(pasta, nome + ".mol", linhas))
+            resultado, _, _ = estereo.analisar(modelo, dados, valencias)
+            if len(resultado.estereogenicos) != centros:
+                problemas.append(f"regra CIP 2: {nome} com {len(resultado.estereogenicos)} centro(s), esperado {centros}")
     return problemas
 
 

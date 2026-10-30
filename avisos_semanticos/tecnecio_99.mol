@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 99Tc: Tc não tem isótopo de composição natural (CIAAW); todo isótopo dele é radioativo
+// O tecnécio não tem isótopo estável: todo isótopo dele é radioativo
+species atom "Technetium-99" unpaired 5 {
+    atom 99Tc
+}

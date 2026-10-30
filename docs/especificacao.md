@@ -200,6 +200,12 @@ outras configurações declaradas (STEREO-001 a STEREO-005). Centros de anel
 com dois ramos iguais pelo anel, como em 1,4-dimetilciclohexano, são
 declarados por cis/trans.
 
+As prioridades seguem as regras CIP na ordem: 1a (número atômico), 2 (número
+de massa, só depois da regra 1 esgotada; sem número declarado vale a massa
+atômica natural), e 3 a 5 sobre os descritores declarados. Por isso um
+isótopo pode criar um centro: em `atom 2H as d` ligado a um carbono que já
+tem um H, o carbono passa a ter quatro ramos diferentes.
+
 ---
 
 ## 5. Operadores e precedência

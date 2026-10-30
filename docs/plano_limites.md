@@ -135,8 +135,9 @@ ciclos do grafo.
   - 1a: segue como antes.
   - 3 (Z > E), 4 (semelhante antes de diferente) e 5 (R > S): desempatam
     ramos de mesma constituição usando os descritores declarados.
-  - 2 (massa atômica): fica de fora, porque a linguagem não tem isótopos
-    e nunca pode haver empate que ela resolveria.
+  - 2 (número de massa): entrou com os isótopos (docs/plano_atomo.md);
+    desempata depois da regra 1 esgotada, com a massa atômica natural
+    para o átomo sem número de massa.
 
 ## L9. Sintaxe para declarar a configuração
 

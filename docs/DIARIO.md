@@ -626,3 +626,20 @@ Hund, íons de metais de transição).
 - Página: compilador do navegador com as regras ATOM, Bohr com configuração
   declarada e prótons/nêutrons, isótopos na tabela periódica, lição "Núcleo e
   eletrosfera" no guia e tópico "Estrutura atômica" na Doc.
+
+---
+
+## 30/10/2026 — Átomo, segunda etapa: regra CIP 2, isótopos e termo
+
+- Regra CIP 2 (IUPAC P-92.3) no `--estereo`: a chave de cada ramo é o par
+  (esferas de números atômicos, esferas de massas), então a massa só decide
+  com a regra 1 esgotada. Átomo sem número de massa usa a massa atômica
+  natural (PubChem, novo campo `massa_atomica`). Os automorfismos separam
+  isótopos (D só troca com D). No (1-²H)etanol: O > C > ²H > H.
+- `regras/isotopos.json` com os 118 elementos, conferido com a tabela da
+  CIAAW; elementos sem composição natural têm lista vazia e o ATOM-005 diz
+  que todo isótopo deles é radioativo.
+- Termo fundamental pelas regras de Hund em `src/atomo.py`
+  (`termo_fundamental`), no relatório, na legenda do Bohr e na tabela
+  periódica.
+

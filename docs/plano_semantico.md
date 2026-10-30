@@ -134,7 +134,7 @@ Plano e fontes em `docs/plano_atomo.md`.
 | ATOM-002 | subcamada impossível (l ≥ n), acima do limite de Pauli, repetida, ou núcleo que não é gás nobre | erro |
 | ATOM-003 | total de elétrons da configuração diferente de Z − carga | erro |
 | ATOM-004 | configuração diferente do estado fundamental de referência | aviso |
-| ATOM-005 | isótopo fora dos isótopos naturais da CIAAW (Z ≤ 20) | aviso |
+| ATOM-005 | isótopo fora dos isótopos naturais da CIAAW (todos os elementos) | aviso |
 | ATOM-006 | `configuration` fora de `atom`/`monatomic_ion`, ou repetida | erro |
 | ATOM-007 | `unpaired` diferente da regra de Hund | aviso |
 

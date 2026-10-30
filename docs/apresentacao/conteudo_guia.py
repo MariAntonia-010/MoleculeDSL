@@ -96,6 +96,9 @@ LICOES = [
             "configuration declara a configuração de um átomo isolado ou íon monoatômico, com um núcleo de gás nobre opcional "
             "([He], [Ne], [Ar]...). O compilador confere Pauli, o total de elétrons (Z − carga) e compara com o estado fundamental "
             "medido; o unpaired precisa bater com a regra de Hund. Cátions de metais de transição perdem os elétrons 4s antes dos 3d.",
+            "O relatório --estrutura-atomica também dá o termo fundamental (2S+1)L_J pelas regras de Hund: ³P₀ no carbono, ⁵D₄ no ferro. "
+            "E o número de massa entra na estereoquímica: pela regra CIP 2, com números atômicos empatados, o isótopo mais pesado "
+            "tem prioridade (²H > H), então um deutério pode criar um centro quiral.",
         ],
         "anatomia": {
             "codigo": "configuration fe [Ar] 3d6",
@@ -120,6 +123,28 @@ LICOES = [
                 "explicacao": "O número de massa também vale dentro de moléculas: D₂O usa dois deutérios (2H). Já a configuration não: numa molécula os elétrons ocupam orbitais moleculares.",
                 "codigo": 'species molecule "Heavy water" {\n    atom O as o\n    2x atom 2H as d\n    bond o-d1\n    bond o-d2\n}\n',
                 "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Ferro-56 e o termo fundamental",
+                "explicacao": "26 prótons e 30 nêutrons; 3d6 tem quatro elétrons desemparelhados (Hund), e o termo de menor energia é ⁵D₄: S = 2, L = 2 e, com a subcamada d mais que meio cheia, J = L + S = 4.",
+                "codigo": 'species atom "Iron-56" unpaired 4 {\n    atom 56Fe as fe\n    configuration fe [Ar] 3d6 4s2\n}\n',
+                "opcoes": ["--estrutura-atomica"],
+                "saida": 0,
+                "bohr": "Fe",
+            },
+            {
+                "titulo": "Elemento sem isótopo natural: tecnécio",
+                "explicacao": "O tecnécio não tem isótopo estável; a CIAAW não lista composição natural para ele. Qualquer número de massa gera o aviso ATOM-005.",
+                "codigo": 'species atom "Technetium-99" unpaired 5 {\n    atom 99Tc\n}\n',
+                "opcoes": [],
+                "saida": 0,
+            },
+            {
+                "titulo": "Regra CIP 2: o deutério cria um centro",
+                "explicacao": "No etanol o C1 tem dois H iguais e não é centro. Trocando um H por ²H, os números atômicos empatam entre D e H, e a regra 2 decide pelo número de massa: O > C > ²H > H, configuração R.",
+                "codigo": 'species molecule "(1R)-(1-2H1)ethan-1-ol" {\n    atom C as c1\n    atom C as c2\n    atom O as o\n    atom 2H as d\n    5x atom H as h\n    bond c1-c2\n    bond c1-o\n    bond c1-d\n    bond c1-h1\n    bond o-h2\n    bond c2-h3\n    bond c2-h4\n    bond c2-h5\n    stereo c1 R\n}\n',
+                "opcoes": ["--estereo"],
                 "saida": 0,
             },
             {

@@ -1,0 +1,5 @@
+// Ferro-56: isótopo natural de Z > 20, com a configuração com núcleo de gás nobre
+species atom "Iron-56" unpaired 4 {
+    atom 56Fe as fe
+    configuration fe [Ar] 3d6 4s2
+}

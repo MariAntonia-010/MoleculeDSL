@@ -1,0 +1,17 @@
+// Etanol com deutério no C1: pela regra CIP 2 (O > C > 2H > H) o C1 vira centro
+species molecule "(1R)-(1-2H1)ethan-1-ol" {
+    atom C as c1
+    atom C as c2
+    atom O as o
+    atom 2H as d
+    5x atom H as h
+    bond c1-c2
+    bond c1-o
+    bond c1-d
+    bond c1-h1
+    bond o-h2
+    bond c2-h3
+    bond c2-h4
+    bond c2-h5
+    stereo c1 R
+}

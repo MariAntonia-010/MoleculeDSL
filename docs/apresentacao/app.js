@@ -249,7 +249,9 @@
         const z = DADOS.elementos[cmd.el].numero;
         if (cmd.massa < z) { erro(cmd, "ATOM-001", `o número de massa ${cmd.massa} é menor que o número atômico de ${cmd.el} (${z}): daria ${cmd.massa - z} nêutrons`); continue; }
         const naturais = DADOS.isotopos[cmd.el];
-        if (naturais && !naturais.includes(cmd.massa)) aviso(cmd, "ATOM-005", `${cmd.massa}${cmd.el} não é isótopo de composição natural (CIAAW: ${naturais.map((a) => a + cmd.el).join(", ")}); pode ser radioativo ou artificial`);
+        if (naturais && !naturais.includes(cmd.massa)) aviso(cmd, "ATOM-005", naturais.length
+          ? `${cmd.massa}${cmd.el} não é isótopo de composição natural (CIAAW: ${naturais.map((a) => a + cmd.el).join(", ")}); pode ser radioativo ou artificial`
+          : `${cmd.massa}${cmd.el}: ${cmd.el} não tem isótopo de composição natural (CIAAW); todo isótopo dele é radioativo`);
       }
       for (let k = 1; k <= cmd.mult; k++) {
         const nome = cmd.nome == null ? null : cmd.mult > 1 ? cmd.nome + k : cmd.nome;
@@ -412,6 +414,21 @@
   }
   const textoConfig = (m) => [...m.entries()].map(([c, e]) => [...c.split(",").map(Number), e]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(([n, l, e]) => `${n}${LETRA_L[l]}${e}`).join(" ");
   const hundDe = (m) => [...m.entries()].reduce((t, [c, e]) => { const o = 2 * Number(c.split(",")[1]) + 1; return t + (e <= o ? e : 2 * o - e); }, 0);
+  // Termo espectroscópico pelas regras de Hund (mesma conta de src/atomo.py)
+  function termoDe(m) {
+    let dobroS = 0, totalL = 0, decideJ = null;
+    [...m.entries()].map(([c, e]) => [...c.split(",").map(Number), e]).sort((a, b) => a[1] - b[1] || a[0] - b[0]).forEach(([, l, e]) => {
+      const o = 2 * l + 1;
+      if (e >= capacidadeL(l)) return;
+      const acima = Math.min(e, o), abaixo = e - acima;
+      dobroS += acima - abaixo;
+      for (let k = 0; k < acima; k++) totalL += l - k;
+      for (let k = 0; k < abaixo; k++) totalL += l - k;
+      if (e !== o) decideJ = e < o;
+    });
+    const dobroJ = decideJ === null || decideJ ? Math.abs(2 * totalL - dobroS) : 2 * totalL + dobroS;
+    return `${dobroS + 1}${"SPDFGHIKLMNOQRTUV"[totalL] || "L=" + totalL}${dobroJ % 2 ? dobroJ + "/2" : dobroJ / 2}`;
+  }
   const camadasDeMapa = (m) => { const v = []; m.forEach((e, c) => { const n = Number(c.split(",")[0]); v[n - 1] = (v[n - 1] || 0) + e; }); return Array.from(v, (x) => x || 0); };
   const mapasIguais = (a, b) => a.size === b.size && [...a].every(([c, e]) => b.get(c) === e);
 
@@ -850,7 +867,10 @@
 
   function legendaLigacoes(r) {
     if (!r.ligacoes.length) {
-      return r.atomos.length === 1 ? `<span class="item-legenda">${r.especie && r.especie.tipo === "monatomic_ion" ? "íon monoatômico" : "átomo isolado"}: modelo de Bohr, sem ligações</span>` : "";
+      if (r.atomos.length !== 1) return "";
+      const a = r.atomos[0], m = a.configuracao || fundamental(a.el, a.carga);
+      const eletrosfera = m ? ` · ${textoConfig(m)} · termo ${termoDe(m)}` : "";
+      return `<span class="item-legenda">${r.especie && r.especie.tipo === "monatomic_ion" ? "íon monoatômico" : "átomo isolado"}: modelo de Bohr, sem ligações${eletrosfera}</span>`;
     }
     const contagem = {};
     r.ligacoes.forEach((l) => {

@@ -224,7 +224,9 @@ O compilador confere o número de massa (ATOM-001), as regras de Pauli e de
 l < n (ATOM-002), o total de elétrons (ATOM-003), o estado fundamental de
 referência (ATOM-004), os isótopos naturais da CIAAW (ATOM-005) e o
 `unpaired` contra a regra de Hund (ATOM-007). `--estrutura-atomica` mostra
-núcleo, eletrosfera e diagrama de orbitais. Pesquisa e decisões em
+núcleo, eletrosfera, diagrama de orbitais e o termo fundamental pelas regras
+de Hund (³P₀ no carbono, ⁵D₄ no ferro). Os isótopos naturais cobrem os 118
+elementos, e o número de massa entra na regra CIP 2 do `--estereo`. Pesquisa e decisões em
 [docs/plano_atomo.md](docs/plano_atomo.md).
 
 ### Configuração estereoquímica
@@ -490,8 +492,9 @@ geram o aviso `RING-004`.
 Ficam fora por dependerem da geometria 3D, que a linguagem não descreve:
 quiralidade planar (ferrocenos substituídos, ciclofanos) e o cálculo da
 barreira de rotação de biarilas, que por isso só entram quando declaradas.
-Também ficam fora visualização 3D e isótopos; sem isótopos, a regra CIP 2
-nunca tem empate a resolver.
+A regra CIP 2 (IUPAC P-92.3) desempata ramos iguais pelo número atômico
+usando o número de massa: no (1-²H)etanol a ordem é O > C > ²H > H. Um átomo
+sem número de massa conta com a massa atômica natural (⁸¹Br > Br > ⁷⁹Br).
 
 ## Solução de problemas
 

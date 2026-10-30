@@ -51,6 +51,20 @@ def carregar_classificacao():
         return json.load(arquivo)
 
 
+def texto_isotopo_fora(elemento, massa, naturais):
+    # Mensagem do ATOM-005; lista vazia: o elemento não tem isótopo natural
+    if not naturais:
+        return (
+            f"{massa}{elemento}: {elemento} não tem isótopo de composição natural "
+            "(CIAAW); todo isótopo dele é radioativo"
+        )
+    return (
+        f"{massa}{elemento} não é isótopo de composição natural "
+        f"(CIAAW: {', '.join(f'{a}{elemento}' for a in naturais)}); "
+        "pode ser radioativo ou artificial"
+    )
+
+
 def carregar_isotopos():
     with open(ARQUIVO_ISOTOPOS, encoding="utf-8") as arquivo:
         return json.load(arquivo)["isotopos_naturais"]
@@ -221,9 +235,7 @@ class AnalisadorSemantico:
                 self.aviso(
                     "ATOM-005",
                     decl,
-                    f"{decl.massa}{decl.elemento} não é isótopo de composição natural "
-                    f"(CIAAW: {', '.join(f'{a}{decl.elemento}' for a in naturais)}); "
-                    "pode ser radioativo ou artificial",
+                    texto_isotopo_fora(decl.elemento, decl.massa, naturais),
                 )
 
         for i in range(decl.multiplicador):
