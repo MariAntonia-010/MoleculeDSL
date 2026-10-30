@@ -808,3 +808,15 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
 - O fixture do COORD-003 (N⁻ com 4 ligações) agora também dá CARGA-001 e
   foi para `invalidos_semanticos`; `radical_amino` ganhou a dica de N(−1).
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 10 (complexos de metais)
+
+- Válidos: [Cu(NH₃)₄]²⁺ (d⁹, `unpaired 1`), [Co(NH₃)₆]³⁺ e [Fe(CN)₆]⁴⁻; o
+  `--coordenacao` dá Cu(II) d⁹ 17 e⁻, Co(III) d⁶ 18 e⁻ e Fe(II) d⁶ 18 e⁻.
+  Grupo novo "Complexos de metais" na página, com o [Ag(NH₃)₂]⁺.
+- Aviso: [Cu(NH₃)₄]²⁺ sem `unpaired`. Inválidos: Fe(+2) no ferrocianeto
+  (estado de oxidação no lugar da carga formal −4) e H como doador.
+- COORD-004 sai uma vez por metal, com a quantidade de ligações
+  coordenadas, em vez de repetir em cada seta.
+

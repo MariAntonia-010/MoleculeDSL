@@ -113,4 +113,7 @@ ESPECIES = {
     "cation_alila": "Cátion alila (ressonância da carga +)",
     "enolato": "Enolato da acetona (ressonância da carga −)",
     "diaminoprata": "Íon diaminoprata, [Ag(NH₃)₂]⁺",
+    "tetraaminocobre": "Tetra-aminocobre(II), [Cu(NH₃)₄]²⁺ (d⁹)",
+    "hexaaminocobalto": "Hexa-aminocobalto(III), [Co(NH₃)₆]³⁺ (d⁶)",
+    "ferrocianeto": "Ferrocianeto, [Fe(CN)₆]⁴⁻ (Fe(II), 18 e⁻)",
 }

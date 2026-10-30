@@ -1,5 +1,4 @@
-// esperado: Aviso semântico [COORD-004] na linha 14, coluna 4: não há dados suficientes para conferir orbital vazio de ag (Ag#1)
-// esperado: Aviso semântico [COORD-004] na linha 15, coluna 4: não há dados suficientes para conferir orbital vazio de ag (Ag#1)
+// esperado: Aviso semântico [COORD-004] na linha 13, coluna 4: não há dados suficientes para conferir orbital vazio de ag (Ag#1) (2 ligações coordenadas)
 // Íon diaminoprata, [Ag(NH3)2]+: cada NH3 doa um par livre à prata (reagente de Tollens)
 species molecular_ion "Diamminesilver(1+)" charge +1 {
     atom Ag(-1) as ag

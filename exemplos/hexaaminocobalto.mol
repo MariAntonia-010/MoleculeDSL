@@ -1,0 +1,31 @@
+// esperado: Aviso semântico [COORD-004] na linha 25, coluna 4: não há dados suficientes para conferir orbital vazio de m (Co#1) (6 ligações coordenadas)
+// [Co(NH3)6]3+: Co(III), d6, número de coordenação 6
+species molecular_ion "Hexaamminecobalt(3+)" charge +3 {
+    atom Co(-3) as m
+    6x atom N(+1) as n
+    18x atom H as h
+    bond n1-h1
+    bond n1-h2
+    bond n1-h3
+    bond n2-h4
+    bond n2-h5
+    bond n2-h6
+    bond n3-h7
+    bond n3-h8
+    bond n3-h9
+    bond n4-h10
+    bond n4-h11
+    bond n4-h12
+    bond n5-h13
+    bond n5-h14
+    bond n5-h15
+    bond n6-h16
+    bond n6-h17
+    bond n6-h18
+    bond n1->m
+    bond n2->m
+    bond n3->m
+    bond n4->m
+    bond n5->m
+    bond n6->m
+}

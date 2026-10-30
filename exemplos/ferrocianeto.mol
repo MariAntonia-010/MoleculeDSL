@@ -1,0 +1,19 @@
+// esperado: Aviso semântico [COORD-004] na linha 13, coluna 4: não há dados suficientes para conferir orbital vazio de fe (Fe#1) (6 ligações coordenadas)
+// [Fe(CN)6]4-: ferrocianeto, Fe(II) com seis cianetos que doam pelo carbono
+species molecular_ion "Hexacyanidoferrate(4-)" charge -4 {
+    atom Fe(-4) as fe
+    6x atom C as c
+    6x atom N as n
+    bond c1#n1
+    bond c2#n2
+    bond c3#n3
+    bond c4#n4
+    bond c5#n5
+    bond c6#n6
+    bond c1->fe
+    bond c2->fe
+    bond c3->fe
+    bond c4->fe
+    bond c5->fe
+    bond c6->fe
+}

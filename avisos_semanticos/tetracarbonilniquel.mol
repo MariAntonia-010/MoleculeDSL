@@ -1,7 +1,4 @@
-// esperado: Aviso semântico [COORD-004] na linha 15, coluna 4: não há dados suficientes para conferir orbital vazio de ni (Ni#1)
-// esperado: Aviso semântico [COORD-004] na linha 16, coluna 4: não há dados suficientes para conferir orbital vazio de ni (Ni#1)
-// esperado: Aviso semântico [COORD-004] na linha 17, coluna 4: não há dados suficientes para conferir orbital vazio de ni (Ni#1)
-// esperado: Aviso semântico [COORD-004] na linha 18, coluna 4: não há dados suficientes para conferir orbital vazio de ni (Ni#1)
+// esperado: Aviso semântico [COORD-004] na linha 12, coluna 4: não há dados suficientes para conferir orbital vazio de ni (Ni#1) (4 ligações coordenadas)
 // Ni(CO)4: cada CO doa o par do carbono ao níquel
 species molecule "Tetracarbonylnickel" {
     atom Ni(-4) as ni

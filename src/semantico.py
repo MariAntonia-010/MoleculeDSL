@@ -955,6 +955,7 @@ class AnalisadorSemantico:
             totais[lig.origem] += valor
             totais[lig.destino] += valor
 
+        sem_dados = {}
         for lig in self.modelo.ligacoes:
             if lig.operador is not Operador.COORDENADA:
                 continue
@@ -1007,12 +1008,9 @@ class AnalisadorSemantico:
             numero_atomico = dados_receptor["numero_atomico"]
             eletrons_valencia_receptor = dados_receptor["eletrons_valencia"]
             if eletrons_valencia_receptor is None or numero_atomico > 10:
-                self.aviso(
-                    "COORD-004",
-                    lig,
-                    f"não há dados suficientes para conferir orbital vazio de "
-                    f"{receptor.rotulo()}",
-                )
+                # Um aviso por receptor, na primeira seta, com a contagem
+                # (o Fe do [Fe(CN)6]4- recebe seis pares)
+                sem_dados.setdefault(receptor.id, []).append(lig)
                 continue
 
             # Antes de aceitar o par, a ordem era uma unidade menor e a carga
@@ -1039,6 +1037,17 @@ class AnalisadorSemantico:
                     f"o modelo de dueto/octeto não identificou capacidade "
                     f"receptora em {receptor.rotulo()} para receber o par",
                 )
+
+        for receptor_id, ligacoes in sem_dados.items():
+            pares = (
+                f" ({len(ligacoes)} ligações coordenadas)" if len(ligacoes) > 1 else ""
+            )
+            self.aviso(
+                "COORD-004",
+                ligacoes[0],
+                f"não há dados suficientes para conferir orbital vazio de "
+                f"{por_id[receptor_id].rotulo()}{pares}",
+            )
 
     def conferir_ligacoes_metalicas(self):
         """Avisa quando `~` envolve elemento não classificado como metal."""

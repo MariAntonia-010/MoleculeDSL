@@ -43,7 +43,8 @@ GRUPOS_EXEMPLOS = [
     ("Isótopos em moléculas", ["agua_pesada", "metano_deuterado", "etano_13c2", "etanol_1_deuterado", "propan_2_ol_d3"]),
     ("Estereoquímica", ["acido_tartarico_meso", "e_1_2_dicloroeteno", "e_pent_2_eno", "r_2_clorobutano",
                         "penta_2_3_dieno", "hexa_2_3_dieno", "cis_1_3_dimetilciclohexano", "e_diazeno", "e_acetaldoxima"]),
-    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro", "diaminoprata"]),
+    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro"]),
+    ("Complexos de metais", ["diaminoprata", "tetraaminocobre", "hexaaminocobalto", "ferrocianeto"]),
     ("Sólidos", ["cloreto_de_sodio", "oxido_de_magnesio", "cloreto_de_magnesio", "dioxido_de_silicio", "sodio_metalico", "cobre_metalico"]),
 ]
 EXEMPLOS = [nome for _, nomes in GRUPOS_EXEMPLOS for nome in nomes]

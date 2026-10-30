@@ -1,0 +1,23 @@
+// esperado: Aviso semântico [COORD-004] na linha 19, coluna 4: não há dados suficientes para conferir orbital vazio de m (Cu#1) (4 ligações coordenadas)
+// [Cu(NH3)4]2+: Cu(II), quatro NH3 doam pares; carga formal do Cu = +2 - 4 = -2; d9 com um elétron desemparelhado (unpaired 1)
+species molecular_ion "Tetraamminecopper(2+)" charge +2 unpaired 1 {
+    atom Cu(-2) as m
+    4x atom N(+1) as n
+    12x atom H as h
+    bond n1-h1
+    bond n1-h2
+    bond n1-h3
+    bond n2-h4
+    bond n2-h5
+    bond n2-h6
+    bond n3-h7
+    bond n3-h8
+    bond n3-h9
+    bond n4-h10
+    bond n4-h11
+    bond n4-h12
+    bond n1->m
+    bond n2->m
+    bond n3->m
+    bond n4->m
+}

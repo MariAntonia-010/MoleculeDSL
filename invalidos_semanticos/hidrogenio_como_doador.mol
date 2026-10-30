@@ -1,0 +1,14 @@
+// esperado: Erro semântico [VAL-001] na linha 8, coluna 4: a soma das ordens de ligação de h4 (H#4) é 2; o máximo para H é 1
+// esperado: Aviso semântico [COORD-001] na linha 13, coluna 4: o doador h4 (H#4) não possui um par de elétrons livre para a ligação coordenada
+// esperado: Aviso semântico [COORD-004] na linha 13, coluna 4: não há dados suficientes para conferir orbital vazio de cu (Cu#1)
+// Um H ligado não tem par livre para doar: no complexo, quem doa o par é o N do NH3
+species molecule "Ammonium copper" {
+    atom Cu(-1) as cu
+    atom N(+1) as n
+    4x atom H as h
+    bond n-h1
+    bond n-h2
+    bond n-h3
+    bond n-h4
+    bond h4->cu
+}

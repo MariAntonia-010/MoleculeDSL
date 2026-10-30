@@ -1,0 +1,19 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é +2, mas a espécie declara carga total -4
+// Erro comum: Fe(+2) é o estado de oxidação; a carga formal do Fe, que recebeu seis pares, é +2 - 6 = -4
+species molecular_ion "Hexacyanidoferrate(4-)" charge -4 {
+    atom Fe(+2) as fe
+    6x atom C as c
+    6x atom N as n
+    bond c1#n1
+    bond c2#n2
+    bond c3#n3
+    bond c4#n4
+    bond c5#n5
+    bond c6#n6
+    bond c1->fe
+    bond c2->fe
+    bond c3->fe
+    bond c4->fe
+    bond c5->fe
+    bond c6->fe
+}
