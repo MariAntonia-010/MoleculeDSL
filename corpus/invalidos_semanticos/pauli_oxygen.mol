@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 2p7: a subcamada p comporta de 1 a 6 elétrons (princípio de Pauli)
+// Erro: 2p7 passa da capacidade 6 da subcamada p (Pauli)
+species atom "Oxygen" unpaired 2 {
+    atom O as o1
+    configuration o1 [He] 2s2 2p7
+}

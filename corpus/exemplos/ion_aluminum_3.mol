@@ -1,0 +1,5 @@
+// Aluminum(3+): 1s2 2s2 2p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Aluminum(3+)" charge +3 {
+    atom Al(+3) as al1
+    configuration al1 [He] 2s2 2p6
+}

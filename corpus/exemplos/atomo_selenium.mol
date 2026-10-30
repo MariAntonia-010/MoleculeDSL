@@ -1,0 +1,5 @@
+// Selenium (Z=34): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p4, termo 3P2
+species atom "Selenium" unpaired 2 {
+    atom Se as se1
+    configuration se1 [Ar] 3d10 4s2 4p4
+}

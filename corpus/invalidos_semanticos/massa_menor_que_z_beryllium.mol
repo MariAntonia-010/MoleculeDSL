@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 3 é menor que o número atômico de Be (4): daria -1 nêutrons
+// Erro: A = 3 é menor que Z = 4, o que daria nêutrons negativos
+species atom "Beryllium-3" {
+    atom 3Be as be1
+}

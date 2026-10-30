@@ -1,0 +1,5 @@
+// Aluminum (Z=13): 1s2 2s2 2p6 3s2 3p1, termo 2P1/2
+species atom "Aluminum" unpaired 1 {
+    atom Al as al1
+    configuration al1 [Ne] 3s2 3p1
+}

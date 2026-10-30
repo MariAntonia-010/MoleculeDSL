@@ -1,0 +1,5 @@
+// Calcium(2+): 1s2 2s2 2p6 3s2 3p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Calcium(2+)" charge +2 {
+    atom Ca(+2) as ca1
+    configuration ca1 [Ne] 3s2 3p6
+}

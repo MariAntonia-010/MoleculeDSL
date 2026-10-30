@@ -1,0 +1,15 @@
+// Iodoethane (CCI)
+species molecule "Iodoethane" {
+    atom C as c1
+    atom C as c2
+    atom I as i1
+    5x atom H as h
+
+    bond c1-c2
+    bond c2-i1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+}

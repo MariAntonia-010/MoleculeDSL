@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 3 elétrons, mas be1 (Be#1) (Z=4, carga +0) tem 4
+// Erro: a configuração soma 3 elétrons, mas Be tem 4
+species atom "Beryllium" {
+    atom Be as be1
+    configuration be1 [He] 2s1
+}

@@ -417,6 +417,7 @@ O script verifica:
 - erros sintáticos em `invalidos_sintaticos/`;
 - erros semânticos em `invalidos_semanticos/`;
 - avisos em `avisos_semanticos/`;
+- o corpus gerado em `corpus/` (300 arquivos, mesmas subpastas);
 - arquivo inexistente e código ANTLR ausente;
 - snapshots textuais da AST e do modelo;
 - tipo, ordem e posição dos nós da AST em todos os exemplos;
@@ -436,10 +437,32 @@ A comparação é exata: ID, linha, coluna e explicação precisam coincidir.
 Exemplos válidos também podem declarar avisos esperados, mantendo código de
 saída 0.
 
+### Corpus gerado
+
+`corpus/gerar_corpus.py` gera 300 exemplos e confere cada um com o
+compilador:
+
+| Grupo | Quantidade | Conteúdo |
+|---|---|---|
+| válidos | 180 | 36 átomos (Z = 1 a 36) no estado fundamental, 10 isótopos naturais, 24 íons monoatômicos e 110 moléculas escritas em SMILES e convertidas para a DSL |
+| erros de átomo | 28 | elétrons a menos (ATOM-003), Pauli (ATOM-002), massa menor que Z (ATOM-001) |
+| avisos | 26 | isótopo não natural (ATOM-005), estado excitado (ATOM-004), unpaired contra Hund (ATOM-007) |
+| erros em moléculas | 40 | quinta ligação no carbono (VAL-001), nome inexistente (STRUCT-001), ligação repetida (STRUCT-006), átomo solto (STRUCT-003) |
+| sintaxe e léxico | 26 | `}` faltando, ligação sem operador, `bnd`, nome sem aspas e caracteres fora do alfabeto |
+
+Um válido só entra se o compilador não emitir nenhuma mensagem, e um
+inválido só entra se emitir a regra planejada. As linhas `// esperado:`
+registram a saída e valem como regressão. Para regenerar:
+
+```bash
+python3 corpus/gerar_corpus.py
+```
+
 ## Estrutura
 
 ```text
 gramatica/                  gramática combinada do ANTLR
+corpus/                     300 exemplos gerados e conferidos (corpus/gerar_corpus.py)
 src/                        lexer, parser, AST, modelo, semântica e relatórios químicos
                             (eletronico, tautomeros, aromaticidade, estereo, complexos)
 src/solver/                 solver de estruturas (backends, filtros, geração ordenada, isolamento)

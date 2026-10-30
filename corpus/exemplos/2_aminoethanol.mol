@@ -1,0 +1,19 @@
+// 2-Aminoethanol (NCCO)
+species molecule "2-Aminoethanol" {
+    atom N as n1
+    atom C as c1
+    atom C as c2
+    atom O as o1
+    7x atom H as h
+
+    bond n1-c1
+    bond c1-c2
+    bond c2-o1
+    bond n1-h1
+    bond n1-h2
+    bond c1-h3
+    bond c1-h4
+    bond c2-h5
+    bond c2-h6
+    bond o1-h7
+}

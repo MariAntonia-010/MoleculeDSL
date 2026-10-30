@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 13B não é isótopo de composição natural (CIAAW: 10B, 11B); pode ser radioativo ou artificial
+// Aviso: 13B não é isótopo natural (CIAAW: 10, 11)
+species atom "Boron-13" unpaired 1 {
+    atom 13B as b1
+}

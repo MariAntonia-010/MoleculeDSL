@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de o1 (O#1) (referência: 1s2 2s2 2p4); descreve um estado excitado
+// Aviso: um elétron de 2p subiu para 3s: estado excitado
+species atom "Oxygen" unpaired 4 {
+    atom O as o1
+    configuration o1 [He] 2s2 2p3 3s1
+}

@@ -1,0 +1,5 @@
+// Boron (Z=5): 1s2 2s2 2p1, termo 2P1/2
+species atom "Boron" unpaired 1 {
+    atom B as b1
+    configuration b1 [He] 2s2 2p1
+}

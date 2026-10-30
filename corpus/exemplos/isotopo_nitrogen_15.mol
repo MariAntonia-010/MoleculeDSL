@@ -1,0 +1,4 @@
+// 15N: 7 prótons e 8 nêutrons, isótopo natural (CIAAW)
+species atom "Nitrogen-15" unpaired 3 {
+    atom 15N as n1
+}

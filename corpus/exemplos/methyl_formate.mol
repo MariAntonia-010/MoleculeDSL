@@ -1,0 +1,16 @@
+// Methyl formate (COC=O)
+species molecule "Methyl formate" {
+    atom C as c1
+    atom O as o1
+    atom C as c2
+    atom O as o2
+    4x atom H as h
+
+    bond c1-o1
+    bond o1-c2
+    bond c2=o2
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+}

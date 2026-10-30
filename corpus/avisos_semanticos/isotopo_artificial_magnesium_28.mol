@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 28Mg não é isótopo de composição natural (CIAAW: 24Mg, 25Mg, 26Mg); pode ser radioativo ou artificial
+// Aviso: 28Mg não é isótopo natural (CIAAW: 24, 25, 26)
+species atom "Magnesium-28" {
+    atom 28Mg as mg1
+}

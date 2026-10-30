@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 29Al não é isótopo de composição natural (CIAAW: 27Al); pode ser radioativo ou artificial
+// Aviso: 29Al não é isótopo natural (CIAAW: 27)
+species atom "Aluminum-29" unpaired 1 {
+    atom 29Al as al1
+}

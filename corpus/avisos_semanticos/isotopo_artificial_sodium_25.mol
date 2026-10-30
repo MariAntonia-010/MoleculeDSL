@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 25Na não é isótopo de composição natural (CIAAW: 23Na); pode ser radioativo ou artificial
+// Aviso: 25Na não é isótopo natural (CIAAW: 23)
+species atom "Sodium-25" unpaired 1 {
+    atom 25Na as na1
+}

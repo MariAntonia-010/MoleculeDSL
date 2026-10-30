@@ -1,0 +1,5 @@
+// Fluoride: 1s2 2s2 2p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Fluoride" charge -1 {
+    atom F(-1) as f1
+    configuration f1 [He] 2s2 2p6
+}

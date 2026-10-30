@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 11Be não é isótopo de composição natural (CIAAW: 9Be); pode ser radioativo ou artificial
+// Aviso: 11Be não é isótopo natural (CIAAW: 9)
+species atom "Beryllium-11" {
+    atom 11Be as be1
+}

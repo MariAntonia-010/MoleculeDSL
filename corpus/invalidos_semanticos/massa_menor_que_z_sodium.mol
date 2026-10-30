@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 10 é menor que o número atômico de Na (11): daria -1 nêutrons
+// Erro: A = 10 é menor que Z = 11, o que daria nêutrons negativos
+species atom "Sodium-10" unpaired 1 {
+    atom 10Na as na1
+}

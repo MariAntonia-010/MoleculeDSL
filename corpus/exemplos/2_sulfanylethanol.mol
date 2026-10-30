@@ -1,0 +1,18 @@
+// 2-Sulfanylethanol (OCCS)
+species molecule "2-Sulfanylethanol" {
+    atom O as o1
+    atom C as c1
+    atom C as c2
+    atom S as s1
+    6x atom H as h
+
+    bond o1-c1
+    bond c1-c2
+    bond c2-s1
+    bond o1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond s1-h6
+}

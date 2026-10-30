@@ -1,0 +1,5 @@
+// Hydride: 1s2, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Hydride" charge -1 {
+    atom H(-1) as h1
+    configuration h1 1s2
+}

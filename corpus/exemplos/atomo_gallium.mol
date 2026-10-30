@@ -1,0 +1,5 @@
+// Gallium (Z=31): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p1, termo 2P1/2
+species atom "Gallium" unpaired 1 {
+    atom Ga as ga1
+    configuration ga1 [Ar] 3d10 4s2 4p1
+}

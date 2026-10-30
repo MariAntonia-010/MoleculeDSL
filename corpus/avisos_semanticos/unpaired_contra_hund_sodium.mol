@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=3, mas a configuração 1s2 2s2 2p6 3s1 tem 1 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Na tem 1 desemparelhado(s), não 3
+species atom "Sodium" unpaired 3 {
+    atom Na as na1
+    configuration na1 [Ne] 3s1
+}

@@ -19,13 +19,18 @@ PASTA_RAIZ = os.path.dirname(os.path.abspath(__file__))
 MAIN = os.path.join(PASTA_RAIZ, "src", "main.py")
 DESENHAR_ARVORE = os.path.join(PASTA_RAIZ, "src", "desenhar_arvore.py")
 
-PASTAS_VALIDOS = ["exemplos"]
+# corpus/ tem os 300 exemplos gerados por corpus/gerar_corpus.py
+PASTAS_VALIDOS = ["exemplos", "corpus/exemplos"]
 # Pasta e código de saída esperado
 PASTAS_COM_MENSAGENS = {
     "invalidos": 1,
     "invalidos_sintaticos": 1,
     "invalidos_semanticos": 2,
     "avisos_semanticos": 0,
+    "corpus/invalidos": 1,
+    "corpus/invalidos_sintaticos": 1,
+    "corpus/invalidos_semanticos": 2,
+    "corpus/avisos_semanticos": 0,
 }
 
 MARCA_ESPERADO = "// esperado:"

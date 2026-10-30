@@ -1,0 +1,4 @@
+// 4He: 2 prótons e 2 nêutrons, isótopo natural (CIAAW)
+species atom "Helium-4" {
+    atom 4He as he1
+}

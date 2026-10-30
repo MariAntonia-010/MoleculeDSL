@@ -1,0 +1,14 @@
+// Ethanedial (O=CC=O)
+species molecule "Ethanedial" {
+    atom O as o1
+    atom C as c1
+    atom C as c2
+    atom O as o2
+    2x atom H as h
+
+    bond o1=c1
+    bond c1-c2
+    bond c2=o2
+    bond c1-h1
+    bond c2-h2
+}

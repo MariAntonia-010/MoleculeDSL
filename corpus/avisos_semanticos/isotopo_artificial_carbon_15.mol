@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 15C não é isótopo de composição natural (CIAAW: 12C, 13C); pode ser radioativo ou artificial
+// Aviso: 15C não é isótopo natural (CIAAW: 12, 13)
+species atom "Carbon-15" unpaired 2 {
+    atom 15C as c1
+}

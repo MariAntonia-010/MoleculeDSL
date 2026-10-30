@@ -1,0 +1,5 @@
+// Oxygen (Z=8): 1s2 2s2 2p4, termo 3P2
+species atom "Oxygen" unpaired 2 {
+    atom O as o1
+    configuration o1 [He] 2s2 2p4
+}

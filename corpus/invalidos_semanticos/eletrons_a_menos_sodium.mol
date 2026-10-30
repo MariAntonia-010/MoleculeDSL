@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 10 elétrons, mas na1 (Na#1) (Z=11, carga +0) tem 11
+// Erro: a configuração soma 10 elétrons, mas Na tem 11
+species atom "Sodium" unpaired 1 {
+    atom Na as na1
+    configuration na1 [He] 2s2 2p6
+}

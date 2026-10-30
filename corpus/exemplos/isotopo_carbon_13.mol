@@ -1,0 +1,4 @@
+// 13C: 6 prótons e 7 nêutrons, isótopo natural (CIAAW)
+species atom "Carbon-13" unpaired 2 {
+    atom 13C as c1
+}

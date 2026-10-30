@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=2, mas a configuração 1s2 2s2 2p6 3s2 tem 0 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Mg tem 0 desemparelhado(s), não 2
+species atom "Magnesium" unpaired 2 {
+    atom Mg as mg1
+    configuration mg1 [Ne] 3s2
+}

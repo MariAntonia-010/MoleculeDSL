@@ -1,0 +1,47 @@
+// esperado: Erro léxico [LEX-001] na linha 16, coluna 15: caractere inválido '!'
+// Erro: '!' não pertence ao alfabeto da linguagem
+species molecule "Decane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    atom C as c8
+    atom C as c9
+    atom C as c10
+    22x atom H as h
+
+    bond c1-c2 !
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c7
+    bond c7-c8
+    bond c8-c9
+    bond c9-c10
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c3-h7
+    bond c4-h8
+    bond c4-h9
+    bond c5-h10
+    bond c5-h11
+    bond c6-h12
+    bond c6-h13
+    bond c7-h14
+    bond c7-h15
+    bond c8-h16
+    bond c8-h17
+    bond c9-h18
+    bond c9-h19
+    bond c10-h20
+    bond c10-h21
+    bond c10-h22
+}

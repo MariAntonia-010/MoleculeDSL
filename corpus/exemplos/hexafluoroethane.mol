@@ -1,0 +1,19 @@
+// Hexafluoroethane (FC(F)(F)C(F)(F)F)
+species molecule "Hexafluoroethane" {
+    atom F as f1
+    atom C as c1
+    atom F as f2
+    atom F as f3
+    atom C as c2
+    atom F as f4
+    atom F as f5
+    atom F as f6
+
+    bond f1-c1
+    bond c1-f2
+    bond c1-f3
+    bond c1-c2
+    bond c2-f4
+    bond c2-f5
+    bond c2-f6
+}

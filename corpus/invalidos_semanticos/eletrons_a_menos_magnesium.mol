@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 11 elétrons, mas mg1 (Mg#1) (Z=12, carga +0) tem 12
+// Erro: a configuração soma 11 elétrons, mas Mg tem 12
+species atom "Magnesium" {
+    atom Mg as mg1
+    configuration mg1 [Ne] 3s1
+}

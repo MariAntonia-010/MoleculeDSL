@@ -1,0 +1,24 @@
+// 1-Methoxypropane (CCCOC)
+species molecule "1-Methoxypropane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom O as o1
+    atom C as c4
+    10x atom H as h
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-o1
+    bond o1-c4
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c3-h7
+    bond c4-h8
+    bond c4-h9
+    bond c4-h10
+}

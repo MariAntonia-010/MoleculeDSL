@@ -1,0 +1,5 @@
+// Iron(3+): 1s2 2s2 2p6 3s2 3p6 3d5, 5 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Iron(3+)" charge +3 unpaired 5 {
+    atom Fe(+3) as fe1
+    configuration fe1 [Ar] 3d5
+}

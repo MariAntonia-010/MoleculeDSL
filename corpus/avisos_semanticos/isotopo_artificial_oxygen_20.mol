@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 20O não é isótopo de composição natural (CIAAW: 16O, 17O, 18O); pode ser radioativo ou artificial
+// Aviso: 20O não é isótopo natural (CIAAW: 16, 17, 18)
+species atom "Oxygen-20" unpaired 2 {
+    atom 20O as o1
+}

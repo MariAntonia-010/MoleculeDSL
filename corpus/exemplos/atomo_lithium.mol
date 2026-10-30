@@ -1,0 +1,5 @@
+// Lithium (Z=3): 1s2 2s1, termo 2S1/2
+species atom "Lithium" unpaired 1 {
+    atom Li as li1
+    configuration li1 [He] 2s1
+}

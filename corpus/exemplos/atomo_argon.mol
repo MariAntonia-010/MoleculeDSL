@@ -1,0 +1,5 @@
+// Argon (Z=18): 1s2 2s2 2p6 3s2 3p6, termo 1S0
+species atom "Argon" {
+    atom Ar as ar1
+    configuration ar1 [Ne] 3s2 3p6
+}

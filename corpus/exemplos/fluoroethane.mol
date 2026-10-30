@@ -1,0 +1,15 @@
+// Fluoroethane (CCF)
+species molecule "Fluoroethane" {
+    atom C as c1
+    atom C as c2
+    atom F as f1
+    5x atom H as h
+
+    bond c1-c2
+    bond c2-f1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+}

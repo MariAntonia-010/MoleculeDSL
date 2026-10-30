@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 17N não é isótopo de composição natural (CIAAW: 14N, 15N); pode ser radioativo ou artificial
+// Aviso: 17N não é isótopo natural (CIAAW: 14, 15)
+species atom "Nitrogen-17" unpaired 3 {
+    atom 17N as n1
+}

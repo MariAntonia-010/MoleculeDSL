@@ -1,0 +1,5 @@
+// Bromide: 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Bromide" charge -1 {
+    atom Br(-1) as br1
+    configuration br1 [Ar] 3d10 4s2 4p6
+}

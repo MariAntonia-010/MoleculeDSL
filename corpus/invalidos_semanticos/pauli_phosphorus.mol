@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 3p7: a subcamada p comporta de 1 a 6 elétrons (princípio de Pauli)
+// Erro: 3p7 passa da capacidade 6 da subcamada p (Pauli)
+species atom "Phosphorus" unpaired 3 {
+    atom P as p1
+    configuration p1 [Ne] 3s2 3p7
+}

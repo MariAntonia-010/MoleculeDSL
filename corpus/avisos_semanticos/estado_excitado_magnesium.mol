@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de mg1 (Mg#1) (referência: 1s2 2s2 2p6 3s2); descreve um estado excitado
+// Aviso: um elétron de 3s subiu para 3p: estado excitado
+species atom "Magnesium" unpaired 2 {
+    atom Mg as mg1
+    configuration mg1 [Ne] 3s1 3p1
+}

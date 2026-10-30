@@ -1,0 +1,13 @@
+// Trifluoromethane (FC(F)F)
+species molecule "Trifluoromethane" {
+    atom F as f1
+    atom C as c1
+    atom F as f2
+    atom F as f3
+    atom H as h1
+
+    bond f1-c1
+    bond c1-f2
+    bond c1-f3
+    bond c1-h1
+}

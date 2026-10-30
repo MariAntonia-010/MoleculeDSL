@@ -1,0 +1,4 @@
+// 7Li: 3 prótons e 4 nêutrons, isótopo natural (CIAAW)
+species atom "Lithium-7" unpaired 1 {
+    atom 7Li as li1
+}

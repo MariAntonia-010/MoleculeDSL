@@ -1,0 +1,5 @@
+// Sodium(1+): 1s2 2s2 2p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Sodium(1+)" charge +1 {
+    atom Na(+1) as na1
+    configuration na1 [He] 2s2 2p6
+}

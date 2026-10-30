@@ -1,0 +1,5 @@
+// Chloride: 1s2 2s2 2p6 3s2 3p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Chloride" charge -1 {
+    atom Cl(-1) as cl1
+    configuration cl1 [Ne] 3s2 3p6
+}

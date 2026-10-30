@@ -1,0 +1,22 @@
+// Propane-1,3-diol (OCCCO)
+species molecule "Propane-1,3-diol" {
+    atom O as o1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom O as o2
+    8x atom H as h
+
+    bond o1-c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-o2
+    bond o1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c3-h7
+    bond o2-h8
+}

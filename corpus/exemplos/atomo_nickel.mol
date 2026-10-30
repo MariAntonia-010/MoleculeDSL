@@ -1,0 +1,5 @@
+// Nickel (Z=28): 1s2 2s2 2p6 3s2 3p6 3d8 4s2, termo 3F4
+species atom "Nickel" unpaired 2 {
+    atom Ni as ni1
+    configuration ni1 [Ar] 3d8 4s2
+}

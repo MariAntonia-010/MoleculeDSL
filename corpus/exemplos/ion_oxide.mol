@@ -1,0 +1,5 @@
+// Oxide: 1s2 2s2 2p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Oxide" charge -2 {
+    atom O(-2) as o1
+    configuration o1 [He] 2s2 2p6
+}

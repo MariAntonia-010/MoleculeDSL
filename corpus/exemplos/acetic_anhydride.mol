@@ -1,0 +1,24 @@
+// Acetic anhydride (CC(=O)OC(C)=O)
+species molecule "Acetic anhydride" {
+    atom C as c1
+    atom C as c2
+    atom O as o1
+    atom O as o2
+    atom C as c3
+    atom C as c4
+    atom O as o3
+    6x atom H as h
+
+    bond c1-c2
+    bond c2=o1
+    bond c2-o2
+    bond o2-c3
+    bond c3-c4
+    bond c3=o3
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c4-h4
+    bond c4-h5
+    bond c4-h6
+}

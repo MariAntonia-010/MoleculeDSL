@@ -1,0 +1,5 @@
+// Carbon (Z=6): 1s2 2s2 2p2, termo 3P0
+species atom "Carbon" unpaired 2 {
+    atom C as c1
+    configuration c1 [He] 2s2 2p2
+}

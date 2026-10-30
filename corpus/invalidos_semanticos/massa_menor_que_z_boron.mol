@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 4 é menor que o número atômico de B (5): daria -1 nêutrons
+// Erro: A = 4 é menor que Z = 5, o que daria nêutrons negativos
+species atom "Boron-4" unpaired 1 {
+    atom 4B as b1
+}

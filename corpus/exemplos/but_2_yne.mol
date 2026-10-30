@@ -1,0 +1,18 @@
+// But-2-yne (CC#CC)
+species molecule "But-2-yne" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    6x atom H as h
+
+    bond c1-c2
+    bond c2#c3
+    bond c3-c4
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c4-h4
+    bond c4-h5
+    bond c4-h6
+}

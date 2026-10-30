@@ -1,0 +1,18 @@
+// Dimethyl disulfide (CSSC)
+species molecule "Dimethyl disulfide" {
+    atom C as c1
+    atom S as s1
+    atom S as s2
+    atom C as c2
+    6x atom H as h
+
+    bond c1-s1
+    bond s1-s2
+    bond s2-c2
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c2-h6
+}

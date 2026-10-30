@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de b1 (B#1) (referência: 1s2 2s2 2p1); descreve um estado excitado
+// Aviso: um elétron de 2p subiu para 3s: estado excitado
+species atom "Boron" unpaired 1 {
+    atom B as b1
+    configuration b1 [He] 2s2 3s1
+}

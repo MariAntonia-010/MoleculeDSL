@@ -1,0 +1,5 @@
+// Hydrogen (Z=1): 1s1, termo 2S1/2
+species atom "Hydrogen" unpaired 1 {
+    atom H as h1
+    configuration h1 1s1
+}

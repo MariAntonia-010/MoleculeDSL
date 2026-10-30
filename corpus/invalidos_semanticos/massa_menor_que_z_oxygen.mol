@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 7 é menor que o número atômico de O (8): daria -1 nêutrons
+// Erro: A = 7 é menor que Z = 8, o que daria nêutrons negativos
+species atom "Oxygen-7" unpaired 2 {
+    atom 7O as o1
+}

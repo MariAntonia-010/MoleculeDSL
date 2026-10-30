@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 8 elétrons, mas f1 (F#1) (Z=9, carga +0) tem 9
+// Erro: a configuração soma 8 elétrons, mas F tem 9
+species atom "Fluorine" unpaired 1 {
+    atom F as f1
+    configuration f1 [He] 2s2 2p4
+}

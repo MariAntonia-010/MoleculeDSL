@@ -1,0 +1,16 @@
+// 1,2-Dichloroethane (ClCCCl)
+species molecule "1,2-Dichloroethane" {
+    atom Cl as cl1
+    atom C as c1
+    atom C as c2
+    atom Cl as cl2
+    4x atom H as h
+
+    bond cl1-c1
+    bond c1-c2
+    bond c2-cl2
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+}

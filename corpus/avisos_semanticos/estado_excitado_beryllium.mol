@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de be1 (Be#1) (referência: 1s2 2s2); descreve um estado excitado
+// Aviso: um elétron de 2s subiu para 2p: estado excitado
+species atom "Beryllium" unpaired 2 {
+    atom Be as be1
+    configuration be1 [He] 2s1 2p1
+}

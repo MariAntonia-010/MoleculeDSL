@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 8 é menor que o número atômico de F (9): daria -1 nêutrons
+// Erro: A = 8 é menor que Z = 9, o que daria nêutrons negativos
+species atom "Fluorine-8" unpaired 1 {
+    atom 8F as f1
+}

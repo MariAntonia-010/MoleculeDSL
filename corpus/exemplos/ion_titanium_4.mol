@@ -1,0 +1,5 @@
+// Titanium(4+): 1s2 2s2 2p6 3s2 3p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Titanium(4+)" charge +4 {
+    atom Ti(+4) as ti1
+    configuration ti1 [Ne] 3s2 3p6
+}

@@ -643,3 +643,16 @@ Hund, íons de metais de transição).
   (`termo_fundamental`), no relatório, na legenda do Bohr e na tabela
   periódica.
 
+---
+
+## 30/10/2026 — Corpus de 300 exemplos
+
+- `corpus/gerar_corpus.py` gera 180 válidos e 120 inválidos ou avisos. As
+  moléculas saem de SMILES (parser próprio, hidrogênios pela valência e
+  `ring` para cada anel), e os átomos e íons, da configuração de
+  referência com núcleo de gás nobre.
+- Cada arquivo é conferido pelo compilador. Um válido sem nenhuma
+  mensagem e um inválido com a regra planejada; o resto é descartado e
+  listado.
+- `testar.py` roda o corpus junto com os exemplos curados: 700 testes.
+

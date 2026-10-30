@@ -1,0 +1,4 @@
+// 30Si: 14 prótons e 16 nêutrons, isótopo natural (CIAAW)
+species atom "Silicon-30" unpaired 2 {
+    atom 30Si as si1
+}

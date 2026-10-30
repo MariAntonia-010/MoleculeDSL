@@ -1,0 +1,16 @@
+// Prop-2-enal (C=CC=O)
+species molecule "Prop-2-enal" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom O as o1
+    4x atom H as h
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=o1
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c3-h4
+}

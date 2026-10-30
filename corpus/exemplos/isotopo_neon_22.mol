@@ -1,0 +1,4 @@
+// 22Ne: 10 prótons e 12 nêutrons, isótopo natural (CIAAW)
+species atom "Neon-22" {
+    atom 22Ne as ne1
+}

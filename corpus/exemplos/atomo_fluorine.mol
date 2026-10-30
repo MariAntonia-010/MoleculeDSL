@@ -1,0 +1,5 @@
+// Fluorine (Z=9): 1s2 2s2 2p5, termo 2P3/2
+species atom "Fluorine" unpaired 1 {
+    atom F as f1
+    configuration f1 [He] 2s2 2p5
+}

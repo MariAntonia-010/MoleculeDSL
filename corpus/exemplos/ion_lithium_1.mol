@@ -1,0 +1,5 @@
+// Lithium(1+): 1s2, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Lithium(1+)" charge +1 {
+    atom Li(+1) as li1
+    configuration li1 1s2
+}

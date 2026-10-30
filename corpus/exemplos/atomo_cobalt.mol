@@ -1,0 +1,5 @@
+// Cobalt (Z=27): 1s2 2s2 2p6 3s2 3p6 3d7 4s2, termo 4F9/2
+species atom "Cobalt" unpaired 3 {
+    atom Co as co1
+    configuration co1 [Ar] 3d7 4s2
+}

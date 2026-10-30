@@ -1,0 +1,11 @@
+// Ethanedinitrile (N#CC#N)
+species molecule "Ethanedinitrile" {
+    atom N as n1
+    atom C as c1
+    atom C as c2
+    atom N as n2
+
+    bond n1#c1
+    bond c1-c2
+    bond c2#n2
+}

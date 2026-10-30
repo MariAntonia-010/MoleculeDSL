@@ -1,0 +1,5 @@
+// Potassium(1+): 1s2 2s2 2p6 3s2 3p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Potassium(1+)" charge +1 {
+    atom K(+1) as k1
+    configuration k1 [Ne] 3s2 3p6
+}

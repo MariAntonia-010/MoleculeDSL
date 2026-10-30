@@ -1,0 +1,5 @@
+// Magnesium(2+): 1s2 2s2 2p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Magnesium(2+)" charge +2 {
+    atom Mg(+2) as mg1
+    configuration mg1 [He] 2s2 2p6
+}

@@ -1,0 +1,5 @@
+// Silicon (Z=14): 1s2 2s2 2p6 3s2 3p2, termo 3P0
+species atom "Silicon" unpaired 2 {
+    atom Si as si1
+    configuration si1 [Ne] 3s2 3p2
+}

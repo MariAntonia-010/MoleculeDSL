@@ -1,0 +1,4 @@
+// 18O: 8 prótons e 10 nêutrons, isótopo natural (CIAAW)
+species atom "Oxygen-18" unpaired 2 {
+    atom 18O as o1
+}

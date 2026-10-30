@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 14 elétrons, mas p1 (P#1) (Z=15, carga +0) tem 15
+// Erro: a configuração soma 14 elétrons, mas P tem 15
+species atom "Phosphorus" unpaired 3 {
+    atom P as p1
+    configuration p1 [Ne] 3s2 3p2
+}

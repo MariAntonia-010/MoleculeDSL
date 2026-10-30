@@ -1,0 +1,4 @@
+// 26Mg: 12 prótons e 14 nêutrons, isótopo natural (CIAAW)
+species atom "Magnesium-26" {
+    atom 26Mg as mg1
+}

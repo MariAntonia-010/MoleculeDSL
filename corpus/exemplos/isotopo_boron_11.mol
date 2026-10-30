@@ -1,0 +1,4 @@
+// 11B: 5 prótons e 6 nêutrons, isótopo natural (CIAAW)
+species atom "Boron-11" unpaired 1 {
+    atom 11B as b1
+}

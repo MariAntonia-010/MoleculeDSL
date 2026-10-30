@@ -1,0 +1,5 @@
+// Manganese(2+): 1s2 2s2 2p6 3s2 3p6 3d5, 5 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Manganese(2+)" charge +2 unpaired 5 {
+    atom Mn(+2) as mn1
+    configuration mn1 [Ar] 3d5
+}

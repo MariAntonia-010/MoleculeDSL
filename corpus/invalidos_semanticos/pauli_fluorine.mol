@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 2p7: a subcamada p comporta de 1 a 6 elétrons (princípio de Pauli)
+// Erro: 2p7 passa da capacidade 6 da subcamada p (Pauli)
+species atom "Fluorine" unpaired 1 {
+    atom F as f1
+    configuration f1 [He] 2s2 2p7
+}

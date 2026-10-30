@@ -1,0 +1,5 @@
+// Magnesium (Z=12): 1s2 2s2 2p6 3s2, termo 1S0
+species atom "Magnesium" {
+    atom Mg as mg1
+    configuration mg1 [Ne] 3s2
+}

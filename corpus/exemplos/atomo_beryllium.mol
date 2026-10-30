@@ -1,0 +1,5 @@
+// Beryllium (Z=4): 1s2 2s2, termo 1S0
+species atom "Beryllium" {
+    atom Be as be1
+    configuration be1 [He] 2s2
+}

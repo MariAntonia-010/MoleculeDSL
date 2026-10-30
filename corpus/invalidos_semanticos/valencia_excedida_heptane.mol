@@ -1,0 +1,38 @@
+// esperado: Aviso semântico [RAD-001] na linha 4, coluna 0: a espécie tem contagem eletrônica ímpar; declare 'unpaired' para representar o radical
+// esperado: Erro semântico [VAL-001] na linha 5, coluna 4: a soma das ordens de ligação de c1 (C#1) é 5; o máximo para C é 4
+// Erro: c1 já tem quatro ligações; a ligação com hz é a quinta
+species molecule "Heptane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    16x atom H as h
+
+    atom H as hz
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c7
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c3-h7
+    bond c4-h8
+    bond c4-h9
+    bond c5-h10
+    bond c5-h11
+    bond c6-h12
+    bond c6-h13
+    bond c7-h14
+    bond c7-h15
+    bond c7-h16
+    bond c1-hz
+}

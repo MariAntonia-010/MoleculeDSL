@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=2, mas a configuração 1s2 2s2 tem 0 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Be tem 0 desemparelhado(s), não 2
+species atom "Beryllium" unpaired 2 {
+    atom Be as be1
+    configuration be1 [He] 2s2
+}

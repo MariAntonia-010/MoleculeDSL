@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 5 elétrons, mas c1 (C#1) (Z=6, carga +0) tem 6
+// Erro: a configuração soma 5 elétrons, mas C tem 6
+species atom "Carbon" unpaired 2 {
+    atom C as c1
+    configuration c1 [He] 2s2 2p1
+}

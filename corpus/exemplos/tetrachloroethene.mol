@@ -1,0 +1,15 @@
+// Tetrachloroethene (ClC(Cl)=C(Cl)Cl)
+species molecule "Tetrachloroethene" {
+    atom Cl as cl1
+    atom C as c1
+    atom Cl as cl2
+    atom C as c2
+    atom Cl as cl3
+    atom Cl as cl4
+
+    bond cl1-c1
+    bond c1-cl2
+    bond c1=c2
+    bond c2-cl3
+    bond c2-cl4
+}

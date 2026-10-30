@@ -1,0 +1,5 @@
+// Potassium (Z=19): 1s2 2s2 2p6 3s2 3p6 4s1, termo 2S1/2
+species atom "Potassium" unpaired 1 {
+    atom K as k1
+    configuration k1 [Ar] 4s1
+}

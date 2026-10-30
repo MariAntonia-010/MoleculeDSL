@@ -1,0 +1,5 @@
+// Rubidium(1+): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Rubidium(1+)" charge +1 {
+    atom Rb(+1) as rb1
+    configuration rb1 [Ar] 3d10 4s2 4p6
+}

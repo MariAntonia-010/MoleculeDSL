@@ -1,0 +1,5 @@
+// Helium (Z=2): 1s2, termo 1S0
+species atom "Helium" {
+    atom He as he1
+    configuration he1 1s2
+}

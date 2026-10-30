@@ -1,0 +1,5 @@
+// Arsenic (Z=33): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p3, termo 4S3/2
+species atom "Arsenic" unpaired 3 {
+    atom As as as1
+    configuration as1 [Ar] 3d10 4s2 4p3
+}

@@ -1,0 +1,5 @@
+// Chromium (Z=24): 1s2 2s2 2p6 3s2 3p6 3d5 4s1, termo 7S3
+species atom "Chromium" unpaired 6 {
+    atom Cr as cr1
+    configuration cr1 [Ar] 3d5 4s1
+}

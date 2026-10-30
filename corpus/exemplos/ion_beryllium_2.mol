@@ -1,0 +1,5 @@
+// Beryllium(2+): 1s2, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Beryllium(2+)" charge +2 {
+    atom Be(+2) as be1
+    configuration be1 1s2
+}

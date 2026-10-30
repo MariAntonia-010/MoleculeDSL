@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 32Si não é isótopo de composição natural (CIAAW: 28Si, 29Si, 30Si); pode ser radioativo ou artificial
+// Aviso: 32Si não é isótopo natural (CIAAW: 28, 29, 30)
+species atom "Silicon-32" unpaired 2 {
+    atom 32Si as si1
+}

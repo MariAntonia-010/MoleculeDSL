@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de na1 (Na#1) (referência: 1s2 2s2 2p6 3s1); descreve um estado excitado
+// Aviso: um elétron de 3s subiu para 3p: estado excitado
+species atom "Sodium" unpaired 1 {
+    atom Na as na1
+    configuration na1 [Ne] 3p1
+}

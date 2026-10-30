@@ -1,0 +1,5 @@
+// Chlorine (Z=17): 1s2 2s2 2p6 3s2 3p5, termo 2P3/2
+species atom "Chlorine" unpaired 1 {
+    atom Cl as cl1
+    configuration cl1 [Ne] 3s2 3p5
+}

@@ -1,0 +1,5 @@
+// Zinc(2+): 1s2 2s2 2p6 3s2 3p6 3d10, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Zinc(2+)" charge +2 {
+    atom Zn(+2) as zn1
+    configuration zn1 [Ar] 3d10
+}
