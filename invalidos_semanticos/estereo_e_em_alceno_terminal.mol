@@ -1,0 +1,21 @@
+// esperado: Erro semântico [STEREO-001] na linha 20, coluna 4: c1 (C#1)=c2 (C#2) não é um elemento estereogênico
+// But-1-eno: c1 tem dois H iguais, então a dupla c1=c2 não tem E/Z
+species molecule "But-1-ene" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    8x atom H as h
+    bond c1=c2
+    bond c2-c3
+    bond c3-c4
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c3-h4
+    bond c3-h5
+    bond c4-h6
+    bond c4-h7
+    bond c4-h8
+    stereo c1=c2 E
+}

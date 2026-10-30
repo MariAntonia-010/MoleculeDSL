@@ -1,0 +1,8 @@
+// Radical metila: o carbono tem só três ligações e um elétron desemparelhado
+species molecule "Methyl radical" unpaired 1 {
+    atom C as c
+    3x atom H as h
+    bond c-h1
+    bond c-h2
+    bond c-h3
+}

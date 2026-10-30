@@ -1,0 +1,8 @@
+// Íon tiocianato, SCN-: o mesmo arranjo do cianato, com enxofre
+species molecular_ion "Thiocyanate" charge -1 {
+    atom S(-1) as s
+    atom C as c
+    atom N as n
+    bond s-c
+    bond c#n
+}

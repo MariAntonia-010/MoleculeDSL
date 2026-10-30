@@ -69,7 +69,9 @@
       if (resto.startsWith("->")) { empurrar("OP", "->"); continue; }
       if ("-=#~".includes(resto[0])) { empurrar("OP", resto[0]); continue; }
       if ("+(){}[]".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
-      throw new ErroDSL("léxico", "LEX-001", linha, coluna, `caractere inválido '${resto[0]}'`);
+      throw new ErroDSL("léxico", "LEX-001", linha, coluna, "<>".includes(resto[0])
+        ? `caractere inválido '${resto[0]}': a única seta da linguagem é '->', a ligação coordenada do doador para o receptor`
+        : `caractere inválido '${resto[0]}'`);
     }
     tokens.push({ tipo: "EOF", valor: "fim do arquivo", l: linha, c: coluna });
     return tokens;
@@ -368,13 +370,19 @@
       for (const lig of ligacoes) { soma[lig.a] += lig.ordem; soma[lig.b] += lig.ordem; }
       const linhaAtomo = new Map();
       especie.comandos.filter((c) => c.tipo === "atom").forEach((c) => (porElemento.get(c.el) || []).forEach((a) => { if (!linhaAtomo.has(a.id)) linhaAtomo.set(a.id, c); }));
+      const abaixo = [];
       for (const a of atomos) {
         const permitidas = valenciasDe(a);
         if (!permitidas) continue;
         const maximo = Math.max(...permitidas);
         const no = linhaAtomo.get(a.id) || { l: 1, c: 0 };
         if (soma[a.id] > maximo) erro(no, "VAL-001", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`, [a.id]);
-        else if (!permitidas.includes(soma[a.id])) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`, [a.id]);
+        else if (!permitidas.includes(soma[a.id])) abaixo.push([no, a, permitidas]);
+      }
+      // Radical declarado: cada ligação que falta é um elétron do unpaired
+      const faltam = abaixo.reduce((t, [, a, p]) => t + Math.min(...p.filter((v) => v > soma[a.id])) - soma[a.id], 0);
+      if (!(especie.desemparelhados && faltam === especie.desemparelhados)) {
+        abaixo.forEach(([no, a, permitidas]) => aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`, [a.id]));
       }
       if (atomos.length > 1 && !especie.legado && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
         erro({ l: 1, c: 0 }, "STRUCT-008", "a entidade tem partes desconectadas");

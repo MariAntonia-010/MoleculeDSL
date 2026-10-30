@@ -1103,6 +1103,16 @@ class AnalisadorSemantico:
         self.avisos_valencia.setdefault(chave, []).append(atomo)
 
     def emitir_avisos_valencia(self):
+        # Radical declarado: se cada ligação que falta corresponde a um
+        # elétron desemparelhado do 'unpaired', a valência baixa é o
+        # próprio radical e o aviso não acrescenta nada
+        unpaired = self.molecula.eletrons_desemparelhados
+        faltam = sum(
+            (min(v for v in aceitas if v > total) - total) * len(atomos)
+            for (_, _, _, total, aceitas, _), atomos in self.avisos_valencia.items()
+        )
+        if unpaired and faltam == unpaired:
+            return
         for chave, atomos in self.avisos_valencia.items():
             _, _, elemento, total, aceitas, carga_possivel = chave
             if len(atomos) == 1:

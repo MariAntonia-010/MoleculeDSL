@@ -1,0 +1,7 @@
+// esperado: Aviso semântico [SPEC-002] na linha 3, coluna 0: ionic_solid é uma estrutura estendida; o grafo representa apenas um motivo finito
+// Óxido de magnésio: sólido iônico de Mg2+ e O2-
+species ionic_solid "Magnesium oxide" {
+    atom Mg(+2) as mg
+    atom O(-2) as o
+    bond mg-o
+}

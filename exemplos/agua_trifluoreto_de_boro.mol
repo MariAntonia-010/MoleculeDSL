@@ -1,0 +1,13 @@
+// Aduto água-BF3: o oxigênio doa um par ao boro (ligação coordenada)
+species molecule "Water-boron trifluoride" {
+    atom O(+1) as o
+    atom B(-1) as b
+    2x atom H as h
+    3x atom F as f
+    bond o-h1
+    bond o-h2
+    bond b-f1
+    bond b-f2
+    bond b-f3
+    bond o->b
+}

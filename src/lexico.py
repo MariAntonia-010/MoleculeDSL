@@ -51,6 +51,13 @@ def traduzir_erro_lexico(caractere):
             "LEX-003",
             "'.' fora de um número real (um número real é escrito como 3.5)",
         )
+    if caractere in "<>":
+        # Setas fora de '->' (como '<-' ou '=>'): a única seta da linguagem
+        return (
+            "LEX-001",
+            f"caractere inválido '{caractere}': a única seta da linguagem é '->', "
+            "a ligação coordenada do doador para o receptor",
+        )
     if caractere.isprintable() and not caractere.isspace():
         return "LEX-001", f"caractere inválido '{caractere}'"
     return "LEX-004", f"caractere invisível inválido (U+{ord(caractere):04X})"

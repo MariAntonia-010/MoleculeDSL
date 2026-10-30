@@ -1,0 +1,14 @@
+// esperado: Erro léxico [LEX-001] na linha 13, coluna 11: caractere inválido '>': a única seta da linguagem é '->', a ligação coordenada do doador para o receptor
+// A ligação coordenada é '->'; '=>' não é operador da linguagem
+species molecule "Ammonia borane" {
+    atom N(+1) as n
+    atom B(-1) as b
+    6x atom H as h
+    bond n-h1
+    bond n-h2
+    bond n-h3
+    bond b-h4
+    bond b-h5
+    bond b-h6
+    bond n=>b
+}

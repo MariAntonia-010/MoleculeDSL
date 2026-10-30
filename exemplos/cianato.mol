@@ -1,0 +1,8 @@
+// Íon cianato, OCN-: a carga negativa fica no oxigênio
+species molecular_ion "Cyanate" charge -1 {
+    atom O(-1) as o
+    atom C as c
+    atom N as n
+    bond o-c
+    bond c#n
+}

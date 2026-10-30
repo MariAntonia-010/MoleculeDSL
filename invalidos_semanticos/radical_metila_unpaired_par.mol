@@ -1,0 +1,9 @@
+// esperado: Erro semântico [RAD-002] na linha 3, coluna 0: unpaired=2 é incompatível com 9 elétrons
+// CH3 tem 9 elétrons (ímpar): unpaired 2 não combina com essa contagem
+species molecule "Methyl radical" unpaired 2 {
+    atom C as c
+    3x atom H as h
+    bond c-h1
+    bond c-h2
+    bond c-h3
+}

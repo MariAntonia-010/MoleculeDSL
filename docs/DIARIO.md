@@ -656,3 +656,15 @@ Hund, íons de metais de transição).
   listado.
 - `testar.py` roda o corpus junto com os exemplos curados: 700 testes.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 2
+
+- Válidos: (E)-pent-2-eno, (R)-2-clorobutano, (2R,3R)-2,3-diclorobutano,
+  cianato, tiocianato, radical metila, aduto água-BF3 e óxido de magnésio.
+- Inválidos: E/Z em alceno terminal, R numa dupla, `e` minúsculo, unpaired
+  par no CH3, carga total errada no cianato, carga `(1+)` e `=>`.
+- VAL-002 não sai quando o `unpaired` declarado explica as ligações que
+  faltam (o NO• deixou de avisar). Setas fora de `->` ganharam dica no
+  LEX-001.
+

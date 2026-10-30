@@ -1,0 +1,9 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é -1, mas a espécie declara carga total -2
+// O cianato tem carga -1; o cabeçalho declara -2
+species molecular_ion "Cyanate" charge -2 {
+    atom O(-1) as o
+    atom C as c
+    atom N as n
+    bond o-c
+    bond c#n
+}

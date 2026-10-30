@@ -460,7 +460,7 @@ LICOES = [
         "exemplos": [
             {
                 "titulo": "Óxido nítrico: um elétron desemparelhado",
-                "explicacao": "NO tem 11 elétrons de valência; unpaired 1 declara o radical. O compilador ainda avisa VAL-002: no modelo de Lewis simples o N fica com só duas ligações.",
+                "explicacao": "NO tem 11 elétrons de valência; unpaired 1 declara o radical. O N fica com só duas ligações, e o elétron desemparelhado explica a ligação que falta: por isso não há aviso VAL-002. Sem o unpaired, o compilador avisaria RAD-001 e VAL-002.",
                 "codigo": 'species molecule "Nitric oxide" unpaired 1 {\n    atom N\n    atom O\n    bond N=O\n}\n',
                 "opcoes": [],
                 "saida": 0,

@@ -1,0 +1,13 @@
+// esperado: Aviso semântico [BOND-002] na linha 9, coluna 4: ligação dupla com Cl é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+// esperado: Aviso semântico [BOND-002] na linha 10, coluna 4: ligação dupla com Cl é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+// esperado: Aviso semântico [BOND-002] na linha 11, coluna 4: ligação dupla com Cl é incomum no perfil Lewis introdutório; trate a ordem como representação formal
+// Íon perclorato, ClO4-: cloro com valência expandida (7) ligado a oxigênios
+species molecular_ion "Perchlorate" charge -1 {
+    atom Cl as cl
+    3x atom O as od
+    atom O(-1) as o
+    bond cl=od1
+    bond cl=od2
+    bond cl=od3
+    bond cl-o
+}
