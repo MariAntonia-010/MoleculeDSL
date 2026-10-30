@@ -686,6 +686,7 @@
   const vazio = document.getElementById("cena-vazia");
   let exemploAtual = null;
   let tradPlay = null; // painel de tradução ao vivo, criado depois dos módulos
+  let arvoresProntas = false; // aba Árvores, idem
 
   seletor.innerHTML = '<option value="" disabled>Código próprio (escolha um exemplo para carregar)</option>';
   DADOS.exemplos.forEach((ex, i) => {
@@ -704,6 +705,7 @@
     const r = compilar(codigo.value);
     renderizarDiagnosticos(r);
     if (tradPlay) tradPlay.desenhar();
+    if (arvoresProntas) atualizarArvores();
     const modelo = document.querySelector("#p-modelo pre");
     document.getElementById("legenda-ligacoes").innerHTML = legendaLigacoes(r);
     if (r.atomos.length && !r.erros.length) {

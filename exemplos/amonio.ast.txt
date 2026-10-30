@@ -1,4 +1,4 @@
-Molecula 'Ammonium' tipo=molecular_ion carga_total=+1 desemparelhados=não declarado [2:0]
+Especie 'Ammonium' tipo=molecular_ion carga_total=+1 desemparelhados=não declarado [2:0]
   AtomoDecl elemento=N multiplicador=1 carga=+1 nome=None [3:4]
   AtomoDecl elemento=H multiplicador=4 carga=+0 nome=None [4:4]
   LigacaoDecl SIMPLES repeticoes=4 [6:4]

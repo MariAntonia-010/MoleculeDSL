@@ -459,3 +459,25 @@
     .traco.metálica { border-top: 3px dotted var(--suave); }
     .traco.coordenada { border-top: 3px dashed var(--acento); border-top-style: dashed; }
     .traco.não-classificada { opacity: 0.4; }
+
+    /* desenho das árvores */
+    .desenho-arvore { border: 1px solid var(--borda); border-radius: 12px; background: var(--bg); }
+    .arv-controles { display: flex; gap: 0.4rem; align-items: center; justify-content: flex-end; padding: 0.5rem; border-bottom: 1px solid var(--borda); }
+    .arv-controles span { margin-right: auto; font: 0.74rem var(--mono); color: var(--fraco); }
+    .arv-rolagem { overflow: auto; max-height: 520px; padding: 0.4rem; }
+    .arv-svg { display: block; }
+    .arv-aresta { fill: none; stroke: var(--borda-forte); stroke-width: 1.3; }
+    .arv-no rect { fill: var(--superficie); stroke: var(--borda-forte); stroke-width: 1.2; }
+    .arv-no.folha rect { fill: var(--acento-fundo); stroke: color-mix(in srgb, var(--acento) 55%, transparent); }
+    .arv-rotulo { font: 600 12px var(--mono); fill: var(--texto); }
+    .arv-no.folha .arv-rotulo { font-weight: 500; fill: var(--acento); }
+    .arv-detalhe { font: 10.5px var(--mono); fill: var(--fraco); }
+    .como-lista { margin-top: 0.7rem; }
+    .como-lista summary { cursor: pointer; font-size: 0.82rem; color: var(--suave); }
+    .como-lista .arvore { margin-top: 0.6rem; }
+    #p-arvores .trad-topo { margin-bottom: 0.2rem; }
+    .arvores-play { margin-top: 1.1rem; }
+    .arvores-play .arv-rolagem { max-height: 640px; }
+    .arv-campo { font: 10.5px var(--mono); fill: var(--acento); }
+    .arv-divisoria { stroke: var(--borda-forte); stroke-width: 1; }
+    .ficha-arvore .arv-rolagem { max-height: 320px; }

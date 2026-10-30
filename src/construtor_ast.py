@@ -11,7 +11,7 @@ from ast_nos import (
     AtomoDecl,
     EstereoDecl,
     LigacaoDecl,
-    Molecula,
+    Especie,
     Operador,
     Referencia,
     TipoEspecie,
@@ -48,7 +48,7 @@ class ConstrutorAST(MoleculeDSLVisitor):
                 ctx.desemparelhados().INTEIRO().getText()
             )
         comandos = [self.visit(c) for c in ctx.comando()]
-        return Molecula(
+        return Especie(
             nome=nome,
             linha=ctx.start.line,
             coluna=ctx.start.column,

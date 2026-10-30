@@ -539,6 +539,17 @@ charge unpaired atom bond as ring stereo</pre>
           <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve quais átomos se ligam, não coordenadas. A verificação do navegador cobre sintaxe, nomes, anéis e valências; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
         </div>
       </div>
+      <div class="placa arvores-play" id="p-arvores">
+        <div class="trad-topo">
+          <div><h3 style="margin:0">Árvores da linguagem</h3><p class="nota" style="margin:0.2rem 0 0">Como a linguagem entendeu o código acima: atualiza a cada tecla.</p></div>
+          <div class="trad-topo" style="gap:0.6rem">
+            <div class="lentes" role="group" aria-label="Qual árvore"><button type="button" data-arvore="ast">AST</button><button type="button" data-arvore="sintatica">Árvore sintática</button></div>
+            <div class="lentes" role="group" aria-label="Lente"><button type="button" data-arv-lente="comp">Computação</button><button type="button" data-arv-lente="quim">Química</button></div>
+          </div>
+        </div>
+        <p class="trad-explica" id="arvores-explica"></p>
+        <div id="arvores-desenho"></div>
+      </div>
     </section>
     <!-- ================= GUIA ================= -->
     <section class="pagina" id="pg-guia" aria-label="Guia de uso">

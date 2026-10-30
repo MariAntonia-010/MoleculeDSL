@@ -1,4 +1,4 @@
-Molecula 'Ammonia borane' tipo=molecule carga_total=não declarada desemparelhados=não declarado [3:0]
+Especie 'Ammonia borane' tipo=molecule carga_total=não declarada desemparelhados=não declarado [3:0]
   AtomoDecl elemento=N multiplicador=1 carga=+1 nome=None [4:4]
   AtomoDecl elemento=B multiplicador=1 carga=-1 nome=None [5:4]
   AtomoDecl elemento=H multiplicador=3 carga=+0 nome=hn [6:4]

@@ -82,10 +82,97 @@
 
   // Árvore genérica: { rotulo, detalhe, classe, filhos }
   function arvoreHTML(no) {
+    if (no.campos) no = { ...no, filhos: [...no.campos.map((c) => ({ rotulo: c, classe: "folha" })), ...(no.filhos || [])] };
     const rotulo = `<span class="no-rotulo ${no.classe || ""}">${escapar(no.rotulo)}</span>${no.detalhe ? `<span class="no-detalhe">${escapar(no.detalhe)}</span>` : ""}`;
     if (!no.filhos || !no.filhos.length) return `<li><span class="no">${rotulo}</span></li>`;
     return `<li><details open><summary class="no">${rotulo}</summary><ul>${no.filhos.map(arvoreHTML).join("")}</ul></details></li>`;
   }
+
+  /* Desenho da árvore em SVG: folhas da esquerda para a direita, cada pai
+     centralizado sobre os filhos, arestas em cotovelo (como o desenhar_arvore.py) */
+  const CORTE_DETALHE = 30;
+  function medirNo(no, comDetalhe) {
+    const detalhe = comDetalhe && no.detalhe ? (no.detalhe.length > CORTE_DETALHE ? no.detalhe.slice(0, CORTE_DETALHE - 1) + "…" : no.detalhe) : "";
+    no._detalhe = detalhe;
+    const campos = no.campos || [];
+    no._w = Math.max(no.rotulo.length * 7.4, detalhe.length * 6.1, ...campos.map((c) => c.length * 6.4)) + 22;
+    no._h = (detalhe ? 44 : 30) + campos.length * 15 + (campos.length ? 4 : 0);
+    const filhos = no.filhos || [];
+    filhos.forEach((f) => medirNo(f, comDetalhe));
+    const largura = filhos.reduce((t, f) => t + f._sub, 0) + Math.max(0, filhos.length - 1) * 14;
+    no._sub = Math.max(no._w, largura);
+    no._larguraFilhos = largura;
+  }
+  function posicionarNo(no, x0, nivel, saida) {
+    no._x = x0 + no._sub / 2;
+    no._y = 16 + nivel * saida.passo;
+    saida.nos.push(no);
+    saida.profundidade = Math.max(saida.profundidade, nivel);
+    let x = x0 + (no._sub - no._larguraFilhos) / 2;
+    (no.filhos || []).forEach((f) => {
+      posicionarNo(f, x, nivel + 1, saida);
+      saida.arestas.push([no, f]);
+      x += f._sub + 14;
+    });
+  }
+  function arvoreSVG(raizNo, comDetalhe = true) {
+    medirNo(raizNo, comDetalhe);
+    // Distância entre níveis: a caixa mais alta mais o espaço das arestas
+    let maior = 0;
+    const percorrer = (n) => { maior = Math.max(maior, n._h); (n.filhos || []).forEach(percorrer); };
+    percorrer(raizNo);
+    const saida = { nos: [], arestas: [], profundidade: 0, passo: maior + 46 };
+    posicionarNo(raizNo, 16, 0, saida);
+    const largura = raizNo._sub + 32;
+    const altura = Math.max(...saida.nos.map((n) => n._y + n._h)) + 18;
+    const arestas = saida.arestas.map(([p, f]) => {
+      const meio = (p._y + p._h + f._y) / 2;
+      return `<path class="arv-aresta" d="M ${p._x} ${p._y + p._h} V ${meio} H ${f._x} V ${f._y}"/>`;
+    }).join("");
+    const nos = saida.nos.map((n) => `<g class="arv-no ${n.classe || ""}"><title>${escapar(n.rotulo + (n.detalhe ? " — " + n.detalhe : ""))}</title>
+      <rect x="${n._x - n._w / 2}" y="${n._y}" width="${n._w}" height="${n._h}" rx="8"/>
+      <text class="arv-rotulo" x="${n._x}" y="${n._y + 19}" text-anchor="middle">${escapar(n.rotulo)}</text>
+      ${n._detalhe ? `<text class="arv-detalhe" x="${n._x}" y="${n._y + 35}" text-anchor="middle">${escapar(n._detalhe)}</text>` : ""}
+      ${(n.campos || []).map((c, i) => `<text class="arv-campo" x="${n._x - n._w / 2 + 11}" y="${n._y + (n._detalhe ? 44 : 30) + 13 + i * 15}">${escapar(c)}</text>`).join("")}
+      ${n.campos && n.campos.length ? `<line class="arv-divisoria" x1="${n._x - n._w / 2}" x2="${n._x + n._w / 2}" y1="${n._y + (n._detalhe ? 44 : 30)}" y2="${n._y + (n._detalhe ? 44 : 30)}"/>` : ""}</g>`).join("");
+    return { svg: `<svg xmlns="http://www.w3.org/2000/svg" class="arv-svg" viewBox="0 0 ${largura} ${altura}" width="${largura}" height="${altura}" data-largura="${largura}" data-altura="${altura}">${arestas}${nos}</svg>`, nos: saida.nos.length };
+  }
+  function desenhoArvore(raizNo, comDetalhe = true) {
+    const { svg, nos } = arvoreSVG(raizNo, comDetalhe);
+    return `<div class="desenho-arvore">
+      <div class="arv-controles"><span>${nos} nós</span>
+        <button type="button" class="botao pequeno" data-zoom="0.8" aria-label="Diminuir">−</button>
+        <button type="button" class="botao pequeno" data-zoom="1.25" aria-label="Aumentar">+</button>
+        <button type="button" class="botao pequeno" data-zoom="ajustar">Ajustar à largura</button></div>
+      <div class="arv-rolagem">${svg}</div></div>`;
+  }
+  // Ao aparecer: reduz até caber na largura (sem passar de 45%) e centraliza a raiz
+  function ajustarDesenhos(alvo) {
+    alvo.querySelectorAll(".desenho-arvore").forEach((caixa) => {
+      const rolagem = caixa.querySelector(".arv-rolagem"), svg = caixa.querySelector("svg");
+      const larguraBase = Number(svg.dataset.largura), alturaBase = Number(svg.dataset.altura);
+      const disponivel = rolagem.clientWidth - 12;
+      if (!disponivel) return;
+      const escala = Math.min(1, Math.max(0.7, disponivel / larguraBase));
+      svg.dataset.escala = escala;
+      svg.setAttribute("width", larguraBase * escala);
+      svg.setAttribute("height", alturaBase * escala);
+      rolagem.scrollLeft = Math.max(0, (larguraBase * escala - rolagem.clientWidth) / 2);
+    });
+  }
+  // Zoom: muda o tamanho do SVG; a rolagem do contêiner faz o resto
+  document.addEventListener("click", (e) => {
+    const botao = e.target.closest("[data-zoom]");
+    if (!botao) return;
+    const caixa = botao.closest(".desenho-arvore");
+    const svg = caixa.querySelector("svg");
+    const larguraBase = Number(svg.dataset.largura), alturaBase = Number(svg.dataset.altura);
+    let escala = Number(svg.dataset.escala || 1);
+    escala = botao.dataset.zoom === "ajustar" ? Math.min(1.5, caixa.querySelector(".arv-rolagem").clientWidth / larguraBase) : Math.min(3, Math.max(0.2, escala * Number(botao.dataset.zoom)));
+    svg.dataset.escala = escala;
+    svg.setAttribute("width", larguraBase * escala);
+    svg.setAttribute("height", alturaBase * escala);
+  });
 
   function arvoreSintaticaNo(no, lente) {
     if (no.token) {
@@ -100,18 +187,18 @@
     const q = lente === "quim";
     const filhos = especie.comandos.map((c) => {
       if (c.tipo === "atom") {
-        return { rotulo: "AtomoDecl", detalhe: q ? `${c.mult > 1 ? c.mult + " átomos" : "átomo"} de ${nomeElemento(c.el)}${c.carga ? `, carga ${c.carga > 0 ? "+" : ""}${c.carga}` : ""}` : `[${c.l}:${c.c}]`,
-          filhos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", c.nome ?? "None"]].map(([k, v]) => ({ rotulo: `${k}: ${v}`, classe: "folha" })) };
+        return { rotulo: "AtomoDecl", detalhe: q ? `${c.mult > 1 ? c.mult + " átomos" : "átomo"} de ${(DADOS.elementos[c.el] || {}).nome || c.el}${c.carga ? `, carga ${c.carga > 0 ? "+" : ""}${c.carga}` : ""}` : `[${c.l}:${c.c}]`,
+          campos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", c.nome ?? "None"]].map(([k, v]) => `${k}: ${v}`) };
       }
       if (c.tipo === "bond") {
         const op = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" }[c.op];
-        return { rotulo: "LigacaoDecl", detalhe: q ? LIGACAO_QUIMICA[c.op] : `[${c.l}:${c.c}]`,
-          filhos: [`origem: ${c.origem.texto} (${c.origem.porNome ? "nome" : "elemento"})`, `operador: ${op}`, `destino: ${c.destino.texto} (${c.destino.porNome ? "nome" : "elemento"})`, `repeticoes: ${c.rep}`].map((r) => ({ rotulo: r, classe: "folha" })) };
+        return { rotulo: "LigacaoDecl", detalhe: q ? { "-": "ligação simples", "=": "ligação dupla", "#": "ligação tripla", "->": "ligação coordenada", "~": "ligação metálica" }[c.op] : `[${c.l}:${c.c}]`,
+          campos: [`origem: ${c.origem.texto}`, `operador: ${op}`, `destino: ${c.destino.texto}`, `repeticoes: ${c.rep}`] };
       }
-      if (c.tipo === "ring") return { rotulo: "AnelDecl", detalhe: q ? `ciclo de ${c.nomes.length} átomos` : `[${c.l}:${c.c}]`, filhos: c.nomes.map((n) => ({ rotulo: `nome: ${n.texto}`, classe: "folha" })) };
-      return { rotulo: "EstereoDecl", detalhe: q ? "configuração espacial declarada" : `[${c.l}:${c.c}]`, filhos: [...c.refs.map((r) => ({ rotulo: `átomo: ${r.texto}`, classe: "folha" })), { rotulo: `descritor: ${c.descritor}`, classe: "folha" }] };
+      if (c.tipo === "ring") return { rotulo: "AnelDecl", detalhe: q ? `ciclo de ${c.nomes.length} átomos` : `[${c.l}:${c.c}]`, campos: [`nomes: ${c.nomes.map((n) => n.texto).join(" ")}`] };
+      return { rotulo: "EstereoDecl", detalhe: q ? "configuração espacial declarada" : `[${c.l}:${c.c}]`, campos: [`átomos: ${c.refs.map((r) => r.texto).join(" ")}`, `descritor: ${c.descritor}`] };
     });
-    return { rotulo: `Molecula '${especie.nome}'`, detalhe: q ? ESPECIE_QUIMICA[especie.tipo] : `tipo=${especie.tipo}`, filhos };
+    return { rotulo: `Especie '${especie.nome}'`, detalhe: q ? ESPECIE_QUIMICA[especie.tipo] : `tipo=${especie.tipo}`, filhos };
   }
 
   const ETAPAS = [
@@ -142,12 +229,12 @@
     }
     if (etapa.id === "sintaxe") {
       if (!r.tokens) return `<p class="etapa-vazia">Sem tokens, não há o que analisar.</p>`;
-      const arvore = r.arvore ? `<ul class="arvore">${arvoreHTML(arvoreSintaticaNo(r.arvore, lente))}</ul>` : "";
+      const arvore = r.arvore ? desenhoArvore(arvoreSintaticaNo(r.arvore, lente), false) + `<details class="como-lista"><summary>ver como lista, com as explicações</summary><ul class="arvore">${arvoreHTML(arvoreSintaticaNo(r.arvore, lente))}</ul></details>` : "";
       return (falhou(["sintático"]) ? erroHTML() : "") + arvore;
     }
     if (etapa.id === "ast") {
       if (!r.especie) return `<p class="etapa-vazia">A AST só existe quando a sintaxe está correta.</p>`;
-      return `<ul class="arvore">${arvoreHTML(astNo(r.especie, lente))}</ul>`;
+      return desenhoArvore(astNo(r.especie, lente)) + `<details class="como-lista"><summary>ver como lista</summary><ul class="arvore">${arvoreHTML(astNo(r.especie, lente))}</ul></details>`;
     }
     if (etapa.id === "modelo") {
       if (!r.especie) return `<p class="etapa-vazia">O modelo depende da AST.</p>`;
@@ -161,7 +248,8 @@
           const tipo = `${classe}${dx != null ? `, Δχ = ${dx.toFixed(2)}` : ""}`;
           return { rotulo: `${nomes[l.a]} ${l.op} ${nomes[l.b]}`, detalhe: lente === "comp" ? `${simbolo[l.op]}, ordem ${l.ordem}, classificação=${classe}` : `${LIGACAO_QUIMICA[l.op]} · ${tipo}`, classe: "folha" };
         }) };
-      return `<ul class="arvore">${arvoreHTML({ rotulo: "Modelo", detalhe: lente === "comp" ? "grafo não dirigido com pesos" : formulaHill(r.atomos), filhos: [vertices, arestas] })}</ul>`;
+      const modeloNo = { rotulo: "Modelo", detalhe: lente === "comp" ? "grafo não dirigido com pesos" : formulaHill(r.atomos), filhos: [vertices, arestas] };
+      return desenhoArvore(modeloNo) + `<details class="como-lista"><summary>ver como lista</summary><ul class="arvore">${arvoreHTML(modeloNo)}</ul></details>`;
     }
     if (!r.especie) return `<p class="etapa-vazia">A semântica depende do modelo.</p>`;
     const soma = r.atomos.map(() => 0);
@@ -202,6 +290,7 @@
       alvo.querySelectorAll("[data-lente]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lente === estado.lente)));
       alvo.querySelector(".trad-explica").innerHTML = `<b>${escapar(etapa.titulo)}</b> · fase ${escapar(etapa.fase)}. ${escapar(estado.lente === "comp" ? etapa.comp : etapa.quim)}`;
       alvo.querySelector(".trad-conteudo").innerHTML = conteudoEtapa(etapa, estado.resultado, estado.lente);
+      requestAnimationFrame(() => ajustarDesenhos(alvo));
     };
     alvo.querySelectorAll(".etapa").forEach((b) => b.addEventListener("click", () => { estado.i = Number(b.dataset.i); desenhar(); }));
     alvo.querySelectorAll("[data-lente]").forEach((b) => b.addEventListener("click", () => { estado.lente = b.dataset.lente; desenhar(); }));
@@ -249,4 +338,34 @@
   document.getElementById("demonstrar-atual").addEventListener("click", () => {
     abrirDemonstracao(codigo.value, exemploAtual ? `${exemploAtual.titulo} — ${exemploAtual.arquivo}` : "Código do playground");
   });
+
+  /* Aba Árvores do playground: AST ou árvore sintática do código atual */
+  const estadoArvores = { tipo: "ast", lente: "comp" };
+  function atualizarArvores() {
+    const alvo = document.getElementById("arvores-desenho");
+    if (!alvo) return;
+    const r = compilar(codigo.value);
+    document.querySelectorAll("[data-arvore]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.arvore === estadoArvores.tipo)));
+    document.querySelectorAll("[data-arv-lente]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.arvLente === estadoArvores.lente)));
+    const explicacao = document.getElementById("arvores-explica");
+    if (estadoArvores.tipo === "ast") {
+      explicacao.textContent = estadoArvores.lente === "comp"
+        ? "AST: os nós são as dataclasses da linguagem (Especie, AtomoDecl, LigacaoDecl, AnelDecl, EstereoDecl), com linha e coluna. Não há pontuação, e o multiplicador continua no nó."
+        : "AST: o que a linguagem entendeu do seu código: a espécie, cada declaração de átomo (elemento, quantidade, carga) e cada ligação, com o tipo de ligação.";
+      alvo.innerHTML = r.especie ? desenhoArvore(astNo(r.especie, estadoArvores.lente)) : `<div class="etapa-erro">A AST só existe com a sintaxe correta: ${escapar(r.erros[0].codigo)} na linha ${r.erros[0].linha}: ${escapar(r.erros[0].mensagem)}</div>`;
+    } else {
+      explicacao.textContent = estadoArvores.lente === "comp"
+        ? "Árvore sintática (parse tree): cada nó interno é uma regra da gramática ANTLR, e cada folha um token com o texto lido. É a estrutura exata que o parser reconheceu."
+        : "Árvore sintática: mostra como a frase química foi dividida em partes: cabeçalho, comandos, átomos, ligações e cada símbolo.";
+      alvo.innerHTML = r.arvore
+        ? (r.falhaEm === "sintático" ? `<div class="etapa-erro">O parser parou em ${escapar(r.erros[0].codigo)}, linha ${r.erros[0].linha}: ${escapar(r.erros[0].mensagem)}. A árvore abaixo vai até onde a leitura chegou.</div>` : "") + desenhoArvore(arvoreSintaticaNo(r.arvore, estadoArvores.lente), estadoArvores.lente === "quim")
+        : `<div class="etapa-erro">Erro léxico antes do parser: ${escapar(r.erros[0].mensagem)}</div>`;
+    }
+    requestAnimationFrame(() => ajustarDesenhos(alvo));
+  }
+  document.querySelectorAll("[data-arvore]").forEach((b) => b.addEventListener("click", () => { estadoArvores.tipo = b.dataset.arvore; atualizarArvores(); }));
+  document.querySelectorAll("[data-arv-lente]").forEach((b) => b.addEventListener("click", () => { estadoArvores.lente = b.dataset.arvLente; atualizarArvores(); }));
+  arvoresProntas = true;
+  new ResizeObserver(() => ajustarDesenhos(document.getElementById("arvores-desenho"))).observe(document.getElementById("arvores-desenho"));
+  atualizarArvores();
 

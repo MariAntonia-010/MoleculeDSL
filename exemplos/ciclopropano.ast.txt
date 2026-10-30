@@ -1,4 +1,4 @@
-Molecula 'Cyclopropane' tipo=molecule carga_total=não declarada desemparelhados=não declarado [2:0]
+Especie 'Cyclopropane' tipo=molecule carga_total=não declarada desemparelhados=não declarado [2:0]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c1 [3:4]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c2 [4:4]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c3 [5:4]

@@ -1,4 +1,4 @@
-Molecula '(E)-1,2-Dichloroethene' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
+Especie '(E)-1,2-Dichloroethene' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c1 [2:4]
   AtomoDecl elemento=C multiplicador=1 carga=+0 nome=c2 [3:4]
   AtomoDecl elemento=Cl multiplicador=1 carga=+0 nome=cl1 [4:4]

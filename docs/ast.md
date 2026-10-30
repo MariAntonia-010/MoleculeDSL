@@ -6,13 +6,15 @@ sem nós de pontuação como `{`, `(` ou `)`. A análise semântica recebe a AST
 e não acessa a parse tree do ANTLR.
 
 Cada arquivo contém uma única espécie, conforme a decisão registrada em
-`plano_sintatico.md`. O nome histórico da classe raiz continua `Molecula`
-por compatibilidade; não há um nó `Programa` com uma lista de espécies.
+`plano_sintatico.md`. A classe raiz é `Especie`, porque a espécie pode ser
+um átomo isolado, um íon, uma molécula ou o motivo de um sólido; o nome
+antigo `Molecula` continua disponível como apelido. Não há um nó `Programa`
+com uma lista de espécies.
 
 ## Estrutura dos nós
 
 ```text
-Molecula
+Especie
 ├── nome: str
 ├── tipo: TipoEspecie
 ├── carga_total: int | None
@@ -56,10 +58,10 @@ modelo semântico.
 
 | Regra da gramática | Resultado na AST |
 |---|---|
-| `programa` | encaminha o único nó `Molecula` |
-| `molecula` | `Molecula` |
-| `cabecalho` | tipo, nome e carga total de `Molecula` |
-| `desemparelhados` | `eletrons_desemparelhados` de `Molecula` |
+| `programa` | encaminha o único nó `Especie` |
+| `molecula` | `Especie` |
+| `cabecalho` | tipo, nome e carga total de `Especie` |
+| `desemparelhados` | `eletrons_desemparelhados` de `Especie` |
 | `comando` | encaminha `AtomoDecl`, `LigacaoDecl`, `AnelDecl` ou `EstereoDecl` |
 | `atomo` | `AtomoDecl` |
 | `carga` | inteiro positivo ou negativo dentro de `AtomoDecl` |
@@ -95,7 +97,7 @@ species molecule "Water" {
 Saída de `python src/main.py --ast exemplos/agua.mol`:
 
 ```text
-Molecula 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
+Especie 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado [1:0]
   AtomoDecl elemento=O multiplicador=1 carga=+0 nome=None [2:4]
   AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [3:4]
   AtomoDecl elemento=H multiplicador=1 carga=+0 nome=None [4:4]

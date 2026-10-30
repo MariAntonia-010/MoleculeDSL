@@ -73,11 +73,14 @@
           <dt>Classificação</dt><dd>${e.eletronegatividade != null ? "entra no cálculo de Δχ das ligações" : "sem eletronegatividade: ligação “não classificada”"}</dd></dl></div>
       </div>
       <pre>${escapar(codigoDoElemento(simbolo).trim())}</pre>
+      <p class="nota" style="margin:0.8rem 0 0.3rem">AST desse programa: como a linguagem entende o elemento</p>
+      <div class="ficha-arvore">${desenhoArvore(astNo(compilar(codigoDoElemento(simbolo)).especie, "quim"))}</div>
       <div class="acoes-ficha">
         <button type="button" class="botao pequeno" id="demo-elemento">Demonstrar tradução</button>
         <button type="button" class="botao pequeno" id="usar-elemento">Abrir no playground</button>
         <button type="button" class="botao pequeno primario" id="bancada-mais">+ adicionar à bancada</button>
       </div>`;
+    requestAnimationFrame(() => ajustarDesenhos(document.getElementById("ficha-elemento")));
     document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo isolado de ${e.nome.toLowerCase()}`));
     document.getElementById("usar-elemento").addEventListener("click", () => {
       exemploAtual = null;
@@ -131,7 +134,9 @@
     caixa.innerHTML = `<div class="fichas">${bancada.map((s, i) => `<button type="button" class="ficha" data-tirar-bancada="${i}" title="Remover"><code>${s}</code><small>remover</small></button>`).join("")}</div>
       <p class="nota">${escapar(nota)}</p>
       <pre>${escapar(codigoDaBancada().trim())}</pre>
+      ${(() => { const r = compilar(codigoDaBancada()); return r.especie ? `<p class="nota" style="margin:0.8rem 0 0.3rem">AST da bancada (as ligações entram quando você escrever os bond no playground)</p>${desenhoArvore(astNo(r.especie, "comp"))}` : ""; })()}
       <div class="acoes-ficha"><button type="button" class="botao pequeno primario" id="bancada-abrir">Abrir no playground</button><button type="button" class="botao pequeno" id="bancada-limpar">Limpar</button></div>`;
+    requestAnimationFrame(() => ajustarDesenhos(caixa));
     caixa.querySelectorAll("[data-tirar-bancada]").forEach((b) => b.addEventListener("click", () => { bancada.splice(Number(b.dataset.tirarBancada), 1); desenharBancada(); }));
     document.getElementById("bancada-limpar").addEventListener("click", () => { bancada.length = 0; desenharBancada(); });
     document.getElementById("bancada-abrir").addEventListener("click", () => {

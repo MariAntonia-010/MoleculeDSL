@@ -548,3 +548,16 @@ O₃ trioxigênio; cátion monoatômico "sódio(1+)", ânion "cloreto"). O limit
   classificação igual à do compilador; espécies atômicas desenhadas pelo
   modelo de Bohr com a carga; nomes em português (elementos e espécies, com
   nomes estequiométricos da IUPAC); duas lições novas no guia.
+
+---
+
+## 30/10/2026 — Desenho das árvores na página
+
+- Playground: painel "Árvores da linguagem", com a AST e a árvore sintática do
+  código atual desenhadas em SVG (layout em árvore, arestas em cotovelo, zoom
+  e rolagem), nas lentes de computação e de química. Na AST, os atributos de
+  cada nó ficam dentro da caixa, como num registro.
+- As etapas 2 a 4 da demonstração da tradução e a ficha de cada elemento da
+  tabela periódica (inclusive a bancada) também mostram o desenho.
+- A classe raiz da AST passou de `Molecula` para `Especie`, porque a espécie
+  pode ser átomo, íon, molécula ou sólido; `Molecula` continua como apelido.

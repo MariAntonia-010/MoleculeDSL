@@ -83,7 +83,7 @@ Comando = AtomoDecl | LigacaoDecl | AnelDecl | EstereoDecl
 
 
 @dataclass
-class Molecula:
+class Especie:
     nome: str
     linha: int
     coluna: int
@@ -92,6 +92,10 @@ class Molecula:
     carga_total: int | None = None
     eletrons_desemparelhados: int | None = None
     declaracao_legacy: bool = True
+
+
+# Nome antigo da raiz, mantido para código que ainda importa Molecula
+Molecula = Especie
 
 
 def formatar(molecula):
@@ -114,7 +118,7 @@ def formatar(molecula):
         else str(molecula.eletrons_desemparelhados)
     )
     linhas = [
-        f"Molecula {molecula.nome!r} tipo={molecula.tipo.value} "
+        f"Especie {molecula.nome!r} tipo={molecula.tipo.value} "
         f"carga_total={carga} desemparelhados={desemparelhados} {pos(molecula)}"
     ]
 
