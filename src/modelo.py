@@ -39,6 +39,16 @@ class Ligacao:
 
 
 @dataclass
+class Estereo:
+    # Configuração declarada: atomos são ids; operador é "=", "-" ou None
+    atomos: list
+    operador: str | None
+    descritor: str
+    linha: int
+    coluna: int
+
+
+@dataclass
 class Modelo:
     nome: str
     tipo: TipoEspecie = TipoEspecie.MOLECULA
@@ -48,6 +58,7 @@ class Modelo:
     ligacoes: list[Ligacao] = field(default_factory=list)
     # Cada anel é a lista de ids dos átomos, na ordem citada
     aneis: list[list[int]] = field(default_factory=list)
+    estereo: list[Estereo] = field(default_factory=list)
 
 
 def formatar(modelo):
@@ -92,5 +103,12 @@ def formatar(modelo):
         linhas.append(f"  Anéis ({len(modelo.aneis)})")
         for anel in modelo.aneis:
             linhas.append("    " + " ".join(por_id[i].rotulo() for i in anel))
+
+    if modelo.estereo:
+        linhas.append(f"  Configurações declaradas ({len(modelo.estereo)})")
+        for e in modelo.estereo:
+            separador = e.operador or " "
+            alvo = separador.join(por_id[i].rotulo() for i in e.atomos)
+            linhas.append(f"    {alvo} {e.descritor} [{e.linha}:{e.coluna}]")
 
     return "\n".join(linhas)

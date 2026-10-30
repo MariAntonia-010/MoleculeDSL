@@ -31,6 +31,7 @@ comando
     : atomo
     | ligacao
     | anel
+    | estereo
     ;
 
 // Ex.: atom O, 4x atom H, atom N(+1), atom C as c1
@@ -72,6 +73,18 @@ anel
     : RING NOME NOME NOME+
     ;
 
+// Configuração: stereo c2 R, stereo c2=c3 Z, stereo c2 Sa (aleno, pelo
+// átomo central), stereo c1-c7 Ra (eixo de biarila), stereo c1 c4 trans
+estereo
+    : STEREO referencia (operador? referencia)? descritor
+    ;
+
+// R, S, E, Z, Ra, Sa são IDENT; r, s, cis, trans são NOME
+descritor
+    : IDENT
+    | NOME
+    ;
+
 // ---------- LEXER ----------
 
 // Palavras-chave (antes de NOME, para vencer no empate)
@@ -87,6 +100,7 @@ ATOM     : 'atom' ;
 BOND     : 'bond' ;
 AS       : 'as' ;
 RING     : 'ring' ;
+STEREO   : 'stereo' ;
 
 // Quantificadores
 MULTIPLICADOR_ATOMO

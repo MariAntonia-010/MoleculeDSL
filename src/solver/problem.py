@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from ast_nos import AnelDecl, AtomoDecl, LigacaoDecl
+from ast_nos import AnelDecl, AtomoDecl, EstereoDecl, LigacaoDecl
 
 
 @dataclass(frozen=True)
@@ -35,7 +35,7 @@ class SolveProblem:
 
 def normalize(molecule):
     for command in molecule.comandos:
-        if isinstance(command, (LigacaoDecl, AnelDecl)):
+        if isinstance(command, (LigacaoDecl, AnelDecl, EstereoDecl)):
             return None, command
 
     atoms = []

@@ -1,0 +1,37 @@
+molecule "trans-1,2-Dimethylcyclohexane" {
+    atom C as r1
+    atom C as r2
+    atom C as r3
+    atom C as r4
+    atom C as r5
+    atom C as r6
+    atom C as m1
+    atom C as m2
+    16x atom H as h
+    bond r1-r2
+    bond r2-r3
+    bond r3-r4
+    bond r4-r5
+    bond r5-r6
+    bond r6-r1
+    bond r1-m1
+    bond r2-m2
+    bond r1-h1
+    bond r2-h2
+    bond r3-h3
+    bond r3-h4
+    bond r4-h5
+    bond r4-h6
+    bond r5-h7
+    bond r5-h8
+    bond r6-h9
+    bond r6-h10
+    bond m1-h11
+    bond m1-h12
+    bond m1-h13
+    bond m2-h14
+    bond m2-h15
+    bond m2-h16
+    ring r1 r2 r3 r4 r5 r6
+    stereo r1 r2 trans
+}

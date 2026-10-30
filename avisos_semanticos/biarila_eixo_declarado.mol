@@ -1,0 +1,52 @@
+// esperado: Aviso semântico [STEREO-005] na linha 51, coluna 4: eixo a1 (C#1)-b1 (C#7) declarado como estereogênico; a barreira de rotação não é verificada a partir do grafo
+molecule "2,2'-Dichloro-6,6'-dimethylbiphenyl" {
+    atom C as a1
+    atom C as a2
+    atom C as a3
+    atom C as a4
+    atom C as a5
+    atom C as a6
+    atom C as b1
+    atom C as b2
+    atom C as b3
+    atom C as b4
+    atom C as b5
+    atom C as b6
+    atom Cl as cl1
+    atom Cl as cl2
+    atom C as m1
+    atom C as m2
+    12x atom H as h
+    bond a1=a2
+    bond a2-a3
+    bond a3=a4
+    bond a4-a5
+    bond a5=a6
+    bond a6-a1
+    bond b1=b2
+    bond b2-b3
+    bond b3=b4
+    bond b4-b5
+    bond b5=b6
+    bond b6-b1
+    bond a1-b1
+    bond a2-cl1
+    bond b2-cl2
+    bond a6-m1
+    bond b6-m2
+    bond a3-h1
+    bond a4-h2
+    bond a5-h3
+    bond b3-h4
+    bond b4-h5
+    bond b5-h6
+    bond m1-h7
+    bond m1-h8
+    bond m1-h9
+    bond m2-h10
+    bond m2-h11
+    bond m2-h12
+    ring a1 a2 a3 a4 a5 a6
+    ring b1 b2 b3 b4 b5 b6
+    stereo a1-b1 Ra
+}

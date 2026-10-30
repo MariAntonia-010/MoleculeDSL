@@ -3,8 +3,8 @@
 from itertools import combinations, product
 from time import monotonic
 
-from solver.backtracking import feasible, materialize_edges
-from solver.canonical import canonical_heavy_key
+from solver.backtracking import connected, feasible, materialize_edges
+from solver.canonical import column_pairs, hydrogens_sorted, is_canonical_heavy
 from solver.hydrogen import distributions
 
 
@@ -14,7 +14,6 @@ def solve_distribution(
     hydrogen_distribution,
     request,
     deadline,
-    keys,
     solutions,
     limit,
 ):
@@ -43,22 +42,43 @@ def solve_distribution(
     for index, target in enumerate(residual):
         model.add(sum(incident[index]) == target)
 
-    capacity = count - 1
-    flows = {}
-    for a, b in pairs:
-        forward = model.new_int_var(0, capacity, f"f_{a}_{b}")
-        backward = model.new_int_var(0, capacity, f"f_{b}_{a}")
-        model.add(forward <= capacity * edges[(a, b)])
-        model.add(backward <= capacity * edges[(a, b)])
-        flows[(a, b)] = forward
-        flows[(b, a)] = backward
-    for atom in range(count):
-        outgoing = [flows[(atom, other)] for other in range(count) if other != atom]
-        incoming = [flows[(other, atom)] for other in range(count) if other != atom]
-        if atom == 0:
-            model.add(sum(outgoing) - sum(incoming) == capacity)
-        else:
-            model.add(sum(incoming) - sum(outgoing) == 1)
+    # Quebra de simetria por líder lexicográfico: a rotulação canônica
+    # (menor vetor coluna a coluna) nunca diminui ao trocar dois átomos
+    # gêmeos, de mesmo elemento, carga e quantidade de H. Só as posições
+    # que tocam um dos dois mudam, então a comparação vira uma soma
+    # ponderada em base 4 sobre essas posições.
+    rank = {pair: index for index, pair in enumerate(column_pairs(count))}
+    signatures = [
+        (atom.element, atom.charge, hydrogens)
+        for atom, hydrogens in zip(heavy, hydrogen_distribution)
+    ]
+    for i, j in pairs:
+        if signatures[i] != signatures[j]:
+            continue
+
+        def swap(vertex):
+            return j if vertex == i else i if vertex == j else vertex
+
+        touched = sorted(
+            (pair for pair in pairs if (i in pair or j in pair) and pair != (i, j)),
+            key=rank.get,
+        )
+        weights = {
+            pair: 4 ** (len(touched) - 1 - position)
+            for position, pair in enumerate(touched)
+        }
+        model.add(
+            sum(weights[pair] * bonds[pair] for pair in touched)
+            <= sum(
+                weights[pair] * bonds[tuple(sorted(map(swap, pair)))]
+                for pair in touched
+            )
+        )
+
+    # Conexão: o modelo só exige as n - 1 arestas necessárias, e o
+    # callback descarta os grafos desconexos. Variáveis de fluxo fariam
+    # o CP-SAT repetir a mesma estrutura para cada fluxo possível.
+    model.add(sum(edges.values()) >= count - 1)
 
     stopped_for_limit = False
     stopped_for_cancel = False
@@ -75,16 +95,16 @@ def solve_distribution(
                 for pair, variable in bonds.items()
                 if self.value(variable)
             }
+            if not connected(count, heavy_edges):
+                return
             if request.filters is not None and not request.filters.accepts(
                 heavy, heavy_edges, hydrogen_distribution
             ):
                 return
-            key = canonical_heavy_key(
+            if not is_canonical_heavy(
                 heavy_edges, heavy, hydrogen_distribution
-            )
-            if key in keys:
+            ):
                 return
-            keys.add(key)
             solutions.append((heavy_edges, hydrogen_distribution))
             if len(solutions) >= limit + 1:
                 stopped_for_limit = True
@@ -121,7 +141,9 @@ def enumerate_edges(problem, profile, limit, request):
     if not heavy:
         if len(hydrogens) == 2 and (
             request.filters is None
-            or request.filters.accepts_bonds([("H", 1, "H")], 0)
+            or request.filters.accepts_graph(
+                ["H", "H"], [[(1, 1)], [(0, 1)]], 0
+            )
         ):
             return [
                 {(hydrogens[0].index, hydrogens[1].index): 1}
@@ -140,7 +162,6 @@ def enumerate_edges(problem, profile, limit, request):
         if request.time_limit_seconds is not None
         else None
     )
-    keys = set()
     candidates_found = []
     for targets in product(*candidates):
         for hydrogen_distribution in distributions(
@@ -148,6 +169,11 @@ def enumerate_edges(problem, profile, limit, request):
         ):
             if request.cancel_check is not None and request.cancel_check():
                 return [], False, "cancelled"
+            # Quebra de simetria: toda classe tem uma rotulação com os H
+            # em ordem crescente dentro de cada grupo de mesmo elemento e
+            # carga, então as outras distribuições são redundantes
+            if not hydrogens_sorted(heavy, hydrogen_distribution):
+                continue
             residual = tuple(
                 target - hydrogen
                 for target, hydrogen in zip(targets, hydrogen_distribution)
@@ -160,7 +186,6 @@ def enumerate_edges(problem, profile, limit, request):
                 hydrogen_distribution,
                 request,
                 deadline,
-                keys,
                 candidates_found,
                 limit,
             )
@@ -170,12 +195,7 @@ def enumerate_edges(problem, profile, limit, request):
                     heavy, single, hydrogen_distribution
                 )
             ):
-                key = canonical_heavy_key(
-                    single, heavy, hydrogen_distribution
-                )
-                if key not in keys:
-                    keys.add(key)
-                    candidates_found.append((single, hydrogen_distribution))
+                candidates_found.append((single, hydrogen_distribution))
             if reason == "limit":
                 break
             if reason in ("timeout", "cancelled"):

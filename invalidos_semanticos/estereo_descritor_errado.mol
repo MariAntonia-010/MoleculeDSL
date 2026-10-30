@@ -1,0 +1,20 @@
+// esperado: Erro semântico [STEREO-002] na linha 19, coluna 4: c2 (C#2)=c3 (C#3) aceita E ou Z, encontrado 'R'
+molecule "But-2-ene" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    8x atom H as h
+    bond c1-c2
+    bond c2=c3
+    bond c3-c4
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c3-h5
+    bond c4-h6
+    bond c4-h7
+    bond c4-h8
+    stereo c2=c3 R
+}

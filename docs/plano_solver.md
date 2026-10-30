@@ -163,8 +163,9 @@ faltam benchmarks, quebra de simetria no modelo e worker isolado.
 Opções avaliadas:
 
 1. integração com Surge/MAYGEN: exigiria binário externo ou JVM no caminho
-   do compilador e um tradutor do perfil químico; fica para quando a escala
-   passar de oito átomos pesados;
+   do compilador e um tradutor do perfil químico; com a poda ordenada (L1),
+   o backend próprio cobre a escala da linguagem e a integração deixou de
+   ser necessária;
 2. orderly generation própria por blocos: **implementada** no backend de
    referência;
 3. canonical augmentation com nauty/Traces: mesma objeção de dependência
@@ -187,9 +188,11 @@ exigida por `distributions`. A suíte compara os conjuntos com o CP-SAT, que
 ainda deduplica por chave, e confere C₄H₈ (5), C₅H₁₀ (10), C₄H₆ (9),
 C₃H₆O (9) e C₃H₉N (4).
 
-Pendente: o teste é feito na estrutura completa. Podar matrizes parciais
-(orderly generation de Read-Faradzev) reduziria a busca, mas exige ordenar
-o preenchimento por linhas da matriz.
+Atualização (plano de limites, L1): a matriz é preenchida coluna a coluna, e
+`is_canonical_heavy(..., size=k)` testa o prefixo dos k primeiros átomos a
+cada coluna fechada (Read-Faradzev). O limite subiu para 12 átomos pesados.
+O CP-SAT usa o mesmo teste de representante, com líder lexicográfico entre
+átomos gêmeos, e não guarda mais chaves.
 
 ## Fase 6 — Ambiguidade assistida
 
@@ -205,7 +208,7 @@ Implementado em `src/solver/filters.py`:
 - exportação de alternativas canônicas em JSON/JSONL, com os filtros no
   sumário.
 
-Pendente: fragmentos com mais de uma ligação.
+Atualização (L3): fragmentos são cadeias, como `O-C=O`.
 
 Ranking de estabilidade só poderá existir com função, dados, validação e
 calibração explícitos.
@@ -229,10 +232,11 @@ Implementado em `src/eletronico.py`, com as opções `--eletronico` e
 Casos conferidos: carbonato (3), benzeno (2), acetato (2), ozônio (2),
 água (1) e cianeto (1).
 
-Fora do modelo: ligações coordenadas ou metálicas, radicais e elementos sem
-elétrons de valência. Aromaticidade continua fora do escopo
-(`plano_semantico.md`); tautomeria muda o esqueleto sigma e por isso não é
-ressonância — fica como agrupamento futuro.
+Atualização (L5 a L7): radicais deslocam o elétron desemparelhado;
+ligações coordenadas ficam fixas e `~` fica fora; átomos sem elétrons de
+valência ficam no estado declarado. Tautômeros (`--tautomeros`, em
+`src/tautomeros.py`) e aromaticidade por Hückel (`--aromaticidade`, em
+`src/aromaticidade.py`) foram implementados.
 
 ## Fase 8 — Estereoquímica
 
@@ -251,8 +255,11 @@ Implementado em `src/estereo.py`, com a opção `--estereo`:
 - a enumeração estereoquímica é separada da constitucional: o relatório
   informa o limite de 2ⁿ estereoisômeros.
 
-Fora: regras CIP 2 a 5, descontar formas meso, quiralidade axial e
-planar.
+Atualização (L8 e L9): contagem exata de estereoisômeros pelo grupo de
+automorfismos (meso, enantiômeros, centros pseudoassimétricos), centros de
+P/S com par livre, alenos, eixos de biarila declarados, regras CIP 3 a 5
+sobre descritores declarados e o comando `stereo` para declarar a
+configuração. Fica fora a quiralidade planar, que depende de geometria 3D.
 
 ## Fase 9 — Coordenação e sólidos
 

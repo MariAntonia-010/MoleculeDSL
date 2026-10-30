@@ -101,8 +101,9 @@ Opções disponíveis:
 | `--backend=reference\|cpsat` | seleciona o backend de busca |
 | `--aneis=N` | mantém só estruturas com N anéis |
 | `--ligacoes-multiplas=N` | mantém só estruturas com N ligações duplas ou triplas |
-| `--exigir=C=O` | mantém só estruturas com essa ligação (pode repetir) |
-| `--proibir=C#C` | descarta estruturas com essa ligação (pode repetir) |
+| `--exigir=C=O` | mantém só estruturas com essa cadeia, como `O-C=O` (pode repetir) |
+| `--proibir=C#C` | descarta estruturas com essa cadeia (pode repetir) |
+| `--isolar` | roda a busca num processo separado, encerrado no tempo limite |
 
 As opções podem ser combinadas:
 
@@ -121,8 +122,11 @@ python3 src/main.py --resolver --modelo resolver/agua.mol
 
 Nesta etapa estão cobertos H₂O, CO₂, N₂ e NH₄⁺. No modo `--resolver`,
 entradas sem solução, ambíguas ou com ligações já declaradas são rejeitadas.
-O backend de referência aceita até 24 átomos totais e oito átomos pesados;
-hidrogênios são distribuídos antes da geração da matriz pesada.
+O backend de referência aceita até 40 átomos totais e 12 átomos pesados;
+hidrogênios são distribuídos antes da geração da matriz pesada. A matriz é
+gerada coluna a coluna, e cada prefixo que não é canônico corta o ramo
+(geração ordenada de Read-Faradzev): C₆H₆ dá seus 217 isômeros
+constitucionais em menos de um décimo de segundo.
 
 Para inspecionar fórmulas ambíguas pequenas:
 
@@ -156,13 +160,19 @@ python3 src/main.py --resolver --aneis=0 --proibir=C=O resolver/formula_ambigua.
 ```
 
 Para C₂H₄O, `--exigir=C=O` deixa só o acetaldeído, e `--aneis=0
---proibir=C=O` torna o álcool vinílico a única estrutura. Um fragmento usa
-dois símbolos de elemento e o operador da ligação (`C-H`, `C=O`, `N#N`).
+--proibir=C=O` torna o álcool vinílico a única estrutura. Um fragmento é
+uma cadeia de átomos distintos com os operadores das ligações (`C=O`,
+`O-C=O`, `C=C-C=C`) e casa em qualquer um dos dois sentidos.
 
 O backend `reference` permanece o oráculo auditável. `cpsat` usa OR-Tools,
-conectividade por fluxo e a mesma distribuição prévia de H; as soluções são
-canonicalizadas fora do CP-SAT. A suíte compara os conjuntos dos dois
-backends em fórmulas pequenas.
+a mesma distribuição prévia de H e restrições de líder lexicográfico entre
+átomos gêmeos; a conexão é conferida no callback, e só a rotulação canônica
+é aceita. A suíte compara os dois backends, e `tests/benchmark_solver.py
+--backend=ambos` mede os dois numa lista fixa de fórmulas.
+
+Com `--isolar` (ou `SolveRequest(isolate=True)`), a busca roda num processo
+separado; o pai repassa cada solução assim que ela chega e encerra o filho no
+tempo limite, mesmo se ele estiver preso numa chamada nativa.
 
 O modelo classifica ligações por diferença de eletronegatividade como
 covalente apolar, covalente polar ou iônica. Os limites configuráveis ficam
@@ -171,23 +181,48 @@ aparece como `não classificada`.
 
 ### Relatórios químicos
 
-Depois de uma análise sem erros, quatro opções mostram informações extras:
+Depois de uma análise sem erros, estas opções mostram informações extras:
 
 | Opção | Mostra |
 |---|---|
 | `--eletronico` | pares livres, elétrons não ligantes e ligações pi de cada átomo |
-| `--ressonancia` | formas de ressonância com o mesmo esqueleto sigma e a mesma carga |
-| `--estereo` | centros e ligações duplas estereogênicas, com prioridades CIP |
+| `--ressonancia` | formas de ressonância, inclusive de radicais; ligações `->` ficam fixas e `~` fica fora |
+| `--tautomeros` | tautômeros por deslocamento de H de ou para heteroátomos (ceto-enol, imina-enamina) |
+| `--aromaticidade` | regra de Hückel nos ciclos e sistemas fundidos |
+| `--estereo` | centros, duplas E/Z, alenos e eixos declarados, com prioridades CIP e a contagem exata de estereoisômeros |
 | `--coordenacao` | metais, ligantes, κ/η/μ, estados de oxidação e contagem de elétrons |
 
 ```bash
 python3 src/main.py --ressonancia exemplos/carbonato.mol
-python3 src/main.py --estereo exemplos/butan_2_ol.mol
+python3 src/main.py --tautomeros exemplos/acetona.mol
+python3 src/main.py --aromaticidade exemplos/naftaleno.mol
+python3 src/main.py --estereo exemplos/acido_tartarico_meso.mol
 python3 src/main.py --coordenacao avisos_semanticos/tetracarbonilniquel.mol
 ```
 
-A linguagem não descreve configuração, então R/S e E/Z aparecem como não
-especificados. A contagem de 18 elétrons é só informativa.
+A contagem de estereoisômeros agrupa as configurações pelo grupo de
+automorfismos do grafo, então já desconta formas meso (ácido tartárico: 3) e
+reconhece centros pseudoassimétricos (ácido 2,3,4-tri-hidroxiglutárico: 4).
+A contagem de 18 elétrons é só informativa.
+
+### Configuração estereoquímica
+
+O comando `stereo` declara a configuração de um elemento estereogênico:
+
+```text
+stereo c2 R          // centro: R ou S; r ou s em centros pseudoassimétricos
+stereo c2=c3 Z       // ligação dupla: E ou Z
+stereo c3 Ra         // aleno, pelo átomo central: Ra ou Sa
+stereo a1-b1 Ra      // eixo de biarila (atropisomeria), com aviso STEREO-005
+stereo r1 r2 trans   // configuração relativa de dois centros do mesmo anel
+```
+
+Com a configuração declarada, `--estereo` diz se o estereoisômero é quiral,
+aquiral ou meso e mostra os descritores do enantiômero. A semântica confere
+se o elemento é de fato estereogênico (`STEREO-001`), se o descritor combina
+com o tipo do elemento (`STEREO-002`), repetições (`STEREO-003`) e se um
+centro pseudoassimétrico tem a configuração dos ramos declarada
+(`STEREO-004`).
 
 Cada etapa também pode ser executada isoladamente:
 
@@ -268,6 +303,8 @@ O catálogo de códigos, causas e correções está em
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
 | `RING-004` | ciclo independente sem declaração `ring` | aviso |
 | `STRUCT-008` | entidade molecular tem componentes desconectados | erro |
+| `STEREO-001` a `STEREO-004` | configuração em elemento não estereogênico, descritor errado, repetido ou sem desempate | erro |
+| `STEREO-005` | eixo de biarila declarado sem verificação da barreira | aviso |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e
@@ -331,6 +368,7 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 - [Levantamento e fontes de química](docs/levantamento_quimica.md)
 - [Pesquisa química aprofundada](docs/pesquisa_quimica_aprofundada.md)
 - [Plano completo do solver](docs/plano_solver.md)
+- [Plano de eliminação dos limites](docs/plano_limites.md)
 - [Diário do projeto](docs/DIARIO.md)
 - [Página de apresentação](docs/apresentacao/index.html)
 
@@ -346,16 +384,17 @@ Continuam pendentes:
 - valências ainda sem fonte para Be, Al, Si e metais de transição;
 - modelo semântico próprio para sólidos metálicos; nesta iteração,
   `METAL-001` verifica a composição e `METAL-002` informa a limitação
-  coletiva de todo uso de `~`;
-- podar matrizes parciais na geração canônica, regras CIP 2 a 5 e formas
-  meso.
+  coletiva de todo uso de `~`.
 
 `OCT-001` foi removida: para elementos com dados, octeto e dueto já são
 refletidos pelas regras de valência. Ciclos independentes sem `ring` agora
 geram o aviso `RING-004`.
 
-Também ficam fora do escopo atual aromaticidade, visualização 3D, sintaxe
-para configuração estereoquímica e isótopos.
+Ficam fora por dependerem da geometria 3D, que a linguagem não descreve:
+quiralidade planar (ferrocenos substituídos, ciclofanos) e o cálculo da
+barreira de rotação de biarilas, que por isso só entram quando declaradas.
+Também ficam fora visualização 3D e isótopos; sem isótopos, a regra CIP 2
+nunca tem empate a resolver.
 
 ## Solução de problemas
 

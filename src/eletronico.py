@@ -10,7 +10,8 @@ from ast_nos import Operador
 # Os elétrons pi são os que excedem a ligação sigma em cada ligação
 # múltipla. As formas de ressonância mantêm o esqueleto sigma, a carga
 # total e a quantidade de elétrons, e trocam ordens de ligação e cargas
-# formais dentro dos estados permitidos por regras/valencias.json.
+# formais dentro dos estados permitidos por regras/valencias.json. Radicais
+# deslocam o elétron desemparelhado; ligações coordenadas ficam fixas.
 
 LIMITE_FORMAS = 10
 
@@ -107,9 +108,11 @@ def formatar_estados(modelo, dados_elementos, valencias):
     return "\n".join(linhas)
 
 
-def estados_permitidos(atomo, valencia_eletrons, valencias):
-    # Pares (carga, soma das ordens) aceitos pelas regras, sempre com
-    # elétrons não ligantes em pares
+def estados_permitidos(atomo, valencia_eletrons, valencias, radicais=False):
+    # Pares (carga, soma das ordens) aceitos pelas regras. Sem radicais,
+    # os elétrons não ligantes ficam sempre em pares; com radicais, cada
+    # estado fechado também vale com uma ligação a menos e um elétron
+    # desemparelhado.
     permitidos = []
     for valor in valencias["valencias"].get(atomo.elemento, []):
         permitidos.append((0, valor))
@@ -118,82 +121,121 @@ def estados_permitidos(atomo, valencia_eletrons, valencias):
     ).items():
         for valor in valores:
             permitidos.append((int(carga), valor))
-    return [
+    fechados = [
         (carga, valor)
         for carga, valor in permitidos
         if valencia_eletrons - carga - valor >= 0
         and (valencia_eletrons - carga - valor) % 2 == 0
     ]
+    if not radicais:
+        return fechados
+    abertos = [(carga, valor - 1) for carga, valor in fechados if valor >= 1]
+    return sorted(set(fechados + abertos))
 
 
 def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORMAS):
-    """Devolve (formas, motivo, truncado).
+    """Devolve (formas, observacoes, truncado).
 
-    Quando a molécula fica fora do modelo, formas é None e motivo diz por
-    quê. A forma declarada é sempre a primeira da lista.
+    As ligações simples, duplas e triplas trocam de ordem. As coordenadas
+    ficam fixas, e as metálicas ficam fora (o motivo ~ não é estrutura de
+    Lewis). Cada átomo aceita os estados das regras e o próprio estado
+    declarado; um átomo sem elétrons de valência conhecidos fica no estado
+    declarado. Com radicais, o total de elétrons desemparelhados é o da
+    forma declarada. A forma declarada é sempre a primeira da lista.
     """
-    if any(
-        lig.operador in (Operador.METALICA, Operador.COORDENADA)
-        for lig in modelo.ligacoes
-    ):
-        return None, "ligações coordenadas ou metálicas ficam fora do modelo", False
+    observacoes = []
+    if any(lig.operador is Operador.METALICA for lig in modelo.ligacoes):
+        observacoes.append(
+            "arestas ~ ficam fora: o motivo do sólido metálico não tem "
+            "estrutura de Lewis"
+        )
+    if any(lig.operador is Operador.COORDENADA for lig in modelo.ligacoes):
+        observacoes.append("ligações coordenadas ficam fixas")
 
+    declarada = ordens_do_modelo(modelo, valencias)
+    variaveis = set()
+    for lig in modelo.ligacoes:
+        if lig.operador in (Operador.SIMPLES, Operador.DUPLA, Operador.TRIPLA):
+            variaveis.add(tuple(sorted((lig.origem, lig.destino))))
+    fixas = {par: valor for par, valor in declarada.items() if par not in variaveis}
+
+    # Átomos ligados por ~ ficam no estado declarado e fora da contagem
+    # de elétrons desemparelhados: seus elétrons são do mar metálico
+    metalicos = {
+        x
+        for lig in modelo.ligacoes
+        if lig.operador is Operador.METALICA
+        for x in (lig.origem, lig.destino)
+    }
+    lista_estados = estados(modelo, dados_elementos, valencias)
+    desemparelhados_declarados = sum(
+        estado.desemparelhados or 0
+        for estado in lista_estados
+        if estado.atomo.id not in metalicos
+    )
+    radicais = desemparelhados_declarados > 0
+    if radicais:
+        observacoes.append(
+            f"radical: as formas mantêm {desemparelhados_declarados} "
+            "elétron(s) desemparelhado(s)"
+        )
+
+    eletrons = {}
     permitidos = {}
-    for atomo in modelo.atomos:
+    for estado in lista_estados:
+        atomo = estado.atomo
+        declarado = (atomo.carga, estado.soma_ordens)
         valencia = dados_elementos.get(atomo.elemento, {}).get(
             "eletrons_valencia"
         )
-        if valencia is None:
-            return None, f"faltam elétrons de valência de {atomo.elemento}", False
-        opcoes = estados_permitidos(atomo, valencia, valencias)
-        if not opcoes:
-            return None, f"não há estados de valência para {atomo.rotulo()}", False
+        if atomo.id in metalicos:
+            valencia = None
+        eletrons[atomo.id] = valencia
+        if valencia is None or estado.eletrons_nao_ligantes is None:
+            permitidos[atomo.id] = [declarado]
+            continue
+        opcoes = estados_permitidos(atomo, valencia, valencias, radicais)
+        if declarado not in opcoes:
+            opcoes.append(declarado)
         permitidos[atomo.id] = opcoes
 
-    declarada = ordens_do_modelo(modelo, valencias)
-    for estado in estados(modelo, dados_elementos, valencias):
-        if estado.desemparelhados:
-            return None, "radicais ficam fora do modelo de ressonância", False
-
     carga_total = sum(a.carga for a in modelo.atomos)
-    pares = sorted(declarada)
+    pares = sorted(variaveis)
     ultimo_par = {}
     for indice, (a, b) in enumerate(pares):
         ultimo_par[a] = indice
         ultimo_par[b] = indice
     soma = {a.id: 0 for a in modelo.atomos}
+    for (a, b), valor in fixas.items():
+        soma[a] += valor
+        soma[b] += valor
     maximo = {
         atomo_id: max(valor for _, valor in opcoes)
         for atomo_id, opcoes in permitidos.items()
     }
-    ordens = {}
+    ordens = dict(fixas)
     encontradas = []
     truncado = False
 
-    def cargas_possiveis():
-        # Cada átomo pode ter mais de uma carga com a mesma soma de ordens
-        listas = []
-        for atomo in modelo.atomos:
-            listas.append(
-                [
-                    carga
-                    for carga, valor in permitidos[atomo.id]
-                    if valor == soma[atomo.id]
-                ]
-            )
-        return listas
+    def nao_ligantes(atomo_id, carga):
+        if eletrons[atomo_id] is None:
+            return 0
+        return eletrons[atomo_id] - carga - soma[atomo_id]
 
     def fechar():
         nonlocal truncado
         ids = [a.id for a in modelo.atomos]
-        listas = cargas_possiveis()
+        listas = [
+            [carga for carga, valor in permitidos[i] if valor == soma[i]]
+            for i in ids
+        ]
 
-        def escolher(indice, atuais, total):
+        def escolher(indice, atuais, total, abertos):
             nonlocal truncado
             if truncado:
                 return
             if indice == len(ids):
-                if total == carga_total:
+                if total == carga_total and abertos == desemparelhados_declarados:
                     if len(encontradas) >= limite:
                         truncado = True
                         return
@@ -201,10 +243,15 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
                 return
             for carga in listas[indice]:
                 atuais[ids[indice]] = carga
-                escolher(indice + 1, atuais, total + carga)
+                escolher(
+                    indice + 1,
+                    atuais,
+                    total + carga,
+                    abertos + nao_ligantes(ids[indice], carga) % 2,
+                )
             atuais.pop(ids[indice], None)
 
-        escolher(0, {}, 0)
+        escolher(0, {}, 0, 0)
 
     def visitar(indice):
         if truncado:
@@ -232,7 +279,12 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
             soma[b] -= valor
             del ordens[(a, b)]
 
-    visitar(0)
+    # Átomos sem ligações variáveis precisam estar num estado aceito
+    if all(
+        x in ultimo_par or any(v == soma[x] for _, v in permitidos[x])
+        for x in soma
+    ):
+        visitar(0)
 
     # A forma declarada vai primeiro; as demais, por quantidade de átomos
     # com carga formal (critério exibido na saída, não uma estabilidade)
@@ -246,7 +298,7 @@ def formas_de_ressonancia(modelo, dados_elementos, valencias, limite=LIMITE_FORM
             atomos_com_carga(forma),
         )
     )
-    return encontradas, None, truncado
+    return encontradas, observacoes, truncado
 
 
 def atomos_com_carga(forma):
@@ -257,14 +309,13 @@ SIMBOLO = {1: "-", 2: "=", 3: "#"}
 
 
 def formatar_ressonancia(modelo, dados_elementos, valencias):
-    formas, motivo, truncado = formas_de_ressonancia(
+    formas, observacoes, truncado = formas_de_ressonancia(
         modelo, dados_elementos, valencias
     )
-    if formas is None:
-        return f"Ressonância: não avaliada ({motivo})"
     por_id = {a.id: a for a in modelo.atomos}
     declarada = ordens_do_modelo(modelo, valencias)
     linhas = [f"Ressonância: {len(formas)} forma(s) com o mesmo esqueleto sigma"]
+    linhas += [f"  Observação: {texto}" for texto in observacoes]
     for indice, forma in enumerate(formas, start=1):
         mudancas = [
             f"{por_id[a].rotulo()}{SIMBOLO[valor]}{por_id[b].rotulo()}"

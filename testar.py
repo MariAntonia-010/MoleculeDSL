@@ -1,4 +1,5 @@
 import glob
+import importlib.util
 import json
 import os
 import subprocess
@@ -409,6 +410,10 @@ def testar_fases_solver():
             ),
             1,
         ),
+        (solver.SolveFilters(required=(solver.parse_fragment("C=C-O"),)), 1),
+        (solver.SolveFilters(required=(solver.parse_fragment("H-C=O"),)), 1),
+        (solver.SolveFilters(required=(solver.parse_fragment("C-O-C"),)), 1),
+        (solver.SolveFilters(forbidden=(solver.parse_fragment("O-C-C"),)), 2),
     ]
     for filtro, esperado in filtros:
         resultado = resolver_arquivo(ambigua, filters=filtro)
@@ -527,13 +532,12 @@ def testar_fases_quimicas():
         "cianeto": 1,
     }
     for nome, esperado in formas_esperadas.items():
-        formas, motivo, _ = eletronico.formas_de_ressonancia(
+        formas, _, _ = eletronico.formas_de_ressonancia(
             modelo_de("exemplos", f"{nome}.mol"), elementos, valencias
         )
-        if formas is None or len(formas) != esperado:
+        if len(formas) != esperado:
             problemas.append(
-                f"ressonância de {nome}: "
-                f"{motivo or len(formas)}, esperado {esperado}"
+                f"ressonância de {nome}: {len(formas)}, esperado {esperado}"
             )
     pares = {
         estado.atomo.carga: estado.pares_livres
@@ -544,13 +548,13 @@ def testar_fases_quimicas():
     }
     if pares != {0: 2, -1: 3}:
         problemas.append(f"pares livres do carbonato: {pares}")
-    formas, _, _ = eletronico.formas_de_ressonancia(
+    formas, observacoes, _ = eletronico.formas_de_ressonancia(
         modelo_de("exemplos", "amonio_por_ligacao_coordenada.mol"),
         elementos,
         valencias,
     )
-    if formas is not None:
-        problemas.append("ressonância aceitou ligação coordenada")
+    if len(formas) != 1 or not any("coordenadas" in o for o in observacoes):
+        problemas.append("ressonância não manteve a ligação coordenada fixa")
 
     # Fase 8: elementos estereogênicos
     casos_estereo = {
@@ -562,16 +566,18 @@ def testar_fases_quimicas():
     }
     for nome, (centros_esperados, duplas_esperadas) in casos_estereo.items():
         modelo = modelo_de("exemplos", f"{nome}.mol")
-        (centros, duplas), _ = estereo.analisar(modelo, elementos, valencias)
-        if (len(centros), len(duplas)) != (centros_esperados, duplas_esperadas):
-            problemas.append(
-                f"estereoquímica de {nome}: {len(centros)} centro(s) e "
-                f"{len(duplas)} dupla(s)"
-            )
+        resultado, _, _ = estereo.analisar(modelo, elementos, valencias)
+        tipos = [resultado.elementos[i].tipo for i in resultado.estereogenicos]
+        if (tipos.count("centro"), tipos.count("dupla")) != (
+            centros_esperados,
+            duplas_esperadas,
+        ):
+            problemas.append(f"estereoquímica de {nome}: {tipos}")
     modelo = modelo_de("exemplos", "butan_2_ol.mol")
-    (centros, _), _ = estereo.analisar(modelo, elementos, valencias)
+    resultado, _, _ = estereo.analisar(modelo, elementos, valencias)
     por_id = {a.id: a for a in modelo.atomos}
-    ordem = [por_id[i].nome for i in centros[0][1]] if centros else []
+    centro = resultado.elementos[resultado.estereogenicos[0]]
+    ordem = [por_id[nivel[0]].nome for nivel in centro.prioridades[0]]
     if ordem != ["o", "c3", "c1", "h5"]:
         problemas.append(f"prioridades CIP do butan-2-ol: {ordem}")
 
@@ -607,6 +613,234 @@ def testar_fases_quimicas():
             problemas.append(f"CLI não mostrou '{trecho}'")
     if codigo != 0:
         problemas.append(f"CLI dos relatórios saiu com código {codigo}")
+    return problemas
+
+
+def molecula_com_h(pasta, nome, atomos, ligacoes, extras=()):
+    # Gera um .mol com os H que completam C(4), N(3), O(2), S(2) e
+    # halogênios(1); atomos é "c1:C o1:O ..." e ligacoes "c1-c2 c2=o1 ..."
+    valencia = {"C": 4, "N": 3, "O": 2, "S": 2, "Cl": 1, "Br": 1}
+    elementos = dict(par.split(":") for par in atomos.split())
+    soma = dict.fromkeys(elementos, 0)
+    linhas = [f'molecule "{nome}" {{']
+    linhas += [f"    atom {e} as {n}" for n, e in elementos.items()]
+    corpo = []
+    for ligacao in ligacoes.split():
+        for simbolo, ordem in (("=", 2), ("#", 3), ("-", 1)):
+            if simbolo in ligacao:
+                a, b = ligacao.split(simbolo)
+                soma[a] += ordem
+                soma[b] += ordem
+                corpo.append(f"    bond {ligacao}")
+                break
+    donos = []
+    for n, e in elementos.items():
+        alvo = soma[n] if e == "S" and soma[n] > 2 else valencia[e]
+        donos += [n] * (alvo - soma[n])
+    if donos:
+        linhas.append(f"    {len(donos)}x atom H as h")
+    linhas += corpo
+    linhas += [f"    bond {n}-h{i}" for i, n in enumerate(donos, start=1)]
+    linhas += [f"    {extra}" for extra in extras]
+    linhas.append("}")
+    return escrever_mol(pasta, f"{nome}.mol", linhas)
+
+
+def testar_limites():
+    """Plano de limites (docs/plano_limites.md), itens L1 a L9."""
+    src = os.path.join(PASTA_RAIZ, "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+
+    from construtor_ast import construir
+    from sintatico import analisar
+    import aromaticidade
+    import eletronico
+    import estereo
+    import semantico
+    import solver
+    import tautomeros
+    from solver.canonical import column_pairs
+
+    elementos = semantico.carregar_elementos()
+    valencias = semantico.carregar_valencias()
+    problemas = []
+
+    def modelo_de(caminho):
+        modelo, mensagens = semantico.analisar(construir(analisar(caminho)))
+        if any(m.severidade == semantico.ERRO for m in mensagens):
+            raise AssertionError(f"{caminho}: {mensagens}")
+        return modelo
+
+    def exemplo(nome):
+        return modelo_de(os.path.join(PASTA_RAIZ, "exemplos", f"{nome}.mol"))
+
+    with tempfile.TemporaryDirectory() as pasta:
+        # L1: poda ordenada, com a ordem coluna a coluna
+        if column_pairs(4) != [(0, 1), (0, 2), (1, 2), (0, 3), (1, 3), (2, 3)]:
+            problemas.append("pares fora da ordem coluna a coluna")
+        for formula, carbonos, hidrogenios, esperado in (
+            ("C7H16", 7, 16, 9),
+            ("C6H12", 6, 12, 25),
+            ("C6H6", 6, 6, 217),
+        ):
+            arquivo = escrever_mol(
+                pasta,
+                f"{formula}.mol",
+                [f'molecule "{formula}" {{', f"    {carbonos}x atom C",
+                 f"    {hidrogenios}x atom H", "}"],
+            )
+            for backend in ("reference", "cpsat"):
+                if backend == "cpsat" and importlib.util.find_spec("ortools") is None:
+                    continue
+                resultado = solver.solve(
+                    construir(analisar(arquivo)),
+                    valencias,
+                    solver.SolveRequest(
+                        max_solutions=1000, require_unique=False, backend=backend
+                    ),
+                )
+                if resultado.summary.solutions_emitted != esperado:
+                    problemas.append(
+                        f"{formula} ({backend}): "
+                        f"{resultado.summary.solutions_emitted}, esperado {esperado}"
+                    )
+
+        # L3: fragmentos em cadeia
+        if str(solver.parse_fragment("O-C=O")) != "O-C=O":
+            problemas.append("fragmento O-C=O não foi lido como cadeia")
+        if solver.parse_fragment("C=") is not None:
+            problemas.append("fragmento incompleto foi aceito")
+
+        # L4: busca isolada num processo separado
+        ambigua = os.path.join(PASTA_RAIZ, "resolver", "formula_ambigua.mol")
+        isolado = solver.solve(
+            construir(analisar(ambigua)),
+            valencias,
+            solver.SolveRequest(max_solutions=10, require_unique=False, isolate=True),
+        )
+        if len(isolado.solutions) != 3 or not isolado.summary.details.get("isolated"):
+            problemas.append(f"busca isolada: {len(isolado.solutions)} soluções")
+        codigo, saida = rodar_comando(["--isolar", ambigua])
+        if codigo != 1 or "--isolar exige" not in saida:
+            problemas.append("--isolar sem resolução não foi recusado")
+
+        # L5: ressonância com radicais, coordenadas e metálicas
+        alila = escrever_mol(
+            pasta,
+            "alila.mol",
+            [
+                'species molecule "Allyl radical" unpaired 1 {',
+                "    atom C as c1",
+                "    atom C as c2",
+                "    atom C as c3",
+                "    5x atom H as h",
+                "    bond c1=c2",
+                "    bond c2-c3",
+                *(f"    bond {c}-h{i}" for i, c in
+                  enumerate(("c1", "c1", "c2", "c3", "c3"), start=1)),
+                "}",
+            ],
+        )
+        formas, observacoes, _ = eletronico.formas_de_ressonancia(
+            modelo_de(alila), elementos, valencias
+        )
+        if len(formas) != 2 or not any("radical" in o for o in observacoes):
+            problemas.append(f"ressonância da alila: {len(formas)} forma(s)")
+        formas, observacoes, _ = eletronico.formas_de_ressonancia(
+            exemplo("sodio_metalico"), elementos, valencias
+        )
+        if any("radical" in o for o in observacoes):
+            problemas.append("sódio metálico foi tratado como radical")
+
+        # L6: tautômeros
+        for nome, esperado in (
+            ("acetona", 2),
+            ("ureia", 2),
+            ("pirrol", 3),
+            ("piridina", 1),
+            ("etano", 1),
+        ):
+            lista, _ = tautomeros.tautomeros(exemplo(nome), elementos, valencias)
+            if len(lista) != esperado:
+                problemas.append(f"tautômeros de {nome}: {len(lista)}, esperado {esperado}")
+
+        # L7: aromaticidade
+        ciclobutadieno = molecula_com_h(
+            pasta, "ciclobutadieno", "c1:C c2:C c3:C c4:C",
+            "c1=c2 c2-c3 c3=c4 c4-c1", ["ring c1 c2 c3 c4"],
+        )
+        casos = {
+            "benzeno": ["aromático"],
+            "naftaleno": ["aromático", "aromático"],
+            "pirrol": ["aromático"],
+            "ciclopentadieno": ["não aromático"],
+            "ciclohexano": ["não aromático"],
+        }
+        for nome, esperado in casos.items():
+            resultado = aromaticidade.analisar(exemplo(nome), elementos, valencias)
+            obtido = [
+                "não aromático" if e is None else aromaticidade.classificar(e)
+                for _, e, _ in resultado
+            ]
+            if obtido != esperado:
+                problemas.append(f"aromaticidade de {nome}: {obtido}")
+        resultado = aromaticidade.analisar(
+            modelo_de(ciclobutadieno), elementos, valencias
+        )
+        if [aromaticidade.classificar(e) for _, e, _ in resultado] != ["antiaromático"]:
+            problemas.append("ciclobutadieno não ficou antiaromático")
+
+        # L8: contagem exata de estereoisômeros pelo grupo de automorfismos
+        tartarico = ("c1:C c2:C c3:C c4:C o1:O o2:O o3:O o4:O o5:O o6:O",
+                     "c1-c2 c2-c3 c3-c4 c1=o1 c1-o2 c2-o3 c3-o4 c4=o5 c4-o6")
+        anel = "r1:C r2:C r3:C r4:C r5:C r6:C m1:C m2:C"
+        ciclo = "r1-r2 r2-r3 r3-r4 r4-r5 r5-r6 r6-r1"
+        casos = {
+            "tartarico": (*tartarico, 3, 1),
+            "dimetil14": (anel, ciclo + " r1-m1 r4-m2", 2, 2),
+            "dimetil12": (anel, ciclo + " r1-m1 r2-m2", 3, 1),
+            "metilciclohexano": ("r1:C r2:C r3:C r4:C r5:C r6:C m1:C",
+                                 ciclo + " r1-m1", 1, 1),
+            "aleno": ("c1:C c2:C c3:C c4:C c5:C", "c1-c2 c2=c3 c3=c4 c4-c5", 2, 0),
+            "sulfoxido": ("c1:C s1:S o1:O c2:C c3:C", "c1-s1 s1=o1 s1-c2 c2-c3", 2, 0),
+            "dibromobutano": ("c1:C c2:C c3:C c4:C b1:Br b2:Br",
+                              "c1-c2 c2-c3 c3-c4 c2-b1 c3-b2", 3, 1),
+        }
+        for nome, (atomos, ligacoes, total, aquirais) in casos.items():
+            extras = ["ring r1 r2 r3 r4 r5 r6"] if atomos.startswith("r1") else []
+            modelo = modelo_de(molecula_com_h(pasta, nome, atomos, ligacoes, extras))
+            resultado, _, _ = estereo.analisar(modelo, elementos, valencias)
+            obtido = (
+                len(resultado.classes),
+                sum(1 for c, e in resultado.classes.items() if c == e),
+            )
+            if obtido != (total, aquirais):
+                problemas.append(f"estereoisômeros de {nome}: {obtido}, esperado {(total, aquirais)}")
+
+        # L9: configuração declarada
+        declarados = {
+            "acido_tartarico_meso": "aquiral (forma meso)",
+            "acido_tri_hidroxiglutarico": "aquiral (forma meso)",
+            "trans_1_2_dimetilciclohexano": "par de enantiômeros",
+            "penta_2_3_dieno": "Enantiômero: c2 (C#2)=c3 (C#3)=c4 (C#4) Sa",
+            "etil_metil_sulfoxido": "Enantiômero: s1 (S#1) R",
+        }
+        for nome, trecho in declarados.items():
+            texto = estereo.formatar(exemplo(nome), elementos, valencias)
+            if trecho not in texto:
+                problemas.append(f"configuração declarada de {nome}: {texto}")
+
+    for opcao, nome, trecho in (
+        ("--tautomeros", "acetona", "Tautômero 2"),
+        ("--aromaticidade", "pirrol", "aromático (Hückel)"),
+        ("--estereo", "acido_tartarico_meso", "forma meso"),
+    ):
+        codigo, saida = rodar_comando(
+            [opcao, os.path.join(PASTA_RAIZ, "exemplos", f"{nome}.mol")]
+        )
+        if codigo != 0 or trecho not in saida:
+            problemas.append(f"{opcao} em {nome}: {saida}")
     return problemas
 
 
@@ -947,6 +1181,7 @@ def main():
         ("solver/cli_estruturada", testar_cli_solver_estruturado),
         ("solver/fases_do_plano", testar_fases_solver),
         ("solver/fases_quimicas", testar_fases_quimicas),
+        ("solver/limites", testar_limites),
     ]
     casos_especiais += [
         (

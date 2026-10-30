@@ -72,25 +72,39 @@ def hydrogens_sorted(atoms, hydrogen_counts):
     return True
 
 
-def is_canonical_heavy(edges, atoms, hydrogen_counts):
+def column_pairs(count):
+    """Pares (a, b), a < b, coluna a coluna da matriz de adjacência.
+
+    As arestas entre os k primeiros átomos formam um prefixo dessa ordem,
+    o que permite testar a canonicidade antes de a estrutura terminar.
+    """
+    return [(a, b) for b in range(count) for a in range(b)]
+
+
+def is_canonical_heavy(edges, atoms, hydrogen_counts, size=None):
     """Diz se esta rotulação é a representante da sua órbita.
 
-    A representante é a de menor vetor (H por átomo, ordens das arestas)
-    entre as permutações que trocam átomos de mesmo elemento e carga. Com
-    os H já ordenados, só as permutações que preservam a quantidade de H
-    podem empatar no primeiro componente, então basta testar essas.
-    Exatamente uma rotulação de cada classe passa no teste, e nenhuma
-    chave precisa ser guardada.
+    A representante é a de menor vetor (H por átomo, ordens das arestas
+    coluna a coluna) entre as permutações que trocam átomos de mesmo
+    elemento e carga. Com os H já ordenados, só as permutações que
+    preservam a quantidade de H podem empatar no primeiro componente,
+    então basta testar essas. Exatamente uma rotulação de cada classe
+    passa no teste, e nenhuma chave precisa ser guardada.
+
+    Com size, o teste olha só o subgrafo dos size primeiros átomos. Uma
+    rotulação canônica tem todos esses prefixos canônicos (geração
+    ordenada de Read-Faradzev), então um prefixo reprovado corta o ramo.
     """
     if not hydrogens_sorted(atoms, hydrogen_counts):
         return False
-    count = len(atoms)
-    pairs = list(combinations(range(count), 2))
+    count = len(atoms) if size is None else size
+    pairs = column_pairs(count)
     identity = tuple(edges.get(pair, 0) for pair in pairs)
 
     groups = {}
-    for index, (atom, hydrogens) in enumerate(zip(atoms, hydrogen_counts)):
-        groups.setdefault((*atom_signature(atom), hydrogens), []).append(index)
+    for index in range(count):
+        signature = (*atom_signature(atoms[index]), hydrogen_counts[index])
+        groups.setdefault(signature, []).append(index)
     movable = [indices for indices in groups.values() if len(indices) > 1]
     if not movable:
         return True

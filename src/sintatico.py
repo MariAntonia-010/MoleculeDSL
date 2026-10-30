@@ -109,7 +109,14 @@ class RecuperacaoPorComando(DefaultErrorStrategy):
     # o erro dele sai com uma mensagem errada. Por isso esses tokens
     # nunca são apagados.
 
-    INICIO_DE_COMANDO = {P.ATOM, P.BOND, P.RING, P.MULTIPLICADOR_ATOMO, P.FECHA_CHAVE}
+    INICIO_DE_COMANDO = {
+        P.ATOM,
+        P.BOND,
+        P.RING,
+        P.STEREO,
+        P.MULTIPLICADOR_ATOMO,
+        P.FECHA_CHAVE,
+    }
 
     def singleTokenDeletion(self, recognizer):
         if recognizer.getCurrentToken().type in self.INICIO_DE_COMANDO:
@@ -193,7 +200,7 @@ class ErroSintatico(ColetorErrosANTLR):
                 dica = explicar_quantificador(recognizer.getTokenStream(), token)
                 if dica is not None:
                     return dica, False
-                return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring' ou '}}'", False
+                return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring', 'stereo' ou '}}'", False
 
         if regra == P.RULE_atomo:
             if P.ATOM in esperados:
@@ -219,6 +226,12 @@ class ErroSintatico(ColetorErrosANTLR):
 
         if regra in (P.RULE_ligacao, P.RULE_referencia) and esperados & REFERENCIAS:
             return f"esperado elemento ou nome de átomo na ligação, encontrado {encontrado}", True
+
+        if regra in (P.RULE_estereo, P.RULE_descritor) and esperados & {P.IDENT, P.NOME}:
+            return (
+                f"esperado átomo ou descritor (R, S, r, s, E, Z, Ra, Sa, cis ou trans) "
+                f"em 'stereo', encontrado {encontrado}"
+            ), True
 
         if regra == P.RULE_anel and P.NOME in esperados:
             return f"um anel precisa de pelo menos três nomes de átomos, encontrado {encontrado}", True

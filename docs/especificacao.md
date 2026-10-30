@@ -62,8 +62,8 @@ A MoleculeDSL trabalha com os seguintes tipos de dados:
 
 ## 4. Comandos
 
-Um programa contém uma única espécie. Dentro dela, os comandos `atom`, `bond`
-e `ring` podem aparecer em qualquer ordem.
+Um programa contém uma única espécie. Dentro dela, os comandos `atom`, `bond`,
+`ring` e `stereo` podem aparecer em qualquer ordem.
 
 O cabeçalho recomendado é:
 
@@ -145,6 +145,24 @@ Os átomos são citados na ordem em que aparecem no anel: cada um precisa estar 
 ring c1 c2 c3
 ```
 
+### `stereo`
+
+Declara a configuração de um elemento estereogênico. Os átomos são citados
+pelo nome (ou pelo símbolo, quando só há um átomo do elemento).
+
+```text
+stereo c2 R          // centro: R ou S; r ou s em centros pseudoassimétricos
+stereo c2=c3 Z       // ligação dupla: E ou Z
+stereo c3 Ra         // aleno, pelo átomo central: Ra ou Sa
+stereo a1-b1 Ra      // eixo de biarila (atropisomeria)
+stereo r1 r2 trans   // configuração relativa de dois centros do mesmo anel
+```
+
+A semântica confere se o elemento é estereogênico nesta constituição e nas
+outras configurações declaradas (STEREO-001 a STEREO-005). Centros de anel
+com dois ramos iguais pelo anel, como em 1,4-dimetilciclohexano, são
+declarados por cis/trans.
+
 ---
 
 ## 5. Operadores e precedência
@@ -184,7 +202,7 @@ atom O // átomo de oxigênio
 
 ## 7. Palavras reservadas
 
-As palavras `molecule`, `atom`, `bond`, `as` e `ring` são reservadas e não podem ser usadas como nome de átomo.
+As palavras `molecule`, `species`, `atom`, `bond`, `as`, `ring` e `stereo` são reservadas e não podem ser usadas como nome de átomo.
 
 Também ficam reservados os nomes formados por `x` seguido só de dígitos, como `x4`, porque são lidos como repetição de ligação.
 
@@ -206,13 +224,15 @@ cabecalho     = "molecule" , texto
               | "species" , "metallic_solid" , texto ;
 carga_especie = "charge" , ( "+" | "-" ) , inteiro ;
 desemparelhados = "unpaired" , inteiro ;
-comando       = atomo | ligacao | anel ;
+comando       = atomo | ligacao | anel | estereo ;
 atomo         = [ multiplicador ] , "atom" , elemento , [ carga ] , [ "as" , nome ] ;
 carga         = "(" , ( "+" | "-" ) , inteiro , ")" ;
 ligacao       = "bond" , referencia , operador , referencia , [ repeticao ] ;
 referencia    = elemento | nome ;
 operador      = "-" | "=" | "#" | "->" | "~" ;
 anel          = "ring" , nome , nome , nome , { nome } ;
+estereo       = "stereo" , referencia , [ [ operador ] , referencia ] , descritor ;
+descritor     = elemento | nome ;  (* R, S, E, Z, Ra, Sa, r, s, cis ou trans *)
 
 (* Regras léxicas *)
 multiplicador = digito , { digito } , "x" ;
@@ -290,7 +310,7 @@ suas ligações inferidas. O solver:
 - usa somente valências confirmadas;
 - considera ordens simples, dupla e tripla;
 - exige conectividade;
-- aceita no máximo 24 átomos totais e oito átomos pesados;
+- aceita no máximo 40 átomos totais e 12 átomos pesados;
 - só retorna quando existe uma única solução.
 
 H₂O, CO₂, N₂ e NH₄⁺ são os casos de referência. No modo de solução única,
@@ -319,8 +339,8 @@ A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deli
    visualização 3D é responsabilidade de uma etapa posterior, que poderá calcular
    automaticamente o posicionamento dos átomos.
 
-2. **Não representa aromaticidade.** Um anel aromático precisa ser escrito com ligações simples e duplas alternadas.
+2. **Não tem notação de aromaticidade.** Um anel aromático é escrito com ligações simples e duplas alternadas; a opção `--aromaticidade` aplica a regra de Hückel sobre essa forma.
 
-3. **Não representa propriedades químicas avançadas**, como isótopos e configuração estereoquímica. A opção `--estereo` aponta os centros e as ligações estereogênicas, mas a configuração R/S ou E/Z não pode ser declarada.
+3. **Não representa isótopos nem geometria 3D.** Por isso a quiralidade planar e as barreiras de rotação de biarilas não são decididas pelo compilador; um eixo de biarila só entra quando declarado com `stereo`.
 
 4. **Não aceita mais de uma espécie por arquivo.**

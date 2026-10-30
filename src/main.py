@@ -12,6 +12,8 @@ import solver
 import eletronico
 import estereo
 import complexos
+import tautomeros
+import aromaticidade
 
 
 # Códigos de saída
@@ -31,14 +33,17 @@ USO = (
     "\n  --tempo-limite=S interrompe a busca após S segundos"
     "\n  --formato=texto|json|jsonl escolhe a saída do solver"
     "\n  --backend=reference|cpsat escolhe o backend"
+    "\n  --isolar roda a busca num processo separado"
     "\n  --eletronico mostra pares livres e elétrons pi de cada átomo"
     "\n  --ressonancia lista as formas de ressonância"
+    "\n  --tautomeros lista os tautômeros por deslocamento de H"
+    "\n  --aromaticidade aplica a regra de Hückel aos ciclos"
     "\n  --estereo lista centros e ligações estereogênicas"
     "\n  --coordenacao descreve metais, ligantes e estados de oxidação"
     "\n  --aneis=N mantém só estruturas com N anéis"
     "\n  --ligacoes-multiplas=N mantém só estruturas com N ligações duplas ou triplas"
-    "\n  --exigir=C=O mantém só estruturas com essa ligação (pode repetir)"
-    "\n  --proibir=C#C descarta estruturas com essa ligação (pode repetir)"
+    "\n  --exigir=C=O mantém só estruturas com essa cadeia, como O-C=O (pode repetir)"
+    "\n  --proibir=C#C descarta estruturas com essa cadeia (pode repetir)"
 )
 
 OPCOES = {
@@ -49,11 +54,21 @@ OPCOES = {
     "--resolver-todas",
     "--eletronico",
     "--ressonancia",
+    "--tautomeros",
+    "--aromaticidade",
     "--estereo",
     "--coordenacao",
+    "--isolar",
 }
 
-RELATORIOS = ("--eletronico", "--ressonancia", "--estereo", "--coordenacao")
+RELATORIOS = (
+    "--eletronico",
+    "--ressonancia",
+    "--tautomeros",
+    "--aromaticidade",
+    "--estereo",
+    "--coordenacao",
+)
 
 
 def ler_argumentos(argumentos):
@@ -109,7 +124,7 @@ def ler_argumentos(argumentos):
                 chave, texto = arg[2:].split("=", 1)
                 fragmento = solver.parse_fragment(texto)
                 if fragmento is None:
-                    print(f"Fragmento inválido: {texto} (use, por exemplo, C=O)")
+                    print(f"Fragmento inválido: {texto} (use, por exemplo, C=O ou O-C=O)")
                     return None
                 configuracao["filtros"][chave].append(fragmento)
                 continue
@@ -189,8 +204,16 @@ def compilar(caminho, opcoes, configuracao=None):
         print("Filtros de estrutura exigem uma opção de resolução")
         return ERRO_LEXICO_OU_SINTATICO
 
+    if "--isolar" in opcoes and not (
+        "--resolver" in opcoes or "--resolver-todas" in opcoes
+    ):
+        print("--isolar exige uma opção de resolução")
+        return ERRO_LEXICO_OU_SINTATICO
+
     if "--resolver-todas" in opcoes and formato == "jsonl":
-        return resolver_todas_em_fluxo(molecula, configuracao, filtros)
+        return resolver_todas_em_fluxo(
+            molecula, configuracao, filtros, "--isolar" in opcoes
+        )
 
     if "--resolver-todas" in opcoes:
         resultado = solver.solve(
@@ -202,6 +225,7 @@ def compilar(caminho, opcoes, configuracao=None):
                 time_limit_seconds=configuracao["tempo_limite"],
                 backend=configuracao["backend"],
                 filters=filtros,
+                isolate="--isolar" in opcoes,
             ),
         )
         if formato != "texto":
@@ -257,6 +281,7 @@ def compilar(caminho, opcoes, configuracao=None):
                 time_limit_seconds=configuracao["tempo_limite"],
                 backend=configuracao["backend"],
                 filters=filtros,
+                isolate="--isolar" in opcoes,
             ),
         )
         if formato != "texto":
@@ -337,6 +362,10 @@ def imprimir_relatorios(modelo_molecula, opcoes):
         print(eletronico.formatar_estados(modelo_molecula, elementos, valencias))
     if "--ressonancia" in opcoes:
         print(eletronico.formatar_ressonancia(modelo_molecula, elementos, valencias))
+    if "--tautomeros" in opcoes:
+        print(tautomeros.formatar(modelo_molecula, elementos, valencias))
+    if "--aromaticidade" in opcoes:
+        print(aromaticidade.formatar(modelo_molecula, elementos, valencias))
     if "--estereo" in opcoes:
         print(estereo.formatar(modelo_molecula, elementos, valencias))
     if "--coordenacao" in opcoes:
@@ -350,7 +379,7 @@ def imprimir_relatorios(modelo_molecula, opcoes):
         )
 
 
-def resolver_todas_em_fluxo(molecula, configuracao, filtros):
+def resolver_todas_em_fluxo(molecula, configuracao, filtros, isolar=False):
     # Cada solução vira uma linha JSON assim que é encontrada, sem
     # acumular a enumeração inteira na memória. O resumo vem por último.
     tem_erro = False
@@ -372,6 +401,7 @@ def resolver_todas_em_fluxo(molecula, configuracao, filtros):
             backend=configuracao["backend"],
             filters=filtros,
             on_solution=emitir,
+            isolate=isolar,
         ),
     )
     print(solver.summary_jsonl(resultado.summary))

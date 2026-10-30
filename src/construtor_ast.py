@@ -9,6 +9,7 @@ from MoleculeDSLVisitor import MoleculeDSLVisitor
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
+    EstereoDecl,
     LigacaoDecl,
     Molecula,
     Operador,
@@ -145,6 +146,20 @@ class ConstrutorAST(MoleculeDSLVisitor):
             for n in ctx.NOME()
         ]
         return AnelDecl(nomes, ctx.start.line, ctx.start.column)
+
+    def visitEstereo(self, ctx):
+        operador = None
+        if ctx.operador() is not None:
+            operador = OPERADORES[ctx.operador().start.type]
+        descritor = ctx.descritor().start
+        return EstereoDecl(
+            [self.visit(r) for r in ctx.referencia()],
+            operador,
+            descritor.text,
+            ctx.start.line,
+            ctx.start.column,
+            descritor.column,
+        )
 
 
 def construir(arvore):

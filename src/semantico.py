@@ -5,12 +5,13 @@ from dataclasses import dataclass
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
+    EstereoDecl,
     LigacaoDecl,
     Operador,
     TipoEspecie,
     TipoReferencia,
 )
-from modelo import Atomo, Ligacao, Modelo
+from modelo import Atomo, Estereo, Ligacao, Modelo
 
 
 PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -135,6 +136,10 @@ class AnalisadorSemantico:
             if isinstance(c, AnelDecl):
                 self.declarar_anel(c)
 
+        for c in comandos:
+            if isinstance(c, EstereoDecl):
+                self.declarar_estereo(c)
+
         if not self.tem_erro():
             self.conferir_tipo_carga_e_radical()
 
@@ -154,6 +159,9 @@ class AnalisadorSemantico:
 
         if not self.tem_erro():
             self.conferir_valencias()
+
+        if not self.tem_erro() and self.modelo.estereo:
+            self.conferir_estereo()
 
         self.mensagens.sort(key=lambda m: (m.linha, m.coluna))
         return self.modelo, self.mensagens
@@ -374,6 +382,68 @@ class AnalisadorSemantico:
         self.aneis_vistos[arestas] = decl
 
         self.modelo.aneis.append([a.id for a in atomos])
+
+    # ---------- configuração ----------
+
+    def declarar_estereo(self, decl):
+        # Cada referência precisa citar um único átomo, sem a escolha
+        # automática do próximo átomo livre que vale nas ligações
+        atomos = []
+        for ref in decl.referencias:
+            if not self.fixo(ref):
+                if ref.tipo is TipoReferencia.ELEMENTO and self.por_elemento.get(ref.texto):
+                    self.erro(
+                        "STEREO-001",
+                        ref,
+                        f"'{ref.texto}' não identifica um único átomo; use o nome do átomo",
+                    )
+                    return
+            atomo = self.resolver(ref)
+            if atomo is None:
+                return
+            atomos.append(atomo)
+        operador = None
+        if decl.operador is not None:
+            if decl.operador not in (Operador.SIMPLES, Operador.DUPLA):
+                self.erro(
+                    "STEREO-002",
+                    decl,
+                    "em 'stereo' a ligação é = (dupla) ou - (eixo de biarila)",
+                )
+                return
+            operador = decl.operador.value
+            if frozenset(a.id for a in atomos) not in self.pares:
+                self.erro(
+                    "STEREO-001",
+                    decl,
+                    f"os átomos {atomos[0].rotulo()} e {atomos[1].rotulo()} não estão ligados",
+                )
+                return
+        self.modelo.estereo.append(
+            Estereo(
+                [a.id for a in atomos],
+                operador,
+                decl.descritor,
+                decl.linha,
+                decl.coluna,
+            )
+        )
+
+    def conferir_estereo(self):
+        import estereo
+
+        _, motivo, mensagens = estereo.analisar(
+            self.modelo, self.dados_elementos, self.valencias
+        )
+        if motivo is not None:
+            primeira = self.modelo.estereo[0]
+            self.erro("STEREO-001", primeira, f"configuração não avaliada: {motivo}")
+            return
+        for codigo, severidade, declaracao, texto in mensagens:
+            if severidade == ERRO:
+                self.erro(codigo, declaracao, texto)
+            else:
+                self.aviso(codigo, declaracao, texto)
 
     # ---------- conexões ----------
 

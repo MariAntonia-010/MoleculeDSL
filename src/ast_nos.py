@@ -65,7 +65,19 @@ class AnelDecl:
     coluna: int
 
 
-Comando = AtomoDecl | LigacaoDecl | AnelDecl
+@dataclass
+class EstereoDecl:
+    # Uma referência (centro ou aleno) ou duas, com operador (= ou -) ou
+    # sem operador (cis/trans entre dois átomos de anel)
+    referencias: list[Referencia]
+    operador: Operador | None
+    descritor: str
+    linha: int
+    coluna: int
+    coluna_descritor: int = 0
+
+
+Comando = AtomoDecl | LigacaoDecl | AnelDecl | EstereoDecl
 
 
 @dataclass
@@ -119,6 +131,13 @@ def formatar(molecula):
         elif isinstance(c, AnelDecl):
             linhas.append(f"  AnelDecl {pos(c)}")
             for r in c.nomes:
+                linhas.append(f"    {ref(r)}")
+        elif isinstance(c, EstereoDecl):
+            operador = c.operador.name if c.operador is not None else "nenhum"
+            linhas.append(
+                f"  EstereoDecl descritor={c.descritor} operador={operador} {pos(c)}"
+            )
+            for r in c.referencias:
                 linhas.append(f"    {ref(r)}")
 
     return "\n".join(linhas)

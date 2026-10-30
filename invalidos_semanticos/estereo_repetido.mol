@@ -1,0 +1,25 @@
+// esperado: Erro semântico [STEREO-003] na linha 24, coluna 4: c2 (C#2) já tem configuração declarada
+molecule "2-Butanol" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom O as o1
+    10x atom H as h
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c2-o1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+    bond c4-h9
+    bond o1-h10
+    stereo c2 R
+    stereo c2 S
+}

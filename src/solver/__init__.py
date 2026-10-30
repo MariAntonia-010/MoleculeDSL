@@ -97,6 +97,20 @@ def error_result(message, status=SolveStatus.ERROR):
 def solve(molecule, rules, request=None):
     started = monotonic()
     request = request or SolveRequest()
+    if request.isolate:
+        from solver.isolation import solve_isolated
+
+        result = solve_isolated(molecule, rules, request)
+        if result.summary.status is SolveStatus.ERROR and not result.messages:
+            result.messages.append(
+                SolverMessage(
+                    "SOLVER-006",
+                    molecule.linha,
+                    molecule.coluna,
+                    "o processo isolado da busca terminou sem resultado",
+                )
+            )
+        return result
     problem, invalid_command = normalize(molecule)
     if invalid_command is not None:
         return error_result(

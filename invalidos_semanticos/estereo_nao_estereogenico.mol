@@ -1,0 +1,18 @@
+// esperado: Erro semântico [STEREO-001] na linha 17, coluna 4: c2 (C#2) não é um elemento estereogênico
+molecule "Propane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    8x atom H as h
+    bond c1-c2
+    bond c2-c3
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c3-h7
+    bond c3-h8
+    stereo c2 R
+}

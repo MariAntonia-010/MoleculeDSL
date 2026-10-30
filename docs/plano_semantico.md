@@ -125,9 +125,23 @@ Implementado em `src/semantico.py`:
 
 `RING-004` usa o posto cíclico do grafo (`arestas - vértices + componentes`) para comparar a quantidade de ciclos independentes com os anéis declarados. O aviso não bloqueia a compilação.
 
+### M6b: Configuração estereoquímica
+
+Implementado em `src/semantico.py` com a análise de `src/estereo.py`. O
+comando `stereo` declara a configuração de um elemento estereogênico
+(`docs/plano_limites.md`, L9):
+
+| ID | Regra | Severidade |
+|---|---|---|
+| STEREO-001 | O átomo, a ligação ou o par cis/trans não é elemento estereogênico (inclusive nas configurações declaradas), ou a referência não identifica um único átomo | erro |
+| STEREO-002 | O descritor não combina com o tipo do elemento (R/S, r/s, E/Z, Ra/Sa, cis/trans) | erro |
+| STEREO-003 | Descritor repetido para o mesmo elemento | erro |
+| STEREO-004 | Descritor de centro pseudoassimétrico sem a configuração dos ramos | erro |
+| STEREO-005 | Eixo de biarila declarado; a barreira de rotação não é verificada | aviso |
+
 ### M7: Solver
 
-Implementado para soluções únicas com até 24 átomos totais e oito pesados. O
+Implementado para soluções únicas com até 40 átomos totais e 12 pesados. O
 solver distribui H antes da matriz pesada, busca ordens de 1 a 3 que
 satisfaçam as valências confirmadas e exige um grafo conectado. Casos de
 referência: H₂O, CO₂, N₂ e NH₄⁺.
@@ -158,9 +172,11 @@ plano completo do solver está em `docs/plano_solver.md`.
 M1 → M2 → M3 → M4 → M5 → M6 → M7 → M8, fechando M1 a M5 antes de tocar em M6 e M7.
 
 ## Riscos e pendências
-- Um modelo cristalino para sólidos permanece aberto. A enumeração assistida tem filtros objetivos; fragmentos maiores ficam para depois.
+- Um modelo cristalino para sólidos permanece aberto. A enumeração assistida tem filtros objetivos, inclusive fragmentos em cadeia.
 - O enunciado e o prazo da disciplina ainda não foram conferidos contra este plano.
 - Mudanças de sintaxe alteram o contrato do projeto e precisam de decisão do grupo.
 
 ## Fora do escopo
-Aromaticidade e visualização 3D.
+Visualização 3D e o que depende dela (quiralidade planar, barreiras de
+rotação). Aromaticidade é um relatório (`--aromaticidade`), não uma
+notação: anéis aromáticos continuam escritos em forma de Kekulé.

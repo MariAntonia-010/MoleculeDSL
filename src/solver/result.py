@@ -23,8 +23,8 @@ class Uniqueness(Enum):
 class SolveRequest:
     max_solutions: int = 1
     require_unique: bool = True
-    max_atoms: int = 24
-    max_heavy_atoms: int = 8
+    max_atoms: int = 40
+    max_heavy_atoms: int = 12
     time_limit_seconds: float | None = None
     cancel_check: object | None = None
     backend: str = "reference"
@@ -32,6 +32,9 @@ class SolveRequest:
     # Com on_solution(molecula, indice), cada solução é entregue assim que
     # aparece e não fica acumulada em SolveResult.solutions.
     on_solution: object | None = None
+    # Com isolate, a busca roda num processo separado, encerrado à força
+    # no tempo limite
+    isolate: bool = False
 
 
 @dataclass

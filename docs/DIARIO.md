@@ -424,3 +424,27 @@ Os planos propõem ampliar a linguagem com ligações duplas (`=`), triplas (`#`
   estados de oxidação e contagem informativa de elétrons (`--coordenacao`).
 - Exemplos novos: `butan_2_ol.mol`, `but_2_eno.mol` e
   `avisos_semanticos/tetracarbonilniquel.mol`.
+
+---
+
+## 30/10/2026 — Eliminação dos limites das fases 5 a 9
+
+Plano em `docs/plano_limites.md`.
+
+- L1: geração ordenada de Read-Faradzev, com a matriz preenchida coluna a
+  coluna e prefixos não canônicos cortados. O limite subiu para 12 átomos
+  pesados; C₆H₆ dá 217 isômeros em menos de um décimo de segundo.
+- L3: filtros com fragmentos em cadeia (`--exigir=O-C=O`).
+- L4: busca isolada em processo separado (`--isolar`), CP-SAT com líder
+  lexicográfico e sem variáveis de fluxo, e `tests/benchmark_solver.py`.
+- L5: ressonância com radicais, ligações coordenadas fixas e `~` fora.
+- L6: tautômeros prototrópicos (`--tautomeros`).
+- L7: aromaticidade por Hückel (`--aromaticidade`).
+- L8: contagem exata de estereoisômeros pelo grupo de automorfismos (meso,
+  enantiômeros, centros pseudoassimétricos), P/S com par livre, alenos e
+  eixos de biarila declarados; regras CIP 3 a 5 sobre descritores
+  declarados.
+- L9: comando `stereo` na gramática, com STEREO-001 a STEREO-005.
+- Ficam fora, por dependerem de geometria 3D: quiralidade planar e cálculo
+  de barreira de rotação.
+

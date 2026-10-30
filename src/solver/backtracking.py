@@ -1,8 +1,8 @@
 """Backend exaustivo de referência para grafos pequenos."""
 
-from itertools import combinations, product
+from itertools import product
 
-from solver.canonical import hydrogens_sorted, is_canonical_heavy
+from solver.canonical import column_pairs, hydrogens_sorted, is_canonical_heavy
 from solver.hydrogen import distributions
 
 
@@ -42,13 +42,15 @@ def feasible(residual):
     return True
 
 
-def search_heavy(residual, on_solution, should_stop):
+def search_heavy(residual, on_solution, should_stop, prefix_ok=None):
+    # prefix_ok(k, edges) é chamado ao fechar a coluna k da matriz; se
+    # devolver False, nenhum complemento daquele prefixo é visitado.
     count = len(residual)
     if count < 2:
         if all(value == 0 for value in residual):
             on_solution({})
         return
-    pairs = list(combinations(range(count), 2))
+    pairs = column_pairs(count)
     remaining = list(residual)
     stopped = False
     stop_reason = None
@@ -86,7 +88,14 @@ def search_heavy(residual, on_solution, should_stop):
                 and remaining[b] <= future_capacity(index + 1, b)
             ):
                 edges[(a, b)] = order
-                visit(index + 1, edges)
+                # A coluna b fecha no par (b - 1, b)
+                if (
+                    prefix_ok is None
+                    or a != b - 1
+                    or b == count - 1
+                    or prefix_ok(b + 1, edges)
+                ):
+                    visit(index + 1, edges)
                 edges.pop((a, b), None)
             remaining[a] += order
             remaining[b] += order
@@ -129,8 +138,8 @@ def enumerate_edges(
 
     if not heavy:
         if len(hydrogens) == 2:
-            if filters is not None and not filters.accepts_bonds(
-                [("H", 1, "H")], 0
+            if filters is not None and not filters.accepts_graph(
+                ["H", "H"], [[(1, 1)], [(0, 1)]], 0
             ):
                 return [], False, None
             edges = {(hydrogens[0].index, hydrogens[1].index): 1}
@@ -147,9 +156,9 @@ def enumerate_edges(
             return None, atom, None
         candidates.append(allowed)
 
-    # Fase 5: cada classe é emitida só na sua rotulação canônica, testada
-    # na hora em que a estrutura fica completa. Não há conjunto de chaves
-    # crescendo com a enumeração.
+    # Fase 5: cada classe é emitida só na sua rotulação canônica. O teste
+    # roda a cada coluna fechada (poda ordenada) e de novo na estrutura
+    # completa. Não há conjunto de chaves crescendo com a enumeração.
     solutions = []
     found = 0
     search_limit = limit + 1
@@ -191,8 +200,13 @@ def enumerate_edges(
                     solutions.append(edges)
                 return found >= search_limit
 
+            def prefix_ok(size, heavy_edges):
+                return is_canonical_heavy(
+                    heavy_edges, heavy, hydrogen_distribution, size
+                )
+
             stop_reason = search_heavy(
-                residual, accept, should_stop
+                residual, accept, should_stop, prefix_ok
             )
             if stop_reason is not None:
                 return solutions, False, stop_reason
