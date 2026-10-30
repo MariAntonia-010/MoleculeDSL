@@ -1,0 +1,4 @@
+// Dêuteron: núcleo do deutério (1 p, 1 n)
+species monatomic_ion "Deuteron" charge +1 {
+    atom 2H(+1) as d
+}

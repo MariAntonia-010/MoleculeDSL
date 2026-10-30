@@ -111,9 +111,10 @@ def texto_com_nucleo(config):
     """Configuração abreviada com o maior núcleo de gás nobre: [He] 2s2 2p4."""
     for gas in reversed(list(NUCLEOS)):
         nucleo = normalizar(ler_subcamadas(f"[{gas}]"))
-        if len(config) > len(nucleo) and all(config.get(c) == e for c, e in nucleo.items()):
+        if len(config) >= len(nucleo) and all(config.get(c) == e for c, e in nucleo.items()):
             resto = {c: e for c, e in config.items() if c not in nucleo}
-            return f"[{gas}] {texto_configuracao(resto)}"
+            # Igual ao gás nobre (Na+, Cl-): só o núcleo
+            return f"[{gas}] {texto_configuracao(resto)}" if resto else f"[{gas}]"
     return texto_configuracao(config)
 
 
@@ -195,10 +196,11 @@ def formatar(modelo, dados_elementos):
         z = dados.get("numero_atomico")
         eletrons = z - atomo.carga if z is not None else None
         nucleo = f"Z={z}"
-        if atomo.massa is not None:
-            nucleo += f" A={atomo.massa} prótons={z} nêutrons={atomo.massa - z}"
+        if atomo.neutrons is not None:
+            a = z + atomo.neutrons
+            nucleo += f" A={a} prótons={z} nêutrons={atomo.neutrons} ({a}{atomo.elemento}, {atomo.origem_nucleo})"
         else:
-            nucleo += f" prótons={z} (composição isotópica natural)"
+            nucleo += f" prótons={z} (sem isótopo natural: nêutrons indefinidos)"
         linhas.append(f"  {atomo.rotulo()}: {dados.get('nome', atomo.elemento)}")
         linhas.append(f"    núcleo: {nucleo}")
         if atomo.configuracao is not None:

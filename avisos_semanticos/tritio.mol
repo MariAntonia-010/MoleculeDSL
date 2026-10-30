@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 3H não é isótopo de composição natural (CIAAW: 1H, 2H); pode ser radioativo ou artificial
+// Trítio, 3H: radioativo, fora dos isótopos naturais da CIAAW
+species atom "Tritium" unpaired 1 {
+    atom 3H as t
+}

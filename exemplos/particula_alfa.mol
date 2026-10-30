@@ -1,0 +1,4 @@
+// Partícula alfa: núcleo de hélio-4 (2 p, 2 n), sem elétrons
+species monatomic_ion "Alpha particle" charge +2 {
+    atom 4He(+2) as alfa
+}

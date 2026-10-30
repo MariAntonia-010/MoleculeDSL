@@ -1,0 +1,5 @@
+// Ag+: [Kr] 4d10, a mesma ideia do Zn2+ uma camada abaixo
+species monatomic_ion "Silver(1+)" charge +1 {
+    atom Ag(+1) as ag
+    configuration ag [Kr] 4d10
+}

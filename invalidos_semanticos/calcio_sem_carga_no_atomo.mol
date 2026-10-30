@@ -1,0 +1,5 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é +0, mas a espécie declara carga total +2
+// A carga do íon fica no átomo: Ca sem (+2) soma zero e contradiz o charge +2
+species monatomic_ion "Calcium(2+)" charge +2 {
+    atom Ca as ca
+}

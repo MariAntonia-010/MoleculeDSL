@@ -1,0 +1,5 @@
+// Al3+ tem 10 elétrons, o mesmo número do neônio; com [Ne] não sobraria subcamada, então o núcleo é [He]
+species monatomic_ion "Aluminium(3+)" charge +3 {
+    atom Al(+3) as al
+    configuration al [He] 2s2 2p6
+}

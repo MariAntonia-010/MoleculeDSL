@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: o núcleo [Ne] já tem os 10 elétrons de na (Na#1); 3s1 sobra: escreva só 'configuration na [Ne]'
+// Erro comum: escrever o Na+ com a configuração do Na neutro (11 elétrons em vez de 10)
+species monatomic_ion "Sodium(1+)" charge +1 {
+    atom Na(+1) as na
+    configuration na [Ne] 3s1
+}

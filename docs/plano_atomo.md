@@ -103,6 +103,7 @@ deixa de valer.
 | ATOM-005 | isótopo fora da lista de isótopos naturais da CIAAW (radioativo ou artificial, como ¹⁴C) | aviso |
 | ATOM-006 | `configuration` fora de `atom` ou `monatomic_ion`, átomo inexistente ou configuração repetida | erro |
 | ATOM-007 | `unpaired` diferente do número de elétrons desemparelhados pela regra de Hund | aviso |
+| ATOM-008 | carga positiva maior que Z: elétrons = Z − carga ficaria negativo (H(+2)); +Z é o núcleo nu | erro |
 
 A referência do estado fundamental de um átomo neutro é a configuração de
 `regras/elementos.json`. A de um íon é derivada dela: o cátion perde elétrons

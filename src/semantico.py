@@ -226,6 +226,19 @@ class AnalisadorSemantico:
             self.marcar_invalido(decl)
             return
 
+        # Eletrosfera: um cátion perde no máximo os Z elétrons que tem
+        # (Li3+ é o núcleo nu); com mais carga sobrariam elétrons negativos
+        z = self.dados_elementos[decl.elemento]["numero_atomico"]
+        if decl.carga > z:
+            self.erro(
+                "ATOM-008",
+                decl,
+                f"{decl.elemento}({decl.carga:+d}) perderia {decl.carga} elétrons, mas "
+                f"{decl.elemento} só tem {z}; a maior carga possível é +{z} (o núcleo sem elétrons)",
+            )
+            self.marcar_invalido(decl)
+            return
+
         # Núcleo: A = Z + N, então A não pode ser menor que Z
         if decl.massa is not None:
             z = self.dados_elementos[decl.elemento]["numero_atomico"]
@@ -506,7 +519,16 @@ class AnalisadorSemantico:
             # Núcleo grande demais: já tem mais elétrons que o átomo
             nucleo = estrutura_atomica.ler_subcamadas(f"[{decl.nucleo}]")
             no_nucleo = sum(e for _, _, e in nucleo)
-            if no_nucleo >= z - atomo.carga:
+            if no_nucleo == z - atomo.carga and decl.subcamadas:
+                self.erro(
+                    "ATOM-003",
+                    decl,
+                    f"o núcleo [{decl.nucleo}] já tem os {no_nucleo} elétrons de {atomo.rotulo()}; "
+                    f"{' '.join(decl.subcamadas)} sobra: escreva só "
+                    f"'configuration {decl.referencia.texto} [{decl.nucleo}]'",
+                )
+                return
+            if no_nucleo > z - atomo.carga:
                 menores = [
                     g for g in estrutura_atomica.NUCLEOS
                     if sum(e for _, _, e in estrutura_atomica.ler_subcamadas(f"[{g}]")) < z - atomo.carga

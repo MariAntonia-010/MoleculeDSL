@@ -1,0 +1,5 @@
+// Na+ tem os 10 elétrons do neônio: a configuração é só o núcleo [Ne]
+species monatomic_ion "Sodium(1+)" charge +1 {
+    atom Na(+1) as na
+    configuration na [Ne]
+}

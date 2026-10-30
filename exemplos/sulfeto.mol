@@ -1,0 +1,5 @@
+// Sulfeto, S2-: o enxofre ganha 2 elétrons e completa 3p6
+species monatomic_ion "Sulfide" charge -2 {
+    atom S(-2) as s
+    configuration s [Ne] 3s2 3p6
+}

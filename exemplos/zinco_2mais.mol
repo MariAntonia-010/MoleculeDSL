@@ -1,0 +1,5 @@
+// Zn2+: perde os dois 4s e fica com 3d10 completo, sem elétrons desemparelhados
+species monatomic_ion "Zinc(2+)" charge +2 {
+    atom Zn(+2) as zn
+    configuration zn [Ar] 3d10
+}

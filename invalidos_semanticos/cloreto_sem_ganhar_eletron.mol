@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 17 elétrons, mas cl (Cl#1) (Z=17, carga -1) tem 18
+// Erro comum: o Cl- ganha um elétron; [Ne] 3s2 3p5 é o cloro neutro
+species monatomic_ion "Chloride" charge -1 {
+    atom Cl(-1) as cl
+    configuration cl [Ne] 3s2 3p5
+}

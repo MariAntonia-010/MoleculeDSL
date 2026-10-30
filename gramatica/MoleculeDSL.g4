@@ -90,9 +90,10 @@ descritor
     ;
 
 // Configuração eletrônica de um átomo isolado ou íon monoatômico:
-// configuration c [He] 2s2 2p2
+// configuration c [He] 2s2 2p2. O núcleo sozinho também vale, como no
+// Na+ isoeletrônico do neônio: configuration na [Ne]
 configuracao
-    : CONFIGURATION referencia nucleo? SUBCAMADA+
+    : CONFIGURATION referencia (nucleo SUBCAMADA* | SUBCAMADA+)
     ;
 
 // Núcleo de gás nobre: [He], [Ne], [Ar], [Kr], [Xe], [Rn]

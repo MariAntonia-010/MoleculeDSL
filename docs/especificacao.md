@@ -191,10 +191,15 @@ species monatomic_ion "Iron(2+)" charge +2 unpaired 4 {
 }
 ```
 
+O núcleo também pode vir sozinho, quando o íon tem os mesmos elétrons do
+gás nobre: `configuration na [Ne]` para o Na⁺ e `configuration cl [Ar]` para
+o Cl⁻. Sem núcleo, é preciso pelo menos uma subcamada.
+
 A semântica confere as regras de Pauli e de l < n (ATOM-002), o total de
 elétrons (ATOM-003), o estado fundamental de referência (ATOM-004, aviso), o
 uso só em `atom` e `monatomic_ion` (ATOM-006) e o `unpaired` contra a regra
-de Hund (ATOM-007, aviso).
+de Hund (ATOM-007, aviso). Uma carga positiva maior que Z é erro (ATOM-008):
+o átomo só tem Z elétrons para perder, e +Z já é o núcleo sem elétrons.
 
 ### `stereo`
 

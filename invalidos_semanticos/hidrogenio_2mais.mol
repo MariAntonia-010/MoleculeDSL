@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: H(+2) perderia 2 elétrons, mas H só tem 1; a maior carga possível é +1 (o núcleo sem elétrons)
+// O hidrogênio só tem 1 elétron: não dá para perder 2
+species monatomic_ion "Hydrogen(2+)" charge +2 {
+    atom H(+2)
+}

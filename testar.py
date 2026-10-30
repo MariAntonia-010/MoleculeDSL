@@ -1299,8 +1299,8 @@ def testar_estrutura_atomica():
         casos_montados = {
             "atom C": "p=6 n=6 (12C, mais abundante) e=6 [He] 2s2 2p2",
             "atom 13C": "p=6 n=7 (13C, declarado) e=6 [He] 2s2 2p2",
-            "atom O(-2)": "p=8 n=8 (16O, mais abundante) e=10 [He] 2s2 2p6",
-            "atom Na(+1)": "p=11 n=12 (23Na, mais abundante) e=10 [He] 2s2 2p6",
+            "atom O(-2)": "p=8 n=8 (16O, mais abundante) e=10 [Ne]",
+            "atom Na(+1)": "p=11 n=12 (23Na, mais abundante) e=10 [Ne]",
         }
         for declaracao, esperado in casos_montados.items():
             tipo = "atom" if "(" not in declaracao else "monatomic_ion"

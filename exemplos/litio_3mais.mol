@@ -1,0 +1,4 @@
+// Li3+: o lítio perdeu os 3 elétrons; sobra o núcleo nu (3 p, 4 n), sem configuration
+species monatomic_ion "Lithium(3+)" charge +3 {
+    atom Li(+3)
+}

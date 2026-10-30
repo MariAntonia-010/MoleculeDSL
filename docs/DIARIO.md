@@ -733,3 +733,19 @@ virava só "O#1 carga=+0" no modelo.
   é neutro, cátion ou ânion), a aba Modelo com as mesmas contas, e dois
   passos novos na lição "Construindo um átomo".
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 5 (íons e o átomo montado)
+
+- Bug: `atom H(+2)` era aceito com −1 elétron. Regra nova ATOM-008 (erro):
+  a carga positiva vai no máximo até +Z, o núcleo nu (Li³⁺, H⁺).
+- Gramática: `configuration na [Ne]` aceita o núcleo sozinho, a notação
+  química dos íons isoeletrônicos de gás nobre. Configurações iguais a um
+  gás nobre aparecem como o núcleo ([Ne]) no modelo e na página.
+- Mensagem: Na⁺ escrito `[Ne] 3s1` agora diz que o 3s1 sobra, em vez de
+  sugerir [He]. `--estrutura-atomica` mostra os nêutrons do átomo montado.
+- Válidos: Li³⁺, partícula alfa, dêuteron, Al³⁺, S²⁻, Zn²⁺, Ag⁺ e Na⁺ =
+  [Ne]. Avisos: trítio e Fe³⁺ tirando 3d antes de 4s. Inválidos: H(+2),
+  He(+3), Na⁺ e Cl⁻ com a configuração do átomo neutro, Ca sem a carga no
+  átomo.
+

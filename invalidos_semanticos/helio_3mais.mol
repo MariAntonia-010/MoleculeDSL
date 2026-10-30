@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: He(+3) perderia 3 elétrons, mas He só tem 2; a maior carga possível é +2 (o núcleo sem elétrons)
+// O hélio tem 2 elétrons; +3 deixaria -1 elétron
+species monatomic_ion "Helium(3+)" charge +3 {
+    atom He(+3)
+}

@@ -213,7 +213,7 @@
         }
         const subcamadas = [];
         while (atual().tipo === "SUBCAMADA") subcamadas.push(consumir().valor);
-        if (!subcamadas.length) {
+        if (!subcamadas.length && !nucleo) {
           if (atual().tipo === "INT" && tokens[p + 1] && ["s", "p", "d", "f"].includes(tokens[p + 1].valor)) falhar(`a quantidade de elétrons da subcamada, como ${atual().valor}${tokens[p + 1].valor}2`);
           falhar("subcamada como 2p4 (camada 1 a 7, tipo s, p, d ou f e número de elétrons)");
         }
@@ -262,6 +262,11 @@
     const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
     for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
       if (!DADOS.elementos[cmd.el]) { erro(cmd, "ELEM-001", `elemento desconhecido '${cmd.el}'`); continue; }
+      if (cmd.carga > DADOS.elementos[cmd.el].numero) {
+        const z = DADOS.elementos[cmd.el].numero;
+        erro(cmd, "ATOM-008", `${cmd.el}(+${cmd.carga}) perderia ${cmd.carga} elétrons, mas ${cmd.el} só tem ${z}; a maior carga possível é +${z} (o núcleo sem elétrons)`);
+        continue;
+      }
       if (cmd.massa != null) {
         const z = DADOS.elementos[cmd.el].numero;
         if (cmd.massa < z) { erro(cmd, "ATOM-001", `o número de massa ${cmd.massa} é menor que o número atômico de ${cmd.el} (${z}): daria ${cmd.massa - z} nêutrons`); continue; }
@@ -336,7 +341,11 @@
         // Núcleo grande demais, ou subcamada que já está dentro dele
         const nucleo = lerSubcamadas(`[${cmd.nucleo}]`), eletrons = DADOS.elementos[a.el].numero - a.carga;
         const contar = (g) => lerSubcamadas(`[${g}]`).reduce((t, x) => t + x[2], 0);
-        if (contar(cmd.nucleo) >= eletrons) {
+        if (contar(cmd.nucleo) === eletrons && cmd.subcamadas.length) {
+          erro(cmd, "ATOM-003", `o núcleo [${cmd.nucleo}] já tem os ${eletrons} elétrons de ${rotulo(a)}; ${cmd.subcamadas.join(" ")} sobra: escreva só 'configuration ${cmd.ref.texto} [${cmd.nucleo}]'`, [a.id]);
+          continue;
+        }
+        if (contar(cmd.nucleo) > eletrons) {
           const menores = Object.keys(NUCLEOS_GAS).filter((g) => contar(g) < eletrons);
           erro(cmd, "ATOM-003", `o núcleo [${cmd.nucleo}] sozinho tem ${contar(cmd.nucleo)} elétrons, e ${rotulo(a)} tem ${eletrons}${menores.length ? `; use [${menores[menores.length - 1]}]` : "; escreva as subcamadas sem núcleo"}`, [a.id]);
           continue;
@@ -469,8 +478,10 @@
   function textoComNucleo(m) {
     for (const gas of Object.keys(NUCLEOS_GAS).reverse()) {
       const nucleo = paraMapa(lerSubcamadas(`[${gas}]`));
-      if (m.size > nucleo.size && [...nucleo].every(([c, e]) => m.get(c) === e)) {
-        return `[${gas}] ${textoConfig(new Map([...m].filter(([c]) => !nucleo.has(c))))}`;
+      if (m.size >= nucleo.size && [...nucleo].every(([c, e]) => m.get(c) === e)) {
+        // Igual ao gás nobre (Na+, Cl-): só o núcleo
+        const resto = new Map([...m].filter(([c]) => !nucleo.has(c)));
+        return resto.size ? `[${gas}] ${textoConfig(resto)}` : `[${gas}]`;
       }
     }
     return textoConfig(m) || "(sem elétrons)";
@@ -584,6 +595,7 @@
     "ATOM-004": ["Estado excitado", "A configuração é possível, mas não é a de menor energia (estado fundamental medido).", "Se quis o estado fundamental, use a referência indicada; se quis um estado excitado, o aviso só registra isso."],
     "ATOM-005": ["Isótopo não natural", "O número de massa não está entre os isótopos de composição natural da CIAAW: pode ser radioativo ou artificial.", "Confira o número de massa; para a composição natural, omita-o (atom C)."],
     "ATOM-006": ["Configuração fora de lugar", "A configuração eletrônica descreve um átomo isolado ou um íon monoatômico; em moléculas os elétrons ocupam orbitais moleculares.", "Use configuration só com species atom ou species monatomic_ion, uma vez por átomo."],
+    "ATOM-008": ["Elétrons a menos que zero", "Um cátion perde elétrons, e o átomo só tem Z deles (o número atômico). Carga maior que Z deixaria elétrons negativos.", "Use uma carga de no máximo +Z; +Z é o núcleo nu, como Li(+3) ou H(+1)."],
     "ATOM-007": ["Contra a regra de Hund", "Pela regra de Hund os elétrons ocupam orbitais de mesma energia um a um; isso fixa quantos ficam desemparelhados.", "Ajuste o unpaired para o valor indicado pela configuração."],
     "SPEC-001": ["Tipo de espécie incompatível", "O tipo do cabeçalho não combina com o conteúdo: atom e monatomic_ion descrevem um único átomo, sem ligações.", "Use species molecule para mais de um átomo, ou species monatomic_ion com charge para um átomo com carga."],
     "SPEC-002": ["Motivo de uma estrutura estendida", "Sólidos iônicos e redes covalentes são infinitos; o grafo descreve só uma unidade que se repete.", "Nada a corrigir: o aviso registra o limite do modelo."],

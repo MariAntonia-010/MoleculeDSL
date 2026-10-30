@@ -401,6 +401,7 @@ O catálogo de códigos, causas e correções está em
 | `ATOM-005` | isótopo fora dos isótopos naturais da CIAAW | aviso |
 | `ATOM-006` | `configuration` fora de átomo isolado ou íon monoatômico, ou repetida | erro |
 | `ATOM-007` | `unpaired` diferente da regra de Hund | aviso |
+| `ATOM-008` | carga positiva maior que Z (o átomo não tem tantos elétrons para perder) | erro |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e

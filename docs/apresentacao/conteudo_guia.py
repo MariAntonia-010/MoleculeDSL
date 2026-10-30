@@ -128,6 +128,13 @@ LICOES = [
                 "saida": 0,
             },
             {
+                "titulo": "Íon com o núcleo sozinho: Na⁺ = [Ne]",
+                "explicacao": "O Na⁺ perdeu o 3s1 e ficou com os 10 elétrons do neônio. A notação química é só o núcleo, e a linguagem aceita configuration na [Ne] sem subcamadas.",
+                "codigo": 'species monatomic_ion "Sodium(1+)" charge +1 {\n    atom Na(+1) as na\n    configuration na [Ne]\n}\n',
+                "opcoes": ["--estrutura-atomica"],
+                "saida": 0,
+            },
+            {
                 "titulo": "Ferro-56 e o termo fundamental",
                 "explicacao": "26 prótons e 30 nêutrons; 3d6 tem quatro elétrons desemparelhados (Hund), e o termo de menor energia é ⁵D₄: S = 2, L = 2 e, com a subcamada d mais que meio cheia, J = L + S = 4.",
                 "codigo": 'species atom "Iron-56" unpaired 4 {\n    atom 56Fe as fe\n    configuration fe [Ar] 3d6 4s2\n}\n',

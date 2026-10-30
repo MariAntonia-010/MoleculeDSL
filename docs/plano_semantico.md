@@ -137,6 +137,7 @@ Plano e fontes em `docs/plano_atomo.md`.
 | ATOM-005 | isótopo fora dos isótopos naturais da CIAAW (todos os elementos) | aviso |
 | ATOM-006 | `configuration` fora de `atom`/`monatomic_ion`, ou repetida | erro |
 | ATOM-007 | `unpaired` diferente da regra de Hund | aviso |
+| ATOM-008 | carga positiva maior que Z | erro |
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.
