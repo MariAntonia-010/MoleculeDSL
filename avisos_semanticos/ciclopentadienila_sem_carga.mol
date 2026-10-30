@@ -1,0 +1,19 @@
+// esperado: Aviso semântico [RAD-001] na linha 4, coluna 0: a espécie tem contagem eletrônica ímpar; declare 'unpaired' para representar o radical
+// esperado: Aviso semântico [VAL-002] na linha 6, coluna 4: a soma das ordens de ligação de cm (C#5) é 3; o esperado para C é 4 (se for um íon, declare atom C(-1))
+// Sem a carga, o carbono cm fica com três ligações: o ânion aromático precisa de C(-1) e molecular_ion
+species molecule "Cyclopentadienide" {
+    4x atom C as c
+    atom C as cm
+    5x atom H as h
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-cm
+    bond cm-c1
+    bond c1-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+    bond cm-h5
+    ring c1 c2 c3 c4 cm
+}

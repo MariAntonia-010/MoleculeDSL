@@ -1,0 +1,21 @@
+// Cátion tropílio, C7H7+: 6 elétrons pi no anel de 7, aromático
+species molecular_ion "Tropylium" charge +1 {
+    6x atom C as c
+    atom C(+1) as cp
+    7x atom H as h
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c5
+    bond c5=c6
+    bond c6-cp
+    bond cp-c1
+    bond c1-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+    bond c5-h5
+    bond c6-h6
+    bond cp-h7
+    ring c1 c2 c3 c4 c5 c6 cp
+}

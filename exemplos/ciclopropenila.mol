@@ -1,0 +1,13 @@
+// Cátion ciclopropenila, C3H3+: o menor aromático, com 2 elétrons pi
+species molecular_ion "Cyclopropenylium" charge +1 {
+    2x atom C as c
+    atom C(+1) as cp
+    3x atom H as h
+    bond c1=c2
+    bond c2-cp
+    bond cp-c1
+    bond c1-h1
+    bond c2-h2
+    bond cp-h3
+    ring c1 c2 cp
+}

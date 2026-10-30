@@ -775,3 +775,15 @@ virava só "O#1 carga=+0" no modelo.
   mais RAD-001 (a paridade de um motivo não indica radical), e ciclos só
   de ligações `~` não contam no RING-004.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 8 (aromáticos com carga)
+
+- Válidos: ânion ciclopentadienila, cátion tropílio, cátion
+  ciclopropenila (os três aromáticos pelo `--aromaticidade`) e imidazol;
+  entram no grupo de anéis da página. Aviso: ciclopentadienila sem a
+  carga, que deixa de ser aromática.
+- Inválidos vindos do SMILES: `atom c` minúsculo e a ligação aromática
+  `:`. As duas mensagens agora dizem como escrever na DSL (`atom C`,
+  simples e duplas alternadas); `atom na` sugere `atom Na`.
+

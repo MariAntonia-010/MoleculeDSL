@@ -1,0 +1,16 @@
+// Imidazol: anel de 5 com dois N; o N-H doa o par livre ao sistema pi (aromático)
+species molecule "Imidazole" {
+    3x atom C as c
+    2x atom N as n
+    4x atom H as h
+    bond n1-c1
+    bond c1=n2
+    bond n2-c2
+    bond c2=c3
+    bond c3-n1
+    bond n1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c3-h4
+    ring n1 c1 n2 c2 c3
+}

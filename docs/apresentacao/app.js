@@ -69,6 +69,7 @@
       if (resto.startsWith("->")) { empurrar("OP", "->"); continue; }
       if ("-=#~".includes(resto[0])) { empurrar("OP", resto[0]); continue; }
       if ("+(){}[]".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
+      if (resto[0] === ":") throw new ErroDSL("léxico", "LEX-001", linha, coluna, "caractere inválido ':': a ligação aromática do SMILES não existe na DSL; escreva o anel com ligações simples e duplas alternadas (- e =)");
       throw new ErroDSL("léxico", "LEX-001", linha, coluna, "<>".includes(resto[0])
         ? `caractere inválido '${resto[0]}': a única seta da linguagem é '->', a ligação coordenada do doador para o receptor`
         : `caractere inválido '${resto[0]}'`);
@@ -161,6 +162,11 @@
         pegar("atom", "'atom' depois do multiplicador");
         const massaToken = talvez("INT");
         if (atual().tipo === "MULT") falhar(`o multiplicador antes de 'atom': '${atual().valor} atom ...', não 'atom ${atual().valor} ...'`);
+        if (atual().tipo === "NOME" && atual().valor.length <= 2) {
+          const s = atual().valor[0].toUpperCase() + atual().valor.slice(1);
+          const smiles = ["b", "c", "n", "o", "p", "s"].includes(atual().valor) ? "; átomos aromáticos em minúsculas são do SMILES, não da DSL" : "";
+          falhar(`o símbolo do elemento com maiúscula, 'atom ${s}' ('${atual().valor}' é lido como nome${smiles})`);
+        }
         if (atual().tipo === "(") falhar("a carga depois do símbolo do elemento (e do número de massa, se houver), como 'atom Cl(-1)' ou 'atom 37Cl(-1)'");
         const el = pegar("IDENT", "símbolo de elemento depois de 'atom'");
         let carga = 0;

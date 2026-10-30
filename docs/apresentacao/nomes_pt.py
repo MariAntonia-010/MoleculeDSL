@@ -104,4 +104,8 @@ ESPECIES = {
     "cloreto_de_magnesio": "Cloreto de magnésio (sólido iônico)",
     "dioxido_de_silicio": "Dióxido de silício (rede covalente)",
     "cobre_metalico": "Cobre metálico (motivo Cu₃)",
+    "imidazol": "Imidazol (aromático com dois N)",
+    "ciclopropenila": "Cátion ciclopropenila (aromático, 2 e⁻ pi)",
+    "ciclopentadienila": "Ânion ciclopentadienila (aromático, 6 e⁻ pi)",
+    "tropilio": "Cátion tropílio (aromático, 6 e⁻ pi)",
 }

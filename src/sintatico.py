@@ -244,6 +244,17 @@ class ErroSintatico(ColetorErrosANTLR):
                         f"o multiplicador vem antes de 'atom': escreva '{token.text} atom ...', "
                         f"não 'atom {token.text} ...'"
                     ), True
+                if token.type == P.NOME and len(token.text) <= 2:
+                    # 'atom c' ou 'atom na': o símbolo começa com maiúscula
+                    simbolo = token.text.capitalize()
+                    smiles = (
+                        "; átomos aromáticos em minúsculas são do SMILES, não da DSL"
+                        if token.text in ("b", "c", "n", "o", "p", "s") else ""
+                    )
+                    return (
+                        f"o símbolo do elemento começa com maiúscula: escreva 'atom {simbolo}' "
+                        f"('{token.text}' é lido como nome{smiles})"
+                    ), True
                 if token.type == P.ABRE_PAREN:
                     return (
                         "a carga vem depois do símbolo do elemento (e do número de massa, se "

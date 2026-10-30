@@ -1,0 +1,6 @@
+// esperado: Erro léxico [LEX-001] na linha 5, coluna 11: caractere inválido ':': a ligação aromática do SMILES não existe na DSL; escreva o anel com ligações simples e duplas alternadas (- e =)
+// A ligação aromática ":" do SMILES não existe na DSL: use simples e duplas alternadas
+species molecule "Ethene" {
+    2x atom C as c
+    bond c1:c2
+}

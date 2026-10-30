@@ -1,0 +1,5 @@
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 12: o símbolo do elemento começa com maiúscula: escreva 'atom C' ('c' é lido como nome; átomos aromáticos em minúsculas são do SMILES, não da DSL)
+// Átomos aromáticos minúsculos são do SMILES; na DSL o elemento é sempre C, com as duplas explícitas
+species molecule "Benzene" {
+    6x atom c as a
+}

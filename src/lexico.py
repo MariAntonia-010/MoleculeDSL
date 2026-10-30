@@ -51,6 +51,12 @@ def traduzir_erro_lexico(caractere):
             "LEX-003",
             "'.' fora de um número real (um número real é escrito como 3.5)",
         )
+    if caractere == ":":
+        return (
+            "LEX-001",
+            "caractere inválido ':': a ligação aromática do SMILES não existe na DSL; "
+            "escreva o anel com ligações simples e duplas alternadas (- e =)",
+        )
     if caractere in "<>":
         # Setas fora de '->' (como '<-' ou '=>'): a única seta da linguagem
         return (

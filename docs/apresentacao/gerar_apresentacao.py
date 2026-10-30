@@ -37,7 +37,7 @@ GRUPOS_EXEMPLOS = [
     ("Moléculas", ["agua", "metano", "amonia", "etanol", "metanol", "acetona", "acido_acetico", "ureia",
                    "dioxido_carbono", "monoxido_de_carbono", "cloreto_de_hidrogenio", "peroxido_de_hidrogenio",
                    "berilio", "glicina_zwitterion", "acido_sulfuroso", "tiofosgenio", "germano"]),
-    ("Anéis e aromáticos", ["benzeno", "naftaleno", "pirrol", "ciclohexano", "ciclobutadieno"]),
+    ("Anéis e aromáticos", ["benzeno", "naftaleno", "pirrol", "imidazol", "ciclohexano", "ciclobutadieno", "ciclopropenila", "ciclopentadienila", "tropilio"]),
     ("Íons moleculares", ["amonio_por_ligacao_coordenada", "hidronio", "hidroxido", "nitrato", "sulfato",
                           "carbonato", "cianato", "azida", "nitronio", "hexafluorofosfato", "tetracloroaluminato"]),
     ("Isótopos em moléculas", ["agua_pesada", "metano_deuterado", "etano_13c2", "etanol_1_deuterado", "propan_2_ol_d3"]),

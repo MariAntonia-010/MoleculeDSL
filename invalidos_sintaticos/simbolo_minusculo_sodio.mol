@@ -1,0 +1,5 @@
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 9: o símbolo do elemento começa com maiúscula: escreva 'atom Na' ('na' é lido como nome)
+// Erro comum: o símbolo do sódio é Na, com N maiúsculo
+species atom "Sodium" unpaired 1 {
+    atom na
+}
