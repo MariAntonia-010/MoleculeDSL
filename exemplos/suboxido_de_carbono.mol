@@ -1,0 +1,12 @@
+// Subóxido de carbono, C3O2: quatro duplas acumuladas
+species molecule "Carbon suboxide" {
+    atom O as o1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom O as o2
+    bond o1=c1
+    bond c1=c2
+    bond c2=c3
+    bond c3=o2
+}

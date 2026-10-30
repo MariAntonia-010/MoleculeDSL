@@ -1,0 +1,32 @@
+// cis-1,3-dimetilciclohexano: forma meso, declarada por configuração relativa
+species molecule "cis-1,3-Dimethylcyclohexane" {
+    6x atom C as r
+    2x atom C as m
+    16x atom H as h
+    bond r1-r2
+    bond r2-r3
+    bond r3-r4
+    bond r4-r5
+    bond r5-r6
+    bond r6-r1
+    bond r1-m1
+    bond r3-m2
+    bond r1-h1
+    bond r2-h2
+    bond r2-h3
+    bond r3-h4
+    bond r4-h5
+    bond r4-h6
+    bond r5-h7
+    bond r5-h8
+    bond r6-h9
+    bond r6-h10
+    bond m1-h11
+    bond m1-h12
+    bond m1-h13
+    bond m2-h14
+    bond m2-h15
+    bond m2-h16
+    ring r1 r2 r3 r4 r5 r6
+    stereo r1 r3 cis
+}

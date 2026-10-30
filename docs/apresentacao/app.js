@@ -229,7 +229,7 @@
           falhar(`a quantidade de elétrons da subcamada, como ${atual().valor}${tokens[p + 1].valor}2`, "SIN-002");
         }
         if (atual().tipo === "INT" && p > 1 && tokens[p - 1].tipo === "IDENT" && tokens[p - 2].tipo === "atom" && tokens[p - 1].l === atual().l && tokens[p - 1].c + tokens[p - 1].valor.length === atual().c) {
-          falhar(`o número de massa antes do símbolo, como 'atom ${atual().valor}${tokens[p - 1].valor}'`, "SIN-002");
+          falhar(`'${atual().valor}x atom ${tokens[p - 1].valor}' para ${atual().valor} átomos, ou 'atom ${atual().valor}${tokens[p - 1].valor}' para o isótopo de número de massa ${atual().valor}`, "SIN-002");
         }
         if (atual().tipo === "[" && p > 0 && tokens[p - 1].tipo === "SUBCAMADA") {
           falhar("o núcleo de gás nobre logo depois do átomo, antes das subcamadas, como 'configuration c [He] 2s2 2p2'", "SIN-002");
@@ -323,6 +323,19 @@
       if (!a) continue;
       if (a.configuracao) { erro(cmd, "ATOM-006", `${rotulo(a)} já tem configuração declarada`, [a.id]); continue; }
       if (cmd.nucleo && !NUCLEOS_GAS[cmd.nucleo]) { erro(cmd, "ATOM-002", `[${cmd.nucleo}] não é núcleo de gás nobre; use ${Object.keys(NUCLEOS_GAS).map((g) => `[${g}]`).join(", ")}`, [a.id]); continue; }
+      if (cmd.nucleo) {
+        // Núcleo grande demais, ou subcamada que já está dentro dele
+        const nucleo = lerSubcamadas(`[${cmd.nucleo}]`), eletrons = DADOS.elementos[a.el].numero - a.carga;
+        const contar = (g) => lerSubcamadas(`[${g}]`).reduce((t, x) => t + x[2], 0);
+        if (contar(cmd.nucleo) >= eletrons) {
+          const menores = Object.keys(NUCLEOS_GAS).filter((g) => contar(g) < eletrons);
+          erro(cmd, "ATOM-003", `o núcleo [${cmd.nucleo}] sozinho tem ${contar(cmd.nucleo)} elétrons, e ${rotulo(a)} tem ${eletrons}${menores.length ? `; use [${menores[menores.length - 1]}]` : "; escreva as subcamadas sem núcleo"}`, [a.id]);
+          continue;
+        }
+        const dentro = new Set(nucleo.map(([n, l]) => `${n},${l}`));
+        const repetidas = cmd.subcamadas.filter((s) => dentro.has(`${s[0]},${"spdf".indexOf(s[1])}`));
+        if (repetidas.length) { erro(cmd, "ATOM-002", `${repetidas.map((r) => r.slice(0, 2)).join(", ")} já está no núcleo [${cmd.nucleo}]; depois do núcleo vêm só as subcamadas de fora dele`, [a.id]); continue; }
+      }
       const lista = lerSubcamadas((cmd.nucleo ? `[${cmd.nucleo}] ` : "") + cmd.subcamadas.join(" "));
       const pauli = problemasPauli(lista);
       if (pauli.length) { erro(cmd, "ATOM-002", pauli.join("; "), [a.id]); continue; }

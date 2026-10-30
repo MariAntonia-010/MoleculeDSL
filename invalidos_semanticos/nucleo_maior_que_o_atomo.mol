@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: o núcleo [Ar] sozinho tem 18 elétrons, e na (Na#1) tem 11; use [Ne]
+// O sódio tem 11 elétrons; o núcleo [Ar] sozinho já tem 18
+species atom "Sodium" unpaired 1 {
+    atom Na as na
+    configuration na [Ar] 3s1
+}

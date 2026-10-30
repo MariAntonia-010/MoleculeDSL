@@ -1,0 +1,9 @@
+// esperado: Erro sintático [SIN-002] na linha 3, coluna 43: esperado número inteiro, encontrado '-'
+// unpaired conta elétrons: não pode ser negativo
+species molecule "Methyl radical" unpaired -1 {
+    atom C as c
+    3x atom H as h
+    bond c-h1
+    bond c-h2
+    bond c-h3
+}

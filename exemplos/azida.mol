@@ -1,0 +1,8 @@
+// Íon azida, N3-: três nitrogênios em linha, cargas formais -1, +1, -1
+species molecular_ion "Azide" charge -1 {
+    atom N(-1) as n1
+    atom N(+1) as n2
+    atom N(-1) as n3
+    bond n1=n2
+    bond n2=n3
+}

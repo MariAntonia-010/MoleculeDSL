@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 2p já está no núcleo [Ne]; depois do núcleo vêm só as subcamadas de fora dele
+// Depois do núcleo [Ne] vêm só as subcamadas de fora dele; 2p já está no neônio
+species atom "Sodium" unpaired 1 {
+    atom Na as na
+    configuration na [Ne] 2p6 3s1
+}

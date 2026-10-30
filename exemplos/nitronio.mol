@@ -1,0 +1,7 @@
+// Íon nitrônio, NO2+: o eletrófilo da nitração do benzeno
+species molecular_ion "Nitronium" charge +1 {
+    atom N(+1) as n
+    2x atom O as o
+    bond o1=n
+    bond n=o2
+}

@@ -80,8 +80,8 @@ def explicar_quantificador(fluxo, token):
         ):
             # Número colado no símbolo, como 'atom C13'
             return (
-                f"o número de massa vem antes do símbolo: escreva 'atom {n}{anterior.text}' "
-                f"em vez de 'atom {anterior.text}{n}'"
+                f"'{anterior.text}{n}' não é escrito assim: para {n} átomos use '{n}x atom {anterior.text}', "
+                f"e para o isótopo de número de massa {n} use 'atom {n}{anterior.text}'"
             )
         if seguinte.type == P.NOME and seguinte.text in ("s", "p", "d", "f"):
             return (

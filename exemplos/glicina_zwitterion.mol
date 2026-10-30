@@ -1,0 +1,18 @@
+// Glicina como zwitterion: NH3+ e COO-, carga total zero
+species molecule "Glycine zwitterion" {
+    atom N(+1) as n
+    atom C as ca
+    atom C as c
+    atom O as od
+    atom O(-1) as o
+    5x atom H as h
+    bond n-ca
+    bond ca-c
+    bond c=od
+    bond c-o
+    bond n-h1
+    bond n-h2
+    bond n-h3
+    bond ca-h4
+    bond ca-h5
+}

@@ -1,0 +1,10 @@
+// Ácido isociânico, HN=C=O: tautômero do ácido ciânico (HO-C#N)
+species molecule "Isocyanic acid" {
+    atom H as h
+    atom N as n
+    atom C as c
+    atom O as o
+    bond h-n
+    bond n=c
+    bond c=o
+}

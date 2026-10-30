@@ -1,0 +1,7 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é +0, mas a espécie declara carga total -1
+// Sem as cargas formais, o nitrogênio central fica com quatro ligações
+species molecular_ion "Azide" charge -1 {
+    3x atom N as n
+    bond n1=n2
+    bond n2=n3
+}

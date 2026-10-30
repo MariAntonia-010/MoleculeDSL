@@ -1,0 +1,11 @@
+// Cetena, CH2=C=O: duas duplas acumuladas no carbono central
+species molecule "Ethenone" {
+    atom C as c1
+    atom C as c2
+    atom O as o
+    2x atom H as h
+    bond c1=c2
+    bond c2=o
+    bond c1-h1
+    bond c1-h2
+}

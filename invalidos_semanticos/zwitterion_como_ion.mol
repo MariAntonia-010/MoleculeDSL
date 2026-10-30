@@ -1,0 +1,19 @@
+// esperado: Erro semântico [CARGA-002] na linha 3, coluna 0: a soma das cargas formais é +0, mas a espécie declara carga total +1
+// A glicina zwitteriônica é neutra: declarar molecular_ion com charge +1 contradiz a soma das cargas
+species molecular_ion "Glycine zwitterion" charge +1 {
+    atom N(+1) as n
+    atom C as ca
+    atom C as c
+    atom O as od
+    atom O(-1) as o
+    5x atom H as h
+    bond n-ca
+    bond ca-c
+    bond c=od
+    bond c-o
+    bond n-h1
+    bond n-h2
+    bond n-h3
+    bond ca-h4
+    bond ca-h5
+}

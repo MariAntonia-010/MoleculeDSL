@@ -462,12 +462,43 @@ class AnalisadorSemantico:
                 f"{', '.join(f'[{g}]' for g in estrutura_atomica.NUCLEOS)}",
             )
             return
+        z = self.dados_elementos[atomo.elemento]["numero_atomico"]
+        if decl.nucleo:
+            # Núcleo grande demais: já tem mais elétrons que o átomo
+            nucleo = estrutura_atomica.ler_subcamadas(f"[{decl.nucleo}]")
+            no_nucleo = sum(e for _, _, e in nucleo)
+            if no_nucleo >= z - atomo.carga:
+                menores = [
+                    g for g in estrutura_atomica.NUCLEOS
+                    if sum(e for _, _, e in estrutura_atomica.ler_subcamadas(f"[{g}]")) < z - atomo.carga
+                ]
+                sugestao = f"; use [{menores[-1]}]" if menores else "; escreva as subcamadas sem núcleo"
+                self.erro(
+                    "ATOM-003",
+                    decl,
+                    f"o núcleo [{decl.nucleo}] sozinho tem {no_nucleo} elétrons, e "
+                    f"{atomo.rotulo()} tem {z - atomo.carga}{sugestao}",
+                )
+                return
+            # Subcamada que já está dentro do núcleo
+            dentro = {(n, l) for n, l, _ in nucleo}
+            repetidas = [
+                s for s in decl.subcamadas
+                if (int(s[0]), estrutura_atomica.L_DA_LETRA[s[1]]) in dentro
+            ]
+            if repetidas:
+                self.erro(
+                    "ATOM-002",
+                    decl,
+                    f"{', '.join(r[:2] for r in repetidas)} já está no núcleo [{decl.nucleo}]; "
+                    "depois do núcleo vêm só as subcamadas de fora dele",
+                )
+                return
         subcamadas = estrutura_atomica.ler_subcamadas(texto)
         problemas = estrutura_atomica.problemas_de_pauli(subcamadas)
         if problemas:
             self.erro("ATOM-002", decl, "; ".join(problemas))
             return
-        z = self.dados_elementos[atomo.elemento]["numero_atomico"]
         esperados = z - atomo.carga
         total = sum(e for _, _, e in subcamadas)
         if total != esperados:

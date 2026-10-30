@@ -668,3 +668,18 @@ Hund, íons de metais de transição).
   faltam (o NO• deixou de avisar). Setas fora de `->` ganharam dica no
   LEX-001.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 3
+
+- Válidos: azida, nitrônio, cetena, subóxido de carbono, ácido
+  isociânico, glicina zwitteriônica, (Ra)-hexa-2,3-dieno e
+  cis-1,3-dimetilciclohexano.
+- Inválidos: E num eixo de aleno, núcleo [Ar] no sódio, 2p depois de
+  [Ne], zwitterion declarado como íon, azida sem cargas formais, `atom H2`
+  e `unpaired -1`.
+- Núcleo grande demais tem mensagem própria (ATOM-003, com sugestão do
+  gás nobre certo), e subcamada repetida dentro do núcleo diz isso em vez
+  de "aparece mais de uma vez". A dica de `atom H2` agora oferece as duas
+  leituras: `2x atom H` ou `atom 2H`.
+

@@ -1,0 +1,8 @@
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 10: 'H2' não é escrito assim: para 2 átomos use '2x atom H', e para o isótopo de número de massa 2 use 'atom 2H'
+// Erro comum: escrever H2 como numa fórmula; a quantidade é '2x atom H'
+species molecule "Water" {
+    atom O as o
+    atom H2 as h
+    bond o-h1
+    bond o-h2
+}
