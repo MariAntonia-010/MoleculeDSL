@@ -843,3 +843,11 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
   funcional (18 grupos R × 15 grupos X, sem repetir estrutura pela chave
   canônica do grafo) e erros mais variados, inclusive ATOM-008.
 
+---
+
+## 30/10/2026 — Fundo mais lento
+
+- A malha do fundo andava uma fração de pixel por quadro: rápida, e o
+  dobro em telas de 120 Hz. Agora a velocidade é medida no tempo (até
+  2,5 px/s em qualquer tela), de 3 a 6 vezes mais devagar que antes.
+

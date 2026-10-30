@@ -787,7 +787,7 @@ Espécie 'Water': análise concluída sem erros</pre></div>
           <p class="lead">Com a análise sem erros, o compilador resolve fórmulas e gera relatórios. Saídas reais, pré-computadas.</p>
         </div>
         <div class="grade">
-          <div class="placa c6"><h3>Solver de estruturas</h3><p>Geração ordenada de Read-Faradzev: cada isômero sai uma vez, sem guardar chaves.</p><pre>C6H6       217 (esperado 217)    0.10s</pre></div>
+          <div class="placa c6"><h3>Solver de estruturas</h3><p>Geração ordenada de Read-Faradzev: cada isômero sai uma vez, sem guardar chaves.</p><pre>C6H6       217 (esperado 217)    0.09s</pre></div>
           <div class="placa c6"><h3>Estereoquímica</h3><p>Contagem exata pelo grupo de automorfismos, com formas meso descontadas.</p><pre>Estereoisômeros desta constituição: 3 (1 aquiral(is), 1 par(es) de enantiômeros)
 Estereoisômero declarado: aquiral (forma meso)</pre></div>
           <div class="placa c6"><h3>Tautômeros</h3><pre>Tautômeros: 2 estrutura(s), a declarada primeiro
@@ -2671,8 +2671,11 @@ ESPACO
     const tela = document.getElementById("malha");
     const ctx = tela.getContext("2d");
     const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let nos = [], largura = 0, altura = 0;
+    let nos = [], largura = 0, altura = 0, anterior = null;
     const DISTANCIA = 150;
+    // Velocidade máxima de cada nó em pixels por segundo: medida no tempo,
+    // não por quadro, para não correr o dobro em telas de 120 Hz
+    const VELOCIDADE = 5;
     function montar() {
       const dpr = window.devicePixelRatio || 1;
       largura = innerWidth; altura = innerHeight;
@@ -2682,17 +2685,21 @@ ESPACO
       const rnd = aleatorio(42);
       nos = Array.from({ length: quantidade }, () => ({
         x: rnd() * largura, y: rnd() * altura,
-        vx: (rnd() - 0.5) * 0.25, vy: (rnd() - 0.5) * 0.25,
+        vx: (rnd() - 0.5) * VELOCIDADE, vy: (rnd() - 0.5) * VELOCIDADE,
         r: 1.6 + rnd() * 2.2,
       }));
     }
-    function quadro() {
+    function quadro(tempo) {
+      // Segundos desde o quadro anterior; limitado para a aba que volta do
+      // segundo plano não dar um salto
+      const dt = anterior == null || tempo == null ? 0 : Math.min(0.1, (tempo - anterior) / 1000);
+      anterior = tempo ?? null;
       const claro = raiz.dataset.theme === "light";
       const cor = claro ? "122, 90, 224" : "185, 163, 247";
       ctx.clearRect(0, 0, largura, altura);
       for (const no of nos) {
         if (!parado) {
-          no.x += no.vx; no.y += no.vy;
+          no.x += no.vx * dt; no.y += no.vy * dt;
           if (no.x < 0 || no.x > largura) no.vx *= -1;
           if (no.y < 0 || no.y > altura) no.vy *= -1;
         }
@@ -2712,7 +2719,7 @@ ESPACO
       if (!parado && !document.hidden) requestAnimationFrame(quadro);
     }
     addEventListener("resize", () => { montar(); if (parado) quadro(); });
-    document.addEventListener("visibilitychange", () => { if (!document.hidden && !parado) requestAnimationFrame(quadro); });
+    document.addEventListener("visibilitychange", () => { anterior = null; if (!document.hidden && !parado) requestAnimationFrame(quadro); });
     new MutationObserver(() => { if (parado) quadro(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
     montar();
     quadro();

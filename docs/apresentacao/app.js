@@ -1135,8 +1135,11 @@
     const tela = document.getElementById("malha");
     const ctx = tela.getContext("2d");
     const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let nos = [], largura = 0, altura = 0;
+    let nos = [], largura = 0, altura = 0, anterior = null;
     const DISTANCIA = 150;
+    // Velocidade máxima de cada nó em pixels por segundo: medida no tempo,
+    // não por quadro, para não correr o dobro em telas de 120 Hz
+    const VELOCIDADE = 5;
     function montar() {
       const dpr = window.devicePixelRatio || 1;
       largura = innerWidth; altura = innerHeight;
@@ -1146,17 +1149,21 @@
       const rnd = aleatorio(42);
       nos = Array.from({ length: quantidade }, () => ({
         x: rnd() * largura, y: rnd() * altura,
-        vx: (rnd() - 0.5) * 0.25, vy: (rnd() - 0.5) * 0.25,
+        vx: (rnd() - 0.5) * VELOCIDADE, vy: (rnd() - 0.5) * VELOCIDADE,
         r: 1.6 + rnd() * 2.2,
       }));
     }
-    function quadro() {
+    function quadro(tempo) {
+      // Segundos desde o quadro anterior; limitado para a aba que volta do
+      // segundo plano não dar um salto
+      const dt = anterior == null || tempo == null ? 0 : Math.min(0.1, (tempo - anterior) / 1000);
+      anterior = tempo ?? null;
       const claro = raiz.dataset.theme === "light";
       const cor = claro ? "122, 90, 224" : "185, 163, 247";
       ctx.clearRect(0, 0, largura, altura);
       for (const no of nos) {
         if (!parado) {
-          no.x += no.vx; no.y += no.vy;
+          no.x += no.vx * dt; no.y += no.vy * dt;
           if (no.x < 0 || no.x > largura) no.vx *= -1;
           if (no.y < 0 || no.y > altura) no.vy *= -1;
         }
@@ -1176,7 +1183,7 @@
       if (!parado && !document.hidden) requestAnimationFrame(quadro);
     }
     addEventListener("resize", () => { montar(); if (parado) quadro(); });
-    document.addEventListener("visibilitychange", () => { if (!document.hidden && !parado) requestAnimationFrame(quadro); });
+    document.addEventListener("visibilitychange", () => { anterior = null; if (!document.hidden && !parado) requestAnimationFrame(quadro); });
     new MutationObserver(() => { if (parado) quadro(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
     montar();
     quadro();
