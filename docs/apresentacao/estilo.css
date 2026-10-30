@@ -481,3 +481,25 @@
     .arv-campo { font: 10.5px var(--mono); fill: var(--acento); }
     .arv-divisoria { stroke: var(--borda-forte); stroke-width: 1; }
     .ficha-arvore .arv-rolagem { max-height: 320px; }
+
+    /* guia: passo a passo e anatomia */
+    .passos-guia { margin-top: 1rem; }
+    .passos-guia h4, .anatomia h4 { margin: 0 0 0.8rem; font: 600 0.74rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--acento); }
+    .passos-guia ol { margin: 0; padding: 0; list-style: none; counter-reset: passo; display: grid; gap: 0.9rem; }
+    .passos-guia li { counter-increment: passo; display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); column-gap: 0.6rem; }
+    .passos-guia li::before { content: counter(passo); grid-row: span 3; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--acento) 45%, transparent); background: var(--acento-fundo); color: var(--acento); font: 700 0.85rem var(--mono); }
+    .passos-guia li p { margin: 0.2rem 0 0; color: var(--suave); }
+    .passos-guia li pre { margin-top: 0.5rem; }
+    .anatomia { margin-top: 1rem; }
+    .anatomia-codigo { font: 600 clamp(1.1rem, 2.4vw, 1.6rem) var(--mono); margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .parte { padding: 0.1rem 0.45rem; border-radius: 6px; border: 1px solid var(--borda-forte); }
+    .parte.p0 { color: var(--acento); border-color: color-mix(in srgb, var(--acento) 50%, transparent); }
+    .parte.p1 { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); }
+    .parte.p2 { color: var(--aviso); border-color: color-mix(in srgb, var(--aviso) 50%, transparent); }
+    .parte.p3 { color: var(--erro); border-color: color-mix(in srgb, var(--erro) 45%, transparent); }
+    .anatomia dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.5rem 1rem; align-items: center; }
+    .anatomia dt { font: 600 0.9rem var(--mono); }
+    .anatomia dd { margin: 0; color: var(--suave); }
+    .bohr-guia { width: 100%; max-width: 260px; aspect-ratio: 1; display: block; border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); }
+    .ast-guia { margin-top: 0.9rem; }
+    .ast-guia summary { cursor: pointer; font-size: 0.86rem; color: var(--suave); margin-bottom: 0.5rem; }

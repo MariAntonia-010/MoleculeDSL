@@ -8,6 +8,80 @@ nunca mostra um exemplo que não funciona do jeito descrito.
 
 LICOES = [
     {
+        "id": "construir_atomo",
+        "titulo": "Construindo um átomo, passo a passo",
+        "texto": [
+            "A estrutura mais simples que a linguagem descreve é um átomo sozinho. "
+            "Ela já usa as três partes de todo programa: o cabeçalho da espécie, as chaves e uma declaração.",
+            "Pela IUPAC, um átomo isolado não é molécula. Por isso o tipo é species atom (ou species monatomic_ion, se tiver carga), e não species molecule.",
+        ],
+        "passos": [
+            {"titulo": "Escolha o tipo da espécie", "texto": "Para um átomo neutro, species atom. Para um átomo com carga, species monatomic_ion, que exige charge no cabeçalho.", "codigo": "species atom"},
+            {"titulo": "Dê um nome à espécie", "texto": "Entre aspas, logo depois do tipo. É o nome da espécie inteira, não do átomo.", "codigo": 'species atom "Carbon"'},
+            {"titulo": "Abra e feche as chaves", "texto": "Tudo o que compõe a espécie fica entre { e }.", "codigo": 'species atom "Carbon" {\n}'},
+            {"titulo": "Declare o átomo", "texto": "atom seguido do símbolo do elemento: primeira letra maiúscula e, se houver, a segunda minúscula (C, Na, Cl). Um átomo isolado não tem ligações, então não há bond.", "codigo": 'species atom "Carbon" {\n    atom C\n}'},
+            {"titulo": "Compile", "texto": "O compilador confere que há um único átomo, sem ligações, e que o elemento existe. Sem erro, sai com código 0.", "codigo": "python3 src/main.py --ast --modelo carbono.mol"},
+            {"titulo": "Veja o átomo", "texto": "No playground, uma espécie de um átomo só é desenhada pelo modelo de Bohr, com as camadas de elétrons da configuração eletrônica.", "codigo": ""},
+        ],
+        "anatomia": {
+            "codigo": "atom Na(+1) as na1",
+            "partes": [
+                ["atom", "palavra-chave: declara um átomo (token ATOM)"],
+                ["Na", "símbolo do elemento (token IDENT, [A-Z][a-z]?)"],
+                ["(+1)", "carga formal, opcional; o sinal é obrigatório"],
+                ["as na1", "nome do átomo, opcional; sem ele o nome automático é Na#1"],
+            ],
+        },
+        "exemplos": [
+            {
+                "titulo": "O átomo de carbono completo",
+                "explicacao": "A AST mostra a espécie e um AtomoDecl com o nome automático C#1; o modelo tem um átomo e nenhuma ligação.",
+                "codigo": 'species atom "Carbon" {\n    atom C\n}\n',
+                "opcoes": ["--ast", "--modelo"],
+                "saida": 0,
+                "bohr": "C",
+            },
+            {
+                "titulo": "Variação: com nome",
+                "explicacao": "as c dá um nome ao átomo; numa espécie de um átomo só ele é opcional, mas é o mesmo recurso usado depois para citar átomos nas ligações.",
+                "codigo": 'species atom "Carbon" {\n    atom C as c\n}\n',
+                "opcoes": ["--ast"],
+                "saida": 0,
+                "bohr": "C",
+            },
+            {
+                "titulo": "Variação: íon monoatômico",
+                "explicacao": "Com carga, o tipo passa a monatomic_ion e o cabeçalho declara charge; a carga do átomo precisa bater com ela. Na⁺ perde o elétron da camada externa.",
+                "codigo": 'species monatomic_ion "Sodium(1+)" charge +1 {\n    atom Na(+1)\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+                "bohr": "Na",
+                "carga": 1,
+            },
+            {
+                "titulo": "Erro comum: símbolo em minúsculas",
+                "explicacao": "na começa com minúscula, então é lido como nome, não como elemento: erro de sintaxe (código 1).",
+                "codigo": 'species atom "Sodium" {\n    atom na\n}\n',
+                "opcoes": [],
+                "saida": 1,
+            },
+            {
+                "titulo": "Erro comum: elemento que não existe",
+                "explicacao": "Xx tem a forma de um símbolo, mas não está na tabela periódica: erro semântico ELEM-001.",
+                "codigo": 'species atom "Unknown" {\n    atom Xx\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+            {
+                "titulo": "Erro comum: átomo com carga declarado como atom",
+                "explicacao": "species atom é neutro e não declara charge; com carga, use species monatomic_ion.",
+                "codigo": 'species atom "Sodium" {\n    atom Na(+1)\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+        ],
+    },
+    {
         "id": "primeiro",
         "titulo": "Primeiro programa",
         "texto": [

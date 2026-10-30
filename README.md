@@ -246,7 +246,7 @@ python3 src/construtor_ast.py exemplos/agua.mol
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
-- **Guia:** 13 lições com código, saída real do compilador e variações de
+- **Guia:** 14 lições, começando pela construção de um átomo passo a passo, com código, saída real do compilador e variações de
   escrita; cada exemplo é compilado pelo compilador real ao gerar a página;
 - **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
 - **Uso** e **Doc:** instalação, comandos, gramática real, erros e

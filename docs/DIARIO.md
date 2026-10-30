@@ -589,3 +589,15 @@ O₃ trioxigênio; cátion monoatômico "sódio(1+)", ânion "cloreto"). O limit
   Snapshots de AST, `docs/ast.md` e os SVGs de `docs/` foram atualizados.
 - Teste: nenhum exemplo mostra `None` na AST, e o nome automático de cada
   átomo é o mesmo rótulo do modelo.
+
+---
+
+## 30/10/2026 — Guia: construindo um átomo passo a passo
+
+- Nova lição de abertura do guia: os passos para escrever a estrutura mais
+  simples (tipo da espécie, nome, chaves, declaração do átomo, compilação,
+  visualização), a anatomia do comando `atom Na(+1) as na1` e seis exemplos
+  conferidos pelo compilador real, inclusive os erros mais comuns (símbolo em
+  minúsculas, elemento inexistente, carga em `species atom`).
+- Exemplos de átomo mostram o modelo de Bohr na própria lição; exemplos
+  pequenos de todas as lições mostram a AST desenhada.
