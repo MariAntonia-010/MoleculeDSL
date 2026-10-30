@@ -137,6 +137,7 @@ def main():
         "DADOS_JSON": json.dumps(dados, ensure_ascii=False).replace("</", "<\\/"),
         "USO": rodar().strip(),
         "GRAMATICA": gramatica,
+        "AGUA": open(os.path.join(RAIZ, "exemplos", "agua.mol"), encoding="utf-8").read().strip(),
         "AST_IMG": imagem,
         "TOKENS": sem_conclusao(rodar("--tokens", "exemplos/agua.mol")),
         "AST": sem_conclusao(rodar("--ast", "exemplos/agua.mol")),

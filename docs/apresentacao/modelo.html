@@ -7,44 +7,40 @@
   <meta name="description" content="MoleculeDSL: linguagem química com compilador em Python e ANTLR 4. Linguagens Formais e Compiladores, 2026.">
   <style>
     :root {
-      --bg: #141417;
-      --superficie: #1b1b1f;
-      --elevado: #222227;
-      --borda: rgba(255, 255, 255, 0.06);
-      --texto: #ececf1;
-      --suave: #9b99a6;
-      --fraco: #6d6b77;
+      --bg: #0e0d12;
+      --superficie: #15141b;
+      --elevado: #1c1a24;
+      --borda: rgba(255, 255, 255, 0.08);
+      --borda-forte: rgba(255, 255, 255, 0.14);
+      --texto: #ecebf2;
+      --suave: #a09dac;
+      --fraco: #6f6c7b;
       --acento: #b9a3f7;
-      --acento-forte: #9a7ef0;
-      --acento-fundo: rgba(185, 163, 247, 0.12);
-      --erro: #e8899b;
-      --aviso: #d9b978;
-      --ok: #9fcfae;
-      --sombra: 9px 9px 20px #0c0c0e, -7px -7px 18px #1f1f24;
-      --sombra-dentro: inset 5px 5px 12px #0e0e10, inset -5px -5px 12px #212126;
-      --sombra-leve: 4px 4px 10px #0d0d0f, -3px -3px 9px #202025;
+      --acento-forte: #8f6ef0;
+      --acento-fundo: rgba(185, 163, 247, 0.1);
+      --erro: #ec8fa1;
+      --aviso: #dcbc7b;
+      --ok: #9fd1b0;
       --mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      --sans: "Inter", "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
-      --serif: "IBM Plex Serif", Georgia, serif;
-      --raio: 20px;
+      --sans: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+      --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+      --raio: 16px;
     }
     :root[data-theme="light"] {
-      --bg: #ecebf1;
-      --superficie: #ecebf1;
-      --elevado: #f3f2f7;
-      --borda: rgba(30, 20, 60, 0.07);
-      --texto: #1e1c25;
-      --suave: #5f5b6b;
-      --fraco: #8b8797;
-      --acento: #7a5ae0;
+      --bg: #f7f6fa;
+      --superficie: #ffffff;
+      --elevado: #f1eff7;
+      --borda: rgba(25, 15, 60, 0.1);
+      --borda-forte: rgba(25, 15, 60, 0.18);
+      --texto: #1c1a23;
+      --suave: #5d596a;
+      --fraco: #8a8697;
+      --acento: #6f4fd8;
       --acento-forte: #6a46d8;
-      --acento-fundo: rgba(122, 90, 224, 0.1);
-      --erro: #b3354f;
-      --aviso: #8f6a12;
-      --ok: #2f7a4a;
-      --sombra: 9px 9px 20px #cfcdd8, -9px -9px 20px #ffffff;
-      --sombra-dentro: inset 5px 5px 11px #d2d0db, inset -5px -5px 11px #ffffff;
-      --sombra-leve: 4px 4px 10px #d3d1dc, -4px -4px 10px #ffffff;
+      --acento-fundo: rgba(111, 79, 216, 0.08);
+      --erro: #b0304b;
+      --aviso: #8a650d;
+      --ok: #2d7546;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -52,11 +48,10 @@
       margin: 0;
       background: var(--bg);
       color: var(--texto);
-      font: 400 clamp(16px, 0.6vw + 12px, 19px)/1.6 var(--sans);
+      font: 400 clamp(16px, 0.55vw + 12px, 19px)/1.6 var(--sans);
       overflow-x: hidden;
     }
     a { color: var(--acento); }
-    /* malha de nós interligados no fundo */
     #malha { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
     code, pre, kbd, .mono { font-family: var(--mono); }
     h1, h2, h3 { letter-spacing: -0.025em; }
@@ -65,96 +60,69 @@
 
     /* ---------- barra superior ---------- */
     .topo {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 0.8rem clamp(16px, 4vw, 40px);
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.85rem clamp(16px, 4vw, 40px);
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--borda);
     }
     .marca { font: 700 1.08rem var(--mono); color: var(--texto); text-decoration: none; white-space: nowrap; }
     .marca b { color: var(--acento); font-weight: 700; }
-    .rotas {
-      display: flex;
-      gap: 0.35rem;
-      margin: 0 auto;
-      padding: 0.3rem;
-      border-radius: 14px;
-      box-shadow: var(--sombra-dentro);
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
+    .rotas { display: flex; gap: 0.25rem; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
     .rotas::-webkit-scrollbar { display: none; }
     .rotas a {
-      padding: 0.45rem 0.95rem;
-      border-radius: 10px;
-      color: var(--suave);
-      text-decoration: none;
-      font-size: 0.86rem;
-      font-weight: 500;
-      white-space: nowrap;
-      transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+      padding: 0.5rem 0.95rem; border-radius: 10px; color: var(--suave); text-decoration: none;
+      font-size: 0.88rem; font-weight: 500; white-space: nowrap; transition: color 0.2s, background 0.2s;
     }
     .rotas a:hover { color: var(--texto); }
-    .rotas a.ativo { color: var(--acento); background: var(--elevado); box-shadow: var(--sombra-leve); }
+    .rotas a.ativo { color: var(--acento); background: var(--acento-fundo); }
     .tema {
-      flex: none;
-      width: 42px;
-      height: 42px;
-      border: 0;
-      border-radius: 12px;
-      background: var(--superficie);
-      box-shadow: var(--sombra-leve);
-      cursor: pointer;
-      display: grid;
-      place-items: center;
+      flex: none; width: 42px; height: 42px; border-radius: 12px; cursor: pointer;
+      border: 1px solid var(--borda); background: var(--superficie); display: grid; place-items: center;
     }
     .tema svg { width: 19px; height: 19px; stroke: var(--suave); fill: none; stroke-width: 1.8; stroke-linecap: round; }
 
-    /* ---------- páginas ---------- */
-    .pagina { display: none; padding: clamp(1.5rem, 4vw, 3.5rem) clamp(16px, 4vw, 40px) 4rem; max-width: 1280px; margin: 0 auto; }
+    /* ---------- páginas e cabeçalhos ---------- */
+    .pagina { display: none; padding: clamp(2.5rem, 6vw, 5rem) clamp(16px, 4vw, 40px) 4rem; max-width: 1240px; margin: 0 auto; }
     .pagina.ativa { display: block; animation: surgir 0.35s ease; }
     @keyframes surgir { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-    .rotulo { font: 500 0.72rem var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--acento); }
-    h2 { font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.15; margin: 0.4rem 0 0.8rem; }
-    .lead { color: var(--suave); font-family: var(--serif); font-size: 1.08em; max-width: 760px; margin: 0; }
-    .placa {
-      background: var(--superficie);
-      border-radius: var(--raio);
-      box-shadow: var(--sombra);
-      padding: clamp(1.1rem, 2.4vw, 1.8rem);
-      min-width: 0;
+    .cabeca { text-align: center; max-width: 820px; margin: 0 auto 2.4rem; }
+    .rotulo {
+      display: inline-flex; align-items: center; gap: 0.8rem;
+      font: 500 0.72rem var(--mono); letter-spacing: 0.22em; text-transform: uppercase; color: var(--acento);
     }
-    .grade { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.3rem; margin-top: 1.6rem; }
-    .c4 { grid-column: span 4; } .c6 { grid-column: span 6; } .c8 { grid-column: span 8; } .c12 { grid-column: 1 / -1; } .c3 { grid-column: span 3; }
-    .placa h3 { margin: 0 0 0.4rem; font-size: 1.08rem; }
+    .rotulo::before, .rotulo::after { content: ""; width: 26px; height: 1px; background: currentColor; opacity: 0.55; }
+    h2 { font-size: clamp(1.8rem, 3.8vw, 2.8rem); line-height: 1.15; margin: 0.6rem 0 0.7rem; }
+    .lead { color: var(--suave); font-family: var(--serif); font-size: 1.1em; margin: 0 auto; max-width: 720px; }
+    .placa {
+      background: color-mix(in srgb, var(--superficie) 92%, transparent);
+      border: 1px solid var(--borda);
+      border-radius: var(--raio);
+      padding: clamp(1.1rem, 2.2vw, 1.6rem);
+      min-width: 0;
+      transition: border-color 0.2s;
+    }
+    a.placa:hover, .placa.interativa:hover { border-color: color-mix(in srgb, var(--acento) 45%, transparent); }
+    .grade { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1.1rem; }
+    .c3 { grid-column: span 3; } .c4 { grid-column: span 4; } .c6 { grid-column: span 6; } .c8 { grid-column: span 8; } .c12 { grid-column: 1 / -1; }
+    .placa h3 { margin: 0 0 0.4rem; font-size: 1.06rem; }
     .placa p { margin: 0; color: var(--suave); }
     .icone {
-      width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center;
-      box-shadow: var(--sombra-dentro); color: var(--acento); margin-bottom: 0.9rem;
+      width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; margin-bottom: 0.9rem;
+      border: 1px solid color-mix(in srgb, var(--acento) 35%, transparent); background: var(--acento-fundo); color: var(--acento);
     }
-    .icone svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-
+    .icone svg { width: 21px; height: 21px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
     pre {
-      margin: 0.8rem 0 0;
-      padding: 1rem 1.1rem;
-      border-radius: 14px;
-      background: var(--bg);
-      box-shadow: var(--sombra-dentro);
-      font-size: 0.78rem;
-      line-height: 1.6;
-      overflow-x: auto;
-      color: var(--texto);
+      margin: 0.8rem 0 0; padding: 1rem 1.1rem; border-radius: 12px;
+      background: var(--bg); border: 1px solid var(--borda);
+      font-size: 0.78rem; line-height: 1.6; overflow-x: auto; color: var(--texto);
     }
     .kw { color: var(--acento); }
     .str { color: var(--ok); }
     .op { color: var(--acento-forte); font-weight: 700; }
     .com { color: var(--fraco); font-style: italic; }
-    .erro-txt, pre.erro { color: var(--erro); }
+    pre.erro { color: var(--erro); border-color: color-mix(in srgb, var(--erro) 35%, transparent); }
     table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
     th, td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--borda); vertical-align: top; }
     th { font: 600 0.68rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fraco); }
@@ -163,52 +131,85 @@
     .erro-sev { color: var(--erro); } .aviso-sev { color: var(--aviso); }
     .botao {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.8rem 1.35rem; border-radius: 14px; border: 0;
-      background: var(--superficie); box-shadow: var(--sombra-leve);
-      color: var(--texto); font-weight: 600; text-decoration: none; cursor: pointer;
-      transition: box-shadow 0.2s, color 0.2s;
+      padding: 0.8rem 1.4rem; border-radius: 12px; border: 1px solid var(--borda-forte);
+      background: var(--superficie); color: var(--texto); font-weight: 600; text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
     }
-    .botao:hover { color: var(--acento); }
-    .botao:active { box-shadow: var(--sombra-dentro); }
-    .botao.primario { background: var(--acento-forte); color: #fff; box-shadow: var(--sombra-leve); }
-    .botao.primario:hover { color: #fff; filter: brightness(1.06); }
-    .botao[disabled] { opacity: 0.4; cursor: default; }
+    .botao:hover { border-color: var(--acento); color: var(--acento); }
+    .botao.primario { background: var(--acento-forte); border-color: var(--acento-forte); color: #fff; }
+    .botao.primario:hover { color: #fff; filter: brightness(1.08); }
+    .botao.pequeno { padding: 0.5rem 0.85rem; font-size: 0.82rem; border-radius: 10px; }
+    .botao[disabled] { opacity: 0.35; cursor: default; pointer-events: none; }
 
     /* ---------- início ---------- */
-    .capa { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 2rem; align-items: center; min-height: calc(100vh - 160px); }
-    .capa h1 { font: 700 clamp(2.4rem, 6.4vw, 5.6rem)/1 var(--mono); margin: 0.6rem 0; letter-spacing: -0.05em; white-space: nowrap; }
+    .capa {
+      position: relative; min-height: calc(100vh - 72px);
+      display: grid; grid-template-columns: minmax(0, 1fr); place-items: center;
+      text-align: center; padding: 3rem clamp(16px, 4vw, 40px) 7rem; overflow: hidden;
+    }
+    .marca-dagua {
+      position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -54%);
+      font: 800 clamp(10rem, 34vw, 30rem)/1 var(--mono); letter-spacing: -0.06em;
+      color: color-mix(in srgb, var(--texto) 4%, transparent);
+      user-select: none; pointer-events: none; white-space: nowrap;
+    }
+    .vitrine { position: absolute; inset: 0; opacity: 0.16; pointer-events: auto; }
+    .vitrine canvas { width: 100%; height: 100%; display: block; touch-action: pan-y; }
+    .capa-conteudo { position: relative; width: 100%; max-width: 900px; min-width: 0; pointer-events: none; }
+    .capa-conteudo a, .capa-conteudo button { pointer-events: auto; }
+    .capa h1 { font: 700 clamp(3rem, 10vw, 7.4rem)/1 var(--mono); margin: 0.8rem 0 0.6rem; letter-spacing: -0.05em; white-space: nowrap; }
     .capa h1 b { color: var(--acento); }
-    .cursor { display: inline-block; width: 0.45em; height: 0.8em; background: var(--acento); margin-left: 0.04em; vertical-align: -0.03em; animation: piscar 1.1s steps(1) infinite; border-radius: 2px; }
+    .cursor { display: inline-block; width: 0.42em; height: 0.8em; background: var(--acento); margin-left: 0.05em; vertical-align: -0.03em; animation: piscar 1.1s steps(1) infinite; }
     @keyframes piscar { 50% { opacity: 0; } }
-    .lema { font: 400 clamp(1.1rem, 2vw, 1.4rem)/1.5 var(--serif); color: var(--suave); margin: 0; }
+    .lema { font: 400 clamp(1.1rem, 2vw, 1.45rem)/1.55 var(--serif); color: var(--suave); margin: 0 auto; }
     .lema em { color: var(--texto); }
-    .chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.6rem 0 0; padding: 0; list-style: none; }
-    .chips li { font: 500 0.8rem var(--mono); padding: 0.45rem 0.85rem; border-radius: 999px; box-shadow: var(--sombra-leve); color: var(--suave); }
-    .chips li.destaque { color: var(--acento); }
-    .acoes { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 1.8rem; }
-    .vitrine { position: relative; aspect-ratio: 1; border-radius: 28px; box-shadow: var(--sombra); background: var(--superficie); overflow: hidden; }
-    .vitrine canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
-    .vitrine figcaption { position: absolute; left: 1rem; bottom: 0.8rem; font: 0.74rem var(--mono); color: var(--fraco); }
-    .modulos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.3rem; margin-top: 2.5rem; }
-    .modulo { text-decoration: none; color: inherit; transition: transform 0.2s; }
-    .modulo:hover { transform: translateY(-3px); }
+    .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.55rem; margin: 1.6rem 0 0; padding: 0; list-style: none; }
+    .chips li { font: 500 0.78rem var(--mono); padding: 0.4rem 0.8rem; border-radius: 999px; border: 1px solid var(--borda); background: var(--superficie); color: var(--suave); }
+    .chips li.destaque { color: var(--acento); border-color: color-mix(in srgb, var(--acento) 35%, transparent); }
+    .acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.9rem; margin-top: 2rem; }
+    .terminal {
+      display: flex; gap: 0.5rem; width: fit-content; max-width: 100%; margin: 1.8rem auto 0;
+      padding: 0.7rem 1.1rem; border-radius: 12px; border: 1px solid var(--borda); background: var(--superficie);
+      font: 0.84rem var(--mono); color: var(--suave); overflow-x: auto; white-space: nowrap; text-align: left;
+    }
+    .terminal .prompt { color: var(--ok); }
+    .rolar {
+      position: absolute; bottom: 1.6rem; left: 50%; transform: translateX(-50%);
+      display: grid; justify-items: center; gap: 0.5rem; text-decoration: none;
+      font: 500 0.66rem var(--mono); letter-spacing: 0.22em; color: var(--fraco);
+    }
+    .rolar i { width: 22px; height: 36px; border: 1.5px solid currentColor; border-radius: 12px; position: relative; }
+    .rolar i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; border-radius: 2px; background: var(--acento); transform: translateX(-50%); animation: descer 1.8s ease-in-out infinite; }
+    @keyframes descer { 60% { top: 18px; opacity: 0; } 100% { top: 7px; opacity: 0; } }
+    .bloco-inicio { padding: clamp(3rem, 8vw, 6rem) 0 0; }
+    .modulo { text-decoration: none; color: inherit; }
     .modulo .numero { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.15em; }
+    .chamada { text-align: center; padding: clamp(3rem, 8vw, 6rem) 0 1rem; }
+    .chamada p { color: var(--suave); font-family: var(--serif); margin: 0 0 1.6rem; }
+    .pontos { position: fixed; right: clamp(10px, 2vw, 26px); top: 50%; transform: translateY(-50%); display: none; flex-direction: column; gap: 1rem; z-index: 15; }
+    body.no-inicio .pontos { display: flex; }
+    .pontos a { display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem; text-decoration: none; color: var(--fraco); font: 500 0.64rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; }
+    .pontos a span { opacity: 0; transition: opacity 0.2s; }
+    .pontos a:hover span, .pontos a.ativo span { opacity: 1; }
+    .pontos a.ativo { color: var(--acento); }
+    .pontos i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid currentColor; transition: all 0.2s; }
+    .pontos a.ativo i { background: var(--acento); transform: scale(1.25); }
 
     /* ---------- conteúdo (slides) ---------- */
     .slide { display: none; }
     .slide.ativo { display: block; animation: surgir 0.35s ease; }
     .paginador {
       display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-      margin-top: 2rem; padding: 0.7rem; border-radius: 18px; box-shadow: var(--sombra-dentro);
+      margin-top: 2.2rem; padding-top: 1.2rem; border-top: 1px solid var(--borda);
     }
-    .paginador .contador { font: 600 0.82rem var(--mono); color: var(--suave); }
+    .paginador .contador { font: 600 0.8rem var(--mono); color: var(--suave); }
     .pontinhos { display: flex; gap: 0.45rem; flex-wrap: wrap; justify-content: center; }
-    .pontinhos button { width: 10px; height: 10px; padding: 0; border: 0; border-radius: 50%; background: var(--fraco); opacity: 0.45; cursor: pointer; }
-    .pontinhos button.ativo { background: var(--acento); opacity: 1; width: 26px; border-radius: 6px; }
-    .moldura-ast { border-radius: var(--raio); background: #f8fafc; padding: 0.8rem; overflow-x: auto; box-shadow: var(--sombra-dentro); }
+    .pontinhos button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: var(--fraco); opacity: 0.4; cursor: pointer; }
+    .pontinhos button.ativo { background: var(--acento); opacity: 1; width: 24px; border-radius: 6px; }
+    .moldura-ast { border-radius: var(--raio); background: #f8fafc; padding: 0.8rem; overflow-x: auto; border: 1px solid var(--borda); }
     .moldura-ast img { display: block; height: 280px; width: auto; max-width: none; }
     .pipeline { width: 100%; height: auto; display: block; }
-    .pipeline rect { fill: var(--elevado); stroke: var(--borda); }
+    .pipeline rect { fill: var(--elevado); stroke: var(--borda-forte); }
     .pipeline .fim rect { stroke: var(--acento); }
     .pipeline text { fill: var(--texto); font-family: var(--mono); }
     .pipeline .sub { fill: var(--fraco); }
@@ -217,15 +218,15 @@
     .metrica { text-align: center; }
     .metrica strong { display: block; font: 700 clamp(2.2rem, 4.5vw, 3.2rem)/1.1 var(--mono); color: var(--acento); }
     .metrica span { color: var(--suave); font-size: 0.85rem; }
-    .abas { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
-    .aba { border: 0; padding: 0.5rem 0.95rem; border-radius: 11px; background: var(--superficie); box-shadow: var(--sombra-leve); font: 600 0.8rem var(--mono); color: var(--suave); cursor: pointer; }
-    .aba[aria-selected="true"] { color: var(--acento); box-shadow: var(--sombra-dentro); }
+    .abas { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1rem; border-bottom: 1px solid var(--borda); }
+    .aba { border: 0; border-bottom: 2px solid transparent; padding: 0.55rem 0.9rem; background: none; font: 600 0.8rem var(--mono); color: var(--suave); cursor: pointer; margin-bottom: -1px; }
+    .aba[aria-selected="true"] { color: var(--acento); border-bottom-color: var(--acento); }
 
     /* ---------- documentação ---------- */
-    .doc { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 1.6rem; margin-top: 1.6rem; align-items: start; }
-    .sumario { position: sticky; top: 90px; display: grid; gap: 0.3rem; }
-    .sumario a { padding: 0.55rem 0.8rem; border-radius: 11px; text-decoration: none; color: var(--suave); font-size: 0.9rem; }
-    .sumario a.ativo { color: var(--acento); box-shadow: var(--sombra-dentro); }
+    .doc { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.4rem; align-items: start; }
+    .sumario { position: sticky; top: 90px; display: grid; gap: 0.2rem; }
+    .sumario a { padding: 0.55rem 0.8rem; border-radius: 10px; text-decoration: none; color: var(--suave); font-size: 0.9rem; }
+    .sumario a.ativo { color: var(--acento); background: var(--acento-fundo); }
     .topico { display: none; }
     .topico.ativo { display: block; animation: surgir 0.3s ease; }
     .topico h3 { font-size: 1.3rem; margin: 0 0 0.6rem; }
@@ -233,47 +234,64 @@
     .topico p, .topico li { color: var(--suave); }
 
     /* ---------- playground ---------- */
-    .play { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.3rem; margin-top: 1.4rem; }
+    .guia { margin-bottom: 1.1rem; }
+    .passos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; counter-reset: passo; }
+    .passos li { counter-increment: passo; color: var(--suave); font-size: 0.9rem; }
+    .passos li::before { content: counter(passo, decimal-leading-zero); display: block; font: 600 0.72rem var(--mono); color: var(--acento); letter-spacing: 0.12em; margin-bottom: 0.3rem; }
+    .passos code { color: var(--texto); font-size: 0.82em; }
+    .exemplos-erro { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--borda); }
+    .exemplos-erro span { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 0.3rem; }
+    .play { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.1rem; }
     .barra-ferramentas { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.9rem; }
-    select {
-      font: 500 0.85rem var(--sans); color: var(--texto); background: var(--superficie);
-      border: 0; border-radius: 12px; padding: 0.6rem 0.8rem; box-shadow: var(--sombra-leve); max-width: 100%;
-    }
-    .editor { display: grid; grid-template-columns: auto minmax(0, 1fr); border-radius: 16px; box-shadow: var(--sombra-dentro); background: var(--bg); overflow: hidden; }
-    .numeros { padding: 0.9rem 0.6rem; text-align: right; color: var(--fraco); font: 0.8rem/1.6 var(--mono); user-select: none; white-space: pre; }
-    textarea {
-      width: 100%; min-height: 430px; resize: vertical; border: 0; outline: 0; background: transparent;
-      color: var(--texto); font: 0.8rem/1.6 var(--mono); padding: 0.9rem 0.9rem 0.9rem 0.3rem; white-space: pre; overflow-x: auto; tab-size: 4;
-    }
-    .cena { position: relative; border-radius: 18px; box-shadow: var(--sombra-dentro); background: var(--bg); aspect-ratio: 4 / 3; overflow: hidden; }
+    select { font: 500 0.85rem var(--sans); color: var(--texto); background: var(--superficie); border: 1px solid var(--borda-forte); border-radius: 10px; padding: 0.55rem 0.75rem; max-width: 100%; flex: 1 1 200px; }
+    .editor { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); overflow: hidden; }
+    .numeros { padding: 0.9rem 0.6rem; text-align: right; color: var(--fraco); font: 0.8rem/1.6 var(--mono); user-select: none; white-space: pre; border-right: 1px solid var(--borda); }
+    .numeros .marcada { color: var(--erro); font-weight: 700; }
+    textarea { width: 100%; min-height: 440px; resize: vertical; border: 0; outline: 0; background: transparent; color: var(--texto); font: 0.8rem/1.6 var(--mono); padding: 0.9rem; white-space: pre; overflow-x: auto; tab-size: 4; }
+    .cena { position: relative; border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); aspect-ratio: 4 / 3; overflow: hidden; }
     .cena canvas { width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
     .cena .dica { position: absolute; right: 0.8rem; bottom: 0.6rem; font: 0.7rem var(--mono); color: var(--fraco); }
     .cena .vazio { position: absolute; inset: 0; display: grid; place-items: center; color: var(--fraco); font: 0.85rem var(--mono); text-align: center; padding: 1rem; }
-    .resumo-mol { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.9rem; }
-    .resumo-mol span { font: 0.76rem var(--mono); padding: 0.35rem 0.7rem; border-radius: 999px; box-shadow: var(--sombra-leve); color: var(--suave); }
+    .resumo-mol { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.9rem; }
+    .resumo-mol span { font: 0.76rem var(--mono); padding: 0.3rem 0.65rem; border-radius: 999px; border: 1px solid var(--borda); color: var(--suave); }
     .resumo-mol span b { color: var(--acento); font-weight: 600; }
-    .saida { min-height: 170px; max-height: 340px; }
-    .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.7rem; }
-    .alternar { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
+    .painel { margin-top: 0.9rem; }
+    .painel pre { margin: 0; max-height: 340px; }
+    .diagnosticos { display: grid; gap: 0.7rem; max-height: 420px; overflow-y: auto; }
+    .diag { border: 1px solid var(--borda); border-left: 3px solid var(--erro); border-radius: 10px; padding: 0.85rem 1rem; background: var(--bg); cursor: pointer; text-align: left; width: 100%; }
+    .diag.aviso { border-left-color: var(--aviso); }
+    .diag.ok { border-left-color: var(--ok); cursor: default; }
+    .diag .topo-diag { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; font: 600 0.74rem var(--mono); }
+    .diag .selo { padding: 0.15rem 0.5rem; border-radius: 6px; background: color-mix(in srgb, var(--erro) 14%, transparent); color: var(--erro); }
+    .diag.aviso .selo { background: color-mix(in srgb, var(--aviso) 16%, transparent); color: var(--aviso); }
+    .diag.ok .selo { background: color-mix(in srgb, var(--ok) 16%, transparent); color: var(--ok); }
+    .diag .onde { color: var(--fraco); }
+    .diag .titulo { color: var(--texto); }
+    .diag .msg { margin: 0.45rem 0 0; font: 0.8rem/1.5 var(--mono); color: var(--texto); }
+    .diag dl { margin: 0.6rem 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.25rem 0.8rem; font-size: 0.84rem; }
+    .diag dt { color: var(--fraco); font-weight: 600; }
+    .diag dd { margin: 0; color: var(--suave); }
+    .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.8rem; }
+    .alternar { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
     .alternar input { accent-color: var(--acento-forte); }
 
     footer { text-align: center; padding: 2rem 16px 3rem; color: var(--fraco); font: 0.78rem var(--mono); border-top: 1px solid var(--borda); }
     footer b { color: var(--acento); font-weight: 600; }
 
     @media (max-width: 1000px) {
-      .capa, .play, .doc { grid-template-columns: minmax(0, 1fr); }
-      .capa { min-height: 0; }
-      .vitrine { max-width: 460px; width: 100%; margin: 0 auto; }
-      .modulos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .c4, .c6, .c8, .c3 { grid-column: 1 / -1; }
+      .play, .doc { grid-template-columns: minmax(0, 1fr); }
+      .c3, .c4, .c6, .c8 { grid-column: 1 / -1; }
+      .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .sumario { position: static; grid-auto-flow: column; overflow-x: auto; }
       .sumario a { white-space: nowrap; }
+      body.no-inicio .pontos { display: none; }
     }
+    @media (min-width: 1001px) and (max-width: 1180px) { .c3 { grid-column: span 6; } }
     @media (max-width: 640px) {
       .topo { flex-wrap: wrap; }
       .rotas { order: 3; width: 100%; margin: 0; }
       .tema { margin-left: auto; }
-      .modulos { grid-template-columns: minmax(0, 1fr); }
+      .passos { grid-template-columns: minmax(0, 1fr); }
       .paginador .contador { display: none; }
       textarea { min-height: 320px; }
     }
@@ -298,44 +316,82 @@
     </button>
   </header>
 
+  <nav class="pontos" aria-label="Seções do início">
+    <a href="#s-inicio" data-ancora><span>início</span><i></i></a>
+    <a href="#s-modulos" data-ancora><span>módulos</span><i></i></a>
+    <a href="#s-linguagem" data-ancora><span>linguagem</span><i></i></a>
+    <a href="#s-comecar" data-ancora><span>começar</span><i></i></a>
+  </nav>
+
   <main>
     <!-- ================= INÍCIO ================= -->
-    <section class="pagina" id="pg-inicio" aria-label="Início">
-      <div class="capa">
-        <div>
+    <section class="pagina" id="pg-inicio" aria-label="Início" style="padding-top:0">
+      <div class="capa" id="s-inicio">
+        <div class="marca-dagua" aria-hidden="true">DSL</div>
+        <div class="vitrine"><canvas id="vitrine-3d" aria-label="Benzeno em 3D, gerado a partir de exemplos/benzeno.mol"></canvas></div>
+        <div class="capa-conteudo">
           <span class="rotulo">Linguagem química</span>
           <h1>Molecule<b>DSL</b><span class="cursor" aria-hidden="true"></span></h1>
           <p class="lema">a química das moléculas, <em>escrita como código</em>.<br>declare átomos e ligações — o compilador valida, resolve e explica.</p>
+          <div class="acoes">
+            <a class="botao primario" href="#/playground">Abrir o playground</a>
+            <a class="botao" href="#/conteudo/1">Ver a apresentação</a>
+          </div>
+          <div class="terminal"><span class="prompt">user@moleculedsl:~$</span><span>python3 src/main.py --modelo exemplos/benzeno.mol</span></div>
           <ul class="chips" aria-label="Equipe e disciplina">
             <li class="destaque">Linguagens Formais e Compiladores · 2026</li>
             <li>Geisbelly Victoria</li>
             <li>Murilo</li>
             <li>Maria Antonia</li>
           </ul>
-          <div class="acoes">
-            <a class="botao primario" href="#/playground">Abrir o playground</a>
-            <a class="botao" href="#/conteudo/1">Ver a apresentação</a>
-          </div>
         </div>
-        <figure class="vitrine" style="margin:0">
-          <canvas id="vitrine-3d" aria-label="Benzeno em 3D, gerado a partir de exemplos/benzeno.mol"></canvas>
-          <figcaption>exemplos/benzeno.mol · arraste para girar</figcaption>
-        </figure>
+        <a class="rolar" href="#s-modulos" data-ancora><i></i>ROLE PARA NAVEGAR</a>
       </div>
-      <div class="modulos">
-        <a class="placa modulo" href="#/conteudo/1"><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
-        <a class="placa modulo" href="#/uso"><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
-        <a class="placa modulo" href="#/doc/comandos"><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
-        <a class="placa modulo" href="#/playground"><span class="numero">04</span><h3>Playground</h3><p>Escreva MoleculeDSL e veja a molécula em 3D na hora.</p></a>
+
+      <div class="bloco-inicio" id="s-modulos">
+        <div class="cabeca">
+          <span class="rotulo">01 — módulos</span>
+          <h2>Da apresentação à prática</h2>
+          <p class="lead">Quatro módulos: entenda o compilador, aprenda a usar, consulte a referência e escreva moléculas.</p>
+        </div>
+        <div class="grade">
+          <a class="placa modulo c3" href="#/conteudo/1"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg></div><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
+          <a class="placa modulo c3" href="#/uso"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
+          <a class="placa modulo c3" href="#/doc/comandos"><div class="icone"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
+          <a class="placa modulo c3" href="#/playground"><div class="icone"><svg viewBox="0 0 24 24"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/><circle cx="12" cy="12" r="2.5"/></svg></div><span class="numero">04</span><h3>Playground</h3><p>Escreva MoleculeDSL e veja a molécula em 3D na hora.</p></a>
+        </div>
+      </div>
+
+      <div class="bloco-inicio" id="s-linguagem">
+        <div class="cabeca">
+          <span class="rotulo">02 — em uma tela</span>
+          <h2>Átomos, ligações e pronto</h2>
+          <p class="lead">Este é um programa completo. O compilador confere nomes, valências e cargas e aponta linha e coluna de qualquer erro.</p>
+        </div>
+        <div class="grade">
+          <div class="placa c6"><p class="nota" style="margin:0 0 0.4rem">exemplos/agua.mol</p><pre style="margin:0">{{AGUA}}</pre></div>
+          <div class="placa c6"><p class="nota" style="margin:0 0 0.4rem">python3 src/main.py --modelo exemplos/agua.mol</p><pre style="margin:0">{{MODELO}}</pre></div>
+        </div>
+      </div>
+
+      <div class="chamada" id="s-comecar">
+        <div class="cabeca" style="margin-bottom:1rem">
+          <span class="rotulo">03 — começar</span>
+          <h2>Pronto para escrever uma molécula?</h2>
+        </div>
+        <p>Abra o playground, escolha um exemplo e veja o desenho mudar enquanto você digita.</p>
+        <a class="botao primario" href="#/playground">Começar agora</a>
       </div>
     </section>
 
     <!-- ================= CONTEÚDO ================= -->
     <section class="pagina" id="pg-conteudo" aria-label="Conteúdo">
       <article class="slide" data-titulo="Problema">
-        <span class="rotulo">01 — problema</span>
-        <h2>Química em texto, sem coordenadas</h2>
-        <p class="lead">A MoleculeDSL separa a intenção química da visualização. Quem escreve declara átomos e ligações; o compilador cuida da estrutura, da posição dos erros e das verificações químicas.</p>
+        <div class="cabeca">
+          <span class="rotulo">01 — problema</span>
+          <h2>Química em texto, sem coordenadas</h2>
+          <p class="lead">A MoleculeDSL separa a intenção química da visualização. Quem escreve declara átomos e ligações; o compilador cuida da estrutura, da posição dos erros e das verificações químicas.</p>
+        </div>
         <div class="grade">
           <div class="placa c4"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/></svg></div><h3>Legível</h3><p>Programas curtos, próximos da notação usada em aula.</p></div>
           <div class="placa c4"><div class="icone"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg></div><h3>Precisa</h3><p>Todo diagnóstico aponta fase, código, linha, coluna e uma explicação em português.</p></div>
@@ -344,9 +400,11 @@
       </article>
 
       <article class="slide" data-titulo="Linguagem">
-        <span class="rotulo">02 — linguagem</span>
-        <h2>Um vocabulário pequeno, casos expressivos</h2>
-        <p class="lead">Espécie, átomos, ligações, anéis e configuração, em qualquer ordem dentro da espécie.</p>
+        <div class="cabeca">
+          <span class="rotulo">02 — linguagem</span>
+          <h2>Um vocabulário pequeno, casos expressivos</h2>
+          <p class="lead">Espécie, átomos, ligações, anéis e configuração, em qualquer ordem dentro da espécie.</p>
+        </div>
         <div class="grade">
           <div class="placa c8"><h3>Água</h3><pre><code><span class="kw">species molecule</span> <span class="str">"Water"</span> {
     <span class="kw">atom</span> O
@@ -381,10 +439,12 @@
       </article>
 
       <article class="slide" data-titulo="Pipeline">
-        <span class="rotulo">03 — pipeline</span>
-        <h2>Cada fase recebe uma entrada mais limpa</h2>
-        <p class="lead">Se uma fase falha, as seguintes não rodam: sem erros em cascata, com a origem real do problema preservada.</p>
-        <div class="placa c12" style="margin-top:1.6rem">
+        <div class="cabeca">
+          <span class="rotulo">03 — pipeline</span>
+          <h2>Cada fase recebe uma entrada mais limpa</h2>
+          <p class="lead">Se uma fase falha, as seguintes não rodam: sem erros em cascata, com a origem real do problema preservada.</p>
+        </div>
+        <div class="placa c12">
           <svg class="pipeline" viewBox="0 0 1140 220" role="img" aria-label="Lexer, parser, visitor, modelo e semântica">
             <g transform="translate(20 40)"><rect width="180" height="100" rx="18"/><text x="90" y="46" text-anchor="middle" font-size="21" font-weight="700">Lexer</text><text class="sub" x="90" y="72" text-anchor="middle" font-size="14">tokens</text></g>
             <path d="M206 90 H246"/>
@@ -401,9 +461,11 @@
       </article>
 
       <article class="slide" data-titulo="Léxico e sintático">
-        <span class="rotulo">04 — léxico e sintático</span>
-        <h2>ANTLR 4, sem mensagens opacas</h2>
-        <p class="lead">Nenhum texto interno em inglês chega ao usuário: cada erro vira um código estável em português.</p>
+        <div class="cabeca">
+          <span class="rotulo">04 — léxico e sintático</span>
+          <h2>ANTLR 4, sem mensagens opacas</h2>
+          <p class="lead">Nenhum texto interno em inglês chega ao usuário: cada erro vira um código estável em português.</p>
+        </div>
         <div class="grade">
           <div class="placa c6"><h3>O ANTLR entrega</h3><p>Lexer, parser LL(*), parse tree, visitor e recuperação por inserção, remoção e sincronização.</p></div>
           <div class="placa c6"><h3>O projeto personaliza</h3><p>Listeners em português, IDs LEX/SIN, limite de dez erros por fase e recuperação que não apaga o início do próximo comando.</p></div>
@@ -413,16 +475,20 @@
       </article>
 
       <article class="slide" data-titulo="AST">
-        <span class="rotulo">05 — AST</span>
-        <h2>A árvore contém conceitos, não pontuação</h2>
-        <p class="lead">Dataclasses próprias guardam linha, coluna e quantificadores; a expansão em átomos e ligações individuais só acontece no modelo.</p>
-        <div class="moldura-ast" style="margin-top:1.6rem"><img alt="AST real de exemplos/agua.mol, gerada por src/desenhar_arvore.py" src="{{AST_IMG}}"></div>
+        <div class="cabeca">
+          <span class="rotulo">05 — AST</span>
+          <h2>A árvore contém conceitos, não pontuação</h2>
+          <p class="lead">Dataclasses próprias guardam linha, coluna e quantificadores; a expansão em átomos e ligações individuais só acontece no modelo.</p>
+        </div>
+        <div class="moldura-ast"><img alt="AST real de exemplos/agua.mol, gerada por src/desenhar_arvore.py" src="{{AST_IMG}}"></div>
       </article>
 
       <article class="slide" data-titulo="Semântica">
-        <span class="rotulo">06 — semântica</span>
-        <h2>Estrutura primeiro, química depois</h2>
-        <p class="lead">As verificações avançam em etapas e só usam dados químicos com fonte registrada.</p>
+        <div class="cabeca">
+          <span class="rotulo">06 — semântica</span>
+          <h2>Estrutura primeiro, química depois</h2>
+          <p class="lead">As verificações avançam em etapas e só usam dados químicos com fonte registrada.</p>
+        </div>
         <div class="grade">
           <div class="placa c8"><div class="tabela"><table>
             <tr><th>ID</th><th>Regra</th><th>Severidade</th></tr>
@@ -445,9 +511,11 @@
       </article>
 
       <article class="slide" data-titulo="Química">
-        <span class="rotulo">07 — além da validação</span>
-        <h2>O grafo validado vira química</h2>
-        <p class="lead">Com a análise sem erros, o compilador resolve fórmulas e gera relatórios. Saídas reais, pré-computadas.</p>
+        <div class="cabeca">
+          <span class="rotulo">07 — além da validação</span>
+          <h2>O grafo validado vira química</h2>
+          <p class="lead">Com a análise sem erros, o compilador resolve fórmulas e gera relatórios. Saídas reais, pré-computadas.</p>
+        </div>
         <div class="grade">
           <div class="placa c6"><h3>Solver de estruturas</h3><p>Geração ordenada de Read-Faradzev: cada isômero sai uma vez, sem guardar chaves.</p><pre>{{BENCH}}</pre></div>
           <div class="placa c6"><h3>Estereoquímica</h3><p>Contagem exata pelo grupo de automorfismos, com formas meso descontadas.</p><pre>{{ESTEREO}}</pre></div>
@@ -457,10 +525,12 @@
       </article>
 
       <article class="slide" data-titulo="Demonstração">
-        <span class="rotulo">08 — demonstração</span>
-        <h2>Saída real, pré-computada</h2>
-        <p class="lead">Os três painéis vieram da execução do compilador sobre <code>exemplos/agua.mol</code>.</p>
-        <div class="placa c12" style="margin-top:1.6rem">
+        <div class="cabeca">
+          <span class="rotulo">08 — demonstração</span>
+          <h2>Saída real, pré-computada</h2>
+          <p class="lead">Os três painéis vieram da execução do compilador sobre <code>exemplos/agua.mol</code>.</p>
+        </div>
+        <div class="placa c12">
           <div class="abas" role="tablist" data-grupo="demo">
             <button class="aba" role="tab" aria-selected="true" data-painel="d-tokens">--tokens</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="d-ast">--ast</button>
@@ -473,9 +543,11 @@
       </article>
 
       <article class="slide" data-titulo="Testes">
-        <span class="rotulo">09 — testes</span>
-        <h2>O contrato é executável</h2>
-        <p class="lead">Cada arquivo inválido declara a mensagem esperada; <code>testar.py</code> confere texto, ordem e código de saída.</p>
+        <div class="cabeca">
+          <span class="rotulo">09 — testes</span>
+          <h2>O contrato é executável</h2>
+          <p class="lead">Cada arquivo inválido declara a mensagem esperada; <code>testar.py</code> confere texto, ordem e código de saída.</p>
+        </div>
         <div class="grade">
           <div class="placa c3 metrica"><strong>{{TOTAL}}</strong><span>testes · 0 falhas</span></div>
           <div class="placa c3 metrica"><strong>{{EXEMPLOS}}</strong><span>exemplos válidos</span></div>
@@ -488,8 +560,10 @@
       </article>
 
       <article class="slide" data-titulo="Limites">
-        <span class="rotulo">10 — limites e futuro</span>
-        <h2>O que não foi fingido como resolvido</h2>
+        <div class="cabeca">
+          <span class="rotulo">10 — limites e futuro</span>
+          <h2>O que não foi fingido como resolvido</h2>
+        </div>
         <div class="grade">
           <div class="placa c4"><h3>Octeto</h3><p><code>OCT-001</code> foi removida: as regras de valência já cobrem os elementos com dados.</p></div>
           <div class="placa c4"><h3>Ligação metálica</h3><p><code>METAL-002</code> lembra que uma aresta não valida o sólido metálico.</p></div>
@@ -501,8 +575,10 @@
       </article>
 
       <article class="slide" data-titulo="Referências">
-        <span class="rotulo">11 — referências</span>
-        <h2>Implementação rastreável</h2>
+        <div class="cabeca">
+          <span class="rotulo">11 — referências</span>
+          <h2>Implementação rastreável</h2>
+        </div>
         <div class="grade">
           <div class="placa c6"><p>ANTLR 4.13.2 — lexer, parser, visitor e runtime Python.</p></div>
           <div class="placa c6"><p>PubChem Periodic Table — elementos e eletronegatividade.</p></div>
@@ -523,9 +599,11 @@
 
     <!-- ================= USO ================= -->
     <section class="pagina" id="pg-uso" aria-label="Uso">
-      <span class="rotulo">uso</span>
-      <h2>Do clone à molécula analisada</h2>
-      <p class="lead">Requisitos: Python 3.10+, Java (para gerar o parser) e o pacote <code>antlr4-tools</code>.</p>
+      <div class="cabeca">
+        <span class="rotulo">02 — uso</span>
+        <h2>Do clone à molécula analisada</h2>
+        <p class="lead">Requisitos: Python 3.10+, Java (para gerar o parser) e o pacote <code>antlr4-tools</code>.</p>
+      </div>
       <div class="grade">
         <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></div><h3>1. Instalar</h3><pre>python3 -m pip install -r requirements.txt
 python3 -m pip install -r requirements-solver.txt  <span class="com"># opcional: CP-SAT</span></pre></div>
@@ -549,8 +627,10 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
 
     <!-- ================= DOC ================= -->
     <section class="pagina" id="pg-doc" aria-label="Documentação">
-      <span class="rotulo">documentação</span>
-      <h2>Referência da linguagem</h2>
+      <div class="cabeca">
+        <span class="rotulo">03 — documentação</span>
+        <h2>Referência da linguagem</h2>
+      </div>
       <div class="doc">
         <nav class="sumario placa" aria-label="Tópicos">
           <a href="#/doc/comandos" data-topico="comandos">Comandos</a>
@@ -658,26 +738,49 @@ charge unpaired atom bond as ring stereo</pre>
 
     <!-- ================= PLAYGROUND ================= -->
     <section class="pagina" id="pg-playground" aria-label="Playground">
-      <span class="rotulo">playground</span>
-      <h2>Escreva MoleculeDSL, veja a molécula</h2>
-      <p class="lead">O código é analisado no navegador enquanto você digita e desenhado em 3D. Para a análise oficial completa, rode <code>python3 src/main.py</code>.</p>
+      <div class="cabeca">
+        <span class="rotulo">04 — playground</span>
+        <h2>Escreva MoleculeDSL, veja a molécula</h2>
+        <p class="lead">O código é analisado no navegador a cada tecla e desenhado em 3D. Cada erro vem com o que significa e como corrigir.</p>
+      </div>
+
+      <div class="placa guia">
+        <h3>Como usar</h3>
+        <ol class="passos">
+          <li>Escolha um exemplo no seletor ou clique em <b>Começar do zero</b>.</li>
+          <li>Abra a espécie: <code>species molecule "Nome" { … }</code>.</li>
+          <li>Declare os átomos: <code>atom O</code>, <code>2x atom H as h</code> (cria h1 e h2).</li>
+          <li>Ligue os átomos: <code>bond O-h1</code>. Use <code>=</code> para dupla, <code>#</code> para tripla e <code>-&gt;</code> para coordenada.</li>
+        </ol>
+        <div class="exemplos-erro">
+          <span>veja um erro</span>
+          <button class="botao pequeno" type="button" data-erro="valencia">Valência excedida</button>
+          <button class="botao pequeno" type="button" data-erro="nome">Nome inexistente</button>
+          <button class="botao pequeno" type="button" data-erro="caractere">Caractere inválido</button>
+          <button class="botao pequeno" type="button" data-erro="chave">Falta fechar a espécie</button>
+          <button class="botao pequeno" type="button" data-erro="repetida">Ligação repetida</button>
+          <button class="botao pequeno" type="button" data-erro="incompleta">Faltam hidrogênios</button>
+        </div>
+      </div>
+
       <div class="play">
         <div class="placa">
           <div class="barra-ferramentas">
             <select id="exemplo" aria-label="Carregar exemplo"></select>
-            <button class="botao" type="button" id="limpar">Limpar</button>
+            <button class="botao pequeno" type="button" id="limpar">Começar do zero</button>
           </div>
           <div class="editor">
             <div class="numeros" id="numeros" aria-hidden="true">1</div>
             <textarea id="codigo" spellcheck="false" aria-label="Código MoleculeDSL" autocapitalize="off" autocomplete="off"></textarea>
           </div>
+          <p class="nota">Tab insere quatro espaços. Clique num erro para ir até a linha dele.</p>
         </div>
         <div class="placa">
           <div class="barra-ferramentas">
             <label class="alternar"><input type="checkbox" id="girar" checked> girar</label>
             <label class="alternar"><input type="checkbox" id="rotulos"> rótulos</label>
             <label class="alternar"><input type="checkbox" id="esconder-h"> ocultar H</label>
-            <button class="botao" type="button" id="recentrar">Recentrar</button>
+            <button class="botao pequeno" type="button" id="recentrar">Recentrar</button>
           </div>
           <div class="cena"><canvas id="cena-3d" aria-label="Molécula em 3D"></canvas><div class="vazio" id="cena-vazia" hidden></div><span class="dica">arraste · role para zoom</span></div>
           <div class="resumo-mol" id="resumo"></div>
@@ -686,10 +789,10 @@ charge unpaired atom bond as ring stereo</pre>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-modelo">Modelo</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-real">Compilador real</button>
           </div>
-          <pre class="saida" id="p-diag" role="tabpanel"></pre>
-          <pre class="saida" id="p-modelo" role="tabpanel" hidden></pre>
-          <pre class="saida" id="p-real" role="tabpanel" hidden></pre>
-          <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve a constituição, não coordenadas. A verificação do navegador cobre sintaxe, nomes, anéis e valências das regras; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
+          <div class="painel diagnosticos" id="p-diag" role="tabpanel" aria-live="polite"></div>
+          <div class="painel" id="p-modelo" role="tabpanel" hidden><pre></pre></div>
+          <div class="painel" id="p-real" role="tabpanel" hidden><pre></pre></div>
+          <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve quais átomos se ligam, não coordenadas. A verificação do navegador cobre sintaxe, nomes, anéis e valências; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
         </div>
       </div>
     </section>
@@ -732,8 +835,8 @@ charge unpaired atom bond as ring stereo</pre>
   const OPERADORES = { "-": 1, "=": 2, "#": 3, "->": 1, "~": 0 };
 
   class ErroDSL extends Error {
-    constructor(fase, linha, coluna, mensagem) { super(mensagem); this.fase = fase; this.linha = linha; this.coluna = coluna; }
-    toString() { return `Erro ${this.fase} na linha ${this.linha}, coluna ${this.coluna}: ${this.message}`; }
+    constructor(fase, codigo, linha, coluna, mensagem) { super(mensagem); this.fase = fase; this.codigo = codigo; this.linha = linha; this.coluna = coluna; }
+    diagnostico() { return { tipo: "erro", fase: this.fase, codigo: this.codigo, linha: this.linha, coluna: this.coluna, mensagem: this.message }; }
   }
 
   function tokenizar(texto) {
@@ -754,7 +857,7 @@ charge unpaired atom bond as ring stereo</pre>
       const empurrar = (tipo, valor) => { tokens.push({ tipo, valor, ...pos }); avancar(valor.length); };
       if (resto[0] === '"') {
         m = /^"[^"\r\n]*"/.exec(resto);
-        if (!m) throw new ErroDSL("léxico", linha, coluna, "texto sem aspas de fechamento na mesma linha");
+        if (!m) throw new ErroDSL("léxico", "LEX-002", linha, coluna, "texto sem aspas de fechamento na mesma linha");
         empurrar("TEXTO", m[0]); continue;
       }
       if ((m = /^[0-9]+x/.exec(resto)) && !/^[0-9]+x[a-z0-9_]/.test(resto)) { empurrar("MULT", m[0]); continue; }
@@ -768,7 +871,7 @@ charge unpaired atom bond as ring stereo</pre>
       if (resto.startsWith("->")) { empurrar("OP", "->"); continue; }
       if ("-=#~".includes(resto[0])) { empurrar("OP", resto[0]); continue; }
       if ("+(){}".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
-      throw new ErroDSL("léxico", linha, coluna, `caractere inválido '${resto[0]}'`);
+      throw new ErroDSL("léxico", "LEX-001", linha, coluna, `caractere inválido '${resto[0]}'`);
     }
     tokens.push({ tipo: "EOF", valor: "fim do arquivo", l: linha, c: coluna });
     return tokens;
@@ -778,7 +881,10 @@ charge unpaired atom bond as ring stereo</pre>
     let p = 0;
     const atual = () => tokens[p];
     const descrever = (t) => (t.tipo === "EOF" ? "fim do arquivo" : `'${t.valor}'`);
-    const falhar = (esperado) => { const t = atual(); throw new ErroDSL("sintático", t.l, t.c, `esperado ${esperado}, encontrado ${descrever(t)}`); };
+    const falhar = (esperado, codigo = "SIN-001") => {
+      const t = atual();
+      throw new ErroDSL("sintático", t.tipo === "EOF" ? "SIN-004" : codigo, t.l, t.c, `esperado ${esperado}, encontrado ${descrever(t)}`);
+    };
     const pegar = (tipo, esperado) => { if (atual().tipo !== tipo) falhar(esperado); return tokens[p++]; };
     const talvez = (tipo) => (atual().tipo === tipo ? tokens[p++] : null);
 
@@ -851,24 +957,24 @@ charge unpaired atom bond as ring stereo</pre>
         p++;
         especie.comandos.push({ tipo: "stereo", refs, op, descritor: d.valor, l: t.l, c: t.c });
       } else {
-        falhar("'atom', 'bond', 'ring', 'stereo' ou '}'");
+        falhar("'atom', 'bond', 'ring', 'stereo' ou '}'", "SIN-002");
       }
     }
     p++;
-    if (atual().tipo !== "EOF") falhar("fim do arquivo depois de '}'");
+    if (atual().tipo !== "EOF") falhar("fim do arquivo depois de '}'", "SIN-002");
     return especie;
   }
 
   function analisarSemantica(especie) {
     const erros = [], avisos = [];
-    const erro = (no, msg) => erros.push(`Erro semântico na linha ${no.l}, coluna ${no.c}: ${msg}`);
-    const aviso = (no, msg) => avisos.push(`Aviso semântico na linha ${no.l}, coluna ${no.c}: ${msg}`);
+    const erro = (no, codigo, msg) => erros.push({ tipo: "erro", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg });
+    const aviso = (no, codigo, msg) => avisos.push({ tipo: "aviso", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg });
     const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
     for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
-      if (!DADOS.elementos[cmd.el]) { erro(cmd, `elemento desconhecido '${cmd.el}'`); continue; }
+      if (!DADOS.elementos[cmd.el]) { erro(cmd, "ELEM-001", `elemento desconhecido '${cmd.el}'`); continue; }
       for (let k = 1; k <= cmd.mult; k++) {
         const nome = cmd.nome == null ? null : cmd.mult > 1 ? cmd.nome + k : cmd.nome;
-        if (nome && porNome.has(nome)) { erro(cmd, `o nome '${nome}' já foi usado`); continue; }
+        if (nome && porNome.has(nome)) { erro(cmd, "STRUCT-002", `o nome '${nome}' já foi usado`); continue; }
         contagem.set(cmd.el, (contagem.get(cmd.el) || 0) + 1);
         const atomo = { id: atomos.length, el: cmd.el, carga: cmd.carga, nome, indice: contagem.get(cmd.el) };
         atomos.push(atomo);
@@ -881,15 +987,15 @@ charge unpaired atom bond as ring stereo</pre>
     const resolver = (ref, fixo) => {
       if (ref.porNome) {
         const a = porNome.get(ref.texto);
-        if (!a) { erro(ref, `nenhum átomo se chama '${ref.texto}'`); return null; }
+        if (!a) { erro(ref, "STRUCT-001", `nenhum átomo se chama '${ref.texto}'`); return null; }
         citados.add(a.id); return a;
       }
       const lista = porElemento.get(ref.texto) || [];
-      if (!lista.length) { erro(ref, DADOS.elementos[ref.texto] ? `nenhum átomo de ${ref.texto} foi declarado` : `elemento desconhecido '${ref.texto}'`); return null; }
+      if (!lista.length) { erro(ref, DADOS.elementos[ref.texto] ? "STRUCT-001" : "ELEM-001", DADOS.elementos[ref.texto] ? `nenhum átomo de ${ref.texto} foi declarado` : `elemento desconhecido '${ref.texto}'`); return null; }
       if (lista.length === 1) { citados.add(lista[0].id); return lista[0]; }
-      if (fixo) { erro(ref, `'${ref.texto}' não identifica um único átomo; use o nome do átomo`); return null; }
+      if (fixo) { erro(ref, "STEREO-001", `'${ref.texto}' não identifica um único átomo; use o nome do átomo`); return null; }
       const livre = lista.find((a) => !citados.has(a.id));
-      if (!livre) { erro(ref, `todos os ${lista.length} átomos de ${ref.texto} já foram citados; use nomes`); return null; }
+      if (!livre) { erro(ref, "STRUCT-004", `todos os ${lista.length} átomos de ${ref.texto} já foram citados; use nomes`); return null; }
       citados.add(livre.id); return livre;
     };
     const ligacoes = [], pares = new Set();
@@ -897,9 +1003,9 @@ charge unpaired atom bond as ring stereo</pre>
       for (let k = 0; k < cmd.rep; k++) {
         const a = resolver(cmd.origem), b = resolver(cmd.destino);
         if (!a || !b) break;
-        if (a.id === b.id) { erro(cmd, `o átomo ${rotulo(a)} não pode se ligar a ele mesmo`); break; }
+        if (a.id === b.id) { erro(cmd, "STRUCT-005", `o átomo ${rotulo(a)} não pode se ligar a ele mesmo`); break; }
         const chave = Math.min(a.id, b.id) + "-" + Math.max(a.id, b.id);
-        if (pares.has(chave)) { erro(cmd, `já existe uma ligação entre ${rotulo(a)} e ${rotulo(b)}; use = ou # para ligação múltipla`); break; }
+        if (pares.has(chave)) { erro(cmd, "STRUCT-006", `já existe uma ligação entre ${rotulo(a)} e ${rotulo(b)}; use = ou # para ligação múltipla`); break; }
         pares.add(chave);
         ligacoes.push({ a: a.id, b: b.id, op: cmd.op, ordem: OPERADORES[cmd.op] });
       }
@@ -910,7 +1016,7 @@ charge unpaired atom bond as ring stereo</pre>
       if (lista.includes(null)) continue;
       for (let k = 0; k < lista.length; k++) {
         const x = lista[k], y = lista[(k + 1) % lista.length];
-        if (!temPar(x.id, y.id)) { erro(cmd.nomes[(k + 1) % lista.length], `os átomos ${x.nome} e ${y.nome} do anel não estão ligados`); break; }
+        if (!temPar(x.id, y.id)) { erro(cmd.nomes[(k + 1) % lista.length], "RING-002", `os átomos ${x.nome} e ${y.nome} do anel não estão ligados`); break; }
       }
     }
     const configuracoes = [];
@@ -928,11 +1034,11 @@ charge unpaired atom bond as ring stereo</pre>
         if (!permitidas) continue;
         const maximo = Math.max(...permitidas);
         const no = linhaAtomo.get(a.id) || { l: 1, c: 0 };
-        if (soma[a.id] > maximo) erro(no, `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`);
-        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`);
+        if (soma[a.id] > maximo) erro(no, "VAL-001", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`);
+        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`);
       }
       if (atomos.length > 1 && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
-        erro({ l: 1, c: 0 }, "a entidade tem partes desconectadas");
+        erro({ l: 1, c: 0 }, "STRUCT-008", "a entidade tem partes desconectadas");
       }
     }
     return { atomos, ligacoes, configuracoes, erros, avisos };
@@ -974,10 +1080,39 @@ charge unpaired atom bond as ring stereo</pre>
       const especie = analisarSintaxe(tokenizar(texto));
       return { especie, ...analisarSemantica(especie) };
     } catch (e) {
-      if (e instanceof ErroDSL) return { erros: [e.toString()], avisos: [], atomos: [], ligacoes: [] };
+      if (e instanceof ErroDSL) return { erros: [e.diagnostico()], avisos: [], atomos: [], ligacoes: [], configuracoes: [] };
       throw e;
     }
   }
+
+  /* Explicação de cada diagnóstico: o que significa e como corrigir */
+  const EXPLICA = {
+    "LEX-001": ["Caractere inválido", "O lexer encontrou um símbolo que não pertence à linguagem.", "Apague o caractere ou troque por um operador válido: - = # -> ~."],
+    "LEX-002": ["Texto sem fechar", "O nome da espécie abriu aspas e não fechou na mesma linha.", "Feche as aspas: \"Nome\"."],
+    "SIN-001": ["Comando incompleto", "A estrutura do comando não segue a gramática: falta algo ou algo veio fora de ordem.", "Compare com a forma do comando em Doc → Comandos; a mensagem diz o que era esperado."],
+    "SIN-002": ["Comando inválido", "Apareceu algo que não começa nenhum comando.", "Comece cada linha com atom, bond, ring ou stereo, e feche a espécie com }."],
+    "SIN-004": ["Fim inesperado", "O código terminou antes de a construção ficar completa.", "Feche a espécie com } ou complete o último comando."],
+    "ELEM-001": ["Elemento desconhecido", "O símbolo não está na tabela periódica usada pelo compilador.", "Use o símbolo com a primeira letra maiúscula e a segunda minúscula: Cl, não CL."],
+    "STRUCT-001": ["Átomo não encontrado", "A referência cita um nome ou um elemento que não foi declarado com atom.", "Declare o átomo (atom C as c9) ou corrija o nome na ligação."],
+    "STRUCT-002": ["Nome repetido", "Dois átomos receberam o mesmo nome.", "Use nomes únicos. Com 4x atom H as h, os nomes já são h1, h2, h3 e h4."],
+    "STRUCT-004": ["Átomos esgotados", "Citando pelo símbolo, cada ligação usa o próximo átomo ainda não citado, e não sobrou nenhum.", "Dê nomes aos átomos e use os nomes nas ligações."],
+    "STRUCT-005": ["Ligação consigo mesmo", "Os dois lados da ligação são o mesmo átomo.", "Ligue a outro átomo; confira os nomes."],
+    "STRUCT-006": ["Ligação repetida", "Esses dois átomos já estão ligados.", "Para dupla ou tripla, escreva uma única linha com = ou #, em vez de repetir bond."],
+    "STRUCT-008": ["Partes desconectadas", "Algum átomo não tem caminho de ligações até os demais.", "Ligue todos os átomos, ou use species ionic_solid para um sólido iônico."],
+    "RING-002": ["Anel não fecha", "Dois átomos vizinhos na lista do ring não estão ligados.", "Liste os átomos na ordem do ciclo e declare a ligação que falta."],
+    "STEREO-001": ["Referência ambígua", "Em stereo cada referência precisa apontar para um único átomo.", "Use o nome do átomo em vez do símbolo do elemento."],
+    "VAL-001": ["Valência excedida", "A soma das ordens das ligações passa do máximo permitido para o elemento.", "Remova uma ligação, troque = por -, ou declare a carga do átomo, como atom N(+1)."],
+    "VAL-002": ["Valência incompleta", "O átomo tem menos ligações que o esperado. Pode faltar hidrogênio, ou a espécie é um íon ou radical.", "Adicione os H que faltam, declare a carga (atom C(-1)) ou use unpaired para radical."],
+  };
+
+  const EXEMPLOS_DE_ERRO = {
+    valencia: 'species molecule "Pentavalente" {\n    atom C as c\n    5x atom H as h\n    bond c-h1\n    bond c-h2\n    bond c-h3\n    bond c-h4\n    bond c-h5\n}\n',
+    nome: 'species molecule "Agua" {\n    atom O as o\n    2x atom H as h\n    bond o-h1\n    bond o-h3\n}\n',
+    caractere: 'species molecule "Metano" {\n    atom C @\n    4x atom H\n}\n',
+    chave: 'species molecule "Amonia" {\n    atom N\n    3x atom H\n    bond N-H x3\n',
+    repetida: 'species molecule "Oxigenio" {\n    atom O as o1\n    atom O as o2\n    bond o1-o2\n    bond o1-o2\n}\n',
+    incompleta: 'species molecule "Etano" {\n    atom C as c1\n    atom C as c2\n    4x atom H as h\n    bond c1-c2\n    bond c1-h1\n    bond c1-h2\n    bond c2-h3\n    bond c2-h4\n}\n',
+  };
 
   /* ================= desenho 3D ================= */
   const CORES = { H: "#e4e3ea", C: "#5d5b66", N: "#8c95d8", O: "#d68c9a", S: "#d7c47a", P: "#d9a36f",
@@ -1162,21 +1297,12 @@ charge unpaired atom bond as ring stereo</pre>
     seletor.appendChild(op);
   });
 
-  function atualizarNumeros() {
-    const total = codigo.value.split("\n").length;
-    numeros.textContent = Array.from({ length: total }, (_, i) => i + 1).join("\n");
-  }
   codigo.addEventListener("scroll", () => { numeros.style.transform = `translateY(${-codigo.scrollTop}px)`; });
 
   function executar() {
-    atualizarNumeros();
     const r = compilar(codigo.value);
-    const diag = document.getElementById("p-diag");
-    const linhas = [...r.erros, ...r.avisos];
-    if (!r.erros.length) linhas.push(`Espécie '${r.especie.nome}': análise do navegador concluída sem erros`);
-    diag.textContent = linhas.join("\n");
-    diag.classList.toggle("erro", r.erros.length > 0);
-    const modelo = document.getElementById("p-modelo");
+    renderizarDiagnosticos(r);
+    const modelo = document.querySelector("#p-modelo pre");
     if (r.atomos.length && !r.erros.length) {
       const nomes = r.atomos.map(rotulo);
       const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
@@ -1186,9 +1312,9 @@ charge unpaired atom bond as ring stereo</pre>
     } else {
       modelo.textContent = "Corrija os erros para ver o modelo.";
     }
-    const real = document.getElementById("p-real");
+    const real = document.querySelector("#p-real pre");
     const intacto = exemploAtual && codigo.value === exemploAtual.codigo;
-    real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo; rode python3 src/main.py --modelo no arquivo para a análise oficial.";
+    real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo. Para a análise oficial, salve num arquivo .mol e rode python3 src/main.py --modelo arquivo.mol.";
     const resumo = document.getElementById("resumo");
     if (r.atomos.length) {
       const multiplas = r.ligacoes.filter((l) => l.ordem >= 2).length;
@@ -1200,6 +1326,51 @@ charge unpaired atom bond as ring stereo</pre>
     if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
     else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
   }
+
+  function renderizarDiagnosticos(r) {
+    const painel = document.getElementById("p-diag");
+    painel.innerHTML = "";
+    const lista = [...r.erros, ...r.avisos];
+    const linhasMarcadas = new Set(lista.map((d) => d.linha));
+    numeros.innerHTML = codigo.value.split("\n").map((_, i) => linhasMarcadas.has(i + 1) ? `<span class="marcada">${i + 1}</span>` : String(i + 1)).join("\n");
+    if (!r.erros.length) {
+      const ok = document.createElement("div");
+      ok.className = "diag ok";
+      ok.innerHTML = `<div class="topo-diag"><span class="selo">OK</span><span class="titulo">Sem erros</span></div><p class="msg"></p>`;
+      ok.querySelector(".msg").textContent = `Espécie '${r.especie.nome}': ${r.atomos.length} átomos e ${r.ligacoes.length} ligações, análise do navegador concluída.`;
+      painel.appendChild(ok);
+    }
+    for (const d of lista) {
+      const [titulo, significa, corrigir] = EXPLICA[d.codigo] || ["Diagnóstico", "", ""];
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "diag" + (d.tipo === "aviso" ? " aviso" : "");
+      item.innerHTML = `<div class="topo-diag"><span class="selo"></span><span class="titulo"></span><span class="onde"></span></div><p class="msg"></p><dl><dt>O que é</dt><dd class="significa"></dd><dt>Como corrigir</dt><dd class="corrigir"></dd></dl>`;
+      item.querySelector(".selo").textContent = `${d.tipo === "aviso" ? "Aviso" : "Erro"} ${d.fase} · ${d.codigo}`;
+      item.querySelector(".titulo").textContent = titulo;
+      item.querySelector(".onde").textContent = `linha ${d.linha}, coluna ${d.coluna}`;
+      item.querySelector(".msg").textContent = d.mensagem;
+      item.querySelector(".significa").textContent = significa;
+      item.querySelector(".corrigir").textContent = corrigir;
+      item.addEventListener("click", () => irParaLinha(d.linha));
+      painel.appendChild(item);
+    }
+  }
+
+  function irParaLinha(n) {
+    const linhas = codigo.value.split("\n");
+    const inicio = linhas.slice(0, n - 1).reduce((t, l) => t + l.length + 1, 0);
+    codigo.focus();
+    codigo.setSelectionRange(inicio, inicio + (linhas[n - 1] || "").length);
+    codigo.scrollTop = Math.max(0, (n - 4) * parseFloat(getComputedStyle(codigo).lineHeight));
+  }
+
+  document.querySelectorAll("[data-erro]").forEach((botao) => botao.addEventListener("click", () => {
+    exemploAtual = null;
+    codigo.value = EXEMPLOS_DE_ERRO[botao.dataset.erro];
+    executar();
+    document.querySelector('[data-painel="p-diag"]').click();
+  }));
 
   let espera;
   codigo.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(executar, 250); });
@@ -1326,12 +1497,26 @@ charge unpaired atom bond as ring stereo</pre>
     location.hash = `#/doc/${topicos[topicos.indexOf(topicoAtual) + Number(b.dataset.docPasso)]}`;
   }));
 
+  document.querySelectorAll("[data-ancora]").forEach((link) => link.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelector(link.getAttribute("href")).scrollIntoView({ behavior: "smooth" });
+  }));
+  const secoesInicio = ["s-inicio", "s-modulos", "s-linguagem", "s-comecar"].map((id) => document.getElementById(id));
+  addEventListener("scroll", () => {
+    if (!document.body.classList.contains("no-inicio")) return;
+    let atual = secoesInicio[0].id;
+    for (const secao of secoesInicio) if (secao.getBoundingClientRect().top <= innerHeight * 0.45) atual = secao.id;
+    document.querySelectorAll(".pontos a").forEach((a) => a.classList.toggle("ativo", a.getAttribute("href") === "#" + atual));
+  }, { passive: true });
+
   let primeiraVez = true;
   function rotear() {
     const partes = location.hash.replace(/^#\/?/, "").split("/");
     const rota = ["conteudo", "uso", "doc", "playground"].includes(partes[0]) ? partes[0] : "inicio";
     document.querySelectorAll(".pagina").forEach((p) => p.classList.toggle("ativa", p.id === "pg-" + rota));
     document.querySelectorAll(".rotas a").forEach((a) => a.classList.toggle("ativo", a.dataset.rota === rota));
+    document.body.classList.toggle("no-inicio", rota === "inicio");
+    document.querySelectorAll(".pontos a").forEach((a, i) => a.classList.toggle("ativo", i === 0));
     if (rota === "conteudo") mostrarSlide(Number(partes[1]));
     if (rota === "doc") mostrarTopico(partes[1]);
     if (rota === "playground") {
