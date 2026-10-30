@@ -1,0 +1,4 @@
+// 67Zn: 30 prótons e 37 nêutrons, isótopo natural (CIAAW)
+species atom "Zinc-67" {
+    atom 67Zn as zn1
+}

@@ -1,0 +1,4 @@
+// 38Ar: 18 prótons e 20 nêutrons, isótopo natural (CIAAW)
+species atom "Argon-38" {
+    atom 38Ar as ar1
+}

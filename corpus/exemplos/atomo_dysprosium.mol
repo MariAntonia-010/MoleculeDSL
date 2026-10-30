@@ -1,0 +1,5 @@
+// Dysprosium (Z=66): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f10 5s2 5p6 6s2, termo 5I8
+species atom "Dysprosium" unpaired 4 {
+    atom Dy as dy1
+    configuration dy1 [Xe] 4f10 6s2
+}

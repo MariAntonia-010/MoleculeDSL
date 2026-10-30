@@ -1,0 +1,5 @@
+// Cadmium (Z=48): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2, termo 1S0
+species atom "Cadmium" {
+    atom Cd as cd1
+    configuration cd1 [Kr] 4d10 5s2
+}

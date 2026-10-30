@@ -1,0 +1,27 @@
+// Pentyl bromide (BrCCCCC)
+species molecule "Pentyl bromide" {
+    atom Br as br1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    11x atom H as h
+
+    bond br1-c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+    bond c5-h9
+    bond c5-h10
+    bond c5-h11
+}

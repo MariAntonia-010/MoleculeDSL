@@ -1,0 +1,4 @@
+// 46Ti: 22 prótons e 24 nêutrons, isótopo natural (CIAAW)
+species atom "Titanium-46" unpaired 2 {
+    atom 46Ti as ti1
+}

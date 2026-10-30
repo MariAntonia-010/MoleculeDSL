@@ -1,0 +1,4 @@
+// 14N: 7 prótons e 7 nêutrons, isótopo natural (CIAAW)
+species atom "Nitrogen-14" unpaired 3 {
+    atom 14N as n1
+}

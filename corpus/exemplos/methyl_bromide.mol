@@ -1,0 +1,11 @@
+// Methyl bromide (BrC)
+species molecule "Methyl bromide" {
+    atom Br as br1
+    atom C as c1
+    3x atom H as h
+
+    bond br1-c1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+}

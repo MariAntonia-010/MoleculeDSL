@@ -1,0 +1,4 @@
+// 64Zn: 30 prótons e 34 nêutrons, isótopo natural (CIAAW)
+species atom "Zinc-64" {
+    atom 64Zn as zn1
+}

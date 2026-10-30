@@ -261,9 +261,10 @@
         </div>
         <div class="grade">
           <div class="placa c3 metrica"><strong>{{TOTAL}}</strong><span>testes · 0 falhas</span></div>
-          <div class="placa c3 metrica"><strong>{{EXEMPLOS}}</strong><span>exemplos válidos</span></div>
+          <div class="placa c3 metrica"><strong>{{EXEMPLOS}}</strong><span>exemplos válidos curados</span></div>
           <div class="placa c3 metrica"><strong>{{SNAPSHOTS}}</strong><span>snapshots de AST e modelo</span></div>
           <div class="placa c3 metrica"><strong>{{SVGS}}</strong><span>árvores SVG validadas</span></div>
+          <div class="placa c12"><h3>Exemplos em dois lugares</h3><p>Os <strong>curados</strong> (<code>exemplos/</code>, <code>invalidos*/</code>, <code>avisos_semanticos/</code>, <code>resolver/</code>) são escritos à mão, com comentário, e são os que esta página usa. O <strong>corpus</strong> (<code>corpus/</code>, {{CORPUS}} arquivos) é gerado por <code>corpus/gerar_corpus.py</code> e conferido pelo compilador: átomos, isótopos, íons, moléculas e variações de cada erro. Os dois são testados com as mesmas regras; detalhes em <code>docs/exemplos.md</code>.</p></div>
           <div class="placa c12"><pre>python3 testar.py
 ...
 {{RESUMO}}</pre></div>

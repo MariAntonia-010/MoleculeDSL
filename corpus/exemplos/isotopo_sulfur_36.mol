@@ -1,0 +1,4 @@
+// 36S: 16 prótons e 20 nêutrons, isótopo natural (CIAAW)
+species atom "Sulfur-36" unpaired 2 {
+    atom 36S as s1
+}

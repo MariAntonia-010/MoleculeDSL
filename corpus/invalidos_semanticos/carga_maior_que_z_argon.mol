@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Ar(+19) perderia 19 elétrons, mas Ar só tem 18; a maior carga possível é +18 (o núcleo sem elétrons)
+// Erro: Ar tem 18 elétron(s); a carga +19 deixaria -1
+species monatomic_ion "Argon(19+)" charge +19 {
+    atom Ar(+19)
+}

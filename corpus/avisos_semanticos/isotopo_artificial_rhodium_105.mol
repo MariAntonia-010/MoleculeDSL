@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 105Rh não é isótopo de composição natural (CIAAW: 103Rh); pode ser radioativo ou artificial
+// Aviso: 105Rh não é isótopo natural (CIAAW: 103)
+species atom "Rhodium-105" unpaired 3 {
+    atom 105Rh as rh1
+}

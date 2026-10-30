@@ -1,0 +1,4 @@
+// 70Zn: 30 prótons e 40 nêutrons, isótopo natural (CIAAW)
+species atom "Zinc-70" {
+    atom 70Zn as zn1
+}

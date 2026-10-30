@@ -1,0 +1,30 @@
+// esperado: Erro sintático [SIN-004] na linha 30, coluna 26: esperado '}' para fechar a molécula
+// Erro: falta o '}' que fecha a espécie
+species molecule "Piperidine" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom N as n1
+    atom C as c4
+    atom C as c5
+    11x atom H as h
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-n1
+    bond n1-c4
+    bond c4-c5
+    bond c1-c5
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond n1-h7
+    bond c4-h8
+    bond c4-h9
+    bond c5-h10
+    bond c5-h11
+
+    ring c1 c2 c3 n1 c4 c5

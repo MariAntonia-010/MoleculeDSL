@@ -1,0 +1,5 @@
+// Nitride: 1s2 2s2 2p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Nitride" charge -3 {
+    atom N(-3) as n1
+    configuration n1 [He] 2s2 2p6
+}

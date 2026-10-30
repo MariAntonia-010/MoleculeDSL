@@ -1,0 +1,13 @@
+// Vinyl fluoride (FC=C)
+species molecule "Vinyl fluoride" {
+    atom F as f1
+    atom C as c1
+    atom C as c2
+    3x atom H as h
+
+    bond f1-c1
+    bond c1=c2
+    bond c1-h1
+    bond c2-h2
+    bond c2-h3
+}

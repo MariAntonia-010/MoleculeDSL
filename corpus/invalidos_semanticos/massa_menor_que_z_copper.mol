@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 28 é menor que o número atômico de Cu (29): daria -1 nêutrons
+// Erro: A = 28 é menor que Z = 29, o que daria nêutrons negativos
+species atom "Copper-28" unpaired 1 {
+    atom 28Cu as cu1
+}

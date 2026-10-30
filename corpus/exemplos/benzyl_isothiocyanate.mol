@@ -1,0 +1,34 @@
+// Benzyl isothiocyanate (S=C=NCC1=CC=CC=C1)
+species molecule "Benzyl isothiocyanate" {
+    atom S as s1
+    atom C as c1
+    atom N as n1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    atom C as c8
+    7x atom H as h
+
+    bond s1=c1
+    bond c1=n1
+    bond n1-c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c5
+    bond c5=c6
+    bond c6-c7
+    bond c7=c8
+    bond c3-c8
+    bond c2-h1
+    bond c2-h2
+    bond c4-h3
+    bond c5-h4
+    bond c6-h5
+    bond c7-h6
+    bond c8-h7
+
+    ring c3 c4 c5 c6 c7 c8
+}

@@ -1,0 +1,13 @@
+// Chlorotrifluoromethane (ClC(F)(F)F)
+species molecule "Chlorotrifluoromethane" {
+    atom Cl as cl1
+    atom C as c1
+    atom F as f1
+    atom F as f2
+    atom F as f3
+
+    bond cl1-c1
+    bond c1-f1
+    bond c1-f2
+    bond c1-f3
+}

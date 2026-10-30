@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 95Nb não é isótopo de composição natural (CIAAW: 93Nb); pode ser radioativo ou artificial
+// Aviso: 95Nb não é isótopo natural (CIAAW: 93)
+species atom "Niobium-95" unpaired 5 {
+    atom 95Nb as nb1
+}

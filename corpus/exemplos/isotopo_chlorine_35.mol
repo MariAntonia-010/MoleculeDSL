@@ -1,0 +1,4 @@
+// 35Cl: 17 prótons e 18 nêutrons, isótopo natural (CIAAW)
+species atom "Chlorine-35" unpaired 1 {
+    atom 35Cl as cl1
+}

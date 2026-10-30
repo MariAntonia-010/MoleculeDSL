@@ -1,0 +1,4 @@
+// 50Ti: 22 prótons e 28 nêutrons, isótopo natural (CIAAW)
+species atom "Titanium-50" unpaired 2 {
+    atom 50Ti as ti1
+}

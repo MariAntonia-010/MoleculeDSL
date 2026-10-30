@@ -1,0 +1,4 @@
+// 39K: 19 prótons e 20 nêutrons, isótopo natural (CIAAW)
+species atom "Potassium-39" unpaired 1 {
+    atom 39K as k1
+}

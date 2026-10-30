@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: S(+17) perderia 17 elétrons, mas S só tem 16; a maior carga possível é +16 (o núcleo sem elétrons)
+// Erro: S tem 16 elétron(s); a carga +17 deixaria -1
+species monatomic_ion "Sulfur(17+)" charge +17 {
+    atom S(+17)
+}

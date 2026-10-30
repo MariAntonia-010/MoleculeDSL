@@ -1,0 +1,4 @@
+// 20Ne: 10 prótons e 10 nêutrons, isótopo natural (CIAAW)
+species atom "Neon-20" {
+    atom 20Ne as ne1
+}

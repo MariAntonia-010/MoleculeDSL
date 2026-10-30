@@ -1,0 +1,4 @@
+// 53Cr: 24 prótons e 29 nêutrons, isótopo natural (CIAAW)
+species atom "Chromium-53" unpaired 6 {
+    atom 53Cr as cr1
+}

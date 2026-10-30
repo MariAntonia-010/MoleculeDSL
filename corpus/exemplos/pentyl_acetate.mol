@@ -1,0 +1,36 @@
+// Pentyl acetate (CC(=O)OCCCCC)
+species molecule "Pentyl acetate" {
+    atom C as c1
+    atom C as c2
+    atom O as o1
+    atom O as o2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    14x atom H as h
+
+    bond c1-c2
+    bond c2=o1
+    bond c2-o2
+    bond o2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c7
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c3-h4
+    bond c3-h5
+    bond c4-h6
+    bond c4-h7
+    bond c5-h8
+    bond c5-h9
+    bond c6-h10
+    bond c6-h11
+    bond c7-h12
+    bond c7-h13
+    bond c7-h14
+}

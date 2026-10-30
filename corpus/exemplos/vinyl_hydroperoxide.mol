@@ -1,0 +1,16 @@
+// Vinyl hydroperoxide (OOC=C)
+species molecule "Vinyl hydroperoxide" {
+    atom O as o1
+    atom O as o2
+    atom C as c1
+    atom C as c2
+    4x atom H as h
+
+    bond o1-o2
+    bond o2-c1
+    bond c1=c2
+    bond o1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+}

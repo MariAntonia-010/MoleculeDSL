@@ -831,3 +831,15 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
   (propan-1-ol, propan-2-ol e metoxietano) em `.todas.txt`.
 - O resolvedor acertou todos os casos; nenhuma mudança no compilador.
 
+---
+
+## 30/10/2026 — Corpus de 1000 exemplos e documentação dos dois lugares
+
+- `docs/exemplos.md` explica os dois lugares dos exemplos: os curados
+  (escritos à mão, usados pela página) e o corpus gerado (`corpus/`, não
+  se edita à mão). README e o slide "Testes" da página apontam para ele.
+- O gerador passou de 300 para 1000: átomos até Z = 86, todos os isótopos
+  naturais até o Kr, 40 íons, 250 moléculas por nomenclatura de classe
+  funcional (18 grupos R × 15 grupos X, sem repetir estrutura pela chave
+  canônica do grafo) e erros mais variados, inclusive ATOM-008.
+

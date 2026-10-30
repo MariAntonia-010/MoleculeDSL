@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 83Br não é isótopo de composição natural (CIAAW: 79Br, 81Br); pode ser radioativo ou artificial
+// Aviso: 83Br não é isótopo natural (CIAAW: 79, 81)
+species atom "Bromine-83" unpaired 1 {
+    atom 83Br as br1
+}

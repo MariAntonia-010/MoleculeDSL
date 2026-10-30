@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de ca1 (Ca#1) (referência: 1s2 2s2 2p6 3s2 3p6 4s2); descreve um estado excitado
+// Aviso: um elétron de 4s subiu para 3d: estado excitado
+species atom "Calcium" unpaired 2 {
+    atom Ca as ca1
+    configuration ca1 [Ar] 3d1 4s1
+}

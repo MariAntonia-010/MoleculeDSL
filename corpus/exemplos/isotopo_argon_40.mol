@@ -1,0 +1,4 @@
+// 40Ar: 18 prótons e 22 nêutrons, isótopo natural (CIAAW)
+species atom "Argon-40" {
+    atom 40Ar as ar1
+}

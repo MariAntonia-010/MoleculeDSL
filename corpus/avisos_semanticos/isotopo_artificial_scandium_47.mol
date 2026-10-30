@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 47Sc não é isótopo de composição natural (CIAAW: 45Sc); pode ser radioativo ou artificial
+// Aviso: 47Sc não é isótopo natural (CIAAW: 45)
+species atom "Scandium-47" unpaired 1 {
+    atom 47Sc as sc1
+}

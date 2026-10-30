@@ -1,0 +1,4 @@
+// 34S: 16 prótons e 18 nêutrons, isótopo natural (CIAAW)
+species atom "Sulfur-34" unpaired 2 {
+    atom 34S as s1
+}

@@ -1,0 +1,33 @@
+// Hexylamine (NCCCCCC)
+species molecule "Hexylamine" {
+    atom N as n1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    15x atom H as h
+
+    bond n1-c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond n1-h1
+    bond n1-h2
+    bond c1-h3
+    bond c1-h4
+    bond c2-h5
+    bond c2-h6
+    bond c3-h7
+    bond c3-h8
+    bond c4-h9
+    bond c4-h10
+    bond c5-h11
+    bond c5-h12
+    bond c6-h13
+    bond c6-h14
+    bond c6-h15
+}

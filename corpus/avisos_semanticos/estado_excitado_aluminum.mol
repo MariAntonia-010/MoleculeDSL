@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de al1 (Al#1) (referência: 1s2 2s2 2p6 3s2 3p1); descreve um estado excitado
+// Aviso: um elétron de 3p subiu para 4s: estado excitado
+species atom "Aluminum" unpaired 1 {
+    atom Al as al1
+    configuration al1 [Ne] 3s2 4s1
+}

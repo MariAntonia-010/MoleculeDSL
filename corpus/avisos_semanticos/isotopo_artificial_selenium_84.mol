@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 84Se não é isótopo de composição natural (CIAAW: 74Se, 76Se, 77Se, 78Se, 80Se, 82Se); pode ser radioativo ou artificial
+// Aviso: 84Se não é isótopo natural (CIAAW: 74, 76, 77, 78, 80, 82)
+species atom "Selenium-84" unpaired 2 {
+    atom 84Se as se1
+}

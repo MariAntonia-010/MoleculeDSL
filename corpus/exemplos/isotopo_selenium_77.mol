@@ -1,0 +1,4 @@
+// 77Se: 34 prótons e 43 nêutrons, isótopo natural (CIAAW)
+species atom "Selenium-77" unpaired 2 {
+    atom 77Se as se1
+}

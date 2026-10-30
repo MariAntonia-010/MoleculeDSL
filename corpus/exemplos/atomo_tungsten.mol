@@ -1,0 +1,5 @@
+// Tungsten (Z=74): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f14 5s2 5p6 5d4 6s2, termo 5D0
+species atom "Tungsten" unpaired 4 {
+    atom W as w1
+    configuration w1 [Xe] 4f14 5d4 6s2
+}

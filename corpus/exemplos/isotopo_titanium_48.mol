@@ -1,0 +1,4 @@
+// 48Ti: 22 prótons e 26 nêutrons, isótopo natural (CIAAW)
+species atom "Titanium-48" unpaired 2 {
+    atom 48Ti as ti1
+}

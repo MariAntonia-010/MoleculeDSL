@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de co1 (Co#1) (referência: 1s2 2s2 2p6 3s2 3p6 3d7 4s2); descreve um estado excitado
+// Aviso: um elétron de 3d subiu para 4p: estado excitado
+species atom "Cobalt" unpaired 5 {
+    atom Co as co1
+    configuration co1 [Ar] 3d6 4s2 4p1
+}

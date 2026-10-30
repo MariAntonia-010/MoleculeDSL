@@ -1,0 +1,28 @@
+// tert-Butyl formate (O=COC(C)(C)C)
+species molecule "tert-Butyl formate" {
+    atom O as o1
+    atom C as c1
+    atom O as o2
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    10x atom H as h
+
+    bond o1=c1
+    bond c1-o2
+    bond o2-c2
+    bond c2-c3
+    bond c2-c4
+    bond c2-c5
+    bond c1-h1
+    bond c3-h2
+    bond c3-h3
+    bond c3-h4
+    bond c4-h5
+    bond c4-h6
+    bond c4-h7
+    bond c5-h8
+    bond c5-h9
+    bond c5-h10
+}

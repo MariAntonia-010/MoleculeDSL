@@ -1,0 +1,4 @@
+// 57Fe: 26 prótons e 31 nêutrons, isótopo natural (CIAAW)
+species atom "Iron-57" unpaired 4 {
+    atom 57Fe as fe1
+}

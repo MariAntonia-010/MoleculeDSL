@@ -1,0 +1,13 @@
+// Methylamine (NC)
+species molecule "Methylamine" {
+    atom N as n1
+    atom C as c1
+    5x atom H as h
+
+    bond n1-c1
+    bond n1-h1
+    bond n1-h2
+    bond c1-h3
+    bond c1-h4
+    bond c1-h5
+}

@@ -1,0 +1,4 @@
+// 10B: 5 prótons e 5 nêutrons, isótopo natural (CIAAW)
+species atom "Boron-10" unpaired 1 {
+    atom 10B as b1
+}

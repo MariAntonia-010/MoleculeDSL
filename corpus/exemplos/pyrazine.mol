@@ -1,0 +1,23 @@
+// Pyrazine (C1=CN=CC=N1)
+species molecule "Pyrazine" {
+    atom C as c1
+    atom C as c2
+    atom N as n1
+    atom C as c3
+    atom C as c4
+    atom N as n2
+    4x atom H as h
+
+    bond c1=c2
+    bond c2-n1
+    bond n1=c3
+    bond c3-c4
+    bond c4=n2
+    bond c1-n2
+    bond c1-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+
+    ring c1 c2 n1 c3 c4 n2
+}

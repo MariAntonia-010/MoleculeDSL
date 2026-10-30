@@ -1,0 +1,4 @@
+// 36Ar: 18 prótons e 18 nêutrons, isótopo natural (CIAAW)
+species atom "Argon-36" {
+    atom 36Ar as ar1
+}

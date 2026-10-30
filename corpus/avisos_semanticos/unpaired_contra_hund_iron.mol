@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=6, mas a configuração 1s2 2s2 2p6 3s2 3p6 3d6 4s2 tem 4 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Fe tem 4 desemparelhado(s), não 6
+species atom "Iron" unpaired 6 {
+    atom Fe as fe1
+    configuration fe1 [Ar] 3d6 4s2
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Mg(+13) perderia 13 elétrons, mas Mg só tem 12; a maior carga possível é +12 (o núcleo sem elétrons)
+// Erro: Mg tem 12 elétron(s); a carga +13 deixaria -1
+species monatomic_ion "Magnesium(13+)" charge +13 {
+    atom Mg(+13)
+}

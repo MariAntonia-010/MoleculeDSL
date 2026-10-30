@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=3, mas a configuração 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p1 tem 1 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Ga tem 1 desemparelhado(s), não 3
+species atom "Gallium" unpaired 3 {
+    atom Ga as ga1
+    configuration ga1 [Ar] 3d10 4s2 4p1
+}

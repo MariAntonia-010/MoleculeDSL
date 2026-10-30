@@ -1,0 +1,4 @@
+// 70Ge: 32 prótons e 38 nêutrons, isótopo natural (CIAAW)
+species atom "Germanium-70" unpaired 2 {
+    atom 70Ge as ge1
+}

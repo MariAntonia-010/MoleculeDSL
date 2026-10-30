@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 106Ru não é isótopo de composição natural (CIAAW: 96Ru, 98Ru, 99Ru, 100Ru, 101Ru, 102Ru, 104Ru); pode ser radioativo ou artificial
+// Aviso: 106Ru não é isótopo natural (CIAAW: 96, 98, 99, 100, 101, 102, 104)
+species atom "Ruthenium-106" unpaired 4 {
+    atom 106Ru as ru1
+}

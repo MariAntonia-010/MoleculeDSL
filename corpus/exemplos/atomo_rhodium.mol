@@ -1,0 +1,5 @@
+// Rhodium (Z=45): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d8 5s1, termo 4F9/2
+species atom "Rhodium" unpaired 3 {
+    atom Rh as rh1
+    configuration rh1 [Kr] 4d8 5s1
+}

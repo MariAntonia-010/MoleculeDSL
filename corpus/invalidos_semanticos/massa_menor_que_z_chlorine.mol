@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 16 é menor que o número atômico de Cl (17): daria -1 nêutrons
+// Erro: A = 16 é menor que Z = 17, o que daria nêutrons negativos
+species atom "Chlorine-16" unpaired 1 {
+    atom 16Cl as cl1
+}

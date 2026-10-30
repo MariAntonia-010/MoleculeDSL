@@ -1,0 +1,9 @@
+// (13C)Carbon dioxide (O=[13C]=O)
+species molecule "(13C)Carbon dioxide" {
+    atom O as o1
+    atom 13C as c1
+    atom O as o2
+
+    bond o1=c1
+    bond c1=o2
+}

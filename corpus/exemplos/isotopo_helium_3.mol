@@ -1,0 +1,4 @@
+// 3He: 2 prótons e 1 nêutrons, isótopo natural (CIAAW)
+species atom "Helium-3" {
+    atom 3He as he1
+}

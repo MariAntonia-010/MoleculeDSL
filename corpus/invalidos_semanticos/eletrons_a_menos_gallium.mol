@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 30 elétrons, mas ga1 (Ga#1) (Z=31, carga +0) tem 31
+// Erro: a configuração soma 30 elétrons, mas Ga tem 31
+species atom "Gallium" unpaired 1 {
+    atom Ga as ga1
+    configuration ga1 [Ar] 3d10 4s2
+}

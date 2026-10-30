@@ -1,0 +1,4 @@
+// 6Li: 3 prótons e 3 nêutrons, isótopo natural (CIAAW)
+species atom "Lithium-6" unpaired 1 {
+    atom 6Li as li1
+}

@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 25 elétrons, mas fe1 (Fe#1) (Z=26, carga +0) tem 26
+// Erro: a configuração soma 25 elétrons, mas Fe tem 26
+species atom "Iron" unpaired 4 {
+    atom Fe as fe1
+    configuration fe1 [Ar] 3d5 4s2
+}

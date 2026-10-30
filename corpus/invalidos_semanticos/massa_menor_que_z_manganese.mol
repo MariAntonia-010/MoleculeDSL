@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 24 é menor que o número atômico de Mn (25): daria -1 nêutrons
+// Erro: A = 24 é menor que Z = 25, o que daria nêutrons negativos
+species atom "Manganese-24" unpaired 5 {
+    atom 24Mn as mn1
+}

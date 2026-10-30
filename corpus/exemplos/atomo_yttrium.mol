@@ -1,0 +1,5 @@
+// Yttrium (Z=39): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d1 5s2, termo 2D3/2
+species atom "Yttrium" unpaired 1 {
+    atom Y as y1
+    configuration y1 [Kr] 4d1 5s2
+}

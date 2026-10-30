@@ -1,0 +1,4 @@
+// 43Ca: 20 prótons e 23 nêutrons, isótopo natural (CIAAW)
+species atom "Calcium-43" {
+    atom 43Ca as ca1
+}

@@ -1,0 +1,13 @@
+// Tribromomethane (BrC(Br)Br)
+species molecule "Tribromomethane" {
+    atom Br as br1
+    atom C as c1
+    atom Br as br2
+    atom Br as br3
+    atom H as h1
+
+    bond br1-c1
+    bond c1-br2
+    bond c1-br3
+    bond c1-h1
+}

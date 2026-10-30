@@ -1,0 +1,4 @@
+// 40K: 19 prótons e 21 nêutrons, isótopo natural (CIAAW)
+species atom "Potassium-40" unpaired 1 {
+    atom 40K as k1
+}

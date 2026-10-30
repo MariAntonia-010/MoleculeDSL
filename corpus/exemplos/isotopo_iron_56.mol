@@ -1,0 +1,4 @@
+// 56Fe: 26 prótons e 30 nêutrons, isótopo natural (CIAAW)
+species atom "Iron-56" unpaired 4 {
+    atom 56Fe as fe1
+}

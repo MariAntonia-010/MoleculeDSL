@@ -1,0 +1,4 @@
+// 71Ga: 31 prótons e 40 nêutrons, isótopo natural (CIAAW)
+species atom "Gallium-71" unpaired 1 {
+    atom 71Ga as ga1
+}

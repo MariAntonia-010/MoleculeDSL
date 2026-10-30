@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 111Ag não é isótopo de composição natural (CIAAW: 107Ag, 109Ag); pode ser radioativo ou artificial
+// Aviso: 111Ag não é isótopo natural (CIAAW: 107, 109)
+species atom "Silver-111" unpaired 1 {
+    atom 111Ag as ag1
+}

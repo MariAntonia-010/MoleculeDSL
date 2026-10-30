@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 112Pd não é isótopo de composição natural (CIAAW: 102Pd, 104Pd, 105Pd, 106Pd, 108Pd, 110Pd); pode ser radioativo ou artificial
+// Aviso: 112Pd não é isótopo natural (CIAAW: 102, 104, 105, 106, 108, 110)
+species atom "Palladium-112" {
+    atom 112Pd as pd1
+}

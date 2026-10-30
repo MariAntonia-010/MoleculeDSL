@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 21 é menor que o número atômico de Ti (22): daria -1 nêutrons
+// Erro: A = 21 é menor que Z = 22, o que daria nêutrons negativos
+species atom "Titanium-21" unpaired 2 {
+    atom 21Ti as ti1
+}

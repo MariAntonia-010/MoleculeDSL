@@ -1,0 +1,4 @@
+// 1H: 1 prótons e 0 nêutrons, isótopo natural (CIAAW)
+species atom "Hydrogen-1" unpaired 1 {
+    atom 1H as h1
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 30 é menor que o número atômico de Ga (31): daria -1 nêutrons
+// Erro: A = 30 é menor que Z = 31, o que daria nêutrons negativos
+species atom "Gallium-30" unpaired 1 {
+    atom 30Ga as ga1
+}

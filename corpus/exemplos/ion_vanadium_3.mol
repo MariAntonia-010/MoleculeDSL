@@ -1,0 +1,5 @@
+// Vanadium(3+): 1s2 2s2 2p6 3s2 3p6 3d2, 2 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Vanadium(3+)" charge +3 unpaired 2 {
+    atom V(+3) as v1
+    configuration v1 [Ar] 3d2
+}

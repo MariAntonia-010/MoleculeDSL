@@ -1,0 +1,20 @@
+// Cyclopropyl iodide (IC1CC1)
+species molecule "Cyclopropyl iodide" {
+    atom I as i1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    5x atom H as h
+
+    bond i1-c1
+    bond c1-c2
+    bond c2-c3
+    bond c1-c3
+    bond c1-h1
+    bond c2-h2
+    bond c2-h3
+    bond c3-h4
+    bond c3-h5
+
+    ring c1 c2 c3
+}

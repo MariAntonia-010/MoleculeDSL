@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 91Y não é isótopo de composição natural (CIAAW: 89Y); pode ser radioativo ou artificial
+// Aviso: 91Y não é isótopo natural (CIAAW: 89)
+species atom "Yttrium-91" unpaired 1 {
+    atom 91Y as y1
+}

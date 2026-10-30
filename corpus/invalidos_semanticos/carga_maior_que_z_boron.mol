@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: B(+6) perderia 6 elétrons, mas B só tem 5; a maior carga possível é +5 (o núcleo sem elétrons)
+// Erro: B tem 5 elétron(s); a carga +6 deixaria -1
+species monatomic_ion "Boron(6+)" charge +6 {
+    atom B(+6)
+}

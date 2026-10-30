@@ -1,0 +1,5 @@
+// Indium (Z=49): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p1, termo 2P1/2
+species atom "Indium" unpaired 1 {
+    atom In as in1
+    configuration in1 [Kr] 4d10 5s2 5p1
+}

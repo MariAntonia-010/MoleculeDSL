@@ -1,0 +1,5 @@
+// Rhenium (Z=75): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f14 5s2 5p6 5d5 6s2, termo 6S5/2
+species atom "Rhenium" unpaired 5 {
+    atom Re as re1
+    configuration re1 [Xe] 4f14 5d5 6s2
+}

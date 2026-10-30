@@ -1,0 +1,4 @@
+// 51V: 23 prótons e 28 nêutrons, isótopo natural (CIAAW)
+species atom "Vanadium-51" unpaired 3 {
+    atom 51V as v1
+}

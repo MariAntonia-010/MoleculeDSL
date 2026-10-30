@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 18 elétrons, mas k1 (K#1) (Z=19, carga +0) tem 19
+// Erro: a configuração soma 18 elétrons, mas K tem 19
+species atom "Potassium" unpaired 1 {
+    atom K as k1
+    configuration k1 [Ne] 3s2 3p6
+}

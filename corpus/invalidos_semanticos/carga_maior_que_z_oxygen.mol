@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: O(+9) perderia 9 elétrons, mas O só tem 8; a maior carga possível é +8 (o núcleo sem elétrons)
+// Erro: O tem 8 elétron(s); a carga +9 deixaria -1
+species monatomic_ion "Oxygen(9+)" charge +9 {
+    atom O(+9)
+}

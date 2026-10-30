@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Na(+12) perderia 12 elétrons, mas Na só tem 11; a maior carga possível é +11 (o núcleo sem elétrons)
+// Erro: Na tem 11 elétron(s); a carga +12 deixaria -1
+species monatomic_ion "Sodium(12+)" charge +12 {
+    atom Na(+12)
+}

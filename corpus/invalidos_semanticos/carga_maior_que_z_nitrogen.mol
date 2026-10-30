@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: N(+8) perderia 8 elétrons, mas N só tem 7; a maior carga possível é +7 (o núcleo sem elétrons)
+// Erro: N tem 7 elétron(s); a carga +8 deixaria -1
+species monatomic_ion "Nitrogen(8+)" charge +8 {
+    atom N(+8)
+}

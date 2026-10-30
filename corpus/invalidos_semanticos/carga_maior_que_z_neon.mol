@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Ne(+11) perderia 11 elétrons, mas Ne só tem 10; a maior carga possível é +10 (o núcleo sem elétrons)
+// Erro: Ne tem 10 elétron(s); a carga +11 deixaria -1
+species monatomic_ion "Neon(11+)" charge +11 {
+    atom Ne(+11)
+}

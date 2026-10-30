@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 67Cu não é isótopo de composição natural (CIAAW: 63Cu, 65Cu); pode ser radioativo ou artificial
+// Aviso: 67Cu não é isótopo natural (CIAAW: 63, 65)
+species atom "Copper-67" unpaired 1 {
+    atom 67Cu as cu1
+}

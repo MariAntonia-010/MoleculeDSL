@@ -1,0 +1,4 @@
+// 47Ti: 22 prótons e 25 nêutrons, isótopo natural (CIAAW)
+species atom "Titanium-47" unpaired 2 {
+    atom 47Ti as ti1
+}

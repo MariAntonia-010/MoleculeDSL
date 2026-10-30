@@ -1,0 +1,4 @@
+// 73Ge: 32 prótons e 41 nêutrons, isótopo natural (CIAAW)
+species atom "Germanium-73" unpaired 2 {
+    atom 73Ge as ge1
+}

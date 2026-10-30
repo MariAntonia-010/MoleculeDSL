@@ -1,0 +1,4 @@
+// 60Ni: 28 prótons e 32 nêutrons, isótopo natural (CIAAW)
+species atom "Nickel-60" unpaired 2 {
+    atom 60Ni as ni1
+}

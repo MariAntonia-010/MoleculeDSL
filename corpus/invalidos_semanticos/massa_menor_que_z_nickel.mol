@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 27 é menor que o número atômico de Ni (28): daria -1 nêutrons
+// Erro: A = 27 é menor que Z = 28, o que daria nêutrons negativos
+species atom "Nickel-27" unpaired 2 {
+    atom 27Ni as ni1
+}

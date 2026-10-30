@@ -1,0 +1,12 @@
+// Methyl alcohol (OC)
+species molecule "Methyl alcohol" {
+    atom O as o1
+    atom C as c1
+    4x atom H as h
+
+    bond o1-c1
+    bond o1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c1-h4
+}

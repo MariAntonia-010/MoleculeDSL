@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 43K não é isótopo de composição natural (CIAAW: 39K, 40K, 41K); pode ser radioativo ou artificial
+// Aviso: 43K não é isótopo natural (CIAAW: 39, 40, 41)
+species atom "Potassium-43" unpaired 1 {
+    atom 43K as k1
+}

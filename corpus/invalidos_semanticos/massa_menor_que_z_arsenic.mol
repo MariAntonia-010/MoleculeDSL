@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 32 é menor que o número atômico de As (33): daria -1 nêutrons
+// Erro: A = 32 é menor que Z = 33, o que daria nêutrons negativos
+species atom "Arsenic-32" unpaired 3 {
+    atom 32As as as1
+}

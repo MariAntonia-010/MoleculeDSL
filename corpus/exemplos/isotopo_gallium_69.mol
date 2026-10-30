@@ -1,0 +1,4 @@
+// 69Ga: 31 prótons e 38 nêutrons, isótopo natural (CIAAW)
+species atom "Gallium-69" unpaired 1 {
+    atom 69Ga as ga1
+}

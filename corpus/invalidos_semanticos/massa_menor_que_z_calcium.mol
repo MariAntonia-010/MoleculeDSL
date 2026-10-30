@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 19 é menor que o número atômico de Ca (20): daria -1 nêutrons
+// Erro: A = 19 é menor que Z = 20, o que daria nêutrons negativos
+species atom "Calcium-19" {
+    atom 19Ca as ca1
+}

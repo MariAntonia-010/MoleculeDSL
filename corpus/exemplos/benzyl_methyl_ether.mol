@@ -1,0 +1,35 @@
+// Benzyl methyl ether (COCC1=CC=CC=C1)
+species molecule "Benzyl methyl ether" {
+    atom C as c1
+    atom O as o1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    atom C as c8
+    10x atom H as h
+
+    bond c1-o1
+    bond o1-c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c5
+    bond c5=c6
+    bond c6-c7
+    bond c7=c8
+    bond c3-c8
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c4-h6
+    bond c5-h7
+    bond c6-h8
+    bond c7-h9
+    bond c8-h10
+
+    ring c3 c4 c5 c6 c7 c8
+}

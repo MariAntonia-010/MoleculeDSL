@@ -1,0 +1,4 @@
+// 72Ge: 32 prótons e 40 nêutrons, isótopo natural (CIAAW)
+species atom "Germanium-72" unpaired 2 {
+    atom 72Ge as ge1
+}

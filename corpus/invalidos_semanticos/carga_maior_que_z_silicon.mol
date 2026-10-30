@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Si(+15) perderia 15 elétrons, mas Si só tem 14; a maior carga possível é +14 (o núcleo sem elétrons)
+// Erro: Si tem 14 elétron(s); a carga +15 deixaria -1
+species monatomic_ion "Silicon(15+)" charge +15 {
+    atom Si(+15)
+}

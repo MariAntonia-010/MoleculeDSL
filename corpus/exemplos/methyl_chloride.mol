@@ -1,0 +1,11 @@
+// Methyl chloride (ClC)
+species molecule "Methyl chloride" {
+    atom Cl as cl1
+    atom C as c1
+    3x atom H as h
+
+    bond cl1-c1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+}

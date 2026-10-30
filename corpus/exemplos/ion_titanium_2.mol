@@ -1,0 +1,5 @@
+// Titanium(2+): 1s2 2s2 2p6 3s2 3p6 3d2, 2 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Titanium(2+)" charge +2 unpaired 2 {
+    atom Ti(+2) as ti1
+    configuration ti1 [Ar] 3d2
+}

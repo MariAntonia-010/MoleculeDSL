@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 20 é menor que o número atômico de Sc (21): daria -1 nêutrons
+// Erro: A = 20 é menor que Z = 21, o que daria nêutrons negativos
+species atom "Scandium-20" unpaired 1 {
+    atom 20Sc as sc1
+}

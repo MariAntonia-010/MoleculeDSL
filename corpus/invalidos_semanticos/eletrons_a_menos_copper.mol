@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 28 elétrons, mas cu1 (Cu#1) (Z=29, carga +0) tem 29
+// Erro: a configuração soma 28 elétrons, mas Cu tem 29
+species atom "Copper" unpaired 1 {
+    atom Cu as cu1
+    configuration cu1 [Ar] 3d9 4s1
+}

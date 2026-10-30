@@ -1,0 +1,5 @@
+// Antimony (Z=51): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p3, termo 4S3/2
+species atom "Antimony" unpaired 3 {
+    atom Sb as sb1
+    configuration sb1 [Kr] 4d10 5s2 5p3
+}

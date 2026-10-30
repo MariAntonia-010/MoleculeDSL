@@ -1,0 +1,15 @@
+// Methyl isocyanate (O=C=NC)
+species molecule "Methyl isocyanate" {
+    atom O as o1
+    atom C as c1
+    atom N as n1
+    atom C as c2
+    3x atom H as h
+
+    bond o1=c1
+    bond c1=n1
+    bond n1-c2
+    bond c2-h1
+    bond c2-h2
+    bond c2-h3
+}

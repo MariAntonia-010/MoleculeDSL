@@ -1,0 +1,4 @@
+// 24Mg: 12 prótons e 12 nêutrons, isótopo natural (CIAAW)
+species atom "Magnesium-24" {
+    atom 24Mg as mg1
+}

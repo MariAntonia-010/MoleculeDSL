@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 73Ga não é isótopo de composição natural (CIAAW: 69Ga, 71Ga); pode ser radioativo ou artificial
+// Aviso: 73Ga não é isótopo natural (CIAAW: 69, 71)
+species atom "Gallium-73" unpaired 1 {
+    atom 73Ga as ga1
+}

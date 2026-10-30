@@ -1,0 +1,5 @@
+// Gallium(3+): 1s2 2s2 2p6 3s2 3p6 3d10, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Gallium(3+)" charge +3 {
+    atom Ga(+3) as ga1
+    configuration ga1 [Ar] 3d10
+}

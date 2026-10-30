@@ -1,0 +1,5 @@
+// Holmium (Z=67): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f11 5s2 5p6 6s2, termo 4I15/2
+species atom "Holmium" unpaired 3 {
+    atom Ho as ho1
+    configuration ho1 [Xe] 4f11 6s2
+}

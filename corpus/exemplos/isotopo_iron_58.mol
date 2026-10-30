@@ -1,0 +1,4 @@
+// 58Fe: 26 prótons e 32 nêutrons, isótopo natural (CIAAW)
+species atom "Iron-58" unpaired 4 {
+    atom 58Fe as fe1
+}

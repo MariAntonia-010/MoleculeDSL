@@ -1,0 +1,4 @@
+// 17O: 8 prótons e 9 nêutrons, isótopo natural (CIAAW)
+species atom "Oxygen-17" unpaired 2 {
+    atom 17O as o1
+}

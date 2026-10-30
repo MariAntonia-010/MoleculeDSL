@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de br1 (Br#1) (referência: 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p5); descreve um estado excitado
+// Aviso: um elétron de 4p subiu para 5s: estado excitado
+species atom "Bromine" unpaired 3 {
+    atom Br as br1
+    configuration br1 [Ar] 3d10 4s2 4p4 5s1
+}

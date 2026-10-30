@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 34 é menor que o número atômico de Br (35): daria -1 nêutrons
+// Erro: A = 34 é menor que Z = 35, o que daria nêutrons negativos
+species atom "Bromine-34" unpaired 1 {
+    atom 34Br as br1
+}

@@ -1,0 +1,4 @@
+// 74Ge: 32 prótons e 42 nêutrons, isótopo natural (CIAAW)
+species atom "Germanium-74" unpaired 2 {
+    atom 74Ge as ge1
+}

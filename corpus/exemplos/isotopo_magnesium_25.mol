@@ -1,0 +1,4 @@
+// 25Mg: 12 prótons e 13 nêutrons, isótopo natural (CIAAW)
+species atom "Magnesium-25" {
+    atom 25Mg as mg1
+}

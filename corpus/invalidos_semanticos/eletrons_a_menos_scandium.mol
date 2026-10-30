@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 20 elétrons, mas sc1 (Sc#1) (Z=21, carga +0) tem 21
+// Erro: a configuração soma 20 elétrons, mas Sc tem 21
+species atom "Scandium" unpaired 1 {
+    atom Sc as sc1
+    configuration sc1 [Ar] 4s2
+}

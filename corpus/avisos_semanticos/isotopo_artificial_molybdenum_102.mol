@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 102Mo não é isótopo de composição natural (CIAAW: 92Mo, 94Mo, 95Mo, 96Mo, 97Mo, 98Mo, 100Mo); pode ser radioativo ou artificial
+// Aviso: 102Mo não é isótopo natural (CIAAW: 92, 94, 95, 96, 97, 98, 100)
+species atom "Molybdenum-102" unpaired 6 {
+    atom 102Mo as mo1
+}

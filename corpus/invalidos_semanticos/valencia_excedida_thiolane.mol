@@ -1,0 +1,29 @@
+// esperado: Aviso semântico [RAD-001] na linha 4, coluna 0: a espécie tem contagem eletrônica ímpar; declare 'unpaired' para representar o radical
+// esperado: Erro semântico [VAL-001] na linha 5, coluna 4: a soma das ordens de ligação de c1 (C#1) é 5; o máximo para C é 4
+// Erro: c1 já tem quatro ligações; a ligação com hz é a quinta
+species molecule "Thiolane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom S as s1
+    atom C as c4
+    8x atom H as h
+
+    atom H as hz
+    bond c1-c2
+    bond c2-c3
+    bond c3-s1
+    bond s1-c4
+    bond c1-c4
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+
+    ring c1 c2 c3 s1 c4
+    bond c1-hz
+}

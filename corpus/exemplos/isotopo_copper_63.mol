@@ -1,0 +1,4 @@
+// 63Cu: 29 prótons e 34 nêutrons, isótopo natural (CIAAW)
+species atom "Copper-63" unpaired 1 {
+    atom 63Cu as cu1
+}

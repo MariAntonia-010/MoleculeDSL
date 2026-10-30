@@ -212,6 +212,7 @@ def main():
         "AROMATICIDADE": sem_conclusao(rodar("--aromaticidade", "exemplos/pirrol.mol")),
         "TOTAL": total,
         "EXEMPLOS": str(exemplos),
+        "CORPUS": str(len(glob.glob(os.path.join(RAIZ, "corpus", "*", "*.mol")))),
         "SNAPSHOTS": str(snapshots),
         "SVGS": str(2 * exemplos),
         "RESUMO": resumo,

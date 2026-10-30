@@ -1,0 +1,33 @@
+// esperado: Erro semântico [STRUCT-006] na linha 32, coluna 4: já existe uma ligação entre o1 (O#1) e c1 (C#1); use = ou # para ligação dupla ou tripla
+// Erro: 'bond o1=c1' aparece duas vezes
+species molecule "Cyclohexanone" {
+    atom O as o1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    10x atom H as h
+
+    bond o1=c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c1-c6
+    bond c2-h1
+    bond c2-h2
+    bond c3-h3
+    bond c3-h4
+    bond c4-h5
+    bond c4-h6
+    bond c5-h7
+    bond c5-h8
+    bond c6-h9
+    bond c6-h10
+
+    ring c1 c2 c3 c4 c5 c6
+    bond o1=c1
+}

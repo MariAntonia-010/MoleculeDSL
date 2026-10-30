@@ -1,0 +1,5 @@
+// Cobalt(3+): 1s2 2s2 2p6 3s2 3p6 3d6, 4 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Cobalt(3+)" charge +3 unpaired 4 {
+    atom Co(+3) as co1
+    configuration co1 [Ar] 3d6
+}

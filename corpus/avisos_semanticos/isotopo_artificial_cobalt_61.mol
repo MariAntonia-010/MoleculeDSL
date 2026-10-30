@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 61Co não é isótopo de composição natural (CIAAW: 59Co); pode ser radioativo ou artificial
+// Aviso: 61Co não é isótopo natural (CIAAW: 59)
+species atom "Cobalt-61" unpaired 3 {
+    atom 61Co as co1
+}

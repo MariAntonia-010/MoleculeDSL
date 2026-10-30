@@ -1,0 +1,31 @@
+// Methyl phenyl sulfide (CSC1=CC=CC=C1)
+species molecule "Methyl phenyl sulfide" {
+    atom C as c1
+    atom S as s1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    8x atom H as h
+
+    bond c1-s1
+    bond s1-c2
+    bond c2=c3
+    bond c3-c4
+    bond c4=c5
+    bond c5-c6
+    bond c6=c7
+    bond c2-c7
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c3-h4
+    bond c4-h5
+    bond c5-h6
+    bond c6-h7
+    bond c7-h8
+
+    ring c2 c3 c4 c5 c6 c7
+}

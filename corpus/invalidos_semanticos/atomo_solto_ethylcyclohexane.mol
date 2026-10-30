@@ -1,0 +1,41 @@
+// esperado: Erro semântico [STRUCT-003] na linha 14, coluna 4: o átomo ne1 (Ne#1) não tem nenhuma ligação
+// Erro: o neônio ne1 foi declarado mas não está ligado ao resto da molécula
+species molecule "Ethylcyclohexane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    atom C as c8
+    16x atom H as h
+
+    atom Ne as ne1
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c7
+    bond c7-c8
+    bond c3-c8
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+    bond c5-h9
+    bond c5-h10
+    bond c6-h11
+    bond c6-h12
+    bond c7-h13
+    bond c7-h14
+    bond c8-h15
+    bond c8-h16
+
+    ring c3 c4 c5 c6 c7 c8
+}

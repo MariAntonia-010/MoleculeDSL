@@ -1,0 +1,4 @@
+// 78Se: 34 prótons e 44 nêutrons, isótopo natural (CIAAW)
+species atom "Selenium-78" unpaired 2 {
+    atom 78Se as se1
+}

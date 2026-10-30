@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 77As não é isótopo de composição natural (CIAAW: 75As); pode ser radioativo ou artificial
+// Aviso: 77As não é isótopo natural (CIAAW: 75)
+species atom "Arsenic-77" unpaired 3 {
+    atom 77As as as1
+}

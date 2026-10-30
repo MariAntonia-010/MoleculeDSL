@@ -1,0 +1,4 @@
+// 44Ca: 20 prótons e 24 nêutrons, isótopo natural (CIAAW)
+species atom "Calcium-44" {
+    atom 44Ca as ca1
+}

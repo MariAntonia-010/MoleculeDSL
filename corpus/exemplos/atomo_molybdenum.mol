@@ -1,0 +1,5 @@
+// Molybdenum (Z=42): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d5 5s1, termo 7S3
+species atom "Molybdenum" unpaired 6 {
+    atom Mo as mo1
+    configuration mo1 [Kr] 4d5 5s1
+}

@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 66Ni não é isótopo de composição natural (CIAAW: 58Ni, 60Ni, 61Ni, 62Ni, 64Ni); pode ser radioativo ou artificial
+// Aviso: 66Ni não é isótopo natural (CIAAW: 58, 60, 61, 62, 64)
+species atom "Nickel-66" unpaired 2 {
+    atom 66Ni as ni1
+}

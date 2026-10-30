@@ -1,0 +1,5 @@
+// Iridium (Z=77): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f14 5s2 5p6 5d7 6s2, termo 4F9/2
+species atom "Iridium" unpaired 3 {
+    atom Ir as ir1
+    configuration ir1 [Xe] 4f14 5d7 6s2
+}

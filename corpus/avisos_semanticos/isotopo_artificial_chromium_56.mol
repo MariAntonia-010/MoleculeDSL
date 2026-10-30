@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 56Cr não é isótopo de composição natural (CIAAW: 50Cr, 52Cr, 53Cr, 54Cr); pode ser radioativo ou artificial
+// Aviso: 56Cr não é isótopo natural (CIAAW: 50, 52, 53, 54)
+species atom "Chromium-56" unpaired 6 {
+    atom 56Cr as cr1
+}

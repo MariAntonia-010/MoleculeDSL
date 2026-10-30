@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 23 elétrons, mas cr1 (Cr#1) (Z=24, carga +0) tem 24
+// Erro: a configuração soma 23 elétrons, mas Cr tem 24
+species atom "Chromium" unpaired 6 {
+    atom Cr as cr1
+    configuration cr1 [Ar] 3d4 4s1
+}

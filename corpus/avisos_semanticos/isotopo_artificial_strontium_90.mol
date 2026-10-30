@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 90Sr não é isótopo de composição natural (CIAAW: 84Sr, 86Sr, 87Sr, 88Sr); pode ser radioativo ou artificial
+// Aviso: 90Sr não é isótopo natural (CIAAW: 84, 86, 87, 88)
+species atom "Strontium-90" {
+    atom 90Sr as sr1
+}

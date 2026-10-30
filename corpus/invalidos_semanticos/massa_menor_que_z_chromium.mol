@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 23 é menor que o número atômico de Cr (24): daria -1 nêutrons
+// Erro: A = 23 é menor que Z = 24, o que daria nêutrons negativos
+species atom "Chromium-23" unpaired 6 {
+    atom 23Cr as cr1
+}

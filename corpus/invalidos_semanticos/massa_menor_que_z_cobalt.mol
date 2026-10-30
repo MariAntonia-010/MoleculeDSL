@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 26 é menor que o número atômico de Co (27): daria -1 nêutrons
+// Erro: A = 26 é menor que Z = 27, o que daria nêutrons negativos
+species atom "Cobalt-26" unpaired 3 {
+    atom 26Co as co1
+}

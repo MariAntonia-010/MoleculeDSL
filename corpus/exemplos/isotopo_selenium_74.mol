@@ -1,0 +1,4 @@
+// 74Se: 34 prótons e 40 nêutrons, isótopo natural (CIAAW)
+species atom "Selenium-74" unpaired 2 {
+    atom 74Se as se1
+}

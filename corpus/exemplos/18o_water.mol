@@ -1,0 +1,8 @@
+// (18O)Water ([18O])
+species molecule "(18O)Water" {
+    atom 18O as o1
+    2x atom H as h
+
+    bond o1-h1
+    bond o1-h2
+}

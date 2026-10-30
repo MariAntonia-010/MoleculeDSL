@@ -1,0 +1,4 @@
+// 68Zn: 30 prótons e 38 nêutrons, isótopo natural (CIAAW)
+species atom "Zinc-68" {
+    atom 68Zn as zn1
+}

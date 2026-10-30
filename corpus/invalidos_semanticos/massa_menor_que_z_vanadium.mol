@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 22 é menor que o número atômico de V (23): daria -1 nêutrons
+// Erro: A = 22 é menor que Z = 23, o que daria nêutrons negativos
+species atom "Vanadium-22" unpaired 3 {
+    atom 22V as v1
+}

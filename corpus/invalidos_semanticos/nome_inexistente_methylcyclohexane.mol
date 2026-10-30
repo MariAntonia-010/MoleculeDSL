@@ -1,0 +1,37 @@
+// esperado: Erro semântico [STRUCT-001] na linha 36, coluna 12: nenhum átomo se chama 'q9'
+// Erro: q9 não foi declarado com 'as'
+species molecule "Methylcyclohexane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    14x atom H as h
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c7
+    bond c2-c7
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+    bond c5-h9
+    bond c5-h10
+    bond c6-h11
+    bond c6-h12
+    bond c7-h13
+    bond c7-h14
+
+    ring c2 c3 c4 c5 c6 c7
+    bond c1-q9
+}

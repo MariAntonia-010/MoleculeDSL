@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 33P não é isótopo de composição natural (CIAAW: 31P); pode ser radioativo ou artificial
+// Aviso: 33P não é isótopo natural (CIAAW: 31)
+species atom "Phosphorus-33" unpaired 3 {
+    atom 33P as p1
+}

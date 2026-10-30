@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 13 é menor que o número atômico de Si (14): daria -1 nêutrons
+// Erro: A = 13 é menor que Z = 14, o que daria nêutrons negativos
+species atom "Silicon-13" unpaired 2 {
+    atom 13Si as si1
+}

@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 78Ge não é isótopo de composição natural (CIAAW: 70Ge, 72Ge, 73Ge, 74Ge, 76Ge); pode ser radioativo ou artificial
+// Aviso: 78Ge não é isótopo natural (CIAAW: 70, 72, 73, 74, 76)
+species atom "Germanium-78" unpaired 2 {
+    atom 78Ge as ge1
+}

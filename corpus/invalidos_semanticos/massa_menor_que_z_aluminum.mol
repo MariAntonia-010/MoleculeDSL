@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 12 é menor que o número atômico de Al (13): daria -1 nêutrons
+// Erro: A = 12 é menor que Z = 13, o que daria nêutrons negativos
+species atom "Aluminum-12" unpaired 1 {
+    atom 12Al as al1
+}

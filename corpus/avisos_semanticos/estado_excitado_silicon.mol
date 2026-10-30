@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de si1 (Si#1) (referência: 1s2 2s2 2p6 3s2 3p2); descreve um estado excitado
+// Aviso: um elétron de 3p subiu para 4s: estado excitado
+species atom "Silicon" unpaired 2 {
+    atom Si as si1
+    configuration si1 [Ne] 3s2 3p1 4s1
+}

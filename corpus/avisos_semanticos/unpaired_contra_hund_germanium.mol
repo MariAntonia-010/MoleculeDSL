@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=4, mas a configuração 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p2 tem 2 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Ge tem 2 desemparelhado(s), não 4
+species atom "Germanium" unpaired 4 {
+    atom Ge as ge1
+    configuration ge1 [Ar] 3d10 4s2 4p2
+}

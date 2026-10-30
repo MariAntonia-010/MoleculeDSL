@@ -1,0 +1,5 @@
+// Ruthenium (Z=44): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d7 5s1, termo 5F5
+species atom "Ruthenium" unpaired 4 {
+    atom Ru as ru1
+    configuration ru1 [Kr] 4d7 5s1
+}

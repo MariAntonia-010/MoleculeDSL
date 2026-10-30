@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 37 elétrons, mas sr1 (Sr#1) (Z=38, carga +0) tem 38
+// Erro: a configuração soma 37 elétrons, mas Sr tem 38
+species atom "Strontium" {
+    atom Sr as sr1
+    configuration sr1 [Kr] 5s1
+}

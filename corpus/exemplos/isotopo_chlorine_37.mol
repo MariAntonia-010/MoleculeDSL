@@ -1,0 +1,4 @@
+// 37Cl: 17 prótons e 20 nêutrons, isótopo natural (CIAAW)
+species atom "Chlorine-37" unpaired 1 {
+    atom 37Cl as cl1
+}

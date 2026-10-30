@@ -1,0 +1,5 @@
+// Promethium (Z=61): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f5 5s2 5p6 6s2, termo 6H5/2
+species atom "Promethium" unpaired 5 {
+    atom Pm as pm1
+    configuration pm1 [Xe] 4f5 6s2
+}

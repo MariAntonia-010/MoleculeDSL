@@ -1,0 +1,4 @@
+// 50Cr: 24 prótons e 26 nêutrons, isótopo natural (CIAAW)
+species atom "Chromium-50" unpaired 6 {
+    atom 50Cr as cr1
+}

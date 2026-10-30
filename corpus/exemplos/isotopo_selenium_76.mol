@@ -1,0 +1,4 @@
+// 76Se: 34 prótons e 42 nêutrons, isótopo natural (CIAAW)
+species atom "Selenium-76" unpaired 2 {
+    atom 76Se as se1
+}

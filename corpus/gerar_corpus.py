@@ -1,4 +1,4 @@
-"""Gera o corpus de 300 exemplos (válidos e inválidos) da MoleculeDSL.
+"""Gera o corpus de 1000 exemplos (válidos e inválidos) da MoleculeDSL.
 
 Uso: python3 corpus/gerar_corpus.py
 
@@ -34,24 +34,25 @@ MAIN = os.path.join(RAIZ, "src", "main.py")
 DADOS = semantico.carregar_elementos()
 ISOTOPOS = semantico.carregar_isotopos()
 
-# Quantos arquivos de cada grupo entram no corpus (total 300)
+# Quantos arquivos de cada grupo entram no corpus (total 1000)
 QUANTIDADES = {
-    "atomos": 36,
-    "isotopos": 10,
-    "ions": 24,
-    "moleculas": 110,
-    "atom-003": 12,
-    "atom-002": 8,
-    "atom-001": 8,
-    "atom-005": 10,
-    "atom-004": 8,
-    "atom-007": 8,
-    "val-001": 10,
-    "nome-inexistente": 10,
-    "ligacao-repetida": 10,
-    "atomo-solto": 10,
-    "sintaxe": 16,
-    "lexico": 10,
+    "atomos": 86,
+    "isotopos": 80,
+    "ions": 40,
+    "moleculas": 360,
+    "atom-003": 40,
+    "atom-002": 30,
+    "atom-001": 30,
+    "atom-005": 40,
+    "atom-004": 30,
+    "atom-007": 30,
+    "atom-008": 20,
+    "val-001": 40,
+    "nome-inexistente": 40,
+    "ligacao-repetida": 40,
+    "atomo-solto": 40,
+    "sintaxe": 40,
+    "lexico": 14,
 }
 
 VALENCIA_PADRAO = {"C": 4, "N": 3, "O": 2, "S": 2, "F": 1, "Cl": 1, "Br": 1, "I": 1, "H": 1, "B": 3, "P": 3}
@@ -210,6 +211,60 @@ IONS = [
     ("Co", 2, None), ("Ni", 2, None), ("Cu", 1, None), ("Cu", 2, None), ("Zn", 2, None),
     ("F", -1, "Fluoride"), ("Cl", -1, "Chloride"), ("Br", -1, "Bromide"), ("O", -2, "Oxide"),
     ("S", -2, "Sulfide"), ("N", -3, "Nitride"), ("I", -1, "Iodide"), ("Ag", 1, None),
+    ("Cs", 1, None), ("Ba", 2, None), ("Ti", 2, None), ("V", 2, None), ("V", 3, None),
+    ("Cr", 2, None), ("Mn", 3, None), ("Fe", 2, None), ("Co", 3, None), ("Ga", 3, None),
+    ("Cd", 2, None), ("Sn", 2, None), ("Sn", 4, None), ("Pb", 2, None), ("Hg", 2, None),
+    ("Au", 1, None), ("Au", 3, None), ("Se", -2, "Selenide"), ("Te", -2, "Telluride"),
+    ("P", -3, "Phosphide"),
+]
+
+# Moléculas R–X por nomenclatura de classe funcional (IUPAC): um grupo
+# alquila ou arila R com um grupo funcional X. O SMILES de R começa no
+# átomo que se liga a X; o de X termina no átomo que se liga a R.
+RADICAIS = [
+    ("methyl", "C"), ("ethyl", "CC"), ("propyl", "CCC"), ("isopropyl", "C(C)C"),
+    ("butyl", "CCCC"), ("sec-butyl", "C(C)CC"), ("isobutyl", "CC(C)C"), ("tert-butyl", "C(C)(C)C"),
+    ("pentyl", "CCCCC"), ("hexyl", "CCCCCC"), ("cyclopropyl", "C1CC1"), ("cyclobutyl", "C1CCC1"),
+    ("cyclopentyl", "C1CCCC1"), ("cyclohexyl", "C1CCCCC1"), ("phenyl", "C1=CC=CC=C1"),
+    ("benzyl", "CC1=CC=CC=C1"), ("vinyl", "C=C"), ("allyl", "CC=C"),
+]
+# (SMILES de X, molde do nome); {r} é o radical, e {par} a dupla em ordem
+# alfabética com methyl (éteres, sulfetos e cetonas)
+GRUPOS = [
+    ("F", "{r} fluoride"), ("Cl", "{r} chloride"), ("Br", "{r} bromide"), ("I", "{r} iodide"),
+    ("N#C", "{r} cyanide"), ("O", "{r} alcohol"), ("N", "{r}amine"), ("CO", "{par} ether"),
+    ("CS", "{par} sulfide"), ("CC(=O)", "{par} ketone"), ("CC(=O)O", "{r} acetate"),
+    ("O=CO", "{r} formate"), ("OO", "{r} hydroperoxide"), ("O=C=N", "{r} isocyanate"),
+    ("S=C=N", "{r} isothiocyanate"),
+]
+
+
+def chave_ordem(radical):
+    # Prefixos em itálico (sec-, tert-) não contam na ordem alfabética
+    return radical.split("-", 1)[1] if radical.startswith(("sec-", "tert-")) else radical
+
+
+def maiuscula(nome):
+    # 'tert-butyl chloride' -> 'tert-Butyl chloride'
+    if nome.startswith(("sec-", "tert-")):
+        prefixo, resto = nome.split("-", 1)
+        return f"{prefixo}-{resto[0].upper()}{resto[1:]}"
+    return nome[0].upper() + nome[1:]
+
+
+def nome_classe_funcional(radical, molde):
+    if radical == "phenyl" and molde == "{r} alcohol":
+        return "Phenol"  # o fenol não é um álcool
+    if "{par}" in molde:
+        par = "dimethyl" if radical == "methyl" else " ".join(sorted([radical, "methyl"], key=chave_ordem))
+        return maiuscula(molde.format(par=par))
+    return maiuscula(molde.format(r=radical))
+
+
+MOLECULAS_RX = [
+    (nome_classe_funcional(radical, molde), grupo + smiles_r)
+    for radical, smiles_r in RADICAIS
+    for grupo, molde in GRUPOS
 ]
 
 
@@ -354,6 +409,26 @@ class Corpus:
         self.contagem[grupo] = self.contagem.get(grupo, 0) + 1
 
 
+def chave_canonica(codigo):
+    # Chave do grafo (elementos, ordens, cargas e H por átomo) para não
+    # repetir a mesma molécula com outro nome
+    import tempfile
+
+    import construtor_ast
+    import sintatico
+    import tautomeros
+
+    with tempfile.NamedTemporaryFile("w", suffix=".mol", delete=False, encoding="utf-8") as arquivo:
+        arquivo.write(codigo)
+    try:
+        modelo, _ = semantico.analisar(construtor_ast.construir(sintatico.analisar(arquivo.name)))
+        return tautomeros.chave(modelo, semantico.carregar_valencias())
+    except Exception:
+        return codigo
+    finally:
+        os.remove(arquivo.name)
+
+
 def ultima_subcamada(config):
     return max(config, key=lambda c: (c[0] + c[1], c[0]))
 
@@ -365,18 +440,19 @@ def main():
     corpus = Corpus()
 
     # Átomos isolados no estado fundamental de referência
-    for s in simbolos_ate(36):
+    for s in simbolos_ate(86):
         config = atomo.configuracao_fundamental(s, 0, DADOS)
         termo = atomo.texto_termo(atomo.termo_fundamental(config))
         corpus.valido("atomos", f"atomo_{nome_ingles(s)}", especie_atomo(
             s, comentario=f"{nome_ingles(s)} (Z={DADOS[s]['numero_atomico']}): {atomo.texto_configuracao(config)}, termo {termo}"))
 
-    # Isótopos naturais: o mais pesado de cada elemento com mais de um
-    for s in simbolos_ate(20):
+    # Isótopos naturais (CIAAW) dos elementos com mais de um, até o Kr
+    for s in simbolos_ate(36):
         naturais = ISOTOPOS.get(s) or []
-        if len(naturais) > 1:
-            a = naturais[-1]
-            z = DADOS[s]["numero_atomico"]
+        if len(naturais) < 2:
+            continue
+        z = DADOS[s]["numero_atomico"]
+        for a in naturais:
             corpus.valido("isotopos", f"isotopo_{nome_ingles(s)}_{a}", especie_atomo(
                 s, config_texto="", massa=a, titulo=f"{nome_ingles(s)}-{a}",
                 comentario=f"{a}{s}: {z} prótons e {a - z} nêutrons, isótopo natural (CIAAW)"))
@@ -385,12 +461,23 @@ def main():
         nome_final = nome or f"{nome_ingles(s)}({carga}+)"
         corpus.valido("ions", f"ion_{nome_final}", especie_ion(s, carga, nome))
 
-    for nome, smiles in MOLECULAS:
+    # Moléculas; a mesma estrutura escrita com outro SMILES (cloroetano e
+    # ethyl chloride) entra uma vez só, pela chave canônica do grafo
+    vistas = set()
+    moleculas_aceitas = []
+    for nome, smiles in MOLECULAS + MOLECULAS_RX:
         codigo = f"// {nome} ({smiles})\n" + molecula_para_dsl(nome, smiles)
+        chave = chave_canonica(codigo)
+        if chave in vistas:
+            continue
+        vistas.add(chave)
+        antes = corpus.contagem.get("moleculas", 0)
         corpus.valido("moleculas", nome, codigo)
+        if corpus.contagem.get("moleculas", 0) > antes:
+            moleculas_aceitas.append((nome, smiles))
 
     # ---------- avisos e erros de estrutura atômica ----------
-    candidatos = [s for s in simbolos_ate(36) if s not in GASES_NOBRES]
+    candidatos = [s for s in simbolos_ate(86) if s not in GASES_NOBRES]
     for s in candidatos[2:]:
         config = atomo.configuracao_fundamental(s, 0, DADOS)
         ultima = ultima_subcamada(config)
@@ -439,8 +526,16 @@ def main():
             s, unpaired=hund + 2,
             comentario=f"Aviso: pela regra de Hund {s} tem {hund} desemparelhado(s), não {hund + 2}"), "ATOM-007", 0)
 
+    # Carga maior que Z: o átomo não tem tantos elétrons para perder
+    for s in simbolos_ate(20):
+        z = DADOS[s]["numero_atomico"]
+        corpus.invalido("atom-008", "invalidos_semanticos", f"carga_maior_que_z_{nome_ingles(s)}", (
+            f"// Erro: {s} tem {z} elétron(s); a carga +{z + 1} deixaria -1\n"
+            f'species monatomic_ion "{nome_ingles(s)}({z + 1}+)" charge +{z + 1} {{\n'
+            f"    atom {s}(+{z + 1})\n}}\n"), "ATOM-008", 2)
+
     # ---------- erros em moléculas ----------
-    for nome, smiles in MOLECULAS:
+    for nome, smiles in moleculas_aceitas:
         if "[" in smiles:
             continue
         base = molecula_para_dsl(nome, smiles)

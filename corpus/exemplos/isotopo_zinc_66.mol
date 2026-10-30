@@ -1,0 +1,4 @@
+// 66Zn: 30 prótons e 36 nêutrons, isótopo natural (CIAAW)
+species atom "Zinc-66" {
+    atom 66Zn as zn1
+}

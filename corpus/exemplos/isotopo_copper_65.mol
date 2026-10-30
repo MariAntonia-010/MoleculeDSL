@@ -1,0 +1,4 @@
+// 65Cu: 29 prótons e 36 nêutrons, isótopo natural (CIAAW)
+species atom "Copper-65" unpaired 1 {
+    atom 65Cu as cu1
+}

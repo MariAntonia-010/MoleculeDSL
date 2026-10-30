@@ -1,0 +1,11 @@
+// Methyl fluoride (FC)
+species molecule "Methyl fluoride" {
+    atom F as f1
+    atom C as c1
+    3x atom H as h
+
+    bond f1-c1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+}

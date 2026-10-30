@@ -1,0 +1,36 @@
+// Cyclohexyl isocyanate (O=C=NC1CCCCC1)
+species molecule "Cyclohexyl isocyanate" {
+    atom O as o1
+    atom C as c1
+    atom N as n1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    atom C as c6
+    atom C as c7
+    11x atom H as h
+
+    bond o1=c1
+    bond c1=n1
+    bond n1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-c6
+    bond c6-c7
+    bond c2-c7
+    bond c2-h1
+    bond c3-h2
+    bond c3-h3
+    bond c4-h4
+    bond c4-h5
+    bond c5-h6
+    bond c5-h7
+    bond c6-h8
+    bond c6-h9
+    bond c7-h10
+    bond c7-h11
+
+    ring c2 c3 c4 c5 c6 c7
+}

@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 19 elétrons, mas ca1 (Ca#1) (Z=20, carga +0) tem 20
+// Erro: a configuração soma 19 elétrons, mas Ca tem 20
+species atom "Calcium" {
+    atom Ca as ca1
+    configuration ca1 [Ar] 4s1
+}

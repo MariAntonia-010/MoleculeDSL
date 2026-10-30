@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Li(+4) perderia 4 elétrons, mas Li só tem 3; a maior carga possível é +3 (o núcleo sem elétrons)
+// Erro: Li tem 3 elétron(s); a carga +4 deixaria -1
+species monatomic_ion "Lithium(4+)" charge +4 {
+    atom Li(+4)
+}

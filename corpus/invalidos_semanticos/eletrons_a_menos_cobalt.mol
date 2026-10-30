@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 26 elétrons, mas co1 (Co#1) (Z=27, carga +0) tem 27
+// Erro: a configuração soma 26 elétrons, mas Co tem 27
+species atom "Cobalt" unpaired 3 {
+    atom Co as co1
+    configuration co1 [Ar] 3d6 4s2
+}

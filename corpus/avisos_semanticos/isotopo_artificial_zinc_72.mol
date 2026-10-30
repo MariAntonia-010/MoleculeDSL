@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 72Zn não é isótopo de composição natural (CIAAW: 64Zn, 66Zn, 67Zn, 68Zn, 70Zn); pode ser radioativo ou artificial
+// Aviso: 72Zn não é isótopo natural (CIAAW: 64, 66, 67, 68, 70)
+species atom "Zinc-72" {
+    atom 72Zn as zn1
+}

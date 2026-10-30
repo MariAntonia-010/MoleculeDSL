@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 52Ti não é isótopo de composição natural (CIAAW: 46Ti, 47Ti, 48Ti, 49Ti, 50Ti); pode ser radioativo ou artificial
+// Aviso: 52Ti não é isótopo natural (CIAAW: 46, 47, 48, 49, 50)
+species atom "Titanium-52" unpaired 2 {
+    atom 52Ti as ti1
+}

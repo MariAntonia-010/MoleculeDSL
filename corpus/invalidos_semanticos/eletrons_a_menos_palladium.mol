@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 45 elétrons, mas pd1 (Pd#1) (Z=46, carga +0) tem 46
+// Erro: a configuração soma 45 elétrons, mas Pd tem 46
+species atom "Palladium" {
+    atom Pd as pd1
+    configuration pd1 [Kr] 4d9
+}

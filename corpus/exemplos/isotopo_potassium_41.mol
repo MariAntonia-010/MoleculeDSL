@@ -1,0 +1,4 @@
+// 41K: 19 prótons e 22 nêutrons, isótopo natural (CIAAW)
+species atom "Potassium-41" unpaired 1 {
+    atom 41K as k1
+}

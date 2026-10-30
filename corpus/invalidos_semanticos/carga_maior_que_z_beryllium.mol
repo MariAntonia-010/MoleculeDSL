@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Be(+5) perderia 5 elétrons, mas Be só tem 4; a maior carga possível é +4 (o núcleo sem elétrons)
+// Erro: Be tem 4 elétron(s); a carga +5 deixaria -1
+species monatomic_ion "Beryllium(5+)" charge +5 {
+    atom Be(+5)
+}

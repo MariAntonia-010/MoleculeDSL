@@ -1,0 +1,26 @@
+// esperado: Erro sintático [SIN-002] na linha 11, coluna 4: comando inválido 'bnd': esperado 'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'
+// Erro: 'bnd' não é palavra-chave da linguagem
+species molecule "Thiolane" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom S as s1
+    atom C as c4
+    8x atom H as h
+
+    bnd c1-c2
+    bond c2-c3
+    bond c3-s1
+    bond s1-c4
+    bond c1-c4
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+    bond c3-h5
+    bond c3-h6
+    bond c4-h7
+    bond c4-h8
+
+    ring c1 c2 c3 s1 c4
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: P(+16) perderia 16 elétrons, mas P só tem 15; a maior carga possível é +15 (o núcleo sem elétrons)
+// Erro: P tem 15 elétron(s); a carga +16 deixaria -1
+species monatomic_ion "Phosphorus(16+)" charge +16 {
+    atom P(+16)
+}

@@ -1,0 +1,9 @@
+// (15N)Ammonia ([15N])
+species molecule "(15N)Ammonia" {
+    atom 15N as n1
+    3x atom H as h
+
+    bond n1-h1
+    bond n1-h2
+    bond n1-h3
+}

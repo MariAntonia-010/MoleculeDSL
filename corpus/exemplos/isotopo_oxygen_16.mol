@@ -1,0 +1,4 @@
+// 16O: 8 prótons e 8 nêutrons, isótopo natural (CIAAW)
+species atom "Oxygen-16" unpaired 2 {
+    atom 16O as o1
+}

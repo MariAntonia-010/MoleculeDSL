@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 38 elétrons, mas y1 (Y#1) (Z=39, carga +0) tem 39
+// Erro: a configuração soma 38 elétrons, mas Y tem 39
+species atom "Yttrium" unpaired 1 {
+    atom Y as y1
+    configuration y1 [Kr] 5s2
+}

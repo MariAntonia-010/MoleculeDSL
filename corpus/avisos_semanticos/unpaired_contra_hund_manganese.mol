@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=7, mas a configuração 1s2 2s2 2p6 3s2 3p6 3d5 4s2 tem 5 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Mn tem 5 desemparelhado(s), não 7
+species atom "Manganese" unpaired 7 {
+    atom Mn as mn1
+    configuration mn1 [Ar] 3d5 4s2
+}

@@ -1,0 +1,5 @@
+// Terbium (Z=65): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f9 5s2 5p6 6s2, termo 6H15/2
+species atom "Terbium" unpaired 5 {
+    atom Tb as tb1
+    configuration tb1 [Xe] 4f9 6s2
+}

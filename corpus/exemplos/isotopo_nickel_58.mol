@@ -1,0 +1,4 @@
+// 58Ni: 28 prótons e 30 nêutrons, isótopo natural (CIAAW)
+species atom "Nickel-58" unpaired 2 {
+    atom 58Ni as ni1
+}

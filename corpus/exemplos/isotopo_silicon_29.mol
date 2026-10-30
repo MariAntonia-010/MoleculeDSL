@@ -1,0 +1,4 @@
+// 29Si: 14 prótons e 15 nêutrons, isótopo natural (CIAAW)
+species atom "Silicon-29" unpaired 2 {
+    atom 29Si as si1
+}

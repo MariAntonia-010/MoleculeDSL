@@ -1,0 +1,4 @@
+// 64Ni: 28 prótons e 36 nêutrons, isótopo natural (CIAAW)
+species atom "Nickel-64" unpaired 2 {
+    atom 64Ni as ni1
+}

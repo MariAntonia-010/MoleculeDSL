@@ -1,0 +1,14 @@
+// (1-13C)Ethane (C[13C])
+species molecule "(1-13C)Ethane" {
+    atom C as c1
+    atom 13C as c2
+    6x atom H as h
+
+    bond c1-c2
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c2-h6
+}

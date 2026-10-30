@@ -1,0 +1,4 @@
+// 28Si: 14 prótons e 14 nêutrons, isótopo natural (CIAAW)
+species atom "Silicon-28" unpaired 2 {
+    atom 28Si as si1
+}

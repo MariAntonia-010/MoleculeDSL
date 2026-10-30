@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 36 elétrons, mas rb1 (Rb#1) (Z=37, carga +0) tem 37
+// Erro: a configuração soma 36 elétrons, mas Rb tem 37
+species atom "Rubidium" unpaired 1 {
+    atom Rb as rb1
+    configuration rb1 [Ar] 3d10 4s2 4p6
+}

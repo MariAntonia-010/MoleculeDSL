@@ -1,0 +1,5 @@
+// Chromium(2+): 1s2 2s2 2p6 3s2 3p6 3d4, 4 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Chromium(2+)" charge +2 unpaired 4 {
+    atom Cr(+2) as cr1
+    configuration cr1 [Ar] 3d4
+}

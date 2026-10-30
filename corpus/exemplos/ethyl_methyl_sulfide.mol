@@ -1,0 +1,20 @@
+// Ethyl methyl sulfide (CSCC)
+species molecule "Ethyl methyl sulfide" {
+    atom C as c1
+    atom S as s1
+    atom C as c2
+    atom C as c3
+    8x atom H as h
+
+    bond c1-s1
+    bond s1-c2
+    bond c2-c3
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c2-h4
+    bond c2-h5
+    bond c3-h6
+    bond c3-h7
+    bond c3-h8
+}

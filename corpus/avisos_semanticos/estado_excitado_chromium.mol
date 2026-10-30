@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de cr1 (Cr#1) (referência: 1s2 2s2 2p6 3s2 3p6 3d5 4s1); descreve um estado excitado
+// Aviso: um elétron de 3d subiu para 4p: estado excitado
+species atom "Chromium" unpaired 6 {
+    atom Cr as cr1
+    configuration cr1 [Ar] 3d4 4s1 4p1
+}

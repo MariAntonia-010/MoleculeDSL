@@ -1,0 +1,4 @@
+// 54Fe: 26 prótons e 28 nêutrons, isótopo natural (CIAAW)
+species atom "Iron-54" unpaired 4 {
+    atom 54Fe as fe1
+}

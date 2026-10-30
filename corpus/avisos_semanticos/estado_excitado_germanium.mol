@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de ge1 (Ge#1) (referência: 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p2); descreve um estado excitado
+// Aviso: um elétron de 4p subiu para 5s: estado excitado
+species atom "Germanium" unpaired 2 {
+    atom Ge as ge1
+    configuration ge1 [Ar] 3d10 4s2 4p1 5s1
+}

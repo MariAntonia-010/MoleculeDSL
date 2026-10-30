@@ -1,0 +1,5 @@
+// Rubidium (Z=37): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 5s1, termo 2S1/2
+species atom "Rubidium" unpaired 1 {
+    atom Rb as rb1
+    configuration rb1 [Kr] 5s1
+}

@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: Ca(+21) perderia 21 elétrons, mas Ca só tem 20; a maior carga possível é +20 (o núcleo sem elétrons)
+// Erro: Ca tem 20 elétron(s); a carga +21 deixaria -1
+species monatomic_ion "Calcium(21+)" charge +21 {
+    atom Ca(+21)
+}

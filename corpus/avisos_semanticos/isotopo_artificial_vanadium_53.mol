@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 53V não é isótopo de composição natural (CIAAW: 50V, 51V); pode ser radioativo ou artificial
+// Aviso: 53V não é isótopo natural (CIAAW: 50, 51)
+species atom "Vanadium-53" unpaired 3 {
+    atom 53V as v1
+}

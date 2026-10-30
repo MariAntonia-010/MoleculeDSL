@@ -1,0 +1,28 @@
+// esperado: Erro sintático [SIN-002] na linha 12, coluna 4: comando inválido 'bnd': esperado 'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'
+// Erro: 'bnd' não é palavra-chave da linguagem
+species molecule "Cyclopentanone" {
+    atom O as o1
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    atom C as c5
+    8x atom H as h
+
+    bnd o1=c1
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c1-c5
+    bond c2-h1
+    bond c2-h2
+    bond c3-h3
+    bond c3-h4
+    bond c4-h5
+    bond c4-h6
+    bond c5-h7
+    bond c5-h8
+
+    ring c1 c2 c3 c4 c5
+}

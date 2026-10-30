@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 50Ca não é isótopo de composição natural (CIAAW: 40Ca, 42Ca, 43Ca, 44Ca, 46Ca, 48Ca); pode ser radioativo ou artificial
+// Aviso: 50Ca não é isótopo natural (CIAAW: 40, 42, 43, 44, 46, 48)
+species atom "Calcium-50" {
+    atom 50Ca as ca1
+}

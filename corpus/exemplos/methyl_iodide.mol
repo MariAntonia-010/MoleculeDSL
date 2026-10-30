@@ -1,0 +1,11 @@
+// Methyl iodide (IC)
+species molecule "Methyl iodide" {
+    atom I as i1
+    atom C as c1
+    3x atom H as h
+
+    bond i1-c1
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+}

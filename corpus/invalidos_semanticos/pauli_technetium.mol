@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 4d11: a subcamada d comporta de 1 a 10 elétrons (princípio de Pauli)
+// Erro: 4d11 passa da capacidade 10 da subcamada d (Pauli)
+species atom "Technetium" unpaired 5 {
+    atom Tc as tc1
+    configuration tc1 [Kr] 4d11 5s2
+}

@@ -1,0 +1,4 @@
+// 49Ti: 22 prótons e 27 nêutrons, isótopo natural (CIAAW)
+species atom "Titanium-49" unpaired 2 {
+    atom 49Ti as ti1
+}

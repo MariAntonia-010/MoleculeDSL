@@ -428,7 +428,8 @@ O script verifica:
 - erros sintáticos em `invalidos_sintaticos/`;
 - erros semânticos em `invalidos_semanticos/`;
 - avisos em `avisos_semanticos/`;
-- o corpus gerado em `corpus/` (300 arquivos, mesmas subpastas);
+- o corpus gerado em `corpus/` (1000 arquivos, mesmas subpastas; ver
+  [docs/exemplos.md](docs/exemplos.md));
 - arquivo inexistente e código ANTLR ausente;
 - snapshots textuais da AST e do modelo;
 - tipo, ordem e posição dos nós da AST em todos os exemplos;
@@ -448,32 +449,28 @@ A comparação é exata: ID, linha, coluna e explicação precisam coincidir.
 Exemplos válidos também podem declarar avisos esperados, mantendo código de
 saída 0.
 
-### Corpus gerado
+### Onde ficam os exemplos
 
-`corpus/gerar_corpus.py` gera 300 exemplos e confere cada um com o
-compilador:
+Há dois lugares, testados com as mesmas regras:
 
-| Grupo | Quantidade | Conteúdo |
-|---|---|---|
-| válidos | 180 | 36 átomos (Z = 1 a 36) no estado fundamental, 10 isótopos naturais, 24 íons monoatômicos e 110 moléculas escritas em SMILES e convertidas para a DSL |
-| erros de átomo | 28 | elétrons a menos (ATOM-003), Pauli (ATOM-002), massa menor que Z (ATOM-001) |
-| avisos | 26 | isótopo não natural (ATOM-005), estado excitado (ATOM-004), unpaired contra Hund (ATOM-007) |
-| erros em moléculas | 40 | quinta ligação no carbono (VAL-001), nome inexistente (STRUCT-001), ligação repetida (STRUCT-006), átomo solto (STRUCT-003) |
-| sintaxe e léxico | 26 | `}` faltando, ligação sem operador, `bnd`, nome sem aspas e caracteres fora do alfabeto |
+- **Exemplos curados**, escritos à mão, um por vez, com um comentário
+  dizendo o que cada um mostra: `exemplos/`, `invalidos/`,
+  `invalidos_sintaticos/`, `invalidos_semanticos/`, `avisos_semanticos/` e
+  `resolver/`. São os que a página usa (playground, guia, laboratório).
+- **Corpus gerado**, 1000 arquivos em `corpus/` (mesmas subpastas), criados
+  por `corpus/gerar_corpus.py` e conferidos pelo compilador: átomos de Z = 1
+  a 86, isótopos, íons, 360 moléculas e variações de cada erro. Não se edita
+  à mão: regenerar apaga e recria a pasta.
 
-Um válido só entra se o compilador não emitir nenhuma mensagem, e um
-inválido só entra se emitir a regra planejada. As linhas `// esperado:`
-registram a saída e valem como regressão. Para regenerar:
-
-```bash
-python3 corpus/gerar_corpus.py
-```
+Os dois ficam separados para que regenerar o corpus nunca apague um exemplo
+escrito à mão. Detalhes, a tabela do que cada pasta testa e como acrescentar
+um exemplo estão em [docs/exemplos.md](docs/exemplos.md).
 
 ## Estrutura
 
 ```text
 gramatica/                  gramática combinada do ANTLR
-corpus/                     300 exemplos gerados e conferidos (corpus/gerar_corpus.py)
+corpus/                     1000 exemplos gerados e conferidos (corpus/gerar_corpus.py; ver docs/exemplos.md)
 src/                        lexer, parser, AST, modelo, semântica e relatórios químicos
                             (eletronico, tautomeros, aromaticidade, estereo, complexos)
 src/solver/                 solver de estruturas (backends, filtros, geração ordenada, isolamento)

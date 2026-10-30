@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 29 elétrons, mas zn1 (Zn#1) (Z=30, carga +0) tem 30
+// Erro: a configuração soma 29 elétrons, mas Zn tem 30
+species atom "Zinc" {
+    atom Zn as zn1
+    configuration zn1 [Ar] 3d9 4s2
+}

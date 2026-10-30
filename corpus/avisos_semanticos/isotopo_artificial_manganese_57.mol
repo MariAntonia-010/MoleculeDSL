@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 57Mn não é isótopo de composição natural (CIAAW: 55Mn); pode ser radioativo ou artificial
+// Aviso: 57Mn não é isótopo natural (CIAAW: 55)
+species atom "Manganese-57" unpaired 5 {
+    atom 57Mn as mn1
+}

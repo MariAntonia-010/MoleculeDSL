@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: K(+20) perderia 20 elétrons, mas K só tem 19; a maior carga possível é +19 (o núcleo sem elétrons)
+// Erro: K tem 19 elétron(s); a carga +20 deixaria -1
+species monatomic_ion "Potassium(20+)" charge +20 {
+    atom K(+20)
+}

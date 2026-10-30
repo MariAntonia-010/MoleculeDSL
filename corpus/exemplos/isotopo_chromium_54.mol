@@ -1,0 +1,4 @@
+// 54Cr: 24 prótons e 30 nêutrons, isótopo natural (CIAAW)
+species atom "Chromium-54" unpaired 6 {
+    atom 54Cr as cr1
+}

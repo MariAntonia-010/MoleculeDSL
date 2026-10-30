@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 42 elétrons, mas tc1 (Tc#1) (Z=43, carga +0) tem 43
+// Erro: a configuração soma 42 elétrons, mas Tc tem 43
+species atom "Technetium" unpaired 5 {
+    atom Tc as tc1
+    configuration tc1 [Kr] 4d4 5s2
+}

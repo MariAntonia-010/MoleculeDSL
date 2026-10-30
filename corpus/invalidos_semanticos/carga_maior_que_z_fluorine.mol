@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-008] na linha 4, coluna 4: F(+10) perderia 10 elétrons, mas F só tem 9; a maior carga possível é +9 (o núcleo sem elétrons)
+// Erro: F tem 9 elétron(s); a carga +10 deixaria -1
+species monatomic_ion "Fluorine(10+)" charge +10 {
+    atom F(+10)
+}

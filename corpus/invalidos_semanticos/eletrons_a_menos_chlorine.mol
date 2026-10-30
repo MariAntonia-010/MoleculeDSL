@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 16 elétrons, mas cl1 (Cl#1) (Z=17, carga +0) tem 17
+// Erro: a configuração soma 16 elétrons, mas Cl tem 17
+species atom "Chlorine" unpaired 1 {
+    atom Cl as cl1
+    configuration cl1 [Ne] 3s2 3p4
+}

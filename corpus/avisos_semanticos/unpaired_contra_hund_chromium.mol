@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=8, mas a configuração 1s2 2s2 2p6 3s2 3p6 3d5 4s1 tem 6 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund Cr tem 6 desemparelhado(s), não 8
+species atom "Chromium" unpaired 8 {
+    atom Cr as cr1
+    configuration cr1 [Ar] 3d5 4s1
+}

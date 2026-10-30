@@ -1,0 +1,4 @@
+// 62Ni: 28 prótons e 34 nêutrons, isótopo natural (CIAAW)
+species atom "Nickel-62" unpaired 2 {
+    atom 62Ni as ni1
+}

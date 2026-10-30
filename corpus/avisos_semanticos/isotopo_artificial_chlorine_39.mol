@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 39Cl não é isótopo de composição natural (CIAAW: 35Cl, 37Cl); pode ser radioativo ou artificial
+// Aviso: 39Cl não é isótopo natural (CIAAW: 35, 37)
+species atom "Chlorine-39" unpaired 1 {
+    atom 39Cl as cl1
+}

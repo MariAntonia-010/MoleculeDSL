@@ -1,0 +1,4 @@
+// 33S: 16 prótons e 17 nêutrons, isótopo natural (CIAAW)
+species atom "Sulfur-33" unpaired 2 {
+    atom 33S as s1
+}

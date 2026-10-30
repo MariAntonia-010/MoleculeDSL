@@ -1,0 +1,5 @@
+// Sulfide: 1s2 2s2 2p6 3s2 3p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Sulfide" charge -2 {
+    atom S(-2) as s1
+    configuration s1 [Ne] 3s2 3p6
+}

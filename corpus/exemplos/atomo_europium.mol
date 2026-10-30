@@ -1,0 +1,5 @@
+// Europium (Z=63): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 4f7 5s2 5p6 6s2, termo 8S7/2
+species atom "Europium" unpaired 7 {
+    atom Eu as eu1
+    configuration eu1 [Xe] 4f7 6s2
+}

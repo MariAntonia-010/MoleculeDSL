@@ -1,0 +1,5 @@
+// Barium (Z=56): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6 6s2, termo 1S0
+species atom "Barium" {
+    atom Ba as ba1
+    configuration ba1 [Xe] 6s2
+}

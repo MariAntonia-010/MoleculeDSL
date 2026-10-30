@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de k1 (K#1) (referência: 1s2 2s2 2p6 3s2 3p6 4s1); descreve um estado excitado
+// Aviso: um elétron de 4s subiu para 3d: estado excitado
+species atom "Potassium" unpaired 1 {
+    atom K as k1
+    configuration k1 [Ar] 3d1
+}

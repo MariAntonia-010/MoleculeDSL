@@ -1,0 +1,4 @@
+// 21Ne: 10 prótons e 11 nêutrons, isótopo natural (CIAAW)
+species atom "Neon-21" {
+    atom 21Ne as ne1
+}

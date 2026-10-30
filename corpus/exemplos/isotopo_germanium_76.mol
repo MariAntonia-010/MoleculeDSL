@@ -1,0 +1,4 @@
+// 76Ge: 32 prótons e 44 nêutrons, isótopo natural (CIAAW)
+species atom "Germanium-76" unpaired 2 {
+    atom 76Ge as ge1
+}

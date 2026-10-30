@@ -1,0 +1,4 @@
+// 32S: 16 prótons e 16 nêutrons, isótopo natural (CIAAW)
+species atom "Sulfur-32" unpaired 2 {
+    atom 32S as s1
+}

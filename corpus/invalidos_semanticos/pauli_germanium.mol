@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 4p7: a subcamada p comporta de 1 a 6 elétrons (princípio de Pauli)
+// Erro: 4p7 passa da capacidade 6 da subcamada p (Pauli)
+species atom "Germanium" unpaired 2 {
+    atom Ge as ge1
+    configuration ge1 [Ar] 3d10 4s2 4p7
+}

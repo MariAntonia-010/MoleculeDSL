@@ -1,0 +1,4 @@
+// 50V: 23 prótons e 27 nêutrons, isótopo natural (CIAAW)
+species atom "Vanadium-50" unpaired 3 {
+    atom 50V as v1
+}

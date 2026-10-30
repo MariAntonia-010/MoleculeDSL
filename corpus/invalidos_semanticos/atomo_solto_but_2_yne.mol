@@ -1,0 +1,20 @@
+// esperado: Erro semântico [STRUCT-003] na linha 10, coluna 4: o átomo ne1 (Ne#1) não tem nenhuma ligação
+// Erro: o neônio ne1 foi declarado mas não está ligado ao resto da molécula
+species molecule "But-2-yne" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    6x atom H as h
+
+    atom Ne as ne1
+    bond c1-c2
+    bond c2#c3
+    bond c3-c4
+    bond c1-h1
+    bond c1-h2
+    bond c1-h3
+    bond c4-h4
+    bond c4-h5
+    bond c4-h6
+}

@@ -1,0 +1,5 @@
+// Zirconium (Z=40): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d2 5s2, termo 3F2
+species atom "Zirconium" unpaired 2 {
+    atom Zr as zr1
+    configuration zr1 [Kr] 4d2 5s2
+}

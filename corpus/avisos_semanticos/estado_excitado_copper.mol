@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de cu1 (Cu#1) (referência: 1s2 2s2 2p6 3s2 3p6 3d10 4s1); descreve um estado excitado
+// Aviso: um elétron de 3d subiu para 4p: estado excitado
+species atom "Copper" unpaired 3 {
+    atom Cu as cu1
+    configuration cu1 [Ar] 3d9 4s1 4p1
+}

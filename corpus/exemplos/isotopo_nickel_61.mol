@@ -1,0 +1,4 @@
+// 61Ni: 28 prótons e 33 nêutrons, isótopo natural (CIAAW)
+species atom "Nickel-61" unpaired 2 {
+    atom 61Ni as ni1
+}

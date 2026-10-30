@@ -1,0 +1,5 @@
+// Niobium (Z=41): 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d4 5s1, termo 6D1/2
+species atom "Niobium" unpaired 5 {
+    atom Nb as nb1
+    configuration nb1 [Kr] 4d4 5s1
+}

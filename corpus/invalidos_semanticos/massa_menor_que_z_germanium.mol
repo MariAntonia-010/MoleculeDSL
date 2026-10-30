@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 31 é menor que o número atômico de Ge (32): daria -1 nêutrons
+// Erro: A = 31 é menor que Z = 32, o que daria nêutrons negativos
+species atom "Germanium-31" unpaired 2 {
+    atom 31Ge as ge1
+}

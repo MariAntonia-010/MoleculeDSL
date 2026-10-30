@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-007] na linha 3, coluna 0: unpaired=3, mas a configuração 1s2 2s2 2p6 3s2 3p6 4s1 tem 1 elétron(s) desemparelhado(s) pela regra de Hund
+// Aviso: pela regra de Hund K tem 1 desemparelhado(s), não 3
+species atom "Potassium" unpaired 3 {
+    atom K as k1
+    configuration k1 [Ar] 4s1
+}

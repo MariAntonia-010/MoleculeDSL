@@ -1,0 +1,5 @@
+// Iodide: 1s2 2s2 2p6 3s2 3p6 3d10 4s2 4p6 4d10 5s2 5p6, 0 desemparelhado(s) pela regra de Hund
+species monatomic_ion "Iodide" charge -1 {
+    atom I(-1) as i1
+    configuration i1 [Kr] 4d10 5s2 5p6
+}

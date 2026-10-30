@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 38S não é isótopo de composição natural (CIAAW: 32S, 33S, 34S, 36S); pode ser radioativo ou artificial
+// Aviso: 38S não é isótopo natural (CIAAW: 32, 33, 34, 36)
+species atom "Sulfur-38" unpaired 2 {
+    atom 38S as s1
+}

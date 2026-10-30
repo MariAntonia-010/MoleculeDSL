@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 60Fe não é isótopo de composição natural (CIAAW: 54Fe, 56Fe, 57Fe, 58Fe); pode ser radioativo ou artificial
+// Aviso: 60Fe não é isótopo natural (CIAAW: 54, 56, 57, 58)
+species atom "Iron-60" unpaired 4 {
+    atom 60Fe as fe1
+}

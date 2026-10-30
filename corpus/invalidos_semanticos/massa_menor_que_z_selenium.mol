@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 33 é menor que o número atômico de Se (34): daria -1 nêutrons
+// Erro: A = 33 é menor que Z = 34, o que daria nêutrons negativos
+species atom "Selenium-33" unpaired 2 {
+    atom 33Se as se1
+}

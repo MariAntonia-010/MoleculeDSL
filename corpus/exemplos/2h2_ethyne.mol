@@ -1,0 +1,11 @@
+// (2H2)Ethyne ([2H]C#C[2H])
+species molecule "(2H2)Ethyne" {
+    atom 2H as d1
+    atom C as c1
+    atom C as c2
+    atom 2H as d2
+
+    bond d1-c1
+    bond c1#c2
+    bond c2-d2
+}

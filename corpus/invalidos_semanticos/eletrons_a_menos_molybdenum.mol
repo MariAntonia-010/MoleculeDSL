@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 41 elétrons, mas mo1 (Mo#1) (Z=42, carga +0) tem 42
+// Erro: a configuração soma 41 elétrons, mas Mo tem 42
+species atom "Molybdenum" unpaired 6 {
+    atom Mo as mo1
+    configuration mo1 [Kr] 4d4 5s1
+}

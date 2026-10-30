@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 39 elétrons, mas zr1 (Zr#1) (Z=40, carga +0) tem 40
+// Erro: a configuração soma 39 elétrons, mas Zr tem 40
+species atom "Zirconium" unpaired 2 {
+    atom Zr as zr1
+    configuration zr1 [Kr] 4d1 5s2
+}

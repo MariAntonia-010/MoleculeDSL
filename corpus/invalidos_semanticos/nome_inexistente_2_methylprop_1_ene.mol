@@ -1,0 +1,22 @@
+// esperado: Erro semântico [STRUCT-001] na linha 21, coluna 12: nenhum átomo se chama 'q9'
+// Erro: q9 não foi declarado com 'as'
+species molecule "2-Methylprop-1-ene" {
+    atom C as c1
+    atom C as c2
+    atom C as c3
+    atom C as c4
+    8x atom H as h
+
+    bond c1=c2
+    bond c2-c3
+    bond c2-c4
+    bond c1-h1
+    bond c1-h2
+    bond c3-h3
+    bond c3-h4
+    bond c3-h5
+    bond c4-h6
+    bond c4-h7
+    bond c4-h8
+    bond c1-q9
+}

@@ -1,0 +1,4 @@
+// 12C: 6 prótons e 6 nêutrons, isótopo natural (CIAAW)
+species atom "Carbon-12" unpaired 2 {
+    atom 12C as c1
+}

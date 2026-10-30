@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 3d11: a subcamada d comporta de 1 a 10 elétrons (princípio de Pauli)
+// Erro: 3d11 passa da capacidade 10 da subcamada d (Pauli)
+species atom "Zinc" {
+    atom Zn as zn1
+    configuration zn1 [Ar] 3d11 4s2
+}

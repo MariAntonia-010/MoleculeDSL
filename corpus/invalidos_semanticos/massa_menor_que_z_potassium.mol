@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 18 é menor que o número atômico de K (19): daria -1 nêutrons
+// Erro: A = 18 é menor que Z = 19, o que daria nêutrons negativos
+species atom "Potassium-18" unpaired 1 {
+    atom 18K as k1
+}

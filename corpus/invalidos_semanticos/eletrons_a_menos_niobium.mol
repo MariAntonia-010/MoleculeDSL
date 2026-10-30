@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 40 elétrons, mas nb1 (Nb#1) (Z=41, carga +0) tem 41
+// Erro: a configuração soma 40 elétrons, mas Nb tem 41
+species atom "Niobium" unpaired 5 {
+    atom Nb as nb1
+    configuration nb1 [Kr] 4d3 5s1
+}

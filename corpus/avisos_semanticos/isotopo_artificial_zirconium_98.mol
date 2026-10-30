@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 98Zr não é isótopo de composição natural (CIAAW: 90Zr, 91Zr, 92Zr, 94Zr, 96Zr); pode ser radioativo ou artificial
+// Aviso: 98Zr não é isótopo natural (CIAAW: 90, 91, 92, 94, 96)
+species atom "Zirconium-98" unpaired 2 {
+    atom 98Zr as zr1
+}
