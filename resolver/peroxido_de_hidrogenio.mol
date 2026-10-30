@@ -1,0 +1,4 @@
+species molecule "Hydrogen peroxide solved" {
+    2x atom O
+    2x atom H
+}

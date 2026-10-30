@@ -1,0 +1,6 @@
+// esperado: Erro de resolução [SOLVER-003] na linha 3, coluna 0: nenhuma estrutura conectada satisfaz as valências conhecidas
+// O2H4 não fecha: dois O com valência 2 só acomodam 2 H se estiverem ligados entre si
+species molecule "Impossible O2H4" {
+    2x atom O
+    4x atom H
+}

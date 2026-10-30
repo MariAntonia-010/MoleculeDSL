@@ -1,0 +1,5 @@
+species molecule "Methylamine solved" {
+    atom C
+    atom N
+    5x atom H
+}

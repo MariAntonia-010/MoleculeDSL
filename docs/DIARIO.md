@@ -820,3 +820,14 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
 - COORD-004 sai uma vez por metal, com a quantidade de ligações
   coordenadas, em vez de repetir em cada seta.
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 11 (resolvedor)
+
+- Casos novos em `resolver/`, só com átomos: HCN, formaldeído, etino,
+  hidrazina, metilamina e H₂O₂ têm estrutura única, e a saída fica em
+  `.saida.txt`. CH₅ e O₂H₄ não têm estrutura (SOLVER-003). C₃H₈O é
+  ambíguo (SOLVER-004), e `--resolver-todas` lista os três isômeros
+  (propan-1-ol, propan-2-ol e metoxietano) em `.todas.txt`.
+- O resolvedor acertou todos os casos; nenhuma mudança no compilador.
+

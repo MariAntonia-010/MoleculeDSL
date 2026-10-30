@@ -1,0 +1,4 @@
+species molecule "Ethyne solved" {
+    2x atom C
+    2x atom H
+}

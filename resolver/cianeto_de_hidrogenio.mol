@@ -1,0 +1,5 @@
+species molecule "Hydrogen cyanide solved" {
+    atom H
+    atom C
+    atom N
+}

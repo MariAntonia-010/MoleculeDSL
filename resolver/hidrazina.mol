@@ -1,0 +1,4 @@
+species molecule "Hydrazine solved" {
+    2x atom N
+    4x atom H
+}

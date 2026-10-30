@@ -1,0 +1,6 @@
+// esperado: Erro de resolução [SOLVER-003] na linha 3, coluna 0: nenhuma estrutura conectada satisfaz as valências conhecidas
+// CH5: o carbono só faz 4 ligações, e o quinto H não tem onde entrar
+species molecule "Impossible CH5" {
+    atom C
+    5x atom H
+}

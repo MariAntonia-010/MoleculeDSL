@@ -1,0 +1,7 @@
+// esperado: Erro de resolução [SOLVER-004] na linha 3, coluna 0: a fórmula admite múltiplas estruturas; declare as ligações
+// C3H8O tem três isômeros (propan-1-ol, propan-2-ol e metoxietano)
+species molecule "C3H8O" {
+    3x atom C
+    atom O
+    8x atom H
+}

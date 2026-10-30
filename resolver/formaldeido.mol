@@ -1,0 +1,5 @@
+species molecule "Formaldehyde solved" {
+    atom C
+    atom O
+    2x atom H
+}
