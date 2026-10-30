@@ -20,6 +20,7 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from conteudo_guia import LICOES  # noqa: E402
 from nomes_pt import ELEMENTOS as NOMES_ELEMENTOS, ESPECIES as NOMES_ESPECIES  # noqa: E402
+import linguagem_fontes  # noqa: E402
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(os.path.dirname(PASTA))
@@ -187,7 +188,11 @@ def main():
                 })
             guia.append({**licao, "exemplos": exemplos_licao})
 
+    fontes = linguagem_fontes.gramatica()
+    regras_semanticas = linguagem_fontes.regras()
     dados = {
+        "palavras": fontes["palavras"],
+        "tipos_especie": fontes["tipos"],
         "guia": guia,
         "exemplos": lista_exemplos,
         "elementos": elementos,
@@ -197,13 +202,13 @@ def main():
             for chave in ("valencias", "valencias_expandidas", "valencias_com_carga")
         },
     }
-    with open(os.path.join(RAIZ, "gramatica", "MoleculeDSL.g4"), encoding="utf-8") as entrada:
-        gramatica = entrada.read().strip()
+    gramatica = fontes["texto"]
 
     valores = {
         "DADOS_JSON": json.dumps(dados, ensure_ascii=False).replace("</", "<\\/"),
         "USO": rodar().strip(),
         "GRAMATICA": gramatica,
+        "PALAVRAS": " ".join(fontes["palavras"]),
         "AGUA": open(os.path.join(RAIZ, "exemplos", "agua.mol"), encoding="utf-8").read().strip(),
         "AST_IMG": imagem,
         "TOKENS": sem_conclusao(rodar("--tokens", "exemplos/agua.mol")),
@@ -220,8 +225,12 @@ def main():
         "SVGS": str(2 * exemplos),
         "RESUMO": resumo,
     }
+    # Tabelas já em HTML, geradas das fontes da linguagem
+    valores["TABELA_REGRAS"] = linguagem_fontes.tabela_regras_html(regras_semanticas)
+    valores["TABELA_TIPOS"] = linguagem_fontes.tabela_tipos_html(fontes["tipos"])
+    valores["TABELA_OPERADORES"] = linguagem_fontes.tabela_operadores_html(fontes["operadores"])
     for chave, valor in valores.items():
-        cru = chave in ("AST_IMG", "DADOS_JSON")
+        cru = chave in ("AST_IMG", "DADOS_JSON", "TABELA_REGRAS", "TABELA_TIPOS", "TABELA_OPERADORES")
         texto = valor if cru else html.escape(valor, quote=False)
         pagina = pagina.replace("{{" + chave + "}}", texto)
     restantes = re.findall(r"\{\{[A-Z_]+\}\}", pagina)

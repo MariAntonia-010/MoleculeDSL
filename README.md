@@ -274,12 +274,30 @@ MoleculeDSL existentes, sem mudar a linguagem. A verificação do navegador é
 uma versão simplificada; a aba "Compilador real" mostra a saída de
 `src/main.py --modelo` para os exemplos.
 
-Todas as saídas exibidas vêm de execuções reais. Depois de mudar o
-compilador, gere a página de novo:
+Todas as saídas exibidas vêm de execuções reais. O que depende da linguagem
+é gerado das fontes, para todas as páginas (Início, Guia, Conteúdo, Uso, Doc,
+Playground, Laboratório e Tabela) mudarem junto:
+
+| Na página | Fonte |
+|---|---|
+| gramática, palavras reservadas, tipos de espécie, operadores | `gramatica/MoleculeDSL.g4` |
+| tabela de regras semânticas | seção "Regras semânticas" deste README |
+| exemplos e saídas do guia | compilador real, sobre `docs/apresentacao/conteudo_guia.py` |
+| exemplos do playground e do laboratório | arquivos de `exemplos/` e `src/main.py --modelo` |
+| elementos e valências | `regras/elementos.json` e `regras/valencias.json` |
+
+Ao mudar a linguagem: atualize a gramática, a semântica e a tabela de regras
+do README; descreva um tipo de espécie ou operador novo em
+`docs/apresentacao/linguagem_fontes.py` (o gerador para se faltar); ajuste o
+compilador do navegador (`docs/apresentacao/app.js`) quando a regra nova
+precisar aparecer no playground; e gere a página de novo:
 
 ```bash
 python3 docs/apresentacao/gerar_apresentacao.py
 ```
+
+O teste `apresentacao/sincronizada` do `testar.py` falha, também no CI, se a
+página não foi regenerada depois de uma mudança na linguagem.
 
 ## Árvores em SVG
 

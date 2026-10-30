@@ -133,8 +133,7 @@
 }</code></pre></div>
           <div class="placa c4"><h3>Ligações</h3><div class="tabela"><table>
             <tr><th>Símbolo</th><th>Ligação</th></tr>
-            <tr><td>-</td><td>simples</td></tr><tr><td>=</td><td>dupla</td></tr><tr><td>#</td><td>tripla</td></tr>
-            <tr><td>-&gt;</td><td>coordenada</td></tr><tr><td>~</td><td>metálica</td></tr>
+            {{TABELA_OPERADORES}}
           </table></div><p class="nota">O tipo — covalente apolar, covalente polar ou iônica — o compilador deduz pela diferença de eletronegatividade (Δχ).</p></div>
           <div class="placa c4"><h3>Anel nomeado</h3><pre><code><span class="kw">atom</span> C <span class="kw">as</span> c1
 <span class="kw">atom</span> C <span class="kw">as</span> c2
@@ -148,6 +147,10 @@
 3x <span class="kw">atom</span> H <span class="kw">as</span> hn
 3x <span class="kw">atom</span> H <span class="kw">as</span> hb
 <span class="kw">bond</span> N<span class="op">-&gt;</span>B</code></pre></div>
+          <div class="placa c12"><h3>Tipos de espécie</h3><div class="tabela"><table>
+            <tr><th>Tipo</th><th>Entidade</th><th>Exemplo</th></tr>
+            {{TABELA_TIPOS}}
+          </table></div><p class="nota">Pela IUPAC, molécula é uma entidade neutra com mais de um átomo; átomo isolado e íon monoatômico têm tipos próprios.</p></div>
           <div class="placa c4"><h3>Configuração</h3><pre><code><span class="kw">stereo</span> c1<span class="op">=</span>c2 E
 <span class="kw">stereo</span> c2 R
 <span class="kw">stereo</span> c3 Ra
@@ -210,17 +213,7 @@
         <div class="grade">
           <div class="placa c8"><div class="tabela"><table>
             <tr><th>ID</th><th>Regra</th><th>Severidade</th></tr>
-            <tr><td>ELEM-001</td><td>Elemento desconhecido</td><td class="erro-sev">erro</td></tr>
-            <tr><td>STRUCT-001…008</td><td>Integridade, limites e componentes</td><td class="erro-sev">erro</td></tr>
-            <tr><td>BOND-001 / 002</td><td>Limite de H/F · ordem incomum em Cl/Br/I</td><td><span class="erro-sev">erro</span> / <span class="aviso-sev">aviso</span></td></tr>
-            <tr><td>VAL-001 / 002</td><td>Valência excedida · incompleta</td><td><span class="erro-sev">erro</span> / <span class="aviso-sev">aviso</span></td></tr>
-            <tr><td>CARGA-001 / 002</td><td>Carga formal · carga total</td><td class="erro-sev">erro</td></tr>
-            <tr><td>RAD-001 / 002</td><td>Radicais e paridade eletrônica</td><td><span class="aviso-sev">aviso</span> / <span class="erro-sev">erro</span></td></tr>
-            <tr><td>SPEC-001 / 002</td><td>Tipo e escopo da espécie</td><td><span class="erro-sev">erro</span> / <span class="aviso-sev">aviso</span></td></tr>
-            <tr><td>COORD-001…004</td><td>Doador e receptor da ligação coordenada</td><td class="aviso-sev">aviso</td></tr>
-            <tr><td>METAL-001 / 002</td><td>Composição e limite coletivo de ~</td><td class="aviso-sev">aviso</td></tr>
-            <tr><td>RING-001…004</td><td>Anéis válidos · ciclo sem ring (aviso)</td><td class="erro-sev">erro</td></tr>
-            <tr><td>STEREO-001…005</td><td>Configuração estereoquímica declarada</td><td class="erro-sev">erro</td></tr>
+            {{TABELA_REGRAS}}
           </table></div></div>
           <div class="placa c4"><h3>Δχ, sem atalhos</h3><p>&lt; 0,4 apolar · até 1,7 polar · acima de 1,7 iônica. Nunca “metal + ametal = iônica”.</p></div>
           <div class="placa c6"><h3>Erro real de valência</h3><pre class="erro">Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de C#1 é 5; o máximo para C é 4</pre></div>
@@ -361,6 +354,7 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
           <a href="#/doc/comandos" data-topico="comandos">Comandos</a>
           <a href="#/doc/referencias" data-topico="referencias">Referências e nomes</a>
           <a href="#/doc/estereo" data-topico="estereo">Configuração (stereo)</a>
+          <a href="#/doc/regras" data-topico="regras">Regras semânticas</a>
           <a href="#/doc/traducao" data-topico="traducao">Árvore de tradução</a>
           <a href="#/doc/gramatica" data-topico="gramatica">Gramática ANTLR</a>
           <a href="#/doc/erros" data-topico="erros">Erros</a>
@@ -372,9 +366,8 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
             <p>Um arquivo contém uma única espécie. Dentro dela, <code>atom</code>, <code>bond</code>, <code>ring</code> e <code>stereo</code> aparecem em qualquer ordem.</p>
             <h4>Cabeçalho</h4>
             <pre><span class="kw">species</span> &lt;tipo&gt; <span class="str">"Nome"</span> [<span class="kw">charge</span> +N|-N] [<span class="kw">unpaired</span> N] { … }
-<span class="com">// tipos: molecule, molecular_ion (exige charge), ionic_solid,
-//        covalent_network, metallic_solid
-// legado: molecule "Nome" { … }</span></pre>
+<span class="com">// legado: molecule "Nome" { … }, sem conferência da carga total</span></pre>
+            <div class="tabela"><table><tr><th>Tipo</th><th>Entidade</th><th>Exemplo</th></tr>{{TABELA_TIPOS}}</table></div>
             <h4>atom</h4>
             <pre>[Nx] <span class="kw">atom</span> Elemento[(±carga)] [<span class="kw">as</span> nome]
 <span class="kw">atom</span> O
@@ -398,8 +391,7 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
               <li>Em <code>stereo</code>, a referência precisa identificar um único átomo.</li>
             </ul>
             <h4>Palavras reservadas</h4>
-            <pre>molecule species molecular_ion ionic_solid covalent_network metallic_solid
-charge unpaired atom bond as ring stereo</pre>
+            <pre>{{PALAVRAS}}</pre>
           </article>
           <article class="topico" data-topico="estereo">
             <h3>Configuração (stereo)</h3>
@@ -417,6 +409,12 @@ charge unpaired atom bond as ring stereo</pre>
               <tr><td>STEREO-004</td><td>r/s sem a configuração dos ramos</td></tr>
               <tr><td>STEREO-005</td><td>eixo de biarila sem verificação da barreira (aviso)</td></tr>
             </table></div>
+          </article>
+          <article class="topico" data-topico="regras">
+            <h3>Regras semânticas</h3>
+            <p>A semântica é o centro da linguagem: confere a química do grafo em etapas (estrutura, tipo da espécie, valência, carga, anéis, configuração). Erro interrompe com código 2; aviso informa e deixa compilar.</p>
+            <div class="tabela"><table><tr><th>ID</th><th>Regra</th><th>Severidade</th></tr>{{TABELA_REGRAS}}</table></div>
+            <p class="nota">Tabela gerada da seção “Regras semânticas” do README.</p>
           </article>
           <article class="topico" data-topico="traducao">
             <h3>Árvore de tradução</h3>

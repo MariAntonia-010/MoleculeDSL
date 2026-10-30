@@ -26,8 +26,9 @@
   });
 
   /* ================= compilador do navegador ================= */
-  const PALAVRAS = new Set(["molecule", "species", "molecular_ion", "ionic_solid", "covalent_network",
-    "metallic_solid", "monatomic_ion", "charge", "unpaired", "atom", "bond", "as", "ring", "stereo"]);
+  // Palavras reservadas e tipos de espécie vêm da gramática, via gerador
+  const PALAVRAS = new Set(DADOS.palavras);
+  const TIPOS_ESPECIE = new Map(DADOS.tipos_especie.map((t) => [t.tipo, t.exige_carga]));
   const OPERADORES = { "-": 1, "=": 2, "#": 3, "->": 1, "~": 0 };
 
   class ErroDSL extends Error {
@@ -108,11 +109,11 @@
       especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
     } else if (talvez("species")) {
       const tipo = atual().tipo;
-      if (!["molecule", "molecular_ion", "atom", "monatomic_ion", "ionic_solid", "covalent_network", "metallic_solid"].includes(tipo)) falhar("tipo de espécie depois de 'species'");
+      if (!TIPOS_ESPECIE.has(tipo)) falhar("tipo de espécie depois de 'species'");
       consumir();
       especie.tipo = tipo;
       especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
-      if (tipo === "molecular_ion" || tipo === "monatomic_ion") {
+      if (TIPOS_ESPECIE.get(tipo)) {
         abrir("cargaEspecie");
         pegar("charge", "'charge' com a carga do íon");
         const s = sinal("sinal da carga (+ ou -)");

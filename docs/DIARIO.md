@@ -561,3 +561,18 @@ O₃ trioxigênio; cátion monoatômico "sódio(1+)", ânion "cloreto"). O limit
   tabela periódica (inclusive a bancada) também mostram o desenho.
 - A classe raiz da AST passou de `Molecula` para `Especie`, porque a espécie
   pode ser átomo, íon, molécula ou sólido; `Molecula` continua como apelido.
+
+---
+
+## 30/10/2026 — Página sincronizada com a linguagem
+
+- Palavras reservadas, tipos de espécie, operadores e gramática da página
+  passam a ser lidos de `gramatica/MoleculeDSL.g4`; a tabela de regras
+  semânticas, do README (`docs/apresentacao/linguagem_fontes.py`). O
+  compilador do navegador usa as mesmas listas.
+- Corrigidas defasagens: SPEC-003 faltava na tabela do Conteúdo, e
+  `monatomic_ion` e `atom` faltavam nas palavras reservadas e nos tipos da
+  Doc. Doc ganhou o tópico "Regras semânticas"; Conteúdo, a tabela de tipos
+  de espécie.
+- Teste `apresentacao/sincronizada`: falha se a página não reflete a
+  gramática e as regras atuais.

@@ -224,8 +224,13 @@
     const erroHTML = () => `<div class="etapa-erro"><b>${escapar(r.erros[0].codigo)}</b> linha ${r.erros[0].linha}, coluna ${r.erros[0].coluna}: ${escapar(r.erros[0].mensagem)}<p>A tradução para aqui: as fases seguintes não rodam, para não gerar erros em cascata.</p></div>`;
     if (etapa.id === "tokens") {
       if (!r.tokens) return erroHTML();
-      return `<div class="fichas">${r.tokens.filter((t) => t.tipo !== "EOF").map((t) =>
-        `<span class="ficha"><code>${escapar(t.valor)}</code><small>${escapar(lente === "comp" ? nomeTokenComp(t) : tokenQuimica(t))}</small></span>`).join("")}</div>`;
+      const visiveis = r.tokens.filter((t) => t.tipo !== "EOF");
+      return `<div class="fichas">${visiveis.map((t, i) => {
+        // depois de 'species', 'atom' é o tipo da espécie, não o comando
+        const tipoDeEspecie = t.tipo === "atom" && i > 0 && visiveis[i - 1].tipo === "species";
+        const sentido = tipoDeEspecie ? (lente === "comp" ? "ATOM (tipo da espécie)" : "tipo: átomo isolado") : (lente === "comp" ? nomeTokenComp(t) : tokenQuimica(t));
+        return `<span class="ficha"><code>${escapar(t.valor)}</code><small>${escapar(sentido)}</small></span>`;
+      }).join("")}</div>`;
     }
     if (etapa.id === "sintaxe") {
       if (!r.tokens) return `<p class="etapa-vazia">Sem tokens, não há o que analisar.</p>`;

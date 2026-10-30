@@ -1179,6 +1179,40 @@ def testar_ast_de_todos_os_exemplos():
     return problemas
 
 
+def testar_apresentacao_sincronizada():
+    # A página precisa refletir a linguagem atual: gramática, palavras
+    # reservadas, tipos de espécie e regras semânticas do README. Se a
+    # linguagem mudar sem regenerar a página, este teste falha.
+    import html as html_mod
+
+    pasta = os.path.join(PASTA_RAIZ, "docs", "apresentacao")
+    if pasta not in sys.path:
+        sys.path.insert(0, pasta)
+    import linguagem_fontes
+
+    with open(os.path.join(pasta, "index.html"), encoding="utf-8") as arquivo:
+        pagina = arquivo.read()
+    fontes = linguagem_fontes.gramatica()
+    problemas = []
+    if html_mod.escape(fontes["texto"], quote=False) not in pagina:
+        problemas.append("a gramática da página não é a de gramatica/MoleculeDSL.g4")
+    dados = json.loads(
+        pagina.split('<script type="application/json" id="dados">', 1)[1]
+        .split("</script>", 1)[0]
+        .replace("<\\/", "</")
+    )
+    if dados.get("palavras") != fontes["palavras"]:
+        problemas.append("palavras reservadas da página diferentes das da gramática")
+    if [t["tipo"] for t in dados.get("tipos_especie", [])] != [t["tipo"] for t in fontes["tipos"]]:
+        problemas.append("tipos de espécie da página diferentes dos da gramática")
+    for regra in linguagem_fontes.regras():
+        if regra["rotulo"] not in pagina:
+            problemas.append(f"regra {regra['rotulo']} do README ausente da página")
+    if problemas:
+        problemas.append("rode python3 docs/apresentacao/gerar_apresentacao.py")
+    return problemas
+
+
 def main():
     casos = []
     for pasta in PASTAS_VALIDOS:
@@ -1281,6 +1315,7 @@ def main():
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
         ("arvores/estereo_nas_arvores", testar_estereo_nas_arvores),
         ("ast/todos_os_exemplos", testar_ast_de_todos_os_exemplos),
+        ("apresentacao/sincronizada", testar_apresentacao_sincronizada),
         ("solver/contrato_estruturado", testar_contrato_solver),
         ("solver/cli_estruturada", testar_cli_solver_estruturado),
         ("solver/fases_do_plano", testar_fases_solver),
