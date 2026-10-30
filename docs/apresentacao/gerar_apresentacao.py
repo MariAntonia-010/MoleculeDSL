@@ -27,44 +27,27 @@ RAIZ = os.path.dirname(os.path.dirname(PASTA))
 MAIN = os.path.join(RAIZ, "src", "main.py")
 
 # Exemplos do playground, na ordem do seletor
-EXEMPLOS = [
-    "agua",
-    "metano",
-    "amonia",
-    "etanol",
-    "acetona",
-    "acido_acetico",
-    "ureia",
-    "dioxido_carbono",
-    "benzeno",
-    "naftaleno",
-    "pirrol",
-    "ciclohexano",
-    "acido_tartarico_meso",
-    "e_1_2_dicloroeteno",
-    "penta_2_3_dieno",
-    "amonio_por_ligacao_coordenada",
-    "hidrogenio",
-    "oxigenio",
-    "nitrogenio",
-    "cloro",
-    "cloreto_de_hidrogenio",
-    "peroxido_de_hidrogenio",
-    "monoxido_de_carbono",
-    "metanol",
-    "argonio",
-    "neonio",
-    "sodio_1mais",
-    "cloreto",
-    "oxido",
-    "proton",
-    "cloreto_de_sodio",
-    "sodio_metalico",
-    "carbono_13",
-    "agua_pesada",
-    "cromo",
-    "ferro_2mais",
+# Exemplos da página, por grupo: o playground mostra cada grupo num
+# <optgroup>, e o laboratório e as demonstrações escolhem entre eles
+GRUPOS_EXEMPLOS = [
+    ("Átomos isolados", ["helio", "neonio", "argonio", "carbono_13", "sodio_configuracao_completa",
+                         "cromo", "cobre", "ferro_56", "uranio_235"]),
+    ("Íons monoatômicos", ["proton", "sodio_1mais", "cloreto", "cloreto_37", "oxido", "ferro_2mais"]),
+    ("Substâncias simples", ["hidrogenio", "oxigenio", "nitrogenio", "cloro", "ozonio"]),
+    ("Moléculas", ["agua", "metano", "amonia", "etanol", "metanol", "acetona", "acido_acetico", "ureia",
+                   "dioxido_carbono", "monoxido_de_carbono", "cloreto_de_hidrogenio", "peroxido_de_hidrogenio",
+                   "berilio", "glicina_zwitterion"]),
+    ("Anéis e aromáticos", ["benzeno", "naftaleno", "pirrol", "ciclohexano"]),
+    ("Íons moleculares", ["amonio_por_ligacao_coordenada", "hidronio", "hidroxido", "nitrato", "sulfato",
+                          "carbonato", "cianato", "azida", "nitronio"]),
+    ("Isótopos em moléculas", ["agua_pesada", "metano_deuterado", "etanol_1_deuterado", "propan_2_ol_d3"]),
+    ("Estereoquímica", ["acido_tartarico_meso", "e_1_2_dicloroeteno", "e_pent_2_eno", "r_2_clorobutano",
+                        "penta_2_3_dieno", "hexa_2_3_dieno", "cis_1_3_dimetilciclohexano"]),
+    ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "agua_trifluoreto_de_boro"]),
+    ("Sólidos", ["cloreto_de_sodio", "oxido_de_magnesio", "sodio_metalico"]),
 ]
+EXEMPLOS = [nome for _, nomes in GRUPOS_EXEMPLOS for nome in nomes]
+GRUPO_DO_EXEMPLO = {nome: grupo for grupo, nomes in GRUPOS_EXEMPLOS for nome in nomes}
 
 
 def rodar(*argumentos, script=MAIN):
@@ -144,6 +127,7 @@ def main():
         lista_exemplos.append(
             {
                 "titulo": titulo,
+                "grupo": GRUPO_DO_EXEMPLO[nome],
                 "arquivo": arquivo,
                 "codigo": texto,
                 "saida": rodar("--modelo", arquivo).strip(),

@@ -683,3 +683,21 @@ Hund, íons de metais de transição).
   de "aparece mais de uma vez". A dica de `atom H2` agora oferece as duas
   leituras: `2x atom H` ou `atom 2H`.
 
+---
+
+## 30/10/2026 — Átomos, íons e sólidos em todos os módulos da página
+
+- Playground: 64 exemplos em dez grupos (`<optgroup>`): átomos isolados,
+  íons monoatômicos, substâncias simples, moléculas, anéis, íons
+  moleculares, isótopos, estereoquímica, radicais e coordenada, sólidos.
+  A lista sai de `GRUPOS_EXEMPLOS` em `gerar_apresentacao.py`.
+- Laboratório: qualquer exemplo da página entra em reações e misturas.
+  Reações novas com íons (neutralização, autoionização da água,
+  protonação da amônia, Na⁺ + Cl⁻) e ozônio. A conservação confere também
+  a carga e separa isótopos (²H não conta como H). Misturas prontas: ar
+  atmosférico (com o átomo de Ar), salmoura, gases nobres, H₂O e D₂O.
+- Fórmula de Hill marca o isótopo (²H2O, ¹³C...) e a lista da mistura e
+  as equações mostram a carga.
+- Uso: demonstrações de átomo (carbono-13), íon (Fe²⁺) e sólido (NaCl), e
+  o comando `--estrutura-atomica`.
+

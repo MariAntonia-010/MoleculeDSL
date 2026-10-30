@@ -3,8 +3,9 @@
   // ou código escrito na hora. A linguagem continua descrevendo uma espécie
   // por programa; cada espécie passa pelo compilador do navegador antes de
   // entrar na simulação.
-  const ESPECIES_LAB = ["hidrogenio", "oxigenio", "agua", "metano", "dioxido_carbono", "monoxido_de_carbono", "nitrogenio",
-    "amonia", "cloro", "cloreto_de_hidrogenio", "peroxido_de_hidrogenio", "etanol", "metanol", "acetona", "acido_acetico", "benzeno", "ureia"];
+  // Todos os exemplos da página entram: átomos, íons, isótopos e sólidos
+  // também podem reagir e se misturar
+  const ESPECIES_LAB = DADOS.exemplos.map((e) => e.arquivo.replace(/^exemplos\/|\.mol$/g, ""));
   const especieDoArquivo = (arquivo) => {
     const ex = DADOS.exemplos.find((e) => e.arquivo === `exemplos/${arquivo}.mol`);
     return { titulo: ex.titulo, codigo: ex.codigo, arquivo: ex.arquivo };
@@ -21,8 +22,9 @@
     const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
     return pos.map(([x, y, z]) => { const x1 = x * ca + z * sa, z1 = -x * sa + z * ca; return [x1, y * cb - z1 * sb, y * sb + z1 * cb]; });
   }
+  // Conta por nuclídeo: 2H e H são átomos diferentes na conservação
   function contarElementos(atomos, fator = 1, alvo = {}) {
-    atomos.forEach((a) => (alvo[a.el] = (alvo[a.el] || 0) + fator));
+    atomos.forEach((a) => { const k = a.massa ? `${a.massa}${a.el}` : a.el; alvo[k] = (alvo[k] || 0) + fator; });
     return alvo;
   }
   function tiposDeLigacao(r, fator, alvo) {
@@ -34,10 +36,19 @@
     return alvo;
   }
   const textoContagem = (c) => Object.entries(c).filter(([, n]) => n).map(([k, n]) => `${n}× ${k}`).join(", ") || "nenhuma";
-  const opcoesEspecies = (selecionado) => ESPECIES_LAB.map((arq) => {
-    const esp = especieDoArquivo(arq);
-    return `<option value="${arq}"${arq === selecionado ? " selected" : ""}>${escapar(esp.titulo)} (${formulaHill(compilarEspecie(esp).r.atomos)})</option>`;
-  }).join("") + `<option value="__codigo"${selecionado === "__codigo" ? " selected" : ""}>Código próprio…</option>`;
+  const cargaDe = (r) => r.atomos.reduce((t, a) => t + a.carga, 0);
+  const textoCarga = (c) => (c === 0 ? "" : `${Math.abs(c) > 1 ? Math.abs(c) : ""}${c > 0 ? "+" : "−"}`);
+  const opcoesEspecies = (selecionado) => {
+    const grupos = new Map();
+    ESPECIES_LAB.forEach((arq) => {
+      const ex = DADOS.exemplos.find((e) => e.arquivo === `exemplos/${arq}.mol`);
+      const { r } = compilarEspecie(especieDoArquivo(arq));
+      const op = `<option value="${arq}"${arq === selecionado ? " selected" : ""}>${escapar(ex.titulo)} (${formulaHill(r.atomos)}${textoCarga(cargaDe(r))})</option>`;
+      grupos.set(ex.grupo, (grupos.get(ex.grupo) || "") + op);
+    });
+    return [...grupos].map(([g, ops]) => `<optgroup label="${escapar(g)}">${ops}</optgroup>`).join("")
+      + `<option value="__codigo"${selecionado === "__codigo" ? " selected" : ""}>Código próprio…</option>`;
+  };
 
   // Erro de uma espécie: mesma faixa vermelha do playground
   function alertaEspecie(esp, r) {
@@ -58,6 +69,12 @@
     { nome: "Síntese do cloreto de hidrogênio", reagentes: [[1, "hidrogenio"], [1, "cloro"]], produtos: [[2, "cloreto_de_hidrogenio"]] },
     { nome: "Decomposição da água oxigenada", reagentes: [[2, "peroxido_de_hidrogenio"]], produtos: [[2, "agua"], [1, "oxigenio"]] },
     { nome: "Combustão do monóxido de carbono", reagentes: [[2, "monoxido_de_carbono"], [1, "oxigenio"]], produtos: [[2, "dioxido_carbono"]] },
+    { nome: "Ozônio a partir do oxigênio", reagentes: [[3, "oxigenio"]], produtos: [[2, "ozonio"]] },
+    // Com íons: além dos átomos, a carga total se conserva
+    { nome: "Neutralização: H⁺ + OH⁻", reagentes: [[1, "proton"], [1, "hidroxido"]], produtos: [[1, "agua"]] },
+    { nome: "Autoionização da água", reagentes: [[2, "agua"]], produtos: [[1, "hidronio"], [1, "hidroxido"]] },
+    { nome: "Protonação da amônia (ligação coordenada)", reagentes: [[1, "amonia"], [1, "proton"]], produtos: [[1, "amonio_por_ligacao_coordenada"]] },
+    { nome: "Íons Na⁺ e Cl⁻ formando o cloreto de sódio", reagentes: [[1, "sodio_1mais"], [1, "cloreto"]], produtos: [[1, "cloreto_de_sodio"]] },
   ];
   const cenaReacao = new Cena(document.getElementById("cena-reacao"));
   // De frente e sem girar sozinha: reagentes e produtos ficam lado a lado
@@ -68,7 +85,11 @@
   let reacaoAtual = null, progresso = 0, tocando = true, ultimoTempo = null;
   const FASES = [[0, "Reagentes"], [0.22, "Ligações se rompem"], [0.42, "Átomos se rearranjam"], [0.78, "Novas ligações se formam"], [0.95, "Produtos"]];
 
-  const equacao = (lado) => lado.map(([n, esp]) => `${n > 1 ? n + " " : ""}${formulaHill(compilarEspecie(esp).r.atomos)}`).join(" + ");
+  const equacao = (lado) => lado.map(([n, esp]) => {
+    const { r } = compilarEspecie(esp);
+    const q = textoCarga(cargaDe(r));
+    return `${n > 1 ? n + " " : ""}${formulaHill(r.atomos)}${q ? `<sup>${q}</sup>` : ""}`;
+  }).join(" + ");
   const contarLado = (lado) => lado.reduce((c, [n, esp]) => contarElementos(compilarEspecie(esp).r.atomos, n, c), {});
 
   function arranjar(lado) {
@@ -101,7 +122,9 @@
     // 2. conservação dos átomos
     const cr = contarLado(reacao.reagentes), cp = contarLado(reacao.produtos);
     const elementos = [...new Set([...Object.keys(cr), ...Object.keys(cp)])].sort();
-    const balanceada = elementos.every((e) => cr[e] === cp[e]);
+    const qr = reacao.reagentes.reduce((t, [n, esp]) => t + n * cargaDe(compilarEspecie(esp).r), 0);
+    const qp = reacao.produtos.reduce((t, [n, esp]) => t + n * cargaDe(compilarEspecie(esp).r), 0);
+    const balanceada = elementos.every((e) => cr[e] === cp[e]) && qr === qp;
     const R = arranjar(reacao.reagentes), P = arranjar(reacao.produtos);
     // Cada átomo dos produtos herda o átomo dos reagentes mais próximo do mesmo elemento
     const mapa = new Array(P.atomos.length).fill(-1), usados = new Set();
@@ -109,7 +132,7 @@
       P.atomos.forEach((a, j) => {
         let melhor = -1, dist = Infinity;
         R.atomos.forEach((b, i) => {
-          if (b.el !== a.el || usados.has(i)) return;
+          if (b.el !== a.el || (b.massa || 0) !== (a.massa || 0) || usados.has(i)) return;
           const d = Math.hypot(R.pos[i][0] - P.pos[j][0], R.pos[i][1] - P.pos[j][1]);
           if (d < dist) { dist = d; melhor = i; }
         });
@@ -143,10 +166,10 @@
     info.innerHTML = `
       <p class="equacao">${equacao(reacao.reagentes)} <span>→</span> ${equacao(reacao.produtos)}</p>
       ${balanceada
-        ? `<p class="estado-ok">Balanceada: ${elementos.map((e) => `${e} ${cr[e]} → ${cp[e]}`).join(" · ")}</p>`
-        : `<div class="alerta aviso" style="cursor:default"><div class="alerta-titulo"><span class="selo">Conservação da massa</span><b>Reação não balanceada</b></div>
-           <p class="alerta-msg">${elementos.filter((e) => cr[e] !== cp[e]).map((e) => `${e}: ${cr[e] || 0} nos reagentes, ${cp[e] || 0} nos produtos`).join(" · ")}</p>
-           <p class="alerta-ajuda">Os átomos não se criam nem se destroem. <strong>Como corrigir:</strong> ajuste os coeficientes ou use “Balancear”.</p></div>`}
+        ? `<p class="estado-ok">Balanceada: ${elementos.map((e) => `${e} ${cr[e]} → ${cp[e]}`).join(" · ")} · carga ${qr >= 0 ? "+" : ""}${qr} → ${qp >= 0 ? "+" : ""}${qp}</p>`
+        : `<div class="alerta aviso" style="cursor:default"><div class="alerta-titulo"><span class="selo">Conservação da massa e da carga</span><b>Reação não balanceada</b></div>
+           <p class="alerta-msg">${[...elementos.filter((e) => cr[e] !== cp[e]).map((e) => `${e}: ${cr[e] || 0} nos reagentes, ${cp[e] || 0} nos produtos`), ...(qr !== qp ? [`carga: ${qr >= 0 ? "+" : ""}${qr} nos reagentes, ${qp >= 0 ? "+" : ""}${qp} nos produtos`] : [])].join(" · ")}</p>
+           <p class="alerta-ajuda">Os átomos não se criam nem se destroem, e a carga total também se conserva. <strong>Como corrigir:</strong> ajuste os coeficientes ou use “Balancear”.</p></div>`}
       <div class="tabela"><table><tr><th>Ligações</th><th>Tipos</th></tr>
         <tr><td>rompidas</td><td>${textoContagem(quebradas)}</td></tr>
         <tr><td>formadas</td><td>${textoContagem(formadas)}</td></tr></table></div>
@@ -226,7 +249,7 @@
     const reacao = reacaoDoMontador();
     const todas = [...reacao.reagentes, ...reacao.produtos];
     if (!todas.length || todas.some(([, esp]) => compilarEspecie(esp).r.erros.length)) { simularReacao(reacao); return; }
-    const contagens = todas.map(([, esp]) => contarElementos(compilarEspecie(esp).r.atomos));
+    const contagens = todas.map(([, esp]) => ({ ...contarElementos(compilarEspecie(esp).r.atomos), "carga": cargaDe(compilarEspecie(esp).r) }));
     const elementos = [...new Set(contagens.flatMap((c) => Object.keys(c)))];
     const nr = reacao.reagentes.length;
     const coef = todas.map(() => 1);
@@ -258,10 +281,19 @@
   document.getElementById("progresso-reacao").addEventListener("input", (e) => { progresso = Number(e.target.value); tocando = false; atualizarBotaoReacao(); });
 
   /* ---------- misturas ---------- */
-  const componentesMistura = [
-    { esp: especieDoArquivo("agua"), n: 6 },
-    { esp: especieDoArquivo("etanol"), n: 2 },
+  // Misturas prontas: átomos isolados (Ar, He, Ne) e íons também entram
+  const MISTURAS = [
+    { nome: "Água e etanol", itens: [["agua", 6], ["etanol", 2]] },
+    { nome: "Ar atmosférico (N₂, O₂ e o átomo de Ar)", itens: [["nitrogenio", 8], ["oxigenio", 2], ["argonio", 1]] },
+    { nome: "Salmoura (água, Na⁺ e Cl⁻)", itens: [["agua", 6], ["sodio_1mais", 2], ["cloreto", 2]] },
+    { nome: "Gases nobres (He, Ne, Ar)", itens: [["helio", 4], ["neonio", 3], ["argonio", 2]] },
+    { nome: "Água e água pesada (H₂O, D₂O)", itens: [["agua", 4], ["agua_pesada", 4]] },
   ];
+  const componentesMistura = [];
+  function carregarMistura(i) {
+    componentesMistura.splice(0, componentesMistura.length, ...MISTURAS[i].itens.map(([arq, n]) => ({ esp: especieDoArquivo(arq), n })));
+  }
+  carregarMistura(0);
   const cenaMistura = new Cena(document.getElementById("cena-mistura"));
   cenaMistura.girar = false;
   cenaMistura.zoom = 1.3;
@@ -270,7 +302,7 @@
   function desenharComponentes() {
     document.getElementById("lista-mistura").innerHTML = componentesMistura.map((c, i) => {
       const { r } = compilarEspecie(c.esp);
-      return `<div class="item-mistura${r.erros.length ? " invalido" : ""}"><div><b>${escapar(c.esp.titulo)}</b><small>${r.erros.length ? "erro: " + escapar(r.erros[0].codigo) : formulaHill(r.atomos)}</small></div>
+      return `<div class="item-mistura${r.erros.length ? " invalido" : ""}"><div><b>${escapar(c.esp.titulo)}</b><small>${r.erros.length ? "erro: " + escapar(r.erros[0].codigo) : formulaHill(r.atomos) + textoCarga(cargaDe(r))}</small></div>
         <div class="contador-mistura"><button type="button" class="botao pequeno" data-menos="${i}" aria-label="Menos">−</button><span>${c.n}</span>
         <button type="button" class="botao pequeno" data-mais="${i}" aria-label="Mais">+</button>
         <button type="button" class="botao pequeno" data-tradu="${i}">Tradução</button>
@@ -350,7 +382,7 @@
     info.innerHTML = total
       ? `<div class="tabela"><table><tr><th>Fórmula</th><th>Espécie</th><th>Moléculas</th><th>Fração</th></tr>${componentesMistura.map((c) =>
           `<tr><td>${formulaHill(compilarEspecie(c.esp).r.atomos)}</td><td>${escapar(c.esp.titulo)}</td><td>${c.n}</td><td>${((c.n / total) * 100).toFixed(0)}%</td></tr>`).join("")}</table></div>
-         <p class="nota">Átomos na cena: ${textoContagem(elementos)}. Numa mistura as moléculas só se movem: nenhuma ligação se rompe ou se forma.</p>`
+         <p class="nota">Átomos na cena: ${textoContagem(elementos)}. Numa mistura as partículas (átomos, íons e moléculas) só se movem: nenhuma ligação se rompe ou se forma.</p>`
       : `<p class="nota">Adicione componentesMistura para montar a mistura.</p>`;
   }
 
@@ -359,6 +391,9 @@
     if (laboratorioPronto) return;
     laboratorioPronto = true;
     document.getElementById("nova-especie").innerHTML = opcoesEspecies("metanol");
+    const pronta = document.getElementById("mistura-pronta");
+    pronta.innerHTML = MISTURAS.map((m, i) => `<option value="${i}">${escapar(m.nome)}</option>`).join("");
+    pronta.addEventListener("change", () => { carregarMistura(Number(pronta.value)); desenharComponentes(); montarMistura(); });
     desenharComponentes();
     montarMistura();
     carregarNoMontador(REACOES[0]);

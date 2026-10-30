@@ -319,9 +319,10 @@
         <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></div><h3>1. Instalar</h3><pre>python3 -m pip install -r requirements.txt
 python3 -m pip install -r requirements-solver.txt  <span class="com"># opcional: CP-SAT</span></pre></div>
         <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><h3>2. Gerar o parser</h3><pre>sh gerar.sh</pre><p class="nota">Cria a pasta <code>gerado/</code> com lexer, parser e visitor do ANTLR.</p></div>
-        <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/></svg></div><h3>3. Compilar uma molécula</h3><pre>python3 src/main.py exemplos/agua.mol
+        <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/></svg></div><h3>3. Compilar uma espécie</h3><pre>python3 src/main.py exemplos/agua.mol
 python3 src/main.py --tokens --ast --modelo exemplos/agua.mol
-python3 src/main.py --estereo exemplos/acido_tartarico_meso.mol</pre></div>
+python3 src/main.py --estereo exemplos/acido_tartarico_meso.mol
+python3 src/main.py --estrutura-atomica exemplos/ferro_56.mol</pre></div>
         <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><h3>4. Rodar os testes</h3><pre>python3 testar.py
 python3 tests/benchmark_solver.py --backend=ambos</pre></div>
         <div class="placa c12"><h3>Veja a tradução de um exemplo</h3><p>Cada etapa (tokens, árvore sintática, AST, modelo e semântica) explicada pela computação e pela química.</p>
@@ -330,6 +331,9 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
             <button type="button" class="botao pequeno" data-demonstrar="exemplos/etanol.mol">Etanol</button>
             <button type="button" class="botao pequeno" data-demonstrar="exemplos/benzeno.mol">Benzeno</button>
             <button type="button" class="botao pequeno" data-demonstrar="exemplos/amonio_por_ligacao_coordenada.mol">Amônio (coordenada)</button>
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/carbono_13.mol">Átomo de carbono-13</button>
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/ferro_2mais.mol">Íon Fe²⁺</button>
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/cloreto_de_sodio.mol">Sólido NaCl</button>
           </div></div>
         <div class="placa c8"><h3>Opções de linha de comando</h3><p class="nota">Texto real de <code>python3 src/main.py</code> sem argumentos:</p><pre>{{USO}}</pre></div>
         <div class="placa c4"><h3>Códigos de saída</h3><div class="tabela"><table>
@@ -633,11 +637,13 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
       </div>
       <div id="lab-mistura" role="tabpanel" class="play" style="margin-top:1.4rem" hidden>
         <div class="placa">
-          <div class="cena"><canvas id="cena-mistura" aria-label="Mistura de moléculas"></canvas><span class="dica">arraste para girar</span></div>
+          <div class="cena"><canvas id="cena-mistura" aria-label="Mistura de átomos, íons e moléculas"></canvas><span class="dica">arraste para girar</span></div>
           <label class="alternar" style="margin-top:0.9rem">agitação (temperatura) <input type="range" id="agitacao" min="0" max="3" step="0.1" value="1"></label>
         </div>
         <div class="placa">
           <h3>Componentes</h3>
+          <label class="nota" for="mistura-pronta" style="display:block;margin:0 0 0.3rem">Mistura pronta</label>
+          <select id="mistura-pronta" style="width:100%;max-width:100%;margin-bottom:0.9rem"></select>
           <div id="lista-mistura" class="lista-mistura"></div>
           <div class="adicionar-mistura">
             <select id="nova-especie" aria-label="Espécie para adicionar"></select>

@@ -492,14 +492,23 @@
 
   function rotulo(a) { return a.nome ? `${a.nome} (${a.el}#${a.indice})` : `${a.el}#${a.indice}`; }
 
+  // Ordem de Hill; isótopo declarado leva o número de massa sobrescrito
+  // antes do símbolo (²H₂O), logo depois do mesmo elemento natural
+  const SOBRESCRITO = "⁰¹²³⁴⁵⁶⁷⁸⁹";
   function formulaHill(atomos) {
-    const n = {};
-    atomos.forEach((a) => (n[a.el] = (n[a.el] || 0) + 1));
-    const ordem = Object.keys(n).sort((x, y) => {
-      const p = (e) => (n.C ? (e === "C" ? 0 : e === "H" ? 1 : 2) : 2);
-      return p(x) - p(y) || x.localeCompare(y);
+    const n = new Map();
+    atomos.forEach((a) => { const k = `${a.el}|${a.massa || 0}`; n.set(k, (n.get(k) || 0) + 1); });
+    const temC = atomos.some((a) => a.el === "C");
+    const ordem = [...n.keys()].sort((x, y) => {
+      const [ex, mx] = x.split("|"), [ey, my] = y.split("|");
+      const p = (e) => (temC ? (e === "C" ? 0 : e === "H" ? 1 : 2) : 2);
+      return p(ex) - p(ey) || ex.localeCompare(ey) || Number(mx) - Number(my);
     });
-    return ordem.map((e) => e + (n[e] > 1 ? n[e] : "")).join("");
+    return ordem.map((k) => {
+      const [e, m] = k.split("|");
+      const massa = Number(m) ? String(m).replace(/\d/g, (d) => SOBRESCRITO[d]) : "";
+      return massa + e + (n.get(k) > 1 ? n.get(k) : "");
+    }).join("");
   }
 
   function compilar(texto) {
@@ -842,10 +851,18 @@
   let arvoresProntas = false; // aba Árvores, idem
 
   seletor.innerHTML = '<option value="" disabled>Código próprio (escolha um exemplo para carregar)</option>';
+  // Um <optgroup> por grupo: átomos, íons, moléculas, isótopos, sólidos...
+  const gruposSeletor = new Map();
   DADOS.exemplos.forEach((ex, i) => {
+    if (!gruposSeletor.has(ex.grupo)) {
+      const grupo = document.createElement("optgroup");
+      grupo.label = ex.grupo;
+      seletor.appendChild(grupo);
+      gruposSeletor.set(ex.grupo, grupo);
+    }
     const op = document.createElement("option");
     op.value = i; op.textContent = `${ex.titulo} — ${ex.arquivo}`;
-    seletor.appendChild(op);
+    gruposSeletor.get(ex.grupo).appendChild(op);
   });
 
   codigo.addEventListener("scroll", () => {
