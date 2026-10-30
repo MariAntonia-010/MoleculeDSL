@@ -239,6 +239,16 @@ class ErroSintatico(ColetorErrosANTLR):
             if P.ATOM in esperados:
                 return f"o multiplicador (como '4x') só pode vir antes de 'atom', encontrado {encontrado}", False
             if P.IDENT in esperados:
+                if token.type == P.MULTIPLICADOR_ATOMO:
+                    return (
+                        f"o multiplicador vem antes de 'atom': escreva '{token.text} atom ...', "
+                        f"não 'atom {token.text} ...'"
+                    ), True
+                if token.type == P.ABRE_PAREN:
+                    return (
+                        "a carga vem depois do símbolo do elemento (e do número de massa, se "
+                        "houver): escreva 'atom Cl(-1)' ou 'atom 37Cl(-1)'"
+                    ), True
                 return f"esperado símbolo de elemento depois de 'atom', encontrado {encontrado}", True
             if P.NOME in esperados:
                 if token.type == P.IDENT:

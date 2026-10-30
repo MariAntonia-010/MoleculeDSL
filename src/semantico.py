@@ -776,8 +776,15 @@ class AnalisadorSemantico:
             - carga_para_contagem
         )
         desemparelhados = self.molecula.eletrons_desemparelhados
+        # Sólidos e redes são motivos finitos de uma estrutura estendida
+        # (SPEC-002): a paridade dos elétrons do motivo não indica radical
+        estendida = self.molecula.tipo in (
+            TipoEspecie.SOLIDO_IONICO,
+            TipoEspecie.REDE_COVALENTE,
+            TipoEspecie.SOLIDO_METALICO,
+        )
         if desemparelhados is None:
-            if total_eletrons % 2:
+            if total_eletrons % 2 and not estendida:
                 self.aviso(
                     "RAD-001",
                     self.molecula,
@@ -822,9 +829,9 @@ class AnalisadorSemantico:
                 mensagem = f"os átomos {rotulos} não têm nenhuma ligação"
             self.erro("STRUCT-003", atomos[0], mensagem)
 
-    def quantidade_componentes(self):
+    def quantidade_componentes(self, ligacoes=None):
         adjacencias = {atomo.id: set() for atomo in self.modelo.atomos}
-        for ligacao in self.modelo.ligacoes:
+        for ligacao in self.modelo.ligacoes if ligacoes is None else ligacoes:
             adjacencias[ligacao.origem].add(ligacao.destino)
             adjacencias[ligacao.destino].add(ligacao.origem)
 
@@ -865,11 +872,14 @@ class AnalisadorSemantico:
         if not self.modelo.atomos:
             return
 
-        componentes = self.quantidade_componentes()
+        # Ciclos só de ligações metálicas (~) não são anéis: num aglomerado
+        # metálico os elétrons são coletivos
+        ligacoes = [
+            lig for lig in self.modelo.ligacoes if lig.operador != Operador.METALICA
+        ]
+        componentes = self.quantidade_componentes(ligacoes)
 
-        ciclos_independentes = (
-            len(self.modelo.ligacoes) - len(self.modelo.atomos) + componentes
-        )
+        ciclos_independentes = len(ligacoes) - len(self.modelo.atomos) + componentes
         ciclos_faltantes = max(
             0, ciclos_independentes - len(self.modelo.aneis)
         )

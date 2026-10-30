@@ -762,3 +762,16 @@ virava só "O#1 carga=+0" no modelo.
   `unpaired 1`. Agora a conta do radical declarado inclui os átomos com
   carga; sem unpaired, o erro continua. "1 elétrons" virou "1 elétron".
 
+---
+
+## 30/10/2026 — Alimentação de exemplos, rodada 7 (combinações e sólidos)
+
+- Válidos: etano com dois ¹³C (`2x atom 13C`), ácido hipocloroso, N com
+  `configuration N` pelo símbolo, MgCl₂ e SiO₂ como motivos, cobre
+  metálico (Cu₃); os sólidos e o etano entram nos grupos da página.
+- Inválidos: `x3` sem H suficientes, sólido iônico com carga sobrando,
+  `atom 2x 13C` e `atom (-1)37Cl`, com dicas novas nos dois compiladores.
+- O motivo Cu₃ recebia RAD-001 e RING-004. Sólidos e redes não recebem
+  mais RAD-001 (a paridade de um motivo não indica radical), e ciclos só
+  de ligações `~` não contam no RING-004.
+

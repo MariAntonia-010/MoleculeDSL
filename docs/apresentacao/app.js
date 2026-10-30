@@ -160,6 +160,8 @@
         const mult = t.tipo === "MULT" ? Number(consumir().valor.slice(0, -1)) : 1;
         pegar("atom", "'atom' depois do multiplicador");
         const massaToken = talvez("INT");
+        if (atual().tipo === "MULT") falhar(`o multiplicador antes de 'atom': '${atual().valor} atom ...', não 'atom ${atual().valor} ...'`);
+        if (atual().tipo === "(") falhar("a carga depois do símbolo do elemento (e do número de massa, se houver), como 'atom Cl(-1)' ou 'atom 37Cl(-1)'");
         const el = pegar("IDENT", "símbolo de elemento depois de 'atom'");
         let carga = 0;
         if (atual().tipo === "(") {

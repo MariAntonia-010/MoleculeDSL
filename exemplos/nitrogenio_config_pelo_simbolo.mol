@@ -1,0 +1,5 @@
+// Configuration pode citar o átomo pelo símbolo, quando ele é o único do elemento
+species atom "Nitrogen" unpaired 3 {
+    atom N
+    configuration N [He] 2s2 2p3
+}

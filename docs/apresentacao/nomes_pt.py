@@ -100,4 +100,8 @@ ESPECIES = {
     "metileno_tripleto": "Metileno tripleto (CH₂, carbeno)",
     "dioxido_de_nitrogenio": "Dióxido de nitrogênio (NO₂•)",
     "hidroperoxila": "Radical hidroperoxila (HOO•)",
+    "etano_13c2": "Etano com dois ¹³C (2x atom 13C)",
+    "cloreto_de_magnesio": "Cloreto de magnésio (sólido iônico)",
+    "dioxido_de_silicio": "Dióxido de silício (rede covalente)",
+    "cobre_metalico": "Cobre metálico (motivo Cu₃)",
 }

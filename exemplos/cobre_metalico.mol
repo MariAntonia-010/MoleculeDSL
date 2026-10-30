@@ -1,0 +1,10 @@
+// esperado: Aviso semântico [METAL-002] na linha 7, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-002] na linha 8, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// esperado: Aviso semântico [METAL-002] na linha 9, coluna 4: ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico
+// Cobre metálico: motivo de três átomos com ligação metálica
+species metallic_solid "Copper" {
+    3x atom Cu as cu
+    bond cu1~cu2
+    bond cu2~cu3
+    bond cu3~cu1
+}

@@ -1,0 +1,5 @@
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 9: a carga vem depois do símbolo do elemento (e do número de massa, se houver): escreva 'atom Cl(-1)' ou 'atom 37Cl(-1)'
+// Isótopo com carga: o número de massa fica antes do símbolo, a carga depois
+species monatomic_ion "Chloride-37" charge -1 {
+    atom (-1)37Cl as cl
+}

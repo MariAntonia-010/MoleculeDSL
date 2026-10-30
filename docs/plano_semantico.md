@@ -74,7 +74,7 @@ Implementado em `src/modelo.py` e `src/semantico.py`. Regra para os símbolos de
 | COORD-004 | Dados insuficientes para conferir o receptor | aviso |
 | METAL-001 | Ligação metálica envolve participante fora de um bloco metálico | aviso |
 | METAL-002 | Aresta `~` não valida o comportamento coletivo de um sólido | aviso |
-| RAD-001 | Contagem eletrônica ímpar sem `unpaired` | aviso |
+| RAD-001 | Contagem eletrônica ímpar sem `unpaired` (não vale para sólidos e redes, que são motivos finitos) | aviso |
 | RAD-002 | Paridade ou quantidade de `unpaired` incompatível | erro |
 | SPEC-001 | Tipo da espécie incompatível com sua declaração | erro |
 | SPEC-002 | Grafo finito representa apenas motivo de estrutura estendida | aviso |
@@ -151,7 +151,7 @@ Implementado em `src/semantico.py`:
 | RING-003 | O mesmo anel declarado mais de uma vez, mesmo começando de outro átomo ou na ordem inversa | erro |
 | RING-004 | O grafo contém ciclo independente sem declaração `ring` | aviso |
 
-`RING-004` usa o posto cíclico do grafo (`arestas - vértices + componentes`) para comparar a quantidade de ciclos independentes com os anéis declarados. O aviso não bloqueia a compilação.
+`RING-004` usa o posto cíclico do grafo (`arestas - vértices + componentes`), sem as ligações metálicas `~`: um ciclo de aglomerado metálico não é anel, para comparar a quantidade de ciclos independentes com os anéis declarados. O aviso não bloqueia a compilação.
 
 ### M6b: Configuração estereoquímica
 

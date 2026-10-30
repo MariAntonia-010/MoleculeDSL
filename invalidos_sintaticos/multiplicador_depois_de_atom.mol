@@ -1,0 +1,5 @@
+// esperado: Erro sintático [SIN-001] na linha 4, coluna 9: o multiplicador vem antes de 'atom': escreva '2x atom ...', não 'atom 2x ...'
+// Número de massa com multiplicador na ordem errada: o 2x vem antes de atom
+species molecule "(13C2)Ethane" {
+    atom 2x 13C as c
+}

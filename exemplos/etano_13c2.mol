@@ -1,0 +1,8 @@
+// Etano marcado nos dois carbonos: o multiplicador repete o isótopo (13C, 13C)
+species molecule "(13C2)Ethane" {
+    2x atom 13C as c
+    6x atom H
+    bond c1-c2
+    bond c1-H x3
+    bond c2-H x3
+}

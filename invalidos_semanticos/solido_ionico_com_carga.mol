@@ -1,0 +1,8 @@
+// esperado: Erro semântico [CARGA-002] na linha 4, coluna 0: a soma das cargas formais é +1, mas a espécie declara carga total +0
+// esperado: Aviso semântico [SPEC-002] na linha 4, coluna 0: ionic_solid é uma estrutura estendida; o grafo representa apenas um motivo finito
+// Sólido iônico com cargas que não se anulam: Mg2+ com um só Cl-
+species ionic_solid "Magnesium chloride" {
+    atom Mg(+2) as mg
+    atom Cl(-1) as cl
+    bond mg-cl
+}

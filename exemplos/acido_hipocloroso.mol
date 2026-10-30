@@ -1,0 +1,8 @@
+// Ácido hipocloroso, HOCl: o cloro com uma ligação, como num haleto
+species molecule "Hypochlorous acid" {
+    atom H as h
+    atom O as o
+    atom Cl as cl
+    bond h-o
+    bond o-cl
+}

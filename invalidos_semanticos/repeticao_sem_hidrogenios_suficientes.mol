@@ -1,0 +1,9 @@
+// esperado: Erro semântico [STRUCT-004] na linha 8, coluna 12: todos os 5 átomos de H já foram citados; declare mais átomos ou use nomes para escolher qual
+// x3 pede três H, mas só sobraram dois sem ligação
+species molecule "Ethane" {
+    2x atom C as c
+    5x atom H
+    bond c1-c2
+    bond c1-H x3
+    bond c2-H x3
+}

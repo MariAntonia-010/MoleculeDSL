@@ -1,0 +1,15 @@
+// esperado: Aviso semântico [SPEC-002] na linha 3, coluna 0: covalent_network é uma estrutura estendida; o grafo representa apenas um motivo finito
+// Dióxido de silício: motivo de uma rede covalente, Si ligado a quatro O que fazem ponte
+species covalent_network "Silicon dioxide" {
+    atom Si as si
+    4x atom O as o
+    4x atom H as h
+    bond si-o1
+    bond si-o2
+    bond si-o3
+    bond si-o4
+    bond o1-h1
+    bond o2-h2
+    bond o3-h3
+    bond o4-h4
+}
