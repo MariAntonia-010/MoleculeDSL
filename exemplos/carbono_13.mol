@@ -1,0 +1,5 @@
+// Isótopo e configuração eletrônica de um átomo isolado
+species atom "Carbon-13" unpaired 2 {
+    atom 13C as c
+    configuration c [He] 2s2 2p2
+}

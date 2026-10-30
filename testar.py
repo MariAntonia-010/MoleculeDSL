@@ -1121,7 +1121,7 @@ def testar_ast_de_todos_os_exemplos():
     src = os.path.join(PASTA_RAIZ, "src")
     if src not in sys.path:
         sys.path.insert(0, src)
-    from ast_nos import AnelDecl, AtomoDecl, EstereoDecl, LigacaoDecl, formatar
+    from ast_nos import AnelDecl, AtomoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl, formatar
     from construtor_ast import construir
     import semantico
     from sintatico import analisar_fluxo, tokenizar
@@ -1132,6 +1132,7 @@ def testar_ast_de_todos_os_exemplos():
         P.BOND: LigacaoDecl,
         P.RING: AnelDecl,
         P.STEREO: EstereoDecl,
+        P.CONFIGURATION: ConfiguracaoDecl,
     }
     problemas = []
     for caminho in arquivos("exemplos"):
@@ -1162,6 +1163,8 @@ def testar_ast_de_todos_os_exemplos():
                 referencias = comando.nomes
             elif isinstance(comando, EstereoDecl):
                 referencias = comando.referencias
+            elif isinstance(comando, ConfiguracaoDecl):
+                referencias = [comando.referencia]
             for no in (comando, *referencias):
                 if no.linha < 1 or no.coluna < 0:
                     problemas.append(f"{nome}: nó sem posição {no}")
@@ -1225,6 +1228,54 @@ def testar_apresentacao_sincronizada():
             problemas.append(f"regra {regra['rotulo']} do README ausente da página")
     if problemas:
         problemas.append("rode python3 docs/apresentacao/gerar_apresentacao.py")
+    return problemas
+
+
+def testar_estrutura_atomica():
+    """Núcleo e eletrosfera (docs/plano_atomo.md)."""
+    src = os.path.join(PASTA_RAIZ, "src")
+    if src not in sys.path:
+        sys.path.insert(0, src)
+    import atomo
+    import semantico
+    import solver
+    from construtor_ast import construir
+    from sintatico import analisar
+    from ast_nos import formatar
+
+    dados = semantico.carregar_elementos()
+    problemas = []
+    casos = {
+        ("C", 0): ("1s2 2s2 2p2", 2),
+        ("Fe", 2): ("1s2 2s2 2p6 3s2 3p6 3d6", 4),
+        ("Fe", 3): ("1s2 2s2 2p6 3s2 3p6 3d5", 5),
+        ("Cr", 0): ("1s2 2s2 2p6 3s2 3p6 3d5 4s1", 6),
+        ("Cl", -1): ("1s2 2s2 2p6 3s2 3p6", 0),
+        ("O", 0): ("1s2 2s2 2p4", 2),
+    }
+    for (simbolo, carga), (esperado, hund) in casos.items():
+        config = atomo.configuracao_fundamental(simbolo, carga, dados)
+        if atomo.texto_configuracao(config) != esperado or atomo.desemparelhados(config) != hund:
+            problemas.append(f"{simbolo}{carga:+d}: {atomo.texto_configuracao(config)}, Hund {atomo.desemparelhados(config)}")
+    if len(atomo.problemas_de_pauli(atomo.ler_subcamadas("1s2 2s2 2p7 2d1 2s1"))) != 3:
+        problemas.append("Pauli não acusou 2p7, 2d e 2s repetido")
+    if atomo.ler_subcamadas("[Ne] 3s1") != [(1, 0, 2), (2, 0, 2), (2, 1, 6), (3, 0, 1)]:
+        problemas.append("expansão do núcleo [Ne] errada")
+    codigo, saida = rodar_comando(["--estrutura-atomica", os.path.join(PASTA_RAIZ, "exemplos", "carbono_13.mol")])
+    for trecho in ("nêutrons=7", "desemparelhados (Hund): 2", "2p: [↑][↑][ ]"):
+        if codigo != 0 or trecho not in saida:
+            problemas.append(f"--estrutura-atomica sem '{trecho}'")
+    molecula = construir(analisar(os.path.join(PASTA_RAIZ, "exemplos", "carbono_13.mol")))
+    if "massa=13" not in formatar(molecula):
+        problemas.append("AST sem o número de massa")
+    with tempfile.TemporaryDirectory() as pasta:
+        arquivo = escrever_mol(pasta, "propano13.mol", ['species molecule "Propane-13C" {', "    atom 13C", "    2x atom C", "    8x atom H", "}"])
+        resultado = solver.solve(
+            construir(analisar(arquivo)), semantico.carregar_valencias(),
+            solver.SolveRequest(max_solutions=10, require_unique=False),
+        )
+        if len(resultado.solutions) != 2:
+            problemas.append(f"isotopômeros do propano-13C: {len(resultado.solutions)}, esperado 2")
     return problemas
 
 
@@ -1331,6 +1382,7 @@ def main():
         ("arvores/estereo_nas_arvores", testar_estereo_nas_arvores),
         ("ast/todos_os_exemplos", testar_ast_de_todos_os_exemplos),
         ("apresentacao/sincronizada", testar_apresentacao_sincronizada),
+        ("atomo/estrutura_atomica", testar_estrutura_atomica),
         ("solver/contrato_estruturado", testar_contrato_solver),
         ("solver/cli_estruturada", testar_cli_solver_estruturado),
         ("solver/fases_do_plano", testar_fases_solver),

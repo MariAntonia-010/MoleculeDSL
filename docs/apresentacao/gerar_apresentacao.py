@@ -60,6 +60,10 @@ EXEMPLOS = [
     "proton",
     "cloreto_de_sodio",
     "sodio_metalico",
+    "carbono_13",
+    "agua_pesada",
+    "cromo",
+    "ferro_2mais",
 ]
 
 
@@ -196,6 +200,7 @@ def main():
         "guia": guia,
         "exemplos": lista_exemplos,
         "elementos": elementos,
+        "isotopos": json.load(open(os.path.join(RAIZ, "regras", "isotopos.json"), encoding="utf-8"))["isotopos_naturais"],
         "classificacao": json.load(open(os.path.join(RAIZ, "regras", "classificacao_ligacoes.json"), encoding="utf-8")),
         "valencias": {
             chave: regras[chave]

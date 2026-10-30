@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: a subcamada 2d não existe: na camada 2, l vai de 0 a 1
+// Na camada 2, l vai de 0 a 1: não existe 2d
+species atom "Carbon" {
+    atom C as c
+    configuration c 1s2 2s2 2d2
+}

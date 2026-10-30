@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: [Na] não é núcleo de gás nobre; use [He], [Ne], [Ar], [Kr], [Xe], [Rn]
+// O núcleo entre colchetes precisa ser um gás nobre
+species atom "Sodium" unpaired 1 {
+    atom Na as na
+    configuration na [Na] 3s1
+}

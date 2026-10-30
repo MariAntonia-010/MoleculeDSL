@@ -57,6 +57,7 @@
         if (!m) throw new ErroDSL("léxico", "LEX-002", linha, coluna, "texto sem aspas de fechamento na mesma linha");
         empurrar("TEXTO", m[0]); continue;
       }
+      if ((m = /^[1-7][spdf][0-9]+/.exec(resto))) { empurrar("SUBCAMADA", m[0]); continue; }
       if ((m = /^[0-9]+x/.exec(resto)) && !/^[0-9]+x[a-z0-9_]/.test(resto)) { empurrar("MULT", m[0]); continue; }
       if ((m = /^[0-9]+\.[0-9]+/.exec(resto))) { empurrar("REAL", m[0]); continue; }
       if ((m = /^[0-9]+/.exec(resto))) { empurrar("INT", m[0]); continue; }
@@ -67,7 +68,7 @@
       if ((m = /^[A-Z][a-z]?/.exec(resto))) { empurrar("IDENT", m[0]); continue; }
       if (resto.startsWith("->")) { empurrar("OP", "->"); continue; }
       if ("-=#~".includes(resto[0])) { empurrar("OP", resto[0]); continue; }
-      if ("+(){}".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
+      if ("+(){}[]".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
       throw new ErroDSL("léxico", "LEX-001", linha, coluna, `caractere inválido '${resto[0]}'`);
     }
     tokens.push({ tipo: "EOF", valor: "fim do arquivo", l: linha, c: coluna });
@@ -155,6 +156,7 @@
         abrir("atomo");
         const mult = t.tipo === "MULT" ? Number(consumir().valor.slice(0, -1)) : 1;
         pegar("atom", "'atom' depois do multiplicador");
+        const massaToken = talvez("INT");
         const el = pegar("IDENT", "símbolo de elemento depois de 'atom'");
         let carga = 0;
         if (atual().tipo === "(") {
@@ -168,7 +170,7 @@
         let nome = null;
         if (talvez("as")) nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
         fechar();
-        especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, l: t.l, c: t.c });
+        especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, massa: massaToken ? Number(massaToken.valor) : null, l: t.l, c: t.c });
       } else if (t.tipo === "bond") {
         abrir("ligacao");
         consumir();
@@ -186,6 +188,26 @@
         if (nomes.length < 3) falhar("pelo menos três nomes de átomos no anel");
         fechar();
         especie.comandos.push({ tipo: "ring", nomes, l: t.l, c: t.c });
+      } else if (t.tipo === "configuration") {
+        abrir("configuracao");
+        consumir();
+        const ref = referencia("em 'configuration'");
+        let nucleo = null;
+        if (atual().tipo === "[") {
+          abrir("nucleo");
+          consumir();
+          nucleo = pegar("IDENT", "gás nobre entre colchetes, como [Ne]").valor;
+          pegar("]", "']' para fechar o núcleo de gás nobre");
+          fechar();
+        }
+        const subcamadas = [];
+        while (atual().tipo === "SUBCAMADA") subcamadas.push(consumir().valor);
+        if (!subcamadas.length) {
+          if (atual().tipo === "INT" && tokens[p + 1] && ["s", "p", "d", "f"].includes(tokens[p + 1].valor)) falhar(`a quantidade de elétrons da subcamada, como ${atual().valor}${tokens[p + 1].valor}2`);
+          falhar("subcamada como 2p4 (camada 1 a 7, tipo s, p, d ou f e número de elétrons)");
+        }
+        fechar();
+        especie.comandos.push({ tipo: "configuration", ref, nucleo, subcamadas, l: t.l, c: t.c });
       } else if (t.tipo === "stereo") {
         abrir("estereo");
         consumir();
@@ -201,7 +223,10 @@
         fechar();
         especie.comandos.push({ tipo: "stereo", refs, op, descritor: d.valor, l: t.l, c: t.c });
       } else {
-        falhar("'atom', 'bond', 'ring', 'stereo' ou '}'", "SIN-002");
+        if (atual().tipo === "INT" && tokens[p + 1] && ["s", "p", "d", "f"].includes(tokens[p + 1].valor)) {
+          falhar(`a quantidade de elétrons da subcamada, como ${atual().valor}${tokens[p + 1].valor}2`, "SIN-002");
+        }
+        falhar("'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'", "SIN-002");
       }
       fechar();
     }
@@ -220,11 +245,17 @@
     const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
     for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
       if (!DADOS.elementos[cmd.el]) { erro(cmd, "ELEM-001", `elemento desconhecido '${cmd.el}'`); continue; }
+      if (cmd.massa != null) {
+        const z = DADOS.elementos[cmd.el].numero;
+        if (cmd.massa < z) { erro(cmd, "ATOM-001", `o número de massa ${cmd.massa} é menor que o número atômico de ${cmd.el} (${z}): daria ${cmd.massa - z} nêutrons`); continue; }
+        const naturais = DADOS.isotopos[cmd.el];
+        if (naturais && !naturais.includes(cmd.massa)) aviso(cmd, "ATOM-005", `${cmd.massa}${cmd.el} não é isótopo de composição natural (CIAAW: ${naturais.map((a) => a + cmd.el).join(", ")}); pode ser radioativo ou artificial`);
+      }
       for (let k = 1; k <= cmd.mult; k++) {
         const nome = cmd.nome == null ? null : cmd.mult > 1 ? cmd.nome + k : cmd.nome;
         if (nome && porNome.has(nome)) { erro(cmd, "STRUCT-002", `o nome '${nome}' já foi usado`); continue; }
         contagem.set(cmd.el, (contagem.get(cmd.el) || 0) + 1);
-        const atomo = { id: atomos.length, el: cmd.el, carga: cmd.carga, nome, indice: contagem.get(cmd.el) };
+        const atomo = { id: atomos.length, el: cmd.el, carga: cmd.carga, nome, indice: contagem.get(cmd.el), massa: cmd.massa, configuracao: null };
         atomos.push(atomo);
         if (nome) porNome.set(nome, atomo);
         if (!porElemento.has(cmd.el)) porElemento.set(cmd.el, []);
@@ -272,6 +303,31 @@
       const lista = cmd.refs.map((r) => resolver(r, true));
       if (!lista.includes(null)) configuracoes.push({ atomos: lista, op: cmd.op, descritor: cmd.descritor });
     }
+    // Configuração eletrônica (ATOM-002, 003, 004, 006)
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "configuration")) {
+      if (especie.tipo !== "atom" && especie.tipo !== "monatomic_ion") {
+        erro(cmd, "ATOM-006", "configuration descreve um átomo isolado ou um íon monoatômico; numa molécula os elétrons ocupam orbitais moleculares");
+        continue;
+      }
+      const a = resolver(cmd.ref, true);
+      if (!a) continue;
+      if (a.configuracao) { erro(cmd, "ATOM-006", `${rotulo(a)} já tem configuração declarada`, [a.id]); continue; }
+      if (cmd.nucleo && !NUCLEOS_GAS[cmd.nucleo]) { erro(cmd, "ATOM-002", `[${cmd.nucleo}] não é núcleo de gás nobre; use ${Object.keys(NUCLEOS_GAS).map((g) => `[${g}]`).join(", ")}`, [a.id]); continue; }
+      const lista = lerSubcamadas((cmd.nucleo ? `[${cmd.nucleo}] ` : "") + cmd.subcamadas.join(" "));
+      const pauli = problemasPauli(lista);
+      if (pauli.length) { erro(cmd, "ATOM-002", pauli.join("; "), [a.id]); continue; }
+      const z = DADOS.elementos[a.el].numero, total = lista.reduce((t, x) => t + x[2], 0);
+      if (total !== z - a.carga) { erro(cmd, "ATOM-003", `a configuração tem ${total} elétrons, mas ${rotulo(a)} (Z=${z}, carga ${a.carga >= 0 ? "+" : ""}${a.carga}) tem ${z - a.carga}`, [a.id]); continue; }
+      a.configuracao = paraMapa(lista);
+      const ref = fundamental(a.el, a.carga);
+      if (ref && !mapasIguais(ref, a.configuracao)) aviso(cmd, "ATOM-004", `a configuração não é o estado fundamental de ${rotulo(a)} (referência: ${textoConfig(ref)}); descreve um estado excitado`, [a.id]);
+    }
+    // Hund (ATOM-007): unpaired de um átomo isolado
+    if (!erros.length && (especie.tipo === "atom" || especie.tipo === "monatomic_ion") && especie.desemparelhados != null && atomos.length === 1) {
+      const m = atomos[0].configuracao || fundamental(atomos[0].el, atomos[0].carga);
+      if (m && hundDe(m) !== especie.desemparelhados) aviso({ l: 1, c: 0 }, "ATOM-007", `unpaired=${especie.desemparelhados}, mas a configuração ${textoConfig(m)} tem ${hundDe(m)} elétron(s) desemparelhado(s) pela regra de Hund`, [0]);
+    }
+
     // Tipo da espécie (IUPAC: molécula tem mais de um átomo)
     const atomica = especie.tipo === "atom" || especie.tipo === "monatomic_ion";
     const somaCargas = atomos.reduce((t, a) => t + a.carga, 0);
@@ -318,6 +374,46 @@
     }
     return { atomos, ligacoes, configuracoes, erros, avisos };
   }
+
+  /* Estrutura do átomo: mesma lógica de src/atomo.py */
+  const LETRA_L = "spdf";
+  const NUCLEOS_GAS = { He: "1s2", Ne: "[He] 2s2 2p6", Ar: "[Ne] 3s2 3p6", Kr: "[Ar] 3d10 4s2 4p6", Xe: "[Kr] 4d10 5s2 5p6", Rn: "[Xe] 4f14 5d10 6s2 6p6" };
+  const capacidadeL = (l) => 2 * (2 * l + 1);
+  function lerSubcamadas(texto) {
+    for (let i = 0; i < 6 && /\[(\w+)\]/.test(texto); i++) texto = texto.replace(/\[(\w+)\]/, (_, g) => ` ${NUCLEOS_GAS[g] || ""} `);
+    return [...texto.matchAll(/(\d)([spdf])(\d+)/g)].map(([, n, letra, e]) => [Number(n), LETRA_L.indexOf(letra), Number(e)]);
+  }
+  function problemasPauli(lista) {
+    const problemas = [], vistas = new Set();
+    for (const [n, l, e] of lista) {
+      if (l >= n) problemas.push(`a subcamada ${n}${LETRA_L[l]} não existe: na camada ${n}, l vai de 0 a ${n - 1}`);
+      else if (e > capacidadeL(l) || e === 0) problemas.push(`${n}${LETRA_L[l]}${e}: a subcamada ${LETRA_L[l]} comporta de 1 a ${capacidadeL(l)} elétrons (princípio de Pauli)`);
+      if (vistas.has(`${n},${l}`)) problemas.push(`a subcamada ${n}${LETRA_L[l]} aparece mais de uma vez`);
+      vistas.add(`${n},${l}`);
+    }
+    return problemas;
+  }
+  const paraMapa = (lista) => { const m = new Map(); lista.forEach(([n, l, e]) => { if (e) m.set(`${n},${l}`, e); }); return m; };
+  const ordemMadelung = () => { const p = []; for (let n = 1; n < 8; n++) for (let l = 0; l < Math.min(n, 4); l++) p.push([n, l]); return p.sort((a, b) => a[0] + a[1] - b[0] - b[1] || a[0] - b[0]); };
+  function fundamental(simbolo, carga) {
+    const texto = (DADOS.elementos[simbolo] || {}).config;
+    if (!texto) return null;
+    const m = paraMapa(lerSubcamadas(texto));
+    for (let k = 0; k < carga; k++) {
+      const chave = [...m.keys()].sort((a, b) => { const [na, la] = a.split(",").map(Number), [nb, lb] = b.split(",").map(Number); return nb - na || lb - la; })[0];
+      if (!chave) break;
+      m.set(chave, m.get(chave) - 1);
+      if (!m.get(chave)) m.delete(chave);
+    }
+    for (let k = 0; k < -carga; k++) {
+      for (const [n, l] of ordemMadelung()) { const c = `${n},${l}`; if ((m.get(c) || 0) < capacidadeL(l)) { m.set(c, (m.get(c) || 0) + 1); break; } }
+    }
+    return m;
+  }
+  const textoConfig = (m) => [...m.entries()].map(([c, e]) => [...c.split(",").map(Number), e]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(([n, l, e]) => `${n}${LETRA_L[l]}${e}`).join(" ");
+  const hundDe = (m) => [...m.entries()].reduce((t, [c, e]) => { const o = 2 * Number(c.split(",")[1]) + 1; return t + (e <= o ? e : 2 * o - e); }, 0);
+  const camadasDeMapa = (m) => { const v = []; m.forEach((e, c) => { const n = Number(c.split(",")[0]); v[n - 1] = (v[n - 1] || 0) + e; }); return Array.from(v, (x) => x || 0); };
+  const mapasIguais = (a, b) => a.size === b.size && [...a].every(([c, e]) => b.get(c) === e);
 
   function valenciasDe(a) {
     const v = DADOS.valencias;
@@ -393,6 +489,13 @@
     "STRUCT-008": ["Partes desconectadas", "Algum átomo não tem caminho de ligações até os demais.", "Ligue todos os átomos, ou use species ionic_solid para um sólido iônico."],
     "RING-002": ["Anel não fecha", "Dois átomos vizinhos na lista do ring não estão ligados.", "Liste os átomos na ordem do ciclo e declare a ligação que falta."],
     "STEREO-001": ["Referência ambígua", "Em stereo cada referência precisa apontar para um único átomo.", "Use o nome do átomo em vez do símbolo do elemento."],
+    "ATOM-001": ["Número de massa impossível", "O número de massa A conta prótons e nêutrons (A = Z + N); menor que Z daria nêutrons negativos.", "Use um número de massa maior ou igual ao número atômico, como atom 12C ou atom 13C."],
+    "ATOM-002": ["Subcamada inválida", "Pelo princípio de Pauli, a subcamada l comporta 2(2l+1) elétrons (s2, p6, d10, f14), e na camada n só existem l de 0 a n−1.", "Confira a subcamada: 2p tem no máximo 6 elétrons e não existe 2d; o núcleo entre colchetes deve ser um gás nobre."],
+    "ATOM-003": ["Número de elétrons errado", "A configuração precisa ter Z − carga elétrons: o átomo neutro tem tantos elétrons quanto prótons.", "Some as subcamadas e ajuste; para um íon, lembre que a carga +1 tira um elétron."],
+    "ATOM-004": ["Estado excitado", "A configuração é possível, mas não é a de menor energia (estado fundamental medido).", "Se quis o estado fundamental, use a referência indicada; se quis um estado excitado, o aviso só registra isso."],
+    "ATOM-005": ["Isótopo não natural", "O número de massa não está entre os isótopos de composição natural da CIAAW: pode ser radioativo ou artificial.", "Confira o número de massa; para a composição natural, omita-o (atom C)."],
+    "ATOM-006": ["Configuração fora de lugar", "A configuração eletrônica descreve um átomo isolado ou um íon monoatômico; em moléculas os elétrons ocupam orbitais moleculares.", "Use configuration só com species atom ou species monatomic_ion, uma vez por átomo."],
+    "ATOM-007": ["Contra a regra de Hund", "Pela regra de Hund os elétrons ocupam orbitais de mesma energia um a um; isso fixa quantos ficam desemparelhados.", "Ajuste o unpaired para o valor indicado pela configuração."],
     "SPEC-001": ["Tipo de espécie incompatível", "O tipo do cabeçalho não combina com o conteúdo: atom e monatomic_ion descrevem um único átomo, sem ligações.", "Use species molecule para mais de um átomo, ou species monatomic_ion com charge para um átomo com carga."],
     "SPEC-002": ["Motivo de uma estrutura estendida", "Sólidos iônicos e redes covalentes são infinitos; o grafo descreve só uma unidade que se repete.", "Nada a corrigir: o aviso registra o limite do modelo."],
     "METAL-002": ["Ligação metálica coletiva", "Num metal os elétrons ficam deslocalizados por todo o sólido; uma aresta ~ só indica o motivo.", "Nada a corrigir: o aviso registra o limite do modelo."],
@@ -507,7 +610,7 @@
   }
 
   // Modelo de Bohr: núcleo com o símbolo e camadas com elétrons girando
-  function pintarBohr(ctx, w, h, simbolo, lista, tempo, carga = 0) {
+  function pintarBohr(ctx, w, h, simbolo, lista, tempo, carga = 0, massa = null) {
     const escuro = raiz.dataset.theme !== "light";
     const cx = w / 2, cy = h / 2, n = Math.max(lista.length, 1);
     const rMax = Math.min(w, h) / 2 - 14, rNucleo = Math.max(12, rMax * 0.14);
@@ -530,6 +633,10 @@
     ctx.font = `700 ${rNucleo * 0.8}px ui-monospace, Menlo, monospace`;
     ctx.textAlign = "center"; ctx.textBaseline = "middle";
     ctx.fillText(simbolo, cx, cy + 1);
+    const z = (DADOS.elementos[simbolo] || {}).numero;
+    ctx.fillStyle = escuro ? "rgba(236,235,242,0.75)" : "rgba(28,26,35,0.75)";
+    ctx.font = `600 ${Math.max(10, rNucleo * 0.42)}px ui-monospace, Menlo, monospace`;
+    ctx.fillText(massa ? `${massa}${simbolo}: ${z} p, ${massa - z} n` : `${z} prótons`, cx, cy + rNucleo + Math.max(12, rNucleo * 0.5));
     if (carga) {
       ctx.fillStyle = acento;
       ctx.font = `700 ${rNucleo * 0.7}px ui-monospace, Menlo, monospace`;
@@ -607,7 +714,8 @@
       if (this.atomos.length === 1) {
         // Espécie de um átomo só: modelo de Bohr com a carga do íon
         const a = this.atomos[0];
-        pintarBohr(ctx, w, h, a.el, camadasComCarga(a.el, a.carga), performance.now(), a.carga);
+        const lista = a.configuracao ? camadasDeMapa(a.configuracao) : camadasComCarga(a.el, a.carga);
+        pintarBohr(ctx, w, h, a.el, lista, performance.now(), a.carga, a.massa);
         return;
       }
       const cy = Math.cos(this.ry), sy = Math.sin(this.ry), cx = Math.cos(this.rx), sx = Math.sin(this.rx);

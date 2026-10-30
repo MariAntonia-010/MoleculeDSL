@@ -70,6 +70,11 @@ def explicar_quantificador(fluxo, token):
 
     if token.type == P.INTEIRO:
         n = token.text
+        if seguinte.type == P.NOME and seguinte.text in ("s", "p", "d", "f"):
+            return (
+                f"subcamada sem o número de elétrons: escreva '{n}{seguinte.text}' "
+                f"seguido da quantidade, como {n}{seguinte.text}2"
+            )
         if seguinte.type == P.NOME and seguinte.text == "x":
             return f"multiplicador com espaço: escreva '{n}x', sem espaço entre o número e o x"
         if seguinte.type == P.IDENT and seguinte.text == "X":
@@ -116,6 +121,7 @@ class RecuperacaoPorComando(DefaultErrorStrategy):
         P.BOND,
         P.RING,
         P.STEREO,
+        P.CONFIGURATION,
         P.MULTIPLICADOR_ATOMO,
         P.FECHA_CHAVE,
     }
@@ -202,7 +208,7 @@ class ErroSintatico(ColetorErrosANTLR):
                 dica = explicar_quantificador(recognizer.getTokenStream(), token)
                 if dica is not None:
                     return dica, False
-                return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring', 'stereo' ou '}}'", False
+                return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}}'", False
 
         if regra == P.RULE_atomo:
             if P.ATOM in esperados:
@@ -244,6 +250,16 @@ class ErroSintatico(ColetorErrosANTLR):
                 f"esperado átomo ou descritor (R, S, r, s, E, Z, Ra, Sa, cis ou trans) "
                 f"em 'stereo', encontrado {encontrado}"
             ), True
+
+        if regra in (P.RULE_configuracao, P.RULE_nucleo):
+            if P.SUBCAMADA in esperados:
+                return (
+                    f"esperada subcamada como 2p4 (camada 1 a 7, tipo s, p, d ou f e número de elétrons), encontrado {encontrado}"
+                ), True
+            if P.IDENT in esperados:
+                return f"esperado gás nobre entre colchetes, como [Ne], encontrado {encontrado}", True
+            if P.FECHA_COLCHETE in esperados:
+                return f"esperado ']' para fechar o núcleo de gás nobre, encontrado {encontrado}", True
 
         if regra == P.RULE_anel and P.NOME in esperados:
             return f"um anel precisa de pelo menos três nomes de átomos, encontrado {encontrado}", True

@@ -34,11 +34,13 @@ comando
     | ligacao
     | anel
     | estereo
+    | configuracao
     ;
 
-// Ex.: atom O, 4x atom H, atom N(+1), atom C as c1
+// Ex.: atom O, 4x atom H, atom N(+1), atom C as c1, atom 13C (número de
+// massa antes do símbolo, como na notação de nuclídeo da IUPAC)
 atomo
-    : MULTIPLICADOR_ATOMO? ATOM IDENT carga? (AS NOME)?
+    : MULTIPLICADOR_ATOMO? ATOM INTEIRO? IDENT carga? (AS NOME)?
     ;
 
 // O sinal negativo reaproveita o token LIGACAO
@@ -87,6 +89,17 @@ descritor
     | NOME
     ;
 
+// Configuração eletrônica de um átomo isolado ou íon monoatômico:
+// configuration c [He] 2s2 2p2
+configuracao
+    : CONFIGURATION referencia nucleo? SUBCAMADA+
+    ;
+
+// Núcleo de gás nobre: [He], [Ne], [Ar], [Kr], [Xe], [Rn]
+nucleo
+    : ABRE_COLCHETE IDENT FECHA_COLCHETE
+    ;
+
 // ---------- LEXER ----------
 
 // Palavras-chave (antes de NOME, para vencer no empate)
@@ -104,6 +117,7 @@ BOND     : 'bond' ;
 AS       : 'as' ;
 RING     : 'ring' ;
 STEREO   : 'stereo' ;
+CONFIGURATION : 'configuration' ;
 
 // Quantificadores
 MULTIPLICADOR_ATOMO
@@ -113,6 +127,11 @@ MULTIPLICADOR_ATOMO
 // Antes de NOME: x4 é sempre repetição
 REPETICAO_LIGACAO
     : 'x' [0-9]+
+    ;
+
+// Subcamada ocupada: camada (1 a 7), tipo (s, p, d, f) e elétrons, como 2p4
+SUBCAMADA
+    : [1-7] [spdf] [0-9]+
     ;
 
 // Números
@@ -151,6 +170,8 @@ MAIS        : '+' ;
 ABRE_PAREN  : '(' ;
 FECHA_PAREN : ')' ;
 ABRE_CHAVE  : '{' ;
+ABRE_COLCHETE  : '[' ;
+FECHA_COLCHETE : ']' ;
 FECHA_CHAVE : '}' ;
 
 // Comentários

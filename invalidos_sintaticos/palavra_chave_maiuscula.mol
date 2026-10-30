@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-002] na linha 3, coluna 4: comando inválido 'At': esperado 'atom', 'bond', 'ring', 'stereo' ou '}'
+// esperado: Erro sintático [SIN-002] na linha 3, coluna 4: comando inválido 'At': esperado 'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'
 molecule "Water" {
     Atom O
 }

@@ -18,6 +18,10 @@ class Atomo:
     nome: str | None
     linha: int
     coluna: int
+    # Número de massa declarado (atom 13C) e configuração eletrônica
+    # declarada, como lista de (n, l, elétrons)
+    massa: int | None = None
+    configuracao: list | None = None
 
     def rotulo(self):
         # Ex.: "H#2" ou "c1 (C#1)"
@@ -82,7 +86,8 @@ def formatar(modelo):
 
     linhas.append(f"  Átomos ({len(modelo.atomos)})")
     for a in modelo.atomos:
-        linhas.append(f"    {a.rotulo()} carga={a.carga:+d} [{a.linha}:{a.coluna}]")
+        massa = f" A={a.massa}" if a.massa is not None else ""
+        linhas.append(f"    {a.rotulo()} carga={a.carga:+d}{massa} [{a.linha}:{a.coluna}]")
 
     linhas.append(f"  Ligações ({len(modelo.ligacoes)})")
     for lig in modelo.ligacoes:

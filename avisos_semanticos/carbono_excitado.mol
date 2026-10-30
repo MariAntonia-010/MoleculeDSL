@@ -1,0 +1,6 @@
+// esperado: Aviso semântico [ATOM-004] na linha 5, coluna 4: a configuração não é o estado fundamental de c (C#1) (referência: 1s2 2s2 2p2); descreve um estado excitado
+// Configuração válida, mas não é o estado fundamental
+species atom "Carbon" {
+    atom C as c
+    configuration c 1s2 2s1 2p3
+}

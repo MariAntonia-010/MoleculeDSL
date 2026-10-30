@@ -49,7 +49,7 @@ def solve_distribution(
     # ponderada em base 4 sobre essas posições.
     rank = {pair: index for index, pair in enumerate(column_pairs(count))}
     signatures = [
-        (atom.element, atom.charge, hydrogens)
+        (atom.element, atom.charge, getattr(atom, "mass", None) or 0, hydrogens)
         for atom, hydrogens in zip(heavy, hydrogen_distribution)
     ]
     for i, j in pairs:

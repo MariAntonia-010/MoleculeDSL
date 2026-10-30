@@ -185,6 +185,7 @@ Depois de uma análise sem erros, estas opções mostram informações extras:
 
 | Opção | Mostra |
 |---|---|
+| `--estrutura-atomica` | núcleo (Z, A, prótons, nêutrons), configuração eletrônica, camadas, regra de Hund e diagrama de orbitais |
 | `--eletronico` | pares livres, elétrons não ligantes e ligações pi de cada átomo |
 | `--ressonancia` | formas de ressonância, inclusive de radicais; ligações `->` ficam fixas e `~` fica fora |
 | `--tautomeros` | tautômeros por deslocamento de H de ou para heteroátomos (ceto-enol, imina-enamina) |
@@ -204,6 +205,27 @@ A contagem de estereoisômeros agrupa as configurações pelo grupo de
 automorfismos do grafo, então já desconta formas meso (ácido tartárico: 3) e
 reconhece centros pseudoassimétricos (ácido 2,3,4-tri-hidroxiglutárico: 4).
 A contagem de 18 elétrons é só informativa.
+
+### Estrutura do átomo
+
+O número de massa vem antes do símbolo, como na notação de nuclídeo da
+IUPAC (¹³C): `atom 13C`, `2x atom 2H as d`. Sem número, vale a composição
+isotópica natural. Num átomo isolado ou íon monoatômico, `configuration`
+declara a configuração eletrônica:
+
+```text
+species atom "Carbon-13" unpaired 2 {
+    atom 13C as c
+    configuration c [He] 2s2 2p2
+}
+```
+
+O compilador confere o número de massa (ATOM-001), as regras de Pauli e de
+l < n (ATOM-002), o total de elétrons (ATOM-003), o estado fundamental de
+referência (ATOM-004), os isótopos naturais da CIAAW (ATOM-005) e o
+`unpaired` contra a regra de Hund (ATOM-007). `--estrutura-atomica` mostra
+núcleo, eletrosfera e diagrama de orbitais. Pesquisa e decisões em
+[docs/plano_atomo.md](docs/plano_atomo.md).
 
 ### Configuração estereoquímica
 
@@ -246,7 +268,7 @@ python3 src/construtor_ast.py exemplos/agua.mol
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
-- **Guia:** 14 lições, começando pela construção de um átomo passo a passo, com código, saída real do compilador e variações de
+- **Guia:** 15 lições, começando pela construção de um átomo passo a passo e por núcleo e eletrosfera, com código, saída real do compilador e variações de
   escrita; cada exemplo é compilado pelo compilador real ao gerar a página;
 - **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
 - **Uso** e **Doc:** instalação, comandos, gramática real, erros e
@@ -365,6 +387,13 @@ O catálogo de códigos, causas e correções está em
 | `STRUCT-008` | entidade molecular tem componentes desconectados | erro |
 | `STEREO-001` a `STEREO-004` | configuração em elemento não estereogênico, descritor errado, repetido ou sem desempate | erro |
 | `STEREO-005` | eixo de biarila declarado sem verificação da barreira | aviso |
+| `ATOM-001` | número de massa menor que o número atômico | erro |
+| `ATOM-002` | subcamada impossível, acima do limite de Pauli ou repetida; núcleo que não é gás nobre | erro |
+| `ATOM-003` | total de elétrons da configuração diferente de Z − carga | erro |
+| `ATOM-004` | configuração diferente do estado fundamental (estado excitado) | aviso |
+| `ATOM-005` | isótopo fora dos isótopos naturais da CIAAW | aviso |
+| `ATOM-006` | `configuration` fora de átomo isolado ou íon monoatômico, ou repetida | erro |
+| `ATOM-007` | `unpaired` diferente da regra de Hund | aviso |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e
@@ -435,6 +464,7 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 - [Pesquisa química aprofundada](docs/pesquisa_quimica_aprofundada.md)
 - [Plano completo do solver](docs/plano_solver.md)
 - [Plano de eliminação dos limites](docs/plano_limites.md)
+- [Plano da estrutura do átomo](docs/plano_atomo.md)
 - [Diário do projeto](docs/DIARIO.md)
 - [Página de apresentação](docs/apresentacao/index.html)
 

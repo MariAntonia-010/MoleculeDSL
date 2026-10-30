@@ -50,6 +50,7 @@ def build_molecule(problem, edges):
             nome=atom.name,
             linha=atom.line,
             coluna=atom.column,
+            massa=atom.mass,
         )
         for atom in problem.atoms
     ]

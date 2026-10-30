@@ -1,0 +1,7 @@
+// Água pesada: dois deutérios (2H)
+species molecule "Heavy water" {
+    atom O as o
+    2x atom 2H as d
+    bond o-d1
+    bond o-d2
+}

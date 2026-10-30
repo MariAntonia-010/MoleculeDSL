@@ -1,0 +1,5 @@
+// Exceção real ao Aufbau: 3d5 4s1, seis elétrons desemparelhados
+species atom "Chromium" unpaired 6 {
+    atom Cr as cr
+    configuration cr [Ar] 3d5 4s1
+}

@@ -1,0 +1,5 @@
+// Configuração sem núcleo de gás nobre
+species atom "Sodium" unpaired 1 {
+    atom 23Na as na
+    configuration na 1s2 2s2 2p6 3s1
+}

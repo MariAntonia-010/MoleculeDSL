@@ -601,3 +601,28 @@ O₃ trioxigênio; cátion monoatômico "sódio(1+)", ânion "cloreto"). O limit
   minúsculas, elemento inexistente, carga em `species atom`).
 - Exemplos de átomo mostram o modelo de Bohr na própria lição; exemplos
   pequenos de todas as lições mostram a AST desenhada.
+
+---
+
+## 30/10/2026 — Estrutura do átomo: núcleo e eletrosfera
+
+Pesquisa e plano em `docs/plano_atomo.md` (notação de nuclídeo da IUPAC,
+OpenSMILES, CML, isótopos da CIAAW, Pauli, Aufbau/Madelung com exceções,
+Hund, íons de metais de transição).
+
+- Linguagem: número de massa antes do símbolo (`atom 13C`, `2x atom 2H as d`)
+  e o comando `configuration` com núcleo de gás nobre opcional
+  (`configuration fe [Ar] 3d6`). Tokens novos: `configuration`, `SUBCAMADA`
+  e colchetes; `[` deixou de ser erro léxico.
+- Semântica: ATOM-001 a ATOM-007 (massa menor que Z, Pauli e l < n, total de
+  elétrons, estado excitado, isótopo não natural, configuration fora de
+  átomo/íon monoatômico, unpaired contra Hund). Átomos isolados usam a
+  configuração medida de `regras/elementos.json` como referência; íons, a
+  regra de remoção por maior n.
+- `src/atomo.py` e o relatório `--estrutura-atomica` (núcleo, configuração,
+  camadas, Hund, diagrama de orbitais). `regras/isotopos.json` (CIAAW, Z ≤ 20).
+- Solver: isótopos passam para as soluções e distinguem átomos na
+  deduplicação (corrigida a distribuição de H, que fundia 13C com C).
+- Página: compilador do navegador com as regras ATOM, Bohr com configuração
+  declarada e prótons/nêutrons, isótopos na tabela periódica, lição "Núcleo e
+  eletrosfera" no guia e tópico "Estrutura atômica" na Doc.

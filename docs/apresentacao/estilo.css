@@ -497,6 +497,7 @@
     .parte.p1 { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); }
     .parte.p2 { color: var(--aviso); border-color: color-mix(in srgb, var(--aviso) 50%, transparent); }
     .parte.p3 { color: var(--erro); border-color: color-mix(in srgb, var(--erro) 45%, transparent); }
+    .parte.p4 { color: var(--texto); border-color: var(--fraco); }
     .anatomia dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.5rem 1rem; align-items: center; }
     .anatomia dt { font: 600 0.9rem var(--mono); }
     .anatomia dd { margin: 0; color: var(--suave); }

@@ -1,0 +1,170 @@
+import re
+
+
+# Estrutura do átomo (docs/plano_atomo.md): núcleo e eletrosfera.
+#
+# - Pauli: a subcamada de número l comporta 2(2l+1) elétrons, e l vai de 0 a
+#   n−1 (não existem 1p, 2d, 3f).
+# - Aufbau/Madelung: ordem de preenchimento por n + l e, no empate, por n.
+#   As exceções reais (Cr, Cu...) ficam nos dados medidos de
+#   regras/elementos.json, que são a referência do estado fundamental.
+# - Hund: em orbitais de mesma energia os elétrons entram um de cada vez
+#   antes de formar pares, o que dá os desemparelhados.
+# - Íons: o cátion perde primeiro os elétrons da camada de maior n (ns antes
+#   de (n−1)d); o ânion ganha na ordem de Madelung.
+
+L_DA_LETRA = {"s": 0, "p": 1, "d": 2, "f": 3}
+LETRA_DO_L = "spdf"
+NUCLEOS = {
+    "He": "1s2",
+    "Ne": "[He] 2s2 2p6",
+    "Ar": "[Ne] 3s2 3p6",
+    "Kr": "[Ar] 3d10 4s2 4p6",
+    "Xe": "[Kr] 4d10 5s2 5p6",
+    "Rn": "[Xe] 4f14 5d10 6s2 6p6",
+}
+SUBCAMADA = re.compile(r"(\d)([spdf])(\d+)")
+
+
+def capacidade(l):
+    return 2 * (2 * l + 1)
+
+
+def ordem_madelung():
+    # (n, l) em ordem de preenchimento: n + l crescente e, no empate, n
+    pares = [(n, l) for n in range(1, 8) for l in range(0, min(n, 4))]
+    return sorted(pares, key=lambda p: (p[0] + p[1], p[0]))
+
+
+def ler_subcamadas(texto):
+    """Lista de (n, l, elétrons) de um texto como '[Ne] 3s2 3p4'.
+
+    O núcleo de gás nobre é expandido; não confere nada.
+    """
+    for _ in range(6):
+        if "[" not in texto:
+            break
+        texto = re.sub(r"\[(\w+)\]", lambda m: f" {NUCLEOS.get(m.group(1), '')} ", texto, count=1)
+    return [(int(n), L_DA_LETRA[letra], int(e)) for n, letra, e in SUBCAMADA.findall(texto)]
+
+
+def problemas_de_pauli(subcamadas):
+    """Mensagens para subcamadas impossíveis, cheias demais ou repetidas."""
+    problemas = []
+    vistas = set()
+    for n, l, e in subcamadas:
+        rotulo = f"{n}{LETRA_DO_L[l]}{e}"
+        if l >= n:
+            problemas.append(
+                f"a subcamada {n}{LETRA_DO_L[l]} não existe: na camada {n}, l vai de 0 a {n - 1}"
+            )
+        elif e > capacidade(l) or e == 0:
+            problemas.append(
+                f"{rotulo}: a subcamada {LETRA_DO_L[l]} comporta de 1 a {capacidade(l)} "
+                "elétrons (princípio de Pauli)"
+            )
+        if (n, l) in vistas:
+            problemas.append(f"a subcamada {n}{LETRA_DO_L[l]} aparece mais de uma vez")
+        vistas.add((n, l))
+    return problemas
+
+
+def normalizar(subcamadas):
+    # Dicionário (n, l) -> elétrons, sem subcamadas vazias
+    return {(n, l): e for n, l, e in subcamadas if e}
+
+
+def configuracao_fundamental(simbolo, carga, dados_elementos):
+    """Estado fundamental de referência como dicionário (n, l) -> elétrons.
+
+    Neutro: a configuração medida de regras/elementos.json. Íon: derivada
+    dela. Devolve None se o elemento não tem configuração nos dados.
+    """
+    texto = (dados_elementos.get(simbolo) or {}).get("configuracao_eletronica")
+    if not texto:
+        return None
+    config = normalizar(ler_subcamadas(texto))
+    if carga > 0:
+        for _ in range(carga):
+            if not config:
+                break
+            # maior n primeiro; na mesma camada, maior l primeiro
+            n, l = max(config, key=lambda p: (p[0], p[1]))
+            config[(n, l)] -= 1
+            if not config[(n, l)]:
+                del config[(n, l)]
+    elif carga < 0:
+        for _ in range(-carga):
+            for n, l in ordem_madelung():
+                if config.get((n, l), 0) < capacidade(l):
+                    config[(n, l)] = config.get((n, l), 0) + 1
+                    break
+    return config
+
+
+def texto_configuracao(config):
+    partes = sorted(config.items(), key=lambda item: (item[0][0], item[0][1]))
+    return " ".join(f"{n}{LETRA_DO_L[l]}{e}" for (n, l), e in partes) or "(sem elétrons)"
+
+
+def desemparelhados(config):
+    # Regra de Hund, subcamada por subcamada
+    total = 0
+    for (n, l), e in config.items():
+        orbitais = 2 * l + 1
+        total += e if e <= orbitais else 2 * orbitais - e
+    return total
+
+
+def camadas(config):
+    maior = max((n for n, _ in config), default=0)
+    return [sum(e for (n, _), e in config.items() if n == k) for k in range(1, maior + 1)]
+
+
+def diagrama(config, quantas=2):
+    """Caixas de orbitais (Hund) das últimas subcamadas, em texto."""
+    ordenadas = sorted(config.items(), key=lambda item: (item[0][0] + item[0][1], item[0][0]))
+    linhas = []
+    for (n, l), e in ordenadas[-quantas:]:
+        orbitais = 2 * l + 1
+        caixas = []
+        for k in range(orbitais):
+            setas = ("↑" if e > k else "") + ("↓" if e > orbitais + k else "")
+            caixas.append(f"[{setas or ' '}]")
+        linhas.append(f"{n}{LETRA_DO_L[l]}: {''.join(caixas)}")
+    return linhas
+
+
+def formatar(modelo, dados_elementos):
+    """Relatório --estrutura-atomica: núcleo e eletrosfera de cada átomo."""
+    linhas = ["Estrutura atômica"]
+    for atomo in modelo.atomos:
+        dados = dados_elementos.get(atomo.elemento, {})
+        z = dados.get("numero_atomico")
+        eletrons = z - atomo.carga if z is not None else None
+        nucleo = f"Z={z}"
+        if atomo.massa is not None:
+            nucleo += f" A={atomo.massa} prótons={z} nêutrons={atomo.massa - z}"
+        else:
+            nucleo += f" prótons={z} (composição isotópica natural)"
+        linhas.append(f"  {atomo.rotulo()}: {dados.get('nome', atomo.elemento)}")
+        linhas.append(f"    núcleo: {nucleo}")
+        if atomo.configuracao is not None:
+            config, origem = normalizar(atomo.configuracao), "declarada"
+        else:
+            config, origem = configuracao_fundamental(atomo.elemento, atomo.carga, dados_elementos), "referência"
+        linhas.append(f"    eletrosfera: elétrons={eletrons} carga={atomo.carga:+d}")
+        if config is None:
+            linhas.append("    configuração: sem dado na fonte")
+            continue
+        linhas.append(f"    configuração ({origem}): {texto_configuracao(config)}")
+        linhas.append(f"    camadas: {', '.join(str(c) for c in camadas(config))}")
+        linhas.append(f"    desemparelhados (Hund): {desemparelhados(config)}")
+        for caixa in diagrama(config):
+            linhas.append(f"    {caixa}")
+    if len(modelo.atomos) > 1:
+        linhas.append(
+            "  Observação: dentro de uma molécula os elétrons de valência ocupam "
+            "orbitais moleculares; a configuração mostrada é a do átomo isolado."
+        )
+    return "\n".join(linhas)

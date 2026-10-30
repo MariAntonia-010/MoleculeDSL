@@ -1,0 +1,9 @@
+// esperado: Erro semântico [ATOM-006] na linha 8, coluna 4: configuration descreve um átomo isolado ou um íon monoatômico; numa molécula os elétrons ocupam orbitais moleculares
+// Na molécula os elétrons ocupam orbitais moleculares
+species molecule "Water" {
+    atom O as o
+    2x atom H as h
+    bond o-h1
+    bond o-h2
+    configuration o [He] 2s2 2p4
+}

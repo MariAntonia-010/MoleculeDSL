@@ -51,6 +51,8 @@ class AtomoDecl:
     # Nome automático dos átomos sem `as`, igual ao rótulo do modelo e das
     # mensagens: O#1, ou H#1…H#4 com multiplicador
     nome_automatico: str = ""
+    # Número de massa (isótopo), como em atom 13C; None é a composição natural
+    massa: int | None = None
 
 
 @dataclass
@@ -82,7 +84,17 @@ class EstereoDecl:
     coluna_descritor: int = 0
 
 
-Comando = AtomoDecl | LigacaoDecl | AnelDecl | EstereoDecl
+@dataclass
+class ConfiguracaoDecl:
+    # configuration c [He] 2s2 2p2: núcleo de gás nobre opcional e subcamadas
+    referencia: Referencia
+    nucleo: str | None
+    subcamadas: list[str]
+    linha: int
+    coluna: int
+
+
+Comando = AtomoDecl | LigacaoDecl | AnelDecl | EstereoDecl | ConfiguracaoDecl
 
 
 @dataclass
@@ -143,7 +155,9 @@ def formatar(molecula):
         if isinstance(c, AtomoDecl):
             linhas.append(
                 f"  AtomoDecl elemento={c.elemento} multiplicador={c.multiplicador} "
-                f"carga={c.carga:+d} nome={descrever_nome(c)} {pos(c)}"
+                f"carga={c.carga:+d} nome={descrever_nome(c)}"
+                + (f" massa={c.massa}" if c.massa is not None else "")
+                + f" {pos(c)}"
             )
         elif isinstance(c, LigacaoDecl):
             linhas.append(
@@ -155,6 +169,10 @@ def formatar(molecula):
             linhas.append(f"  AnelDecl {pos(c)}")
             for r in c.nomes:
                 linhas.append(f"    {ref(r)}")
+        elif isinstance(c, ConfiguracaoDecl):
+            nucleo = f"[{c.nucleo}] " if c.nucleo else ""
+            linhas.append(f"  ConfiguracaoDecl {nucleo}{' '.join(c.subcamadas)} {pos(c)}")
+            linhas.append(f"    átomo: {ref(c.referencia)}")
         elif isinstance(c, EstereoDecl):
             operador = c.operador.name if c.operador is not None else "nenhum"
             linhas.append(

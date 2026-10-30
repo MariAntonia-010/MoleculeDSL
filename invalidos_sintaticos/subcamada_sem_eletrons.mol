@@ -1,0 +1,6 @@
+// esperado: Erro sintático [SIN-002] na linha 5, coluna 29: subcamada sem o número de elétrons: escreva '2p' seguido da quantidade, como 2p2
+// A subcamada precisa do número de elétrons, como 2p4
+species atom "Oxygen" {
+    atom O as o
+    configuration o [He] 2s2 2p
+}

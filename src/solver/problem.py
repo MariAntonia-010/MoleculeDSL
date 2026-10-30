@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from ast_nos import AnelDecl, AtomoDecl, EstereoDecl, LigacaoDecl
+from ast_nos import AnelDecl, AtomoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl
 
 
 @dataclass(frozen=True)
@@ -13,6 +13,7 @@ class SolverAtom:
     line: int
     column: int
     name: str
+    mass: int | None = None
 
     @property
     def is_hydrogen(self):
@@ -35,7 +36,7 @@ class SolveProblem:
 
 def normalize(molecule):
     for command in molecule.comandos:
-        if isinstance(command, (LigacaoDecl, AnelDecl, EstereoDecl)):
+        if isinstance(command, (LigacaoDecl, AnelDecl, EstereoDecl, ConfiguracaoDecl)):
             return None, command
 
     atoms = []
@@ -52,6 +53,7 @@ def normalize(molecule):
                     line=command.linha,
                     column=command.coluna,
                     name=f"r{index + 1}",
+                    mass=command.massa,
                 )
             )
     return SolveProblem(molecule, tuple(atoms)), None

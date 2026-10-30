@@ -68,7 +68,7 @@
           <p class="lead">Entenda o compilador, aprenda a usar, consulte a referência, escreva moléculas, simule misturas e reações e explore os elementos.</p>
         </div>
         <div class="grade">
-          <a class="placa modulo c12" href="#/guia/construir_atomo"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Catorze lições com código, saída real do compilador e variações, começando por como construir um átomo passo a passo: átomos e íons monoatômicos, tipos de ligação (covalente, iônica, coordenada, metálica), cargas, anéis, radicais, stereo, erros semânticos, sólidos e o solver.</p></a>
+          <a class="placa modulo c12" href="#/guia/construir_atomo"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Quinze lições com código, saída real do compilador e variações, começando por como construir um átomo passo a passo e por núcleo e eletrosfera (isótopos, Pauli, Aufbau, Hund): átomos e íons monoatômicos, tipos de ligação (covalente, iônica, coordenada, metálica), cargas, anéis, radicais, stereo, erros semânticos, sólidos e o solver.</p></a>
           <a class="placa modulo c3" href="#/conteudo/1"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg></div><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
           <a class="placa modulo c3" href="#/uso"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
           <a class="placa modulo c3" href="#/doc/comandos"><div class="icone"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
@@ -353,6 +353,7 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
         <nav class="sumario placa" aria-label="Tópicos">
           <a href="#/doc/comandos" data-topico="comandos">Comandos</a>
           <a href="#/doc/referencias" data-topico="referencias">Referências e nomes</a>
+          <a href="#/doc/atomo" data-topico="atomo">Estrutura atômica</a>
           <a href="#/doc/estereo" data-topico="estereo">Configuração (stereo)</a>
           <a href="#/doc/regras" data-topico="regras">Regras semânticas</a>
           <a href="#/doc/traducao" data-topico="traducao">Árvore de tradução</a>
@@ -392,6 +393,28 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
             </ul>
             <h4>Palavras reservadas</h4>
             <pre>{{PALAVRAS}}</pre>
+          </article>
+          <article class="topico" data-topico="atomo">
+            <h3>Estrutura atômica</h3>
+            <h4>Núcleo: número de massa</h4>
+            <pre><span class="kw">atom</span> 13C              <span class="com">// carbono-13: 6 prótons, 7 nêutrons</span>
+2x <span class="kw">atom</span> 2H <span class="kw">as</span> d       <span class="com">// dois deutérios</span>
+<span class="kw">atom</span> C               <span class="com">// sem número: composição isotópica natural</span></pre>
+            <p>Como na notação de nuclídeo da IUPAC (¹³C), o número de massa A = Z + N vem antes do símbolo. A &lt; Z é erro (ATOM-001); isótopo fora dos naturais da CIAAW gera aviso (ATOM-005).</p>
+            <h4>Eletrosfera: configuration</h4>
+            <pre><span class="kw">species monatomic_ion</span> <span class="str">"Iron(2+)"</span> <span class="kw">charge</span> +2 <span class="kw">unpaired</span> 4 {
+    <span class="kw">atom</span> Fe(+2) <span class="kw">as</span> fe
+    <span class="kw">configuration</span> fe [Ar] 3d6
+}</pre>
+            <ul>
+              <li><b>Pauli</b>: a subcamada l comporta 2(2l+1) elétrons (s2, p6, d10, f14), e na camada n só há l de 0 a n−1 (ATOM-002).</li>
+              <li><b>Contagem</b>: a configuração tem Z − carga elétrons (ATOM-003).</li>
+              <li><b>Aufbau</b>: diferente do estado fundamental medido gera aviso de estado excitado (ATOM-004); exceções reais como o Cr (3d5 4s1) vêm dos dados.</li>
+              <li><b>Íons</b>: o cátion perde primeiro os elétrons de maior n (4s antes de 3d).</li>
+              <li><b>Hund</b>: o unpaired precisa bater com os desemparelhados da configuração (ATOM-007).</li>
+              <li>configuration só vale em species atom e monatomic_ion (ATOM-006).</li>
+            </ul>
+            <p class="nota">python3 src/main.py --estrutura-atomica mostra núcleo, configuração, camadas e diagrama de orbitais. Pesquisa e fontes em docs/plano_atomo.md.</p>
           </article>
           <article class="topico" data-topico="estereo">
             <h3>Configuração (stereo)</h3>

@@ -55,4 +55,8 @@ ESPECIES = {
     "proton": "Hídron, H⁺ (íon monoatômico)",
     "cloreto_de_sodio": "Cloreto de sódio (sólido iônico)",
     "sodio_metalico": "Sódio metálico (sólido metálico)",
+    "carbono_13": "Carbono-13 (isótopo, com configuração)",
+    "agua_pesada": "Água pesada (D₂O, com deutério)",
+    "cromo": "Crômio (exceção ao Aufbau: 3d⁵ 4s¹)",
+    "ferro_2mais": "Ferro(2+) (íon de metal de transição)",
 }

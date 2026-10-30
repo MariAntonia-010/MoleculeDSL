@@ -1,0 +1,5 @@
+// esperado: Erro semântico [ATOM-001] na linha 4, coluna 4: o número de massa 5 é menor que o número atômico de C (6): daria -1 nêutrons
+// A = Z + N: o número de massa não pode ser menor que Z
+species atom "Carbon" {
+    atom 5C
+}

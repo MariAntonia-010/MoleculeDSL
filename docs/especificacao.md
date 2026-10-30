@@ -160,6 +160,28 @@ Os átomos são citados na ordem em que aparecem no anel: cada um precisa estar 
 ring c1 c2 c3
 ```
 
+### Número de massa e `configuration`
+
+O número de massa vem antes do símbolo, como na notação de nuclídeo:
+`atom 13C`, `2x atom 2H as d`. Sem número, o átomo tem a composição
+isotópica natural. A massa não pode ser menor que o número atômico
+(ATOM-001), e um isótopo fora dos naturais da CIAAW gera aviso (ATOM-005).
+
+`configuration` declara a configuração eletrônica de um átomo isolado ou íon
+monoatômico, com núcleo de gás nobre opcional:
+
+```text
+species monatomic_ion "Iron(2+)" charge +2 unpaired 4 {
+    atom Fe(+2) as fe
+    configuration fe [Ar] 3d6
+}
+```
+
+A semântica confere as regras de Pauli e de l < n (ATOM-002), o total de
+elétrons (ATOM-003), o estado fundamental de referência (ATOM-004, aviso), o
+uso só em `atom` e `monatomic_ion` (ATOM-006) e o `unpaired` contra a regra
+de Hund (ATOM-007, aviso).
+
 ### `stereo`
 
 Declara a configuração de um elemento estereogênico. Os átomos são citados
@@ -217,7 +239,7 @@ atom O // átomo de oxigênio
 
 ## 7. Palavras reservadas
 
-As palavras `molecule`, `species`, `molecular_ion`, `monatomic_ion`, `ionic_solid`, `covalent_network`, `metallic_solid`, `charge`, `unpaired`, `atom`, `bond`, `as`, `ring` e `stereo` são reservadas e não podem ser usadas como nome de átomo.
+As palavras `molecule`, `species`, `molecular_ion`, `monatomic_ion`, `ionic_solid`, `covalent_network`, `metallic_solid`, `charge`, `unpaired`, `atom`, `bond`, `as`, `ring`, `stereo` e `configuration` são reservadas e não podem ser usadas como nome de átomo.
 
 Também ficam reservados os nomes formados por `x` seguido só de dígitos, como `x4`, porque são lidos como repetição de ligação.
 
@@ -241,13 +263,15 @@ cabecalho     = "molecule" , texto
               | "species" , "metallic_solid" , texto ;
 carga_especie = "charge" , ( "+" | "-" ) , inteiro ;
 desemparelhados = "unpaired" , inteiro ;
-comando       = atomo | ligacao | anel | estereo ;
-atomo         = [ multiplicador ] , "atom" , elemento , [ carga ] , [ "as" , nome ] ;
+comando       = atomo | ligacao | anel | estereo | configuracao ;
+atomo         = [ multiplicador ] , "atom" , [ inteiro ] , elemento , [ carga ] , [ "as" , nome ] ;
 carga         = "(" , ( "+" | "-" ) , inteiro , ")" ;
 ligacao       = "bond" , referencia , operador , referencia , [ repeticao ] ;
 referencia    = elemento | nome ;
 operador      = "-" | "=" | "#" | "->" | "~" ;
 anel          = "ring" , nome , nome , nome , { nome } ;
+configuracao  = "configuration" , referencia , [ "[" , elemento , "]" ] , subcamada , { subcamada } ;
+subcamada     = ( "1" | ... | "7" ) , ( "s" | "p" | "d" | "f" ) , inteiro ;
 estereo       = "stereo" , referencia , [ [ operador ] , referencia ] , descritor ;
 descritor     = elemento | nome ;  (* R, S, E, Z, Ra, Sa, r, s, cis ou trans *)
 

@@ -9,6 +9,7 @@ from MoleculeDSLVisitor import MoleculeDSLVisitor
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
+    ConfiguracaoDecl,
     EstereoDecl,
     LigacaoDecl,
     Especie,
@@ -114,6 +115,7 @@ class ConstrutorAST(MoleculeDSLVisitor):
             carga = self.visit(ctx.carga())
 
         nome = ctx.NOME().getText() if ctx.NOME() is not None else None
+        massa = int(ctx.INTEIRO().getText()) if ctx.INTEIRO() is not None else None
 
         return AtomoDecl(
             multiplicador,
@@ -122,6 +124,7 @@ class ConstrutorAST(MoleculeDSLVisitor):
             nome,
             ctx.start.line,
             ctx.start.column,
+            massa=massa,
         )
 
     def visitCarga(self, ctx):
@@ -166,6 +169,16 @@ class ConstrutorAST(MoleculeDSLVisitor):
             for n in ctx.NOME()
         ]
         return AnelDecl(nomes, ctx.start.line, ctx.start.column)
+
+    def visitConfiguracao(self, ctx):
+        nucleo = ctx.nucleo().IDENT().getText() if ctx.nucleo() is not None else None
+        return ConfiguracaoDecl(
+            self.visit(ctx.referencia()),
+            nucleo,
+            [s.getText() for s in ctx.SUBCAMADA()],
+            ctx.start.line,
+            ctx.start.column,
+        )
 
     def visitEstereo(self, ctx):
         operador = None

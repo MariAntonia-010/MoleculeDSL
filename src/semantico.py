@@ -2,9 +2,11 @@ import json
 import os
 from dataclasses import dataclass
 
+import atomo as estrutura_atomica
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
+    ConfiguracaoDecl,
     EstereoDecl,
     LigacaoDecl,
     Operador,
@@ -23,6 +25,7 @@ ARQUIVO_CLASSIFICACAO = os.path.join(
 ARQUIVO_LIGACOES_METALICAS = os.path.join(
     PASTA_RAIZ, "regras", "ligacoes_metalicas.json"
 )
+ARQUIVO_ISOTOPOS = os.path.join(PASTA_RAIZ, "regras", "isotopos.json")
 
 ERRO = "erro"
 AVISO = "aviso"
@@ -46,6 +49,11 @@ def carregar_valencias():
 def carregar_classificacao():
     with open(ARQUIVO_CLASSIFICACAO, encoding="utf-8") as arquivo:
         return json.load(arquivo)
+
+
+def carregar_isotopos():
+    with open(ARQUIVO_ISOTOPOS, encoding="utf-8") as arquivo:
+        return json.load(arquivo)["isotopos_naturais"]
 
 
 def carregar_ligacoes_metalicas():
@@ -92,6 +100,7 @@ class AnalisadorSemantico:
             ligacoes_metalicas["blocos_metalicos"]
         )
         self.mensagens = []
+        self.isotopos = carregar_isotopos()
         self.modelo = Modelo(
             molecula.nome,
             tipo=molecula.tipo,
@@ -140,8 +149,15 @@ class AnalisadorSemantico:
             if isinstance(c, EstereoDecl):
                 self.declarar_estereo(c)
 
+        for c in comandos:
+            if isinstance(c, ConfiguracaoDecl):
+                self.declarar_configuracao(c)
+
         if not self.tem_erro():
             self.conferir_tipo_carga_e_radical()
+
+        if not self.tem_erro():
+            self.conferir_hund()
 
         # Com outros erros, átomos sem ligação e problemas de valência
         # seriam só consequência deles
@@ -188,6 +204,28 @@ class AnalisadorSemantico:
             self.marcar_invalido(decl)
             return
 
+        # Núcleo: A = Z + N, então A não pode ser menor que Z
+        if decl.massa is not None:
+            z = self.dados_elementos[decl.elemento]["numero_atomico"]
+            if decl.massa < z:
+                self.erro(
+                    "ATOM-001",
+                    decl,
+                    f"o número de massa {decl.massa} é menor que o número atômico de "
+                    f"{decl.elemento} ({z}): daria {decl.massa - z} nêutrons",
+                )
+                self.marcar_invalido(decl)
+                return
+            naturais = self.isotopos.get(decl.elemento)
+            if naturais is not None and decl.massa not in naturais:
+                self.aviso(
+                    "ATOM-005",
+                    decl,
+                    f"{decl.massa}{decl.elemento} não é isótopo de composição natural "
+                    f"(CIAAW: {', '.join(f'{a}{decl.elemento}' for a in naturais)}); "
+                    "pode ser radioativo ou artificial",
+                )
+
         for i in range(decl.multiplicador):
             # Com quantidade, o nome vira prefixo: 4x atom H as h cria h1 a h4
             nome = decl.nome
@@ -212,6 +250,7 @@ class AnalisadorSemantico:
                 nome=nome,
                 linha=decl.linha,
                 coluna=decl.coluna,
+                massa=decl.massa,
             )
             self.modelo.atomos.append(atomo)
             do_elemento.append(atomo)
@@ -382,6 +421,88 @@ class AnalisadorSemantico:
         self.aneis_vistos[arestas] = decl
 
         self.modelo.aneis.append([a.id for a in atomos])
+
+    # ---------- estrutura do átomo ----------
+
+    def declarar_configuracao(self, decl):
+        """configuration: confere Pauli, a contagem de elétrons e o estado."""
+        tipo = self.molecula.tipo
+        if tipo not in (TipoEspecie.ATOMO, TipoEspecie.ION_MONOATOMICO):
+            self.erro(
+                "ATOM-006",
+                decl,
+                "configuration descreve um átomo isolado ou um íon monoatômico; "
+                "numa molécula os elétrons ocupam orbitais moleculares",
+            )
+            return
+        atomo = self.resolver(decl.referencia)
+        if atomo is None:
+            return
+        if atomo.configuracao is not None:
+            self.erro("ATOM-006", decl, f"{atomo.rotulo()} já tem configuração declarada")
+            return
+        texto = (f"[{decl.nucleo}] " if decl.nucleo else "") + " ".join(decl.subcamadas)
+        if decl.nucleo and decl.nucleo not in estrutura_atomica.NUCLEOS:
+            self.erro(
+                "ATOM-002",
+                decl,
+                f"[{decl.nucleo}] não é núcleo de gás nobre; use "
+                f"{', '.join(f'[{g}]' for g in estrutura_atomica.NUCLEOS)}",
+            )
+            return
+        subcamadas = estrutura_atomica.ler_subcamadas(texto)
+        problemas = estrutura_atomica.problemas_de_pauli(subcamadas)
+        if problemas:
+            self.erro("ATOM-002", decl, "; ".join(problemas))
+            return
+        z = self.dados_elementos[atomo.elemento]["numero_atomico"]
+        esperados = z - atomo.carga
+        total = sum(e for _, _, e in subcamadas)
+        if total != esperados:
+            self.erro(
+                "ATOM-003",
+                decl,
+                f"a configuração tem {total} elétrons, mas {atomo.rotulo()} "
+                f"(Z={z}, carga {atomo.carga:+d}) tem {esperados}",
+            )
+            return
+        atomo.configuracao = subcamadas
+        referencia = estrutura_atomica.configuracao_fundamental(
+            atomo.elemento, atomo.carga, self.dados_elementos
+        )
+        if referencia is not None and estrutura_atomica.normalizar(subcamadas) != referencia:
+            self.aviso(
+                "ATOM-004",
+                decl,
+                f"a configuração não é o estado fundamental de {atomo.rotulo()} "
+                f"(referência: {estrutura_atomica.texto_configuracao(referencia)}); "
+                "descreve um estado excitado",
+            )
+
+    def conferir_hund(self):
+        """unpaired de um átomo isolado precisa bater com a regra de Hund."""
+        if self.molecula.tipo not in (TipoEspecie.ATOMO, TipoEspecie.ION_MONOATOMICO):
+            return
+        if self.molecula.eletrons_desemparelhados is None or len(self.modelo.atomos) != 1:
+            return
+        atomo = self.modelo.atomos[0]
+        if atomo.configuracao is not None:
+            config = estrutura_atomica.normalizar(atomo.configuracao)
+        else:
+            config = estrutura_atomica.configuracao_fundamental(
+                atomo.elemento, atomo.carga, self.dados_elementos
+            )
+        if config is None:
+            return
+        hund = estrutura_atomica.desemparelhados(config)
+        if hund != self.molecula.eletrons_desemparelhados:
+            self.aviso(
+                "ATOM-007",
+                self.molecula,
+                f"unpaired={self.molecula.eletrons_desemparelhados}, mas a configuração "
+                f"{estrutura_atomica.texto_configuracao(config)} tem {hund} elétron(s) "
+                "desemparelhado(s) pela regra de Hund",
+            )
 
     # ---------- configuração ----------
 

@@ -1,0 +1,5 @@
+// esperado: Aviso semântico [ATOM-005] na linha 4, coluna 4: 14C não é isótopo de composição natural (CIAAW: 12C, 13C); pode ser radioativo ou artificial
+// 14C é radioativo: não está entre os isótopos naturais da CIAAW
+species atom "Carbon-14" {
+    atom 14C
+}

@@ -14,6 +14,7 @@ import estereo
 import complexos
 import tautomeros
 import aromaticidade
+import atomo
 
 
 # Códigos de saída
@@ -34,6 +35,7 @@ USO = (
     "\n  --formato=texto|json|jsonl escolhe a saída do solver"
     "\n  --backend=reference|cpsat escolhe o backend"
     "\n  --isolar roda a busca num processo separado"
+    "\n  --estrutura-atomica mostra núcleo, configuração eletrônica e regra de Hund"
     "\n  --eletronico mostra pares livres e elétrons pi de cada átomo"
     "\n  --ressonancia lista as formas de ressonância"
     "\n  --tautomeros lista os tautômeros por deslocamento de H"
@@ -52,6 +54,7 @@ OPCOES = {
     "--modelo",
     "--resolver",
     "--resolver-todas",
+    "--estrutura-atomica",
     "--eletronico",
     "--ressonancia",
     "--tautomeros",
@@ -62,6 +65,7 @@ OPCOES = {
 }
 
 RELATORIOS = (
+    "--estrutura-atomica",
     "--eletronico",
     "--ressonancia",
     "--tautomeros",
@@ -358,6 +362,8 @@ def imprimir_relatorios(modelo_molecula, opcoes):
         return
     elementos = semantico.carregar_elementos()
     valencias = semantico.carregar_valencias()
+    if "--estrutura-atomica" in opcoes:
+        print(atomo.formatar(modelo_molecula, elementos))
     if "--eletronico" in opcoes:
         print(eletronico.formatar_estados(modelo_molecula, elementos, valencias))
     if "--ressonancia" in opcoes:

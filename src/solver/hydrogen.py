@@ -1,5 +1,7 @@
 """Distribuição canônica de hidrogênios sobre átomos pesados."""
 
+from solver.canonical import atom_signature
+
 
 def distributions(heavy_atoms, target_valences, hydrogen_count):
     if not heavy_atoms:
@@ -9,9 +11,9 @@ def distributions(heavy_atoms, target_valences, hydrogen_count):
     current = [0] * len(heavy_atoms)
 
     def equivalent(a, b):
+        # Mesma assinatura do canônico: elemento, carga e número de massa
         return (
-            heavy_atoms[a].element == heavy_atoms[b].element
-            and heavy_atoms[a].charge == heavy_atoms[b].charge
+            atom_signature(heavy_atoms[a]) == atom_signature(heavy_atoms[b])
             and target_valences[a] == target_valences[b]
         )
 

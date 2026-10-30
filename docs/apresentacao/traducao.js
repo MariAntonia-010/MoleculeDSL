@@ -7,6 +7,7 @@
     atom: "ATOM", bond: "BOND", as: "AS", ring: "RING", stereo: "STEREO", IDENT: "IDENT", NOME: "NOME",
     MULT: "MULTIPLICADOR_ATOMO", REP: "REPETICAO_LIGACAO", INT: "INTEIRO", REAL: "REAL", TEXTO: "TEXTO",
     "{": "ABRE_CHAVE", "}": "FECHA_CHAVE", "(": "ABRE_PAREN", ")": "FECHA_PAREN", "+": "MAIS", EOF: "EOF",
+    configuration: "CONFIGURATION", SUBCAMADA: "SUBCAMADA", "[": "ABRE_COLCHETE", "]": "FECHA_COLCHETE",
   };
   const NOME_OPERADOR = { "-": "LIGACAO", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
   const LIGACAO_QUIMICA = {
@@ -42,6 +43,9 @@
       case "bond": return "declara uma ligação";
       case "ring": return "marca um anel (ciclo)";
       case "stereo": return "configuração espacial";
+      case "configuration": return "configuração eletrônica do átomo";
+      case "SUBCAMADA": return `camada ${t.valor[0]}, subcamada ${t.valor[1]}, ${t.valor.slice(2)} elétron(s)`;
+      case "[": case "]": return "núcleo de gás nobre (abreviação)";
       case "as": return "dá nome ao átomo";
       case "IDENT": return DADOS.elementos[t.valor] ? `elemento: ${nomeElemento(t.valor)}` : "símbolo ou descritor";
       case "NOME": return "nome de um átomo específico";
@@ -74,6 +78,8 @@
     anel: ["anel : RING NOME NOME NOME+", "átomos que formam um ciclo"],
     estereo: ["estereo : STEREO referencia (operador? referencia)? descritor", "arranjo espacial declarado"],
     descritor: ["descritor : IDENT | NOME", "R, S, E, Z, Ra, Sa, cis ou trans"],
+    configuracao: ["configuracao : CONFIGURATION referencia nucleo? SUBCAMADA+", "como os elétrons ocupam as subcamadas"],
+    nucleo: ["nucleo : '[' IDENT ']'", "elétrons internos iguais aos de um gás nobre"],
   };
 
   function escapar(texto) {
@@ -199,13 +205,14 @@
         contagem[c.el] = primeiro + c.mult - 1;
         const rotulos = c.mult > 1 ? `${c.el}#${primeiro}…${c.el}#${primeiro + c.mult - 1}` : `${c.el}#${primeiro}`;
         return { rotulo: "AtomoDecl", detalhe: q ? `${c.mult > 1 ? c.mult + " átomos" : "átomo"} de ${(DADOS.elementos[c.el] || {}).nome || c.el}${c.carga ? `, carga ${c.carga > 0 ? "+" : ""}${c.carga}` : ""}` : `[${c.l}:${c.c}]`,
-          campos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", descreverNome(c, rotulos)]].map(([k, v]) => `${k}: ${v}`) };
+          campos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", descreverNome(c, rotulos)], ...(c.massa != null ? [["massa", c.massa]] : [])].map(([k, v]) => `${k}: ${v}`) };
       }
       if (c.tipo === "bond") {
         const op = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" }[c.op];
         return { rotulo: "LigacaoDecl", detalhe: q ? { "-": "ligação simples", "=": "ligação dupla", "#": "ligação tripla", "->": "ligação coordenada", "~": "ligação metálica" }[c.op] : `[${c.l}:${c.c}]`,
           campos: [`origem: ${c.origem.texto}`, `operador: ${op}`, `destino: ${c.destino.texto}`, `repeticoes: ${c.rep}`] };
       }
+      if (c.tipo === "configuration") return { rotulo: "ConfiguracaoDecl", detalhe: q ? "configuração eletrônica" : `[${c.l}:${c.c}]`, campos: [`átomo: ${c.ref.texto}`, ...(c.nucleo ? [`núcleo: [${c.nucleo}]`] : []), `subcamadas: ${c.subcamadas.join(" ")}`] };
       if (c.tipo === "ring") return { rotulo: "AnelDecl", detalhe: q ? `ciclo de ${c.nomes.length} átomos` : `[${c.l}:${c.c}]`, campos: [`nomes: ${c.nomes.map((n) => n.texto).join(" ")}`] };
       return { rotulo: "EstereoDecl", detalhe: q ? "configuração espacial declarada" : `[${c.l}:${c.c}]`, campos: [`átomos: ${c.refs.map((r) => r.texto).join(" ")}`, `descritor: ${c.descritor}`] };
     });
@@ -237,9 +244,13 @@
       if (!r.tokens) return erroHTML();
       const visiveis = r.tokens.filter((t) => t.tipo !== "EOF");
       return `<div class="fichas">${visiveis.map((t, i) => {
-        // depois de 'species', 'atom' é o tipo da espécie, não o comando
+        // depois de 'species', 'atom' é o tipo da espécie; depois de 'atom', um
+        // inteiro é o número de massa
         const tipoDeEspecie = t.tipo === "atom" && i > 0 && visiveis[i - 1].tipo === "species";
-        const sentido = tipoDeEspecie ? (lente === "comp" ? "ATOM (tipo da espécie)" : "tipo: átomo isolado") : (lente === "comp" ? nomeTokenComp(t) : tokenQuimica(t));
+        const massa = t.tipo === "INT" && i > 0 && visiveis[i - 1].tipo === "atom";
+        const sentido = tipoDeEspecie ? (lente === "comp" ? "ATOM (tipo da espécie)" : "tipo: átomo isolado")
+          : massa ? (lente === "comp" ? "INTEIRO (número de massa)" : "número de massa: prótons + nêutrons")
+          : (lente === "comp" ? nomeTokenComp(t) : tokenQuimica(t));
         return `<span class="ficha"><code>${escapar(t.valor)}</code><small>${escapar(sentido)}</small></span>`;
       }).join("")}</div>`;
     }

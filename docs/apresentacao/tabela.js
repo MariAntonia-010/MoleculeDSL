@@ -65,11 +65,14 @@
           <dt>Camadas</dt><dd>${cam.join(", ") || "—"}</dd>
           <dt>Elétrons de valência</dt><dd>${e.valencia ?? "sem dado na fonte"}</dd>
           <dt>Eletronegatividade</dt><dd>${e.eletronegatividade ?? "sem dado"}</dd>
-          <dt>Estados de oxidação</dt><dd>${(e.estados || []).join(", ") || "—"}</dd></dl></div>
+          <dt>Estados de oxidação</dt><dd>${(e.estados || []).join(", ") || "—"}</dd>
+          <dt>Isótopos naturais (CIAAW)</dt><dd>${DADOS.isotopos[simbolo] ? DADOS.isotopos[simbolo].map((a) => `${a}${simbolo} (${a - e.numero} n)`).join(", ") : "sem dado no projeto (só Z ≤ 20)"}</dd>
+          <dt>Desemparelhados (Hund)</dt><dd>${(() => { const m = fundamental(simbolo, 0); return m ? `${hundDe(m)} · ${textoConfig(m)}` : "—"; })()}</dd></dl></div>
         <div><h4>Para o compilador</h4><dl>
           <dt>Token</dt><dd><code>IDENT '${simbolo}'</code>, casa [A-Z][a-z]?</dd>
           <dt>Nó da AST</dt><dd><code>AtomoDecl(elemento='${simbolo}')</code></dd>
           <dt>Valência</dt><dd>${valencias ? `aceita soma de ordens ${valencias.join(" ou ")}${comCarga ? `; com carga: ${Object.entries(comCarga).map(([c, v]) => `${c} → ${v.join("/")}`).join(", ")}` : ""}` : "sem regra com fonte: a valência não é conferida (nunca é inventada)"}</dd>
+          <dt>Número de massa</dt><dd>${DADOS.isotopos[simbolo] ? `<code>atom ${DADOS.isotopos[simbolo][0]}${simbolo}</code> escolhe o isótopo` : "o número de massa vem antes do símbolo (atom A" + simbolo + ")"}; A ≥ Z (ATOM-001)</dd>
           <dt>Classificação</dt><dd>${e.eletronegatividade != null ? "entra no cálculo de Δχ das ligações" : "sem eletronegatividade: ligação “não classificada”"}</dd></dl></div>
       </div>
       <pre>${escapar(codigoDoElemento(simbolo).trim())}</pre>

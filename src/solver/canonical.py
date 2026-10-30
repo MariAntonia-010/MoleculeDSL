@@ -4,7 +4,8 @@ from itertools import combinations, permutations, product
 
 
 def atom_signature(atom):
-    return atom.element, atom.charge
+    # Isótopos diferentes não são intercambiáveis: 13C não troca com C
+    return atom.element, atom.charge, getattr(atom, "mass", None) or 0
 
 
 def canonical_key(edges, atoms):

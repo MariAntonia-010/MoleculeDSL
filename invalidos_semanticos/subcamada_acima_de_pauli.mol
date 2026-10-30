@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-002] na linha 5, coluna 4: 2p7: a subcamada p comporta de 1 a 6 elétrons (princípio de Pauli)
+// A subcamada p comporta no máximo 6 elétrons
+species atom "Neon" {
+    atom Ne as ne
+    configuration ne 1s2 2s1 2p7
+}

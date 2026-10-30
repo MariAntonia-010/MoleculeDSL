@@ -21,12 +21,14 @@ LICOES = [
             {"titulo": "Abra e feche as chaves", "texto": "Tudo o que compõe a espécie fica entre { e }.", "codigo": 'species atom "Carbon" {\n}'},
             {"titulo": "Declare o átomo", "texto": "atom seguido do símbolo do elemento: primeira letra maiúscula e, se houver, a segunda minúscula (C, Na, Cl). Um átomo isolado não tem ligações, então não há bond.", "codigo": 'species atom "Carbon" {\n    atom C\n}'},
             {"titulo": "Compile", "texto": "O compilador confere que há um único átomo, sem ligações, e que o elemento existe. Sem erro, sai com código 0.", "codigo": "python3 src/main.py --ast --modelo carbono.mol"},
-            {"titulo": "Veja o átomo", "texto": "No playground, uma espécie de um átomo só é desenhada pelo modelo de Bohr, com as camadas de elétrons da configuração eletrônica.", "codigo": ""},
+            {"titulo": "Opcional: núcleo e eletrosfera", "texto": "O número de massa antes do símbolo escolhe o isótopo, e configuration declara a configuração eletrônica; o compilador confere as duas (lição seguinte).", "codigo": 'species atom "Carbon-13" unpaired 2 {\n    atom 13C as c\n    configuration c [He] 2s2 2p2\n}'},
+            {"titulo": "Veja o átomo", "texto": "No playground, uma espécie de um átomo só é desenhada pelo modelo de Bohr, com as camadas de elétrons da configuração e a contagem de prótons e nêutrons. python3 src/main.py --estrutura-atomica mostra o diagrama de orbitais.", "codigo": ""},
         ],
         "anatomia": {
-            "codigo": "atom Na(+1) as na1",
+            "codigo": "atom 23Na(+1) as na1",
             "partes": [
                 ["atom", "palavra-chave: declara um átomo (token ATOM)"],
+                ["23", "número de massa, opcional: prótons + nêutrons (notação de nuclídeo); sem ele, composição natural"],
                 ["Na", "símbolo do elemento (token IDENT, [A-Z][a-z]?)"],
                 ["(+1)", "carga formal, opcional; o sinal é obrigatório"],
                 ["as na1", "nome do átomo, opcional; sem ele o nome automático é Na#1"],
@@ -78,6 +80,114 @@ LICOES = [
                 "codigo": 'species atom "Sodium" {\n    atom Na(+1)\n}\n',
                 "opcoes": [],
                 "saida": 2,
+            },
+        ],
+    },
+    {
+        "id": "nucleo_eletrosfera",
+        "titulo": "Núcleo e eletrosfera: isótopos e configuração eletrônica",
+        "texto": [
+            "O núcleo tem Z prótons e N nêutrons; o número de massa é A = Z + N. Como na notação de nuclídeo da IUPAC (¹³C), "
+            "o número de massa vem antes do símbolo: atom 13C. Sem número, vale a composição isotópica natural. "
+            "O compilador confere que A ≥ Z e avisa quando o isótopo não está entre os naturais da CIAAW.",
+            "A eletrosfera segue três regras. Pauli: a subcamada l comporta 2(2l+1) elétrons (s2, p6, d10, f14), e na camada n só "
+            "existem l de 0 a n−1. Aufbau (Madelung): a ordem de preenchimento 1s, 2s, 2p, 3s, 3p, 4s, 3d..., com exceções reais "
+            "como o Cr (3d5 4s1). Hund: em orbitais de mesma energia, um elétron em cada antes de formar pares.",
+            "configuration declara a configuração de um átomo isolado ou íon monoatômico, com um núcleo de gás nobre opcional "
+            "([He], [Ne], [Ar]...). O compilador confere Pauli, o total de elétrons (Z − carga) e compara com o estado fundamental "
+            "medido; o unpaired precisa bater com a regra de Hund. Cátions de metais de transição perdem os elétrons 4s antes dos 3d.",
+        ],
+        "anatomia": {
+            "codigo": "configuration fe [Ar] 3d6",
+            "partes": [
+                ["configuration", "palavra-chave: configuração eletrônica (token CONFIGURATION)"],
+                ["fe", "o átomo descrito (referência por nome ou símbolo)"],
+                ["[Ar]", "núcleo de gás nobre, opcional: os 18 elétrons do argônio"],
+                ["3d6", "subcamada: camada 3, tipo d, 6 elétrons (token SUBCAMADA)"],
+            ],
+        },
+        "exemplos": [
+            {
+                "titulo": "Carbono-13 com configuração e relatório",
+                "explicacao": "6 prótons, 7 nêutrons, 1s2 2s2 2p2 e dois elétrons desemparelhados pela regra de Hund, como declara unpaired 2.",
+                "codigo": 'species atom "Carbon-13" unpaired 2 {\n    atom 13C as c\n    configuration c [He] 2s2 2p2\n}\n',
+                "opcoes": ["--estrutura-atomica"],
+                "saida": 0,
+                "bohr": "C",
+            },
+            {
+                "titulo": "Isótopos numa molécula: água pesada",
+                "explicacao": "O número de massa também vale dentro de moléculas: D₂O usa dois deutérios (2H). Já a configuration não: numa molécula os elétrons ocupam orbitais moleculares.",
+                "codigo": 'species molecule "Heavy water" {\n    atom O as o\n    2x atom 2H as d\n    bond o-d1\n    bond o-d2\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Exceção real ao Aufbau: crômio",
+                "explicacao": "A regra de Madelung preveria 3d4 4s2; o estado medido é 3d5 4s1, com seis elétrons desemparelhados. O compilador usa os dados medidos como referência.",
+                "codigo": 'species atom "Chromium" unpaired 6 {\n    atom Cr as cr\n    configuration cr [Ar] 3d5 4s1\n}\n',
+                "opcoes": ["--estrutura-atomica"],
+                "saida": 0,
+                "bohr": "Cr",
+            },
+            {
+                "titulo": "Íon de metal de transição: Fe²⁺",
+                "explicacao": "Fe é [Ar] 3d6 4s2; ao formar o cátion, saem primeiro os dois elétrons 4s: [Ar] 3d6, com quatro desemparelhados.",
+                "codigo": 'species monatomic_ion "Iron(2+)" charge +2 unpaired 4 {\n    atom Fe(+2) as fe\n    configuration fe [Ar] 3d6\n}\n',
+                "opcoes": ["--estrutura-atomica"],
+                "saida": 0,
+                "bohr": "Fe",
+                "carga": 2,
+            },
+            {
+                "titulo": "Erro: subcamada acima do limite de Pauli",
+                "explicacao": "2p comporta no máximo 6 elétrons.",
+                "codigo": 'species atom "Neon" {\n    atom Ne as ne\n    configuration ne 1s2 2s1 2p7\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+            {
+                "titulo": "Erro: subcamada que não existe",
+                "explicacao": "Na camada 2 só existem s (l = 0) e p (l = 1); 2d é impossível.",
+                "codigo": 'species atom "Carbon" {\n    atom C as c\n    configuration c 1s2 2s2 2d2\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+            {
+                "titulo": "Erro: número de elétrons errado",
+                "explicacao": "O carbono neutro tem 6 elétrons, e a configuração soma 7.",
+                "codigo": 'species atom "Carbon" {\n    atom C as c\n    configuration c 1s2 2s2 2p3\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+            {
+                "titulo": "Erro: número de massa menor que Z",
+                "explicacao": "5C teria 6 prótons e −1 nêutron.",
+                "codigo": 'species atom "Carbon" {\n    atom 5C\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+            {
+                "titulo": "Aviso: estado excitado",
+                "explicacao": "Um elétron do 2s foi para o 2p: possível, mas não é o estado fundamental.",
+                "codigo": 'species atom "Carbon" {\n    atom C as c\n    configuration c 1s2 2s1 2p3\n}\n',
+                "opcoes": [],
+                "saida": 0,
+            },
+            {
+                "titulo": "Aviso: isótopo radioativo",
+                "explicacao": "14C não está entre os isótopos naturais estáveis da CIAAW (12C e 13C).",
+                "codigo": 'species atom "Carbon-14" {\n    atom 14C\n}\n',
+                "opcoes": [],
+                "saida": 0,
+            },
+            {
+                "titulo": "Aviso: unpaired contra a regra de Hund",
+                "explicacao": "O oxigênio (2p4) tem dois elétrons desemparelhados, não zero.",
+                "codigo": 'species atom "Oxygen" unpaired 0 {\n    atom O\n}\n',
+                "opcoes": [],
+                "saida": 0,
+                "bohr": "O",
             },
         ],
     },

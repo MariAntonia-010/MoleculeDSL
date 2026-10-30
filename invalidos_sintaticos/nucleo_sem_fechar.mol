@@ -1,0 +1,6 @@
+// esperado: Erro sintático [SIN-001] na linha 5, coluna 25: esperado ']' para fechar o núcleo de gás nobre, encontrado '3s1'
+// O núcleo de gás nobre fecha com ]
+species atom "Sodium" {
+    atom Na as na
+    configuration na [Ne 3s1
+}

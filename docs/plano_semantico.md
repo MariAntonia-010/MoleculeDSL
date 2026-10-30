@@ -124,6 +124,20 @@ Os tipos `atom` e `monatomic_ion` descrevem átomo isolado e íon monoatômico.
 Átomo isolado e íon monoatômico não passam pela conferência de valência: não
 têm ligações por definição.
 
+### M5c: Estrutura do átomo
+
+Plano e fontes em `docs/plano_atomo.md`.
+
+| ID | Regra | Severidade |
+|---|---|---|
+| ATOM-001 | número de massa menor que o número atômico | erro |
+| ATOM-002 | subcamada impossível (l ≥ n), acima do limite de Pauli, repetida, ou núcleo que não é gás nobre | erro |
+| ATOM-003 | total de elétrons da configuração diferente de Z − carga | erro |
+| ATOM-004 | configuração diferente do estado fundamental de referência | aviso |
+| ATOM-005 | isótopo fora dos isótopos naturais da CIAAW (Z ≤ 20) | aviso |
+| ATOM-006 | `configuration` fora de `atom`/`monatomic_ion`, ou repetida | erro |
+| ATOM-007 | `unpaired` diferente da regra de Hund | aviso |
+
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.
 

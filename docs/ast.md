@@ -27,7 +27,9 @@ Especie
     │   ├── multiplicador: int
     │   ├── elemento: str
     │   ├── carga: int
-    │   └── nome: str | None
+    │   ├── nome: str | None
+    │   ├── nome_automatico: str      (O#1, para átomos sem `as`)
+    │   └── massa: int | None         (número de massa, como em atom 13C)
     ├── LigacaoDecl
     │   ├── origem: Referencia
     │   ├── operador: Operador
@@ -35,6 +37,10 @@ Especie
     │   └── repeticoes: int
     ├── AnelDecl
     │   └── nomes: list[Referencia]
+    ├── ConfiguracaoDecl
+    │   ├── referencia: Referencia
+    │   ├── nucleo: str | None        (He, Ne, Ar, Kr, Xe, Rn)
+    │   └── subcamadas: list[str]     (como ["2s2", "2p2"])
     └── EstereoDecl
         ├── referencias: list[Referencia]   (uma ou duas)
         ├── operador: Operador | None       (=, - ou nenhum)
@@ -77,6 +83,8 @@ modelo semântico.
 | `operador` | `Operador` |
 | `anel` | `AnelDecl` |
 | `estereo` | `EstereoDecl` |
+| `configuracao` | `ConfiguracaoDecl` |
+| `nucleo` | `nucleo` de `ConfiguracaoDecl` |
 | `descritor` | texto do descritor dentro de `EstereoDecl` |
 
 O descritor fica como texto na AST: conferir se ele combina com o elemento

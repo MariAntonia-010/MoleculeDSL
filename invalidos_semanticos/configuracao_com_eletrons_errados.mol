@@ -1,0 +1,6 @@
+// esperado: Erro semântico [ATOM-003] na linha 5, coluna 4: a configuração tem 7 elétrons, mas c (C#1) (Z=6, carga +0) tem 6
+// O carbono neutro tem 6 elétrons
+species atom "Carbon" {
+    atom C as c
+    configuration c 1s2 2s2 2p3
+}
