@@ -1,0 +1,810 @@
+  "use strict";
+  const DADOS = JSON.parse(document.getElementById("dados").textContent);
+  const raiz = document.documentElement;
+
+  /* ---------------- tema ---------------- */
+  try {
+    const salvo = localStorage.getItem("moleculedsl-tema");
+    if (salvo) raiz.dataset.theme = salvo;
+    else if (matchMedia("(prefers-color-scheme: light)").matches) raiz.dataset.theme = "light";
+  } catch (e) {}
+  document.querySelector(".tema").addEventListener("click", () => {
+    raiz.dataset.theme = raiz.dataset.theme === "light" ? "dark" : "light";
+    try { localStorage.setItem("moleculedsl-tema", raiz.dataset.theme); } catch (e) {}
+  });
+
+  /* ---------------- abas ---------------- */
+  document.querySelectorAll(".abas").forEach((grupo) => {
+    grupo.querySelectorAll(".aba").forEach((aba) => {
+      aba.addEventListener("click", () => {
+        grupo.querySelectorAll(".aba").forEach((outra) => {
+          outra.setAttribute("aria-selected", String(outra === aba));
+          document.getElementById(outra.dataset.painel).hidden = outra !== aba;
+        });
+      });
+    });
+  });
+
+  /* ================= compilador do navegador ================= */
+  const PALAVRAS = new Set(["molecule", "species", "molecular_ion", "ionic_solid", "covalent_network",
+    "metallic_solid", "charge", "unpaired", "atom", "bond", "as", "ring", "stereo"]);
+  const OPERADORES = { "-": 1, "=": 2, "#": 3, "->": 1, "~": 0 };
+
+  class ErroDSL extends Error {
+    constructor(fase, codigo, linha, coluna, mensagem) { super(mensagem); this.fase = fase; this.codigo = codigo; this.linha = linha; this.coluna = coluna; }
+    diagnostico() { return { tipo: "erro", fase: this.fase, codigo: this.codigo, linha: this.linha, coluna: this.coluna, mensagem: this.message }; }
+  }
+
+  function tokenizar(texto) {
+    const tokens = [];
+    let i = 0, linha = 1, coluna = 0;
+    const avancar = (n) => {
+      for (let k = 0; k < n; k++) {
+        if (texto[i] === "\n") { linha++; coluna = 0; } else { coluna++; }
+        i++;
+      }
+    };
+    while (i < texto.length) {
+      const resto = texto.slice(i);
+      let m;
+      if ((m = /^[ \t\r\n﻿]+/.exec(resto))) { avancar(m[0].length); continue; }
+      if (resto.startsWith("//")) { const fim = resto.indexOf("\n"); avancar(fim < 0 ? resto.length : fim); continue; }
+      const pos = { l: linha, c: coluna };
+      const empurrar = (tipo, valor) => { tokens.push({ tipo, valor, ...pos }); avancar(valor.length); };
+      if (resto[0] === '"') {
+        m = /^"[^"\r\n]*"/.exec(resto);
+        if (!m) throw new ErroDSL("léxico", "LEX-002", linha, coluna, "texto sem aspas de fechamento na mesma linha");
+        empurrar("TEXTO", m[0]); continue;
+      }
+      if ((m = /^[0-9]+x/.exec(resto)) && !/^[0-9]+x[a-z0-9_]/.test(resto)) { empurrar("MULT", m[0]); continue; }
+      if ((m = /^[0-9]+\.[0-9]+/.exec(resto))) { empurrar("REAL", m[0]); continue; }
+      if ((m = /^[0-9]+/.exec(resto))) { empurrar("INT", m[0]); continue; }
+      if ((m = /^[a-z][a-z0-9_]*/.exec(resto))) {
+        const v = m[0];
+        empurrar(PALAVRAS.has(v) ? v : /^x[0-9]+$/.test(v) ? "REP" : "NOME", v); continue;
+      }
+      if ((m = /^[A-Z][a-z]?/.exec(resto))) { empurrar("IDENT", m[0]); continue; }
+      if (resto.startsWith("->")) { empurrar("OP", "->"); continue; }
+      if ("-=#~".includes(resto[0])) { empurrar("OP", resto[0]); continue; }
+      if ("+(){}".includes(resto[0])) { empurrar(resto[0], resto[0]); continue; }
+      throw new ErroDSL("léxico", "LEX-001", linha, coluna, `caractere inválido '${resto[0]}'`);
+    }
+    tokens.push({ tipo: "EOF", valor: "fim do arquivo", l: linha, c: coluna });
+    return tokens;
+  }
+
+  function analisarSintaxe(tokens) {
+    // Além da espécie (AST), monta a árvore sintática: cada regra da
+    // gramática vira um nó, e cada token consumido, uma folha
+    let p = 0;
+    const raizArvore = { regra: "programa", filhos: [] };
+    const pilha = [raizArvore];
+    const abrir = (regra) => { const no = { regra, filhos: [] }; pilha[pilha.length - 1].filhos.push(no); pilha.push(no); };
+    const fechar = () => pilha.pop();
+    const atual = () => tokens[p];
+    const consumir = () => { const t = tokens[p++]; pilha[pilha.length - 1].filhos.push({ token: t }); return t; };
+    const descrever = (t) => (t.tipo === "EOF" ? "fim do arquivo" : `'${t.valor}'`);
+    const falhar = (esperado, codigo = "SIN-001") => {
+      const t = atual();
+      const erro = new ErroDSL("sintático", t.tipo === "EOF" ? "SIN-004" : codigo, t.l, t.c, `esperado ${esperado}, encontrado ${descrever(t)}`);
+      erro.arvore = raizArvore;
+      throw erro;
+    };
+    const pegar = (tipo, esperado) => { if (atual().tipo !== tipo) falhar(esperado); return consumir(); };
+    const talvez = (tipo) => (atual().tipo === tipo ? consumir() : null);
+    const sinal = (esperado) => {
+      abrir("sinal");
+      const v = atual().valor === "+" ? 1 : atual().tipo === "OP" && atual().valor === "-" ? -1 : falhar(esperado);
+      consumir();
+      fechar();
+      return v;
+    };
+
+    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [], arvore: raizArvore };
+    abrir("molecula");
+    abrir("cabecalho");
+    if (talvez("molecule")) {
+      especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
+    } else if (talvez("species")) {
+      const tipo = atual().tipo;
+      if (!["molecule", "molecular_ion", "ionic_solid", "covalent_network", "metallic_solid"].includes(tipo)) falhar("tipo de espécie depois de 'species'");
+      consumir();
+      especie.tipo = tipo;
+      especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
+      if (tipo === "molecular_ion") {
+        abrir("cargaEspecie");
+        pegar("charge", "'charge' com a carga do íon");
+        const s = sinal("sinal da carga (+ ou -)");
+        especie.carga = s * Number(pegar("INT", "número inteiro na carga").valor);
+        fechar();
+      }
+    } else {
+      falhar("'molecule' ou 'species' no início do programa");
+    }
+    fechar();
+    if (atual().tipo === "unpaired") {
+      abrir("desemparelhados");
+      consumir();
+      especie.desemparelhados = Number(pegar("INT", "número depois de 'unpaired'").valor);
+      fechar();
+    }
+    pegar("{", "'{' depois do nome da espécie");
+
+    const referencia = (onde) => {
+      abrir("referencia");
+      const t = atual();
+      if (t.tipo !== "IDENT" && t.tipo !== "NOME") falhar(`elemento ou nome de átomo ${onde}`);
+      consumir();
+      fechar();
+      return { texto: t.valor, porNome: t.tipo === "NOME", l: t.l, c: t.c };
+    };
+    const operador = (esperado) => {
+      abrir("operador");
+      const op = pegar("OP", esperado).valor;
+      fechar();
+      return op;
+    };
+
+    while (atual().tipo !== "}") {
+      const t = atual();
+      if (t.tipo === "EOF") falhar("'}' para fechar a molécula");
+      abrir("comando");
+      if (t.tipo === "MULT" || t.tipo === "atom") {
+        abrir("atomo");
+        const mult = t.tipo === "MULT" ? Number(consumir().valor.slice(0, -1)) : 1;
+        pegar("atom", "'atom' depois do multiplicador");
+        const el = pegar("IDENT", "símbolo de elemento depois de 'atom'");
+        let carga = 0;
+        if (atual().tipo === "(") {
+          abrir("carga");
+          consumir();
+          const s = sinal("sinal na carga, como (+1) ou (-1)");
+          carga = s * Number(pegar("INT", "número inteiro na carga").valor);
+          pegar(")", "')' para fechar a carga");
+          fechar();
+        }
+        let nome = null;
+        if (talvez("as")) nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
+        fechar();
+        especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, l: t.l, c: t.c });
+      } else if (t.tipo === "bond") {
+        abrir("ligacao");
+        consumir();
+        const origem = referencia("na ligação");
+        const op = operador("operador de ligação (-, =, #, -> ou ~)");
+        const destino = referencia("na ligação");
+        const rep = talvez("REP");
+        fechar();
+        especie.comandos.push({ tipo: "bond", origem, op, destino, rep: rep ? Number(rep.valor.slice(1)) : 1, l: t.l, c: t.c });
+      } else if (t.tipo === "ring") {
+        abrir("anel");
+        consumir();
+        const nomes = [];
+        while (atual().tipo === "NOME") { const n = consumir(); nomes.push({ texto: n.valor, porNome: true, l: n.l, c: n.c }); }
+        if (nomes.length < 3) falhar("pelo menos três nomes de átomos no anel");
+        fechar();
+        especie.comandos.push({ tipo: "ring", nomes, l: t.l, c: t.c });
+      } else if (t.tipo === "stereo") {
+        abrir("estereo");
+        consumir();
+        const refs = [referencia("em 'stereo'")];
+        let op = null;
+        if (atual().tipo === "OP") { op = operador("operador"); refs.push(referencia("em 'stereo'")); }
+        else if ((atual().tipo === "NOME" || atual().tipo === "IDENT") && ["NOME", "IDENT"].includes(tokens[p + 1].tipo)) refs.push(referencia("em 'stereo'"));
+        abrir("descritor");
+        const d = atual();
+        if (d.tipo !== "IDENT" && d.tipo !== "NOME") falhar("descritor (R, S, r, s, E, Z, Ra, Sa, cis ou trans)");
+        consumir();
+        fechar();
+        fechar();
+        especie.comandos.push({ tipo: "stereo", refs, op, descritor: d.valor, l: t.l, c: t.c });
+      } else {
+        falhar("'atom', 'bond', 'ring', 'stereo' ou '}'", "SIN-002");
+      }
+      fechar();
+    }
+    consumir();
+    fechar();
+    if (atual().tipo !== "EOF") falhar("fim do arquivo depois de '}'", "SIN-002");
+    consumir();
+    return especie;
+  }
+
+  function analisarSemantica(especie) {
+    const erros = [], avisos = [];
+    const erro = (no, codigo, msg) => erros.push({ tipo: "erro", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg });
+    const aviso = (no, codigo, msg) => avisos.push({ tipo: "aviso", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg });
+    const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
+      if (!DADOS.elementos[cmd.el]) { erro(cmd, "ELEM-001", `elemento desconhecido '${cmd.el}'`); continue; }
+      for (let k = 1; k <= cmd.mult; k++) {
+        const nome = cmd.nome == null ? null : cmd.mult > 1 ? cmd.nome + k : cmd.nome;
+        if (nome && porNome.has(nome)) { erro(cmd, "STRUCT-002", `o nome '${nome}' já foi usado`); continue; }
+        contagem.set(cmd.el, (contagem.get(cmd.el) || 0) + 1);
+        const atomo = { id: atomos.length, el: cmd.el, carga: cmd.carga, nome, indice: contagem.get(cmd.el) };
+        atomos.push(atomo);
+        if (nome) porNome.set(nome, atomo);
+        if (!porElemento.has(cmd.el)) porElemento.set(cmd.el, []);
+        porElemento.get(cmd.el).push(atomo);
+      }
+    }
+    const citados = new Set();
+    const resolver = (ref, fixo) => {
+      if (ref.porNome) {
+        const a = porNome.get(ref.texto);
+        if (!a) { erro(ref, "STRUCT-001", `nenhum átomo se chama '${ref.texto}'`); return null; }
+        citados.add(a.id); return a;
+      }
+      const lista = porElemento.get(ref.texto) || [];
+      if (!lista.length) { erro(ref, DADOS.elementos[ref.texto] ? "STRUCT-001" : "ELEM-001", DADOS.elementos[ref.texto] ? `nenhum átomo de ${ref.texto} foi declarado` : `elemento desconhecido '${ref.texto}'`); return null; }
+      if (lista.length === 1) { citados.add(lista[0].id); return lista[0]; }
+      if (fixo) { erro(ref, "STEREO-001", `'${ref.texto}' não identifica um único átomo; use o nome do átomo`); return null; }
+      const livre = lista.find((a) => !citados.has(a.id));
+      if (!livre) { erro(ref, "STRUCT-004", `todos os ${lista.length} átomos de ${ref.texto} já foram citados; use nomes`); return null; }
+      citados.add(livre.id); return livre;
+    };
+    const ligacoes = [], pares = new Set();
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "bond")) {
+      for (let k = 0; k < cmd.rep; k++) {
+        const a = resolver(cmd.origem), b = resolver(cmd.destino);
+        if (!a || !b) break;
+        if (a.id === b.id) { erro(cmd, "STRUCT-005", `o átomo ${rotulo(a)} não pode se ligar a ele mesmo`); break; }
+        const chave = Math.min(a.id, b.id) + "-" + Math.max(a.id, b.id);
+        if (pares.has(chave)) { erro(cmd, "STRUCT-006", `já existe uma ligação entre ${rotulo(a)} e ${rotulo(b)}; use = ou # para ligação múltipla`); break; }
+        pares.add(chave);
+        ligacoes.push({ a: a.id, b: b.id, op: cmd.op, ordem: OPERADORES[cmd.op] });
+      }
+    }
+    const temPar = (x, y) => pares.has(Math.min(x, y) + "-" + Math.max(x, y));
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "ring")) {
+      const lista = cmd.nomes.map((r) => resolver(r));
+      if (lista.includes(null)) continue;
+      for (let k = 0; k < lista.length; k++) {
+        const x = lista[k], y = lista[(k + 1) % lista.length];
+        if (!temPar(x.id, y.id)) { erro(cmd.nomes[(k + 1) % lista.length], "RING-002", `os átomos ${x.nome} e ${y.nome} do anel não estão ligados`); break; }
+      }
+    }
+    const configuracoes = [];
+    for (const cmd of especie.comandos.filter((c) => c.tipo === "stereo")) {
+      const lista = cmd.refs.map((r) => resolver(r, true));
+      if (!lista.includes(null)) configuracoes.push({ atomos: lista, op: cmd.op, descritor: cmd.descritor });
+    }
+    if (!erros.length) {
+      const soma = atomos.map(() => 0);
+      for (const lig of ligacoes) { soma[lig.a] += lig.ordem; soma[lig.b] += lig.ordem; }
+      const linhaAtomo = new Map();
+      especie.comandos.filter((c) => c.tipo === "atom").forEach((c) => (porElemento.get(c.el) || []).forEach((a) => { if (!linhaAtomo.has(a.id)) linhaAtomo.set(a.id, c); }));
+      for (const a of atomos) {
+        const permitidas = valenciasDe(a);
+        if (!permitidas) continue;
+        const maximo = Math.max(...permitidas);
+        const no = linhaAtomo.get(a.id) || { l: 1, c: 0 };
+        if (soma[a.id] > maximo) erro(no, "VAL-001", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`);
+        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`);
+      }
+      if (atomos.length > 1 && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
+        erro({ l: 1, c: 0 }, "STRUCT-008", "a entidade tem partes desconectadas");
+      }
+    }
+    return { atomos, ligacoes, configuracoes, erros, avisos };
+  }
+
+  function valenciasDe(a) {
+    const v = DADOS.valencias;
+    if (a.carga) {
+      const tabela = (v.valencias_com_carga[a.el] || {})[(a.carga > 0 ? "+" : "") + a.carga];
+      return tabela || null;
+    }
+    const base = v.valencias[a.el];
+    if (!base) return null;
+    const expandidas = (v.valencias_expandidas[a.el] || {}).valencias || [];
+    return [...new Set([...base, ...expandidas])];
+  }
+
+  function componentes(atomos, ligacoes) {
+    const pai = atomos.map((_, i) => i);
+    const achar = (x) => (pai[x] === x ? x : (pai[x] = achar(pai[x])));
+    ligacoes.forEach((l) => { pai[achar(l.a)] = achar(l.b); });
+    return new Set(atomos.map((_, i) => achar(i))).size;
+  }
+
+  function rotulo(a) { return a.nome ? `${a.nome} (${a.el}#${a.indice})` : `${a.el}#${a.indice}`; }
+
+  function formulaHill(atomos) {
+    const n = {};
+    atomos.forEach((a) => (n[a.el] = (n[a.el] || 0) + 1));
+    const ordem = Object.keys(n).sort((x, y) => {
+      const p = (e) => (n.C ? (e === "C" ? 0 : e === "H" ? 1 : 2) : 2);
+      return p(x) - p(y) || x.localeCompare(y);
+    });
+    return ordem.map((e) => e + (n[e] > 1 ? n[e] : "")).join("");
+  }
+
+  function compilar(texto) {
+    // Guarda o resultado de cada fase, para a demonstração da tradução
+    let tokens = null;
+    try {
+      tokens = tokenizar(texto);
+      const especie = analisarSintaxe(tokens);
+      return { tokens, arvore: especie.arvore, especie, ...analisarSemantica(especie) };
+    } catch (e) {
+      if (e instanceof ErroDSL) {
+        return { tokens, arvore: e.arvore || null, falhaEm: e.fase, erros: [e.diagnostico()], avisos: [], atomos: [], ligacoes: [], configuracoes: [] };
+      }
+      throw e;
+    }
+  }
+
+  /* Explicação de cada diagnóstico: o que significa e como corrigir */
+  const EXPLICA = {
+    "LEX-001": ["Caractere inválido", "O lexer encontrou um símbolo que não pertence à linguagem.", "Apague o caractere ou troque por um operador válido: - = # -> ~."],
+    "LEX-002": ["Texto sem fechar", "O nome da espécie abriu aspas e não fechou na mesma linha.", "Feche as aspas: \"Nome\"."],
+    "SIN-001": ["Comando incompleto", "A estrutura do comando não segue a gramática: falta algo ou algo veio fora de ordem.", "Compare com a forma do comando em Doc → Comandos; a mensagem diz o que era esperado."],
+    "SIN-002": ["Comando inválido", "Apareceu algo que não começa nenhum comando.", "Comece cada linha com atom, bond, ring ou stereo, e feche a espécie com }."],
+    "SIN-004": ["Fim inesperado", "O código terminou antes de a construção ficar completa.", "Feche a espécie com } ou complete o último comando."],
+    "ELEM-001": ["Elemento desconhecido", "O símbolo não está na tabela periódica usada pelo compilador.", "Use o símbolo com a primeira letra maiúscula e a segunda minúscula: Cl, não CL."],
+    "STRUCT-001": ["Átomo não encontrado", "A referência cita um nome ou um elemento que não foi declarado com atom.", "Declare o átomo (atom C as c9) ou corrija o nome na ligação."],
+    "STRUCT-002": ["Nome repetido", "Dois átomos receberam o mesmo nome.", "Use nomes únicos. Com 4x atom H as h, os nomes já são h1, h2, h3 e h4."],
+    "STRUCT-004": ["Átomos esgotados", "Citando pelo símbolo, cada ligação usa o próximo átomo ainda não citado, e não sobrou nenhum.", "Dê nomes aos átomos e use os nomes nas ligações."],
+    "STRUCT-005": ["Ligação consigo mesmo", "Os dois lados da ligação são o mesmo átomo.", "Ligue a outro átomo; confira os nomes."],
+    "STRUCT-006": ["Ligação repetida", "Esses dois átomos já estão ligados.", "Para dupla ou tripla, escreva uma única linha com = ou #, em vez de repetir bond."],
+    "STRUCT-008": ["Partes desconectadas", "Algum átomo não tem caminho de ligações até os demais.", "Ligue todos os átomos, ou use species ionic_solid para um sólido iônico."],
+    "RING-002": ["Anel não fecha", "Dois átomos vizinhos na lista do ring não estão ligados.", "Liste os átomos na ordem do ciclo e declare a ligação que falta."],
+    "STEREO-001": ["Referência ambígua", "Em stereo cada referência precisa apontar para um único átomo.", "Use o nome do átomo em vez do símbolo do elemento."],
+    "VAL-001": ["Valência excedida", "A soma das ordens das ligações passa do máximo permitido para o elemento.", "Remova uma ligação, troque = por -, ou declare a carga do átomo, como atom N(+1)."],
+    "VAL-002": ["Valência incompleta", "O átomo tem menos ligações que o esperado. Pode faltar hidrogênio, ou a espécie é um íon ou radical.", "Adicione os H que faltam, declare a carga (atom C(-1)) ou use unpaired para radical."],
+  };
+
+  const EXEMPLOS_DE_ERRO = {
+    valencia: 'species molecule "Pentavalente" {\n    atom C as c\n    5x atom H as h\n    bond c-h1\n    bond c-h2\n    bond c-h3\n    bond c-h4\n    bond c-h5\n}\n',
+    nome: 'species molecule "Agua" {\n    atom O as o\n    2x atom H as h\n    bond o-h1\n    bond o-h3\n}\n',
+    caractere: 'species molecule "Metano" {\n    atom C @\n    4x atom H\n}\n',
+    chave: 'species molecule "Amonia" {\n    atom N\n    3x atom H\n    bond N-H x3\n',
+    repetida: 'species molecule "Oxigenio" {\n    atom O as o1\n    atom O as o2\n    bond o1-o2\n    bond o1-o2\n}\n',
+    incompleta: 'species molecule "Etano" {\n    atom C as c1\n    atom C as c2\n    4x atom H as h\n    bond c1-c2\n    bond c1-h1\n    bond c1-h2\n    bond c2-h3\n    bond c2-h4\n}\n',
+  };
+
+  /* ================= desenho 3D ================= */
+  const CORES = { H: "#e4e3ea", C: "#5d5b66", N: "#8c95d8", O: "#d68c9a", S: "#d7c47a", P: "#d9a36f",
+    F: "#8fc7a4", Cl: "#86bf9a", Br: "#b08470", I: "#9a80bd", B: "#d3b39a", Na: "#b1a2e6", K: "#b1a2e6" };
+  const corDe = (el) => CORES[el] || "#b9a3f7";
+  const raioDe = (el) => (el === "H" ? 0.36 : 0.56);
+
+  function aleatorio(semente) {
+    let s = semente >>> 0 || 1;
+    return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296);
+  }
+
+  function layout(atomosReais, ligacoesReais) {
+    // Pares livres entram como pontos invisíveis que se repelem (VSEPR):
+    // assim a água sai angular e a amônia piramidal
+    const atomos = [...atomosReais];
+    const ligacoes = [...ligacoesReais];
+    const soma = atomosReais.map(() => 0);
+    ligacoesReais.forEach((l) => { soma[l.a] += l.ordem; soma[l.b] += l.ordem; });
+    atomosReais.forEach((a, i) => {
+      const eletrons = (DADOS.elementos[a.el] || {}).valencia;
+      if (eletrons == null || a.el === "H" || !soma[i]) return;
+      const pares = Math.floor((eletrons - a.carga - soma[i]) / 2);
+      for (let k = 0; k < Math.min(pares, 3); k++) {
+        atomos.push({ el: "par", fantasma: true });
+        ligacoes.push({ a: i, b: atomos.length - 1, ordem: 1, fantasma: true });
+      }
+    });
+    const n = atomos.length;
+    const rnd = aleatorio(n * 7919 + ligacoes.length * 104729);
+    const pos = atomos.map(() => [rnd() - 0.5, rnd() - 0.5, rnd() - 0.5].map((v) => v * Math.cbrt(n) * 1.6));
+    const vizinhos = atomos.map(() => new Set());
+    ligacoes.forEach((l) => { vizinhos[l.a].add(l.b); vizinhos[l.b].add(l.a); });
+    const repouso = (l) => {
+      if (l.fantasma) return 0.75;
+      const h = atomos[l.a].el === "H" || atomos[l.b].el === "H";
+      if (l.ordem === 0) return 2.2;
+      return (h ? 1.05 : 1.5) * ({ 1: 1, 2: 0.88, 3: 0.79 }[l.ordem] || 1);
+    };
+    let passo = 0.12;
+    const iteracoes = n > 60 ? 500 : 900;
+    for (let it = 0; it < iteracoes; it++) {
+      const forca = pos.map(() => [0, 0, 0]);
+      for (let i = 0; i < n; i++) {
+        for (let j = i + 1; j < n; j++) {
+          const d = [0, 1, 2].map((k) => pos[i][k] - pos[j][k]);
+          const r2 = d[0] * d[0] + d[1] * d[1] + d[2] * d[2] + 0.01;
+          const r = Math.sqrt(r2);
+          let k = 0.9 / r2;
+          if (vizinhos[i].has(j)) k *= 0.2;
+          else for (const v of vizinhos[i]) if (vizinhos[v].has(j)) { k *= 2.4; break; }
+          if (r > 6) continue;
+          for (let c = 0; c < 3; c++) { forca[i][c] += (d[c] / r) * k; forca[j][c] -= (d[c] / r) * k; }
+        }
+      }
+      for (const l of ligacoes) {
+        const d = [0, 1, 2].map((k) => pos[l.b][k] - pos[l.a][k]);
+        const r = Math.hypot(...d) + 1e-6;
+        const k = 2.2 * (r - repouso(l));
+        for (let c = 0; c < 3; c++) { forca[l.a][c] += (d[c] / r) * k; forca[l.b][c] -= (d[c] / r) * k; }
+      }
+      for (let i = 0; i < n; i++) {
+        for (let c = 0; c < 3; c++) pos[i][c] += Math.max(-0.4, Math.min(0.4, forca[i][c] * passo));
+      }
+      passo *= 0.997;
+    }
+    const reais = pos.slice(0, atomosReais.length);
+    const centro = [0, 1, 2].map((k) => reais.reduce((s, p) => s + p[k], 0) / Math.max(reais.length, 1));
+    reais.forEach((p) => { for (let k = 0; k < 3; k++) p[k] -= centro[k]; });
+    return reais;
+  }
+
+  class Cena {
+    constructor(canvas) {
+      this.canvas = canvas;
+      this.ctx = canvas.getContext("2d");
+      this.atomos = []; this.ligacoes = []; this.pos = [];
+      this.rx = -0.35; this.ry = 0.5; this.zoom = 1;
+      this.girar = true; this.rotulos = false; this.semH = false;
+      this.arrastando = false;
+      // velocidade da rotação automática; aoQuadro(t) anima posições (misturas e reações)
+      this.velocidade = 0.006;
+      this.aoQuadro = null;
+      const inicio = (x, y) => { this.arrastando = true; this.ultimo = [x, y]; canvas.style.cursor = "grabbing"; };
+      const mover = (x, y) => {
+        if (!this.arrastando) return;
+        this.ry += (x - this.ultimo[0]) * 0.01; this.rx += (y - this.ultimo[1]) * 0.01;
+        this.ultimo = [x, y]; this.desenhar();
+      };
+      const fim = () => { this.arrastando = false; canvas.style.cursor = "grab"; };
+      canvas.addEventListener("pointerdown", (e) => { canvas.setPointerCapture(e.pointerId); inicio(e.clientX, e.clientY); });
+      canvas.addEventListener("pointermove", (e) => mover(e.clientX, e.clientY));
+      canvas.addEventListener("pointerup", fim);
+      canvas.addEventListener("pointercancel", fim);
+      canvas.addEventListener("wheel", (e) => { e.preventDefault(); this.zoom = Math.min(3, Math.max(0.4, this.zoom * (e.deltaY > 0 ? 0.92 : 1.08))); this.desenhar(); }, { passive: false });
+      new ResizeObserver(() => this.desenhar()).observe(canvas);
+      const quadro = (tempo) => {
+        if (this.atomos.length && this.visivel()) {
+          let mudou = false;
+          if (this.aoQuadro) { this.aoQuadro(tempo); mudou = true; }
+          if (this.girar && !this.arrastando) { this.ry += this.velocidade; mudou = true; }
+          if (mudou) this.desenhar();
+        }
+        requestAnimationFrame(quadro);
+      };
+      requestAnimationFrame(quadro);
+    }
+    visivel() { return this.canvas.offsetParent !== null; }
+    carregar(atomos, ligacoes, posicoes = null) {
+      this.aoQuadro = null;
+      this.atomos = atomos; this.ligacoes = ligacoes; this.pos = posicoes || layout(atomos, ligacoes);
+      this.ajustarEscala();
+      this.desenhar();
+    }
+    ajustarEscala(raioMinimo = 1.5) {
+      const raio = Math.max(raioMinimo, ...this.pos.map((p) => Math.hypot(...p)));
+      this.escalaBase = 1 / (raio + 0.8);
+    }
+    desenhar() {
+      const c = this.canvas, ctx = this.ctx;
+      const dpr = window.devicePixelRatio || 1;
+      const w = c.clientWidth, h = c.clientHeight;
+      if (!w || !h) return;
+      if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      if (!this.atomos.length) return;
+      const escuro = raiz.dataset.theme !== "light";
+      const cy = Math.cos(this.ry), sy = Math.sin(this.ry), cx = Math.cos(this.rx), sx = Math.sin(this.rx);
+      const escala = Math.min(w, h) * 0.46 * this.escalaBase * this.zoom;
+      const proj = this.pos.map(([x, y, z]) => {
+        const x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
+        const y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx;
+        const f = 6 / (6 - z2 * this.escalaBase * 2.2);
+        return { x: w / 2 + x1 * escala * f, y: h / 2 + y1 * escala * f, z: z2, f };
+      });
+      const oculto = (i) => this.semH && this.atomos[i].el === "H";
+      const itens = [];
+      this.ligacoes.forEach((l) => { if (!oculto(l.a) && !oculto(l.b)) itens.push({ t: "l", l, z: (proj[l.a].z + proj[l.b].z) / 2 - 0.01 }); });
+      this.atomos.forEach((a, i) => { if (!oculto(i)) itens.push({ t: "a", i, z: proj[i].z }); });
+      itens.sort((p, q) => p.z - q.z);
+      const corLigacao = escuro ? "rgba(200, 196, 214, 0.55)" : "rgba(70, 64, 88, 0.5)";
+      for (const item of itens) {
+        if (item.t === "l") {
+          const { l } = item, A = proj[l.a], B = proj[l.b];
+          const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy) || 1;
+          const nx = -dy / len, ny = dx / len;
+          if (l.alfa === 0) continue;
+          ctx.globalAlpha = l.alfa == null ? 1 : l.alfa;
+          const largura = Math.max(1.2, 0.09 * escala * (A.f + B.f) / 2);
+          ctx.strokeStyle = l.op === "->" ? (escuro ? "#b9a3f7" : "#7a5ae0") : corLigacao;
+          ctx.lineWidth = l.ordem > 1 ? largura * 0.7 : largura;
+          ctx.lineCap = "round";
+          ctx.setLineDash(l.op === "->" ? [largura * 1.6, largura * 1.4] : l.op === "~" ? [1, largura * 1.8] : []);
+          const linhas = l.ordem <= 1 ? [0] : l.ordem === 2 ? [-0.5, 0.5] : [-1, 0, 1];
+          const sep = largura * 1.35;
+          for (const o of linhas) {
+            ctx.beginPath();
+            ctx.moveTo(A.x + nx * o * sep, A.y + ny * o * sep);
+            ctx.lineTo(B.x + nx * o * sep, B.y + ny * o * sep);
+            ctx.stroke();
+          }
+          ctx.setLineDash([]);
+          ctx.globalAlpha = 1;
+        } else {
+          const a = this.atomos[item.i], P = proj[item.i];
+          const r = raioDe(a.el) * escala * P.f * 0.62;
+          const g = ctx.createRadialGradient(P.x - r * 0.35, P.y - r * 0.4, r * 0.1, P.x, P.y, r);
+          const base = corDe(a.el);
+          g.addColorStop(0, "#ffffff");
+          g.addColorStop(0.25, base);
+          g.addColorStop(1, escuro ? "#141417" : "#8d89a0");
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(P.x, P.y, r, 0, Math.PI * 2); ctx.fill();
+          if (this.rotulos && r > 7) {
+            ctx.fillStyle = a.el === "H" ? "#2a2830" : "#ffffff";
+            ctx.font = `600 ${Math.max(9, r * 0.75)}px ui-monospace, Menlo, monospace`;
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            ctx.fillText(a.el, P.x, P.y + 0.5);
+          }
+        }
+      }
+    }
+  }
+
+  /* ================= playground ================= */
+  const codigo = document.getElementById("codigo");
+  const numeros = document.getElementById("numeros");
+  const seletor = document.getElementById("exemplo");
+  const cena = new Cena(document.getElementById("cena-3d"));
+  const vazio = document.getElementById("cena-vazia");
+  let exemploAtual = null;
+  let tradPlay = null; // painel de tradução ao vivo, criado depois dos módulos
+
+  DADOS.exemplos.forEach((ex, i) => {
+    const op = document.createElement("option");
+    op.value = i; op.textContent = `${ex.titulo} — ${ex.arquivo}`;
+    seletor.appendChild(op);
+  });
+
+  codigo.addEventListener("scroll", () => { numeros.style.transform = `translateY(${-codigo.scrollTop}px)`; });
+
+  function executar() {
+    const r = compilar(codigo.value);
+    renderizarDiagnosticos(r);
+    if (tradPlay) tradPlay.desenhar();
+    const modelo = document.querySelector("#p-modelo pre");
+    if (r.atomos.length && !r.erros.length) {
+      const nomes = r.atomos.map(rotulo);
+      const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
+      modelo.textContent = [`Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}`),
+        `Ligações (${r.ligacoes.length})`, ...r.ligacoes.map((l) => `  ${nomes[l.a]} ${simbolo[l.op]} ${nomes[l.b]}`),
+        ...(r.configuracoes.length ? [`Configurações (${r.configuracoes.length})`, ...r.configuracoes.map((c) => `  ${c.atomos.map(rotulo).join(c.op || " ")} ${c.descritor}`)] : [])].join("\n");
+    } else {
+      modelo.textContent = "Corrija os erros para ver o modelo.";
+    }
+    const real = document.querySelector("#p-real pre");
+    const intacto = exemploAtual && codigo.value === exemploAtual.codigo;
+    real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo. Para a análise oficial, salve num arquivo .mol e rode python3 src/main.py --modelo arquivo.mol.";
+    const resumo = document.getElementById("resumo");
+    if (r.atomos.length) {
+      const multiplas = r.ligacoes.filter((l) => l.ordem >= 2).length;
+      const aneis = r.ligacoes.filter((l) => l.ordem > 0).length - r.atomos.length + componentes(r.atomos, r.ligacoes.filter((l) => l.ordem > 0));
+      resumo.innerHTML = `<span>fórmula <b>${formulaHill(r.atomos)}</b></span><span><b>${r.atomos.length}</b> átomos</span><span><b>${r.ligacoes.length}</b> ligações</span><span><b>${multiplas}</b> múltiplas</span><span><b>${Math.max(0, aneis)}</b> anéis</span>`;
+    } else {
+      resumo.innerHTML = "";
+    }
+    if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
+    else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
+  }
+
+  function renderizarDiagnosticos(r) {
+    const painel = document.getElementById("p-diag");
+    painel.innerHTML = "";
+    const lista = [...r.erros, ...r.avisos];
+    const linhasMarcadas = new Set(lista.map((d) => d.linha));
+    numeros.innerHTML = codigo.value.split("\n").map((_, i) => linhasMarcadas.has(i + 1) ? `<span class="marcada">${i + 1}</span>` : String(i + 1)).join("\n");
+    if (!r.erros.length) {
+      const ok = document.createElement("div");
+      ok.className = "diag ok";
+      ok.innerHTML = `<div class="topo-diag"><span class="selo">OK</span><span class="titulo">Sem erros</span></div><p class="msg"></p>`;
+      ok.querySelector(".msg").textContent = `Espécie '${r.especie.nome}': ${r.atomos.length} átomos e ${r.ligacoes.length} ligações, análise do navegador concluída.`;
+      painel.appendChild(ok);
+    }
+    for (const d of lista) {
+      const [titulo, significa, corrigir] = EXPLICA[d.codigo] || ["Diagnóstico", "", ""];
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "diag" + (d.tipo === "aviso" ? " aviso" : "");
+      item.innerHTML = `<div class="topo-diag"><span class="selo"></span><span class="titulo"></span><span class="onde"></span></div><p class="msg"></p><dl><dt>O que é</dt><dd class="significa"></dd><dt>Como corrigir</dt><dd class="corrigir"></dd></dl>`;
+      item.querySelector(".selo").textContent = `${d.tipo === "aviso" ? "Aviso" : "Erro"} ${d.fase} · ${d.codigo}`;
+      item.querySelector(".titulo").textContent = titulo;
+      item.querySelector(".onde").textContent = `linha ${d.linha}, coluna ${d.coluna}`;
+      item.querySelector(".msg").textContent = d.mensagem;
+      item.querySelector(".significa").textContent = significa;
+      item.querySelector(".corrigir").textContent = corrigir;
+      item.addEventListener("click", () => irParaLinha(d.linha));
+      painel.appendChild(item);
+    }
+  }
+
+  function irParaLinha(n) {
+    const linhas = codigo.value.split("\n");
+    const inicio = linhas.slice(0, n - 1).reduce((t, l) => t + l.length + 1, 0);
+    codigo.focus();
+    codigo.setSelectionRange(inicio, inicio + (linhas[n - 1] || "").length);
+    codigo.scrollTop = Math.max(0, (n - 4) * parseFloat(getComputedStyle(codigo).lineHeight));
+  }
+
+  document.querySelectorAll("[data-erro]").forEach((botao) => botao.addEventListener("click", () => {
+    exemploAtual = null;
+    codigo.value = EXEMPLOS_DE_ERRO[botao.dataset.erro];
+    executar();
+    document.querySelector('[data-painel="p-diag"]').click();
+  }));
+
+  let espera;
+  codigo.addEventListener("input", () => { clearTimeout(espera); espera = setTimeout(executar, 250); });
+  codigo.addEventListener("keydown", (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const i = codigo.selectionStart;
+      codigo.setRangeText("    ", i, codigo.selectionEnd, "end");
+      codigo.dispatchEvent(new Event("input"));
+    }
+  });
+  seletor.addEventListener("change", () => carregarExemplo(Number(seletor.value)));
+  document.getElementById("limpar").addEventListener("click", () => {
+    exemploAtual = null;
+    codigo.value = 'species molecule "Nova" {\n    \n}\n';
+    executar(); codigo.focus();
+  });
+  document.getElementById("girar").addEventListener("change", (e) => { cena.girar = e.target.checked; });
+  document.getElementById("rotulos").addEventListener("change", (e) => { cena.rotulos = e.target.checked; cena.desenhar(); });
+  document.getElementById("esconder-h").addEventListener("change", (e) => { cena.semH = e.target.checked; cena.desenhar(); });
+  document.getElementById("recentrar").addEventListener("click", () => { cena.rx = -0.35; cena.ry = 0.5; cena.zoom = 1; cena.desenhar(); });
+
+  function carregarExemplo(i) {
+    exemploAtual = DADOS.exemplos[i];
+    seletor.value = i;
+    codigo.value = exemploAtual.codigo;
+    executar();
+  }
+
+  /* vitrine do início */
+  const vitrine = new Cena(document.getElementById("vitrine-3d"));
+  vitrine.velocidade = 0.0016;
+  const benzeno = DADOS.exemplos.find((e) => e.arquivo.endsWith("benzeno.mol")) || DADOS.exemplos[0];
+  const rb = compilar(benzeno.codigo);
+  vitrine.rx = -0.9;
+  vitrine.carregar(rb.atomos, rb.ligacoes);
+
+  /* ================= malha do fundo ================= */
+  (() => {
+    const tela = document.getElementById("malha");
+    const ctx = tela.getContext("2d");
+    const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let nos = [], largura = 0, altura = 0;
+    const DISTANCIA = 150;
+    function montar() {
+      const dpr = window.devicePixelRatio || 1;
+      largura = innerWidth; altura = innerHeight;
+      tela.width = largura * dpr; tela.height = altura * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const quantidade = Math.round(Math.min(90, (largura * altura) / 16000));
+      const rnd = aleatorio(42);
+      nos = Array.from({ length: quantidade }, () => ({
+        x: rnd() * largura, y: rnd() * altura,
+        vx: (rnd() - 0.5) * 0.25, vy: (rnd() - 0.5) * 0.25,
+        r: 1.6 + rnd() * 2.2,
+      }));
+    }
+    function quadro() {
+      const claro = raiz.dataset.theme === "light";
+      const cor = claro ? "122, 90, 224" : "185, 163, 247";
+      ctx.clearRect(0, 0, largura, altura);
+      for (const no of nos) {
+        if (!parado) {
+          no.x += no.vx; no.y += no.vy;
+          if (no.x < 0 || no.x > largura) no.vx *= -1;
+          if (no.y < 0 || no.y > altura) no.vy *= -1;
+        }
+      }
+      for (let i = 0; i < nos.length; i++) {
+        for (let j = i + 1; j < nos.length; j++) {
+          const d = Math.hypot(nos[i].x - nos[j].x, nos[i].y - nos[j].y);
+          if (d < DISTANCIA) {
+            ctx.strokeStyle = `rgba(${cor}, ${(1 - d / DISTANCIA) * (claro ? 0.22 : 0.18)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(nos[i].x, nos[i].y); ctx.lineTo(nos[j].x, nos[j].y); ctx.stroke();
+          }
+        }
+      }
+      ctx.fillStyle = `rgba(${cor}, ${claro ? 0.32 : 0.3})`;
+      for (const no of nos) { ctx.beginPath(); ctx.arc(no.x, no.y, no.r, 0, Math.PI * 2); ctx.fill(); }
+      if (!parado && !document.hidden) requestAnimationFrame(quadro);
+    }
+    addEventListener("resize", () => { montar(); if (parado) quadro(); });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && !parado) requestAnimationFrame(quadro); });
+    new MutationObserver(() => { if (parado) quadro(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+    montar();
+    quadro();
+  })();
+
+  /* @modulos */
+
+  /* ================= rotas e paginação ================= */
+  const slides = [...document.querySelectorAll(".slide")];
+  const pontinhos = document.querySelector("#pg-conteudo .pontinhos");
+  slides.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("aria-label", `${i + 1}: ${s.dataset.titulo}`);
+    b.addEventListener("click", () => (location.hash = `#/conteudo/${i + 1}`));
+    pontinhos.appendChild(b);
+  });
+  const topicos = [...document.querySelectorAll(".topico")].map((t) => t.dataset.topico);
+  let slideAtual = 1, topicoAtual = topicos[0];
+
+  function mostrarSlide(n) {
+    slideAtual = Math.min(slides.length, Math.max(1, n || 1));
+    slides.forEach((s, i) => s.classList.toggle("ativo", i === slideAtual - 1));
+    pontinhos.querySelectorAll("button").forEach((b, i) => b.classList.toggle("ativo", i === slideAtual - 1));
+    const pag = document.querySelector("#pg-conteudo .paginador");
+    pag.querySelector(".contador").textContent = `${slideAtual} / ${slides.length} · ${slides[slideAtual - 1].dataset.titulo}`;
+    pag.querySelector('[data-passo="-1"]').disabled = slideAtual === 1;
+    pag.querySelector('[data-passo="1"]').disabled = slideAtual === slides.length;
+  }
+  function mostrarTopico(nome) {
+    topicoAtual = topicos.includes(nome) ? nome : topicos[0];
+    document.querySelectorAll(".topico").forEach((t) => t.classList.toggle("ativo", t.dataset.topico === topicoAtual));
+    document.querySelectorAll(".sumario a").forEach((a) => a.classList.toggle("ativo", a.dataset.topico === topicoAtual));
+    const i = topicos.indexOf(topicoAtual);
+    const pag = document.querySelector("#pg-doc .paginador");
+    pag.querySelector(".contador").textContent = `${i + 1} / ${topicos.length}`;
+    pag.querySelector('[data-doc-passo="-1"]').disabled = i === 0;
+    pag.querySelector('[data-doc-passo="1"]').disabled = i === topicos.length - 1;
+  }
+  document.querySelectorAll("[data-passo]").forEach((b) => b.addEventListener("click", () => {
+    location.hash = `#/conteudo/${slideAtual + Number(b.dataset.passo)}`;
+  }));
+  document.querySelectorAll("[data-doc-passo]").forEach((b) => b.addEventListener("click", () => {
+    location.hash = `#/doc/${topicos[topicos.indexOf(topicoAtual) + Number(b.dataset.docPasso)]}`;
+  }));
+
+  document.querySelectorAll("[data-ancora]").forEach((link) => link.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelector(link.getAttribute("href")).scrollIntoView({ behavior: "smooth" });
+  }));
+  const secoesInicio = ["s-inicio", "s-modulos", "s-linguagem", "s-comecar"].map((id) => document.getElementById(id));
+  addEventListener("scroll", () => {
+    if (!document.body.classList.contains("no-inicio")) return;
+    let atual = secoesInicio[0].id;
+    for (const secao of secoesInicio) if (secao.getBoundingClientRect().top <= innerHeight * 0.45) atual = secao.id;
+    document.querySelectorAll(".pontos a").forEach((a) => a.classList.toggle("ativo", a.getAttribute("href") === "#" + atual));
+  }, { passive: true });
+
+  let primeiraVez = true;
+  function rotear() {
+    const partes = location.hash.replace(/^#\/?/, "").split("/");
+    const rota = ["conteudo", "uso", "doc", "playground", "laboratorio", "tabela"].includes(partes[0]) ? partes[0] : "inicio";
+    document.querySelectorAll(".pagina").forEach((p) => p.classList.toggle("ativa", p.id === "pg-" + rota));
+    document.querySelectorAll(".rotas a").forEach((a) => a.classList.toggle("ativo", a.dataset.rota === rota));
+    document.body.classList.toggle("no-inicio", rota === "inicio");
+    document.querySelectorAll(".pontos a").forEach((a, i) => a.classList.toggle("ativo", i === 0));
+    if (rota === "conteudo") mostrarSlide(Number(partes[1]));
+    if (rota === "doc") mostrarTopico(partes[1]);
+    if (rota === "playground") {
+      if (!codigo.value) carregarExemplo(0);
+      requestAnimationFrame(() => cena.desenhar());
+    }
+    if (rota === "inicio") requestAnimationFrame(() => vitrine.desenhar());
+    if (rota === "laboratorio") iniciarLaboratorio();
+    if (rota === "tabela") iniciarTabela();
+    if (!primeiraVez) window.scrollTo({ top: 0 });
+    primeiraVez = false;
+  }
+  addEventListener("hashchange", rotear);
+  addEventListener("keydown", (e) => {
+    if (e.target.closest("textarea, select, input")) return;
+    if (!document.getElementById("pg-conteudo").classList.contains("ativa")) return;
+    if (e.key === "ArrowRight" && slideAtual < slides.length) location.hash = `#/conteudo/${slideAtual + 1}`;
+    if (e.key === "ArrowLeft" && slideAtual > 1) location.hash = `#/conteudo/${slideAtual - 1}`;
+  });
+  new MutationObserver(() => { cena.desenhar(); vitrine.desenhar(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
+  rotear();

@@ -43,6 +43,7 @@
       --ok: #2d7546;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
@@ -298,6 +299,108 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
+
+    /* ---------- tradução ---------- */
+    .trad-topo { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; justify-content: space-between; }
+    .etapas { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .etapa { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid var(--borda); background: var(--superficie); color: var(--suave); border-radius: 10px; padding: 0.4rem 0.7rem; font: 600 0.76rem var(--mono); cursor: pointer; }
+    .etapa span { display: grid; place-items: center; width: 1.3rem; height: 1.3rem; border-radius: 50%; background: var(--elevado); font-size: 0.68rem; }
+    .etapa[aria-selected="true"] { color: var(--acento); border-color: var(--acento); }
+    .etapa[aria-selected="true"] span { background: var(--acento); color: #fff; }
+    .etapa.falhou { border-color: var(--erro); color: var(--erro); }
+    .etapa.bloqueada { opacity: 0.45; }
+    .lentes { display: inline-flex; border: 1px solid var(--borda-forte); border-radius: 10px; overflow: hidden; }
+    .lentes button { border: 0; background: none; padding: 0.4rem 0.8rem; font: 600 0.76rem var(--sans); color: var(--suave); cursor: pointer; }
+    .lentes button[aria-pressed="true"] { background: var(--acento-fundo); color: var(--acento); }
+    .trad-explica { margin: 0.9rem 0; color: var(--suave); font-size: 0.9rem; }
+    .trad-explica b { color: var(--texto); }
+    .trad-conteudo { max-height: 420px; overflow: auto; border: 1px solid var(--borda); border-radius: 12px; padding: 0.9rem; background: var(--bg); }
+    .fichas { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .ficha { display: inline-grid; gap: 0.1rem; padding: 0.35rem 0.55rem; border: 1px solid var(--borda); border-radius: 8px; background: var(--superficie); }
+    .ficha code { font-size: 0.82rem; color: var(--texto); }
+    .ficha small { font-size: 0.66rem; color: var(--acento); max-width: 16rem; }
+    .arvore, .arvore ul { list-style: none; margin: 0; padding-left: 1.1rem; }
+    .arvore { padding-left: 0; font-size: 0.82rem; }
+    .arvore ul { border-left: 1px dashed var(--borda-forte); margin-left: 0.4rem; }
+    .arvore li { margin: 0.18rem 0; }
+    .arvore summary { cursor: pointer; list-style: none; }
+    .arvore summary::-webkit-details-marker { display: none; }
+    .arvore summary::before { content: "▾"; color: var(--fraco); margin-right: 0.35rem; font-size: 0.7rem; }
+    .arvore details:not([open]) > summary::before { content: "▸"; }
+    .no-rotulo { font-family: var(--mono); color: var(--texto); font-weight: 600; }
+    .no-rotulo.folha { font-weight: 400; color: var(--acento); }
+    .no-detalhe { margin-left: 0.6rem; color: var(--fraco); font-size: 0.78rem; }
+    .etapa-erro { border-left: 3px solid var(--erro); padding: 0.6rem 0.8rem; margin-bottom: 0.8rem; color: var(--erro); font-size: 0.84rem; }
+    .etapa-erro p { color: var(--suave); margin: 0.3rem 0 0; }
+    .etapa-vazia { color: var(--fraco); margin: 0; }
+    .etapa-resumo { margin: 0 0 0.6rem; }
+    .etapa-diag { margin: 0.8rem 0 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--suave); }
+    .estado-ok { color: var(--ok); } .estado-excede { color: var(--erro); } .estado-incompleta { color: var(--aviso); } .estado-sem { color: var(--fraco); }
+    .painel.traducao { max-height: none; }
+
+    /* diálogo de demonstração */
+    .demo { width: min(1100px, 94vw); max-height: 92vh; padding: 0; border: 1px solid var(--borda-forte); border-radius: 18px; background: var(--superficie); color: var(--texto); }
+    .demo::backdrop { background: rgba(8, 6, 14, 0.6); backdrop-filter: blur(3px); }
+    .demo-cabeca { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.3rem; border-bottom: 1px solid var(--borda); }
+    .demo-cabeca h3 { margin: 0.3rem 0 0; }
+    .demo-cabeca .rotulo::before { display: none; }
+    .demo-corpo { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr); gap: 1.1rem; padding: 1.1rem 1.3rem; overflow: auto; max-height: calc(92vh - 170px); }
+    .demo-fonte { margin: 0; max-height: 60vh; }
+    .demo-controles { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.9rem; border-top: 1px solid var(--borda); }
+
+    /* laboratório */
+    .abas-centro { justify-content: center; }
+    .fase-reacao { position: absolute; left: 0.9rem; top: 0.7rem; font: 600 0.78rem var(--mono); color: var(--acento); padding: 0.25rem 0.6rem; border: 1px solid color-mix(in srgb, var(--acento) 40%, transparent); border-radius: 999px; background: var(--superficie); }
+    input[type="range"] { width: 100%; accent-color: var(--acento-forte); margin-top: 0.8rem; }
+    .equacao { font: 600 clamp(1.1rem, 2.2vw, 1.5rem) var(--mono); margin: 0 0 0.5rem; }
+    .equacao span { color: var(--acento); margin: 0 0.4rem; }
+    .botoes-traducao { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin-top: 1rem; }
+    .botoes-traducao span { font-size: 0.84rem; color: var(--fraco); margin-right: 0.3rem; }
+    .lista-mistura { display: grid; gap: 0.5rem; }
+    .item-mistura { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.55rem 0.7rem; border: 1px solid var(--borda); border-radius: 10px; }
+    .item-mistura small { display: block; color: var(--fraco); font: 0.74rem var(--mono); }
+    .contador-mistura { display: flex; align-items: center; gap: 0.4rem; }
+    .contador-mistura span { min-width: 1.6rem; text-align: center; font: 600 0.9rem var(--mono); }
+
+    /* tabela periódica */
+    .tabela-periodica { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); grid-template-rows: repeat(7, auto) 0.6rem repeat(2, auto); gap: 3px; overflow-x: auto; min-width: 0; }
+    .elemento { aspect-ratio: 1; min-width: 30px; border: 1px solid var(--borda); border-radius: 6px; background: var(--superficie); color: var(--texto); cursor: pointer; display: grid; place-content: center; padding: 0; line-height: 1.1; position: relative; }
+    .elemento small { font: 0.52rem var(--mono); color: var(--fraco); }
+    .elemento b { font: 700 clamp(0.62rem, 1vw, 0.9rem) var(--mono); }
+    .elemento:hover { border-color: var(--acento); }
+    .elemento.selecionado { outline: 2px solid var(--acento); outline-offset: 1px; }
+    .elemento.com-regra::after { content: ""; position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--acento); }
+    .marcador-f { display: grid; place-items: center; font: 0.55rem var(--mono); color: var(--fraco); border: 1px dashed var(--borda); border-radius: 6px; }
+    .c1, .legenda-tabela .c1 { background: color-mix(in srgb, var(--acento) 22%, var(--superficie)); }
+    .c2, .legenda-tabela .c2 { background: color-mix(in srgb, var(--acento) 15%, var(--superficie)); }
+    .c3, .legenda-tabela .c3 { background: color-mix(in srgb, var(--texto) 8%, var(--superficie)); }
+    .c4, .legenda-tabela .c4 { background: color-mix(in srgb, var(--texto) 4%, var(--superficie)); }
+    .c5, .legenda-tabela .c5 { background: color-mix(in srgb, var(--ok) 12%, var(--superficie)); }
+    .c6, .legenda-tabela .c6 { background: color-mix(in srgb, var(--acento) 8%, var(--superficie)); }
+    .c7, .legenda-tabela .c7 { background: color-mix(in srgb, var(--aviso) 14%, var(--superficie)); }
+    .c8, .legenda-tabela .c8 { background: color-mix(in srgb, var(--acento-forte) 28%, var(--superficie)); }
+    .c9, .legenda-tabela .c9 { background: color-mix(in srgb, var(--erro) 9%, var(--superficie)); }
+    .c10, .legenda-tabela .c10 { background: color-mix(in srgb, var(--erro) 15%, var(--superficie)); }
+    .legenda-tabela { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 1rem; font-size: 0.78rem; color: var(--suave); justify-content: center; }
+    .legenda-tabela span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .legenda-tabela i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--borda); display: inline-block; }
+    .legenda-tabela .com-regra-amostra { border-radius: 50%; background: var(--acento); width: 7px; height: 7px; border: 0; }
+    .cena-bohr { aspect-ratio: 1; max-width: 420px; margin: 0 auto; }
+    .ficha-topo { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+    .ficha-topo h3 { margin: 0; }
+    .ficha-topo p { margin: 0; color: var(--suave); }
+    .simbolo-grande { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--acento) 45%, transparent); background: var(--acento-fundo); font: 700 2rem var(--mono); color: var(--acento); }
+    .duas-lentes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .duas-lentes h4 { margin: 0 0 0.4rem; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); font-family: var(--mono); }
+    .duas-lentes dl { margin: 0; display: grid; gap: 0.15rem 0; font-size: 0.84rem; }
+    .duas-lentes dt { color: var(--fraco); font-size: 0.74rem; margin-top: 0.4rem; }
+    .duas-lentes dd { margin: 0; color: var(--texto); }
+    .acoes-ficha { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
+    @media (max-width: 1000px) {
+      .demo-corpo, .duas-lentes { grid-template-columns: minmax(0, 1fr); }
+      .tabela-periodica { grid-template-columns: repeat(18, 30px); }
+    }
+
   </style>
 </head>
 <body>
@@ -310,6 +413,8 @@
       <a href="#/uso" data-rota="uso">Uso</a>
       <a href="#/doc/comandos" data-rota="doc">Doc</a>
       <a href="#/playground" data-rota="playground">Playground</a>
+      <a href="#/laboratorio" data-rota="laboratorio">Laboratório</a>
+      <a href="#/tabela" data-rota="tabela">Tabela</a>
     </nav>
     <button class="tema" type="button" aria-label="Alternar tema claro e escuro">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
@@ -352,13 +457,15 @@
         <div class="cabeca">
           <span class="rotulo">01 — módulos</span>
           <h2>Da apresentação à prática</h2>
-          <p class="lead">Quatro módulos: entenda o compilador, aprenda a usar, consulte a referência e escreva moléculas.</p>
+          <p class="lead">Entenda o compilador, aprenda a usar, consulte a referência, escreva moléculas, simule misturas e reações e explore os elementos.</p>
         </div>
         <div class="grade">
           <a class="placa modulo c3" href="#/conteudo/1"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg></div><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
           <a class="placa modulo c3" href="#/uso"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
           <a class="placa modulo c3" href="#/doc/comandos"><div class="icone"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
           <a class="placa modulo c3" href="#/playground"><div class="icone"><svg viewBox="0 0 24 24"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/><circle cx="12" cy="12" r="2.5"/></svg></div><span class="numero">04</span><h3>Playground</h3><p>Escreva MoleculeDSL e veja a molécula em 3D na hora.</p></a>
+          <a class="placa modulo c6" href="#/laboratorio"><div class="icone"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7.5 15h9"/></svg></div><span class="numero">05</span><h3>Laboratório</h3><p>Simule misturas de moléculas e veja reações químicas: ligações que se rompem e se formam.</p></a>
+          <a class="placa modulo c6" href="#/tabela"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="5"/><rect x="10" y="4" width="5" height="5"/><rect x="17" y="4" width="4" height="5"/><rect x="3" y="11" width="18" height="5"/><path d="M6 19h12"/></svg></div><span class="numero">06</span><h3>Tabela periódica</h3><p>Cada elemento com o modelo atômico, os dados químicos e o que o compilador faz com ele.</p></a>
         </div>
       </div>
 
@@ -387,6 +494,7 @@
     O#1 SIMPLES H#2 classificação=covalente polar Δχ=1.24 [7:4]
 Espécie 'Water': análise concluída sem erros</pre></div>
         </div>
+        <div class="acoes"><button type="button" class="botao" data-demonstrar="exemplos/agua.mol">Demonstrar como a linguagem traduz este exemplo</button></div>
       </div>
 
       <div class="chamada" id="s-comecar">
@@ -495,6 +603,7 @@ Espécie 'Water': análise concluída sem erros</pre></div>
           <h2>A árvore contém conceitos, não pontuação</h2>
           <p class="lead">Dataclasses próprias guardam linha, coluna e quantificadores; a expansão em átomos e ligações individuais só acontece no modelo.</p>
         </div>
+        <div class="acoes" style="margin:0 0 1.2rem"><button type="button" class="botao" data-demonstrar="exemplos/agua.mol">Demonstrar a tradução da água, etapa por etapa</button></div>
         <div class="moldura-ast"><img alt="AST real de exemplos/agua.mol, gerada por src/desenhar_arvore.py" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNjIxIiBoZWlnaHQ9IjM2OCIgdmlld0JveD0iMCAwIDM2MjEgMzY4Ij4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y4ZmFmYyIvPgo8c3R5bGU+dGV4dHtmb250LWZhbWlseTpBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZjtmb250LXNpemU6MTNweDtmaWxsOiMxNzIwMzN9Lm5ve2ZpbGw6I2ZmZmZmZjtzdHJva2U6IzY0NzQ4YjtzdHJva2Utd2lkdGg6MS4zfS5hcmVzdGF7ZmlsbDpub25lO3N0cm9rZTojOTRhM2I4O3N0cm9rZS13aWR0aDoxLjN9LnRpdHVsb3tmb250LXNpemU6MTlweDtmb250LXdlaWdodDo3MDA7ZmlsbDojMGYxNzJhfTwvc3R5bGU+Cjx0ZXh0IGNsYXNzPSJ0aXR1bG8iIHg9IjMwIiB5PSIyNyI+TW9sZWN1bGVEU0wg4oCUIMOBcnZvcmUgU2ludMOhdGljYSBBYnN0cmF0YSAoQVNUKTwvdGV4dD4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSAxODEwLjUgOTIuMCBMIDE4MTAuNSAxMTQuMCBMIDk0LjggMTE0LjAgTCA5NC44IDEzNi4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gMTgxMC41IDkyLjAgTCAxODEwLjUgMTE0LjAgTCAyNDYuNCAxMTQuMCBMIDI0Ni40IDEzNi4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gMTgxMC41IDkyLjAgTCAxODEwLjUgMTE0LjAgTCA0NTcuMiAxMTQuMCBMIDQ1Ny4yIDEzNi4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gMTgxMC41IDkyLjAgTCAxODEwLjUgMTE0LjAgTCAyMDk3LjEgMTE0LjAgTCAyMDk3LjEgMTM2LjAiLz4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSAyMDk3LjEgMTc0LjAgTCAyMDk3LjEgMTk2LjAgTCA4NTQuNyAxOTYuMCBMIDg1NC43IDIxOC4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gODU0LjcgMjU2LjAgTCA4NTQuNyAyNzguMCBMIDY1Ni45IDI3OC4wIEwgNjU2LjkgMzAwLjAiLz4KPHBhdGggY2xhc3M9ImFyZXN0YSIgZD0iTSA4NTQuNyAyNTYuMCBMIDg1NC43IDI3OC4wIEwgODA0LjggMjc4LjAgTCA4MDQuOCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDg1NC43IDI1Ni4wIEwgODU0LjcgMjc4LjAgTCA5NDEuNiAyNzguMCBMIDk0MS42IDMwMC4wIi8+CjxwYXRoIGNsYXNzPSJhcmVzdGEiIGQ9Ik0gODU0LjcgMjU2LjAgTCA4NTQuNyAyNzguMCBMIDEwNTYuMiAyNzguMCBMIDEwNTYuMiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDIwOTcuMSAxNzQuMCBMIDIwOTcuMSAxOTYuMCBMIDEzNzkuNyAxOTYuMCBMIDEzNzkuNyAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzNzkuNyAyNTYuMCBMIDEzNzkuNyAyNzguMCBMIDExODEuOSAyNzguMCBMIDExODEuOSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzNzkuNyAyNTYuMCBMIDEzNzkuNyAyNzguMCBMIDEzMjkuOCAyNzguMCBMIDEzMjkuOCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzNzkuNyAyNTYuMCBMIDEzNzkuNyAyNzguMCBMIDE0NjYuNiAyNzguMCBMIDE0NjYuNiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDEzNzkuNyAyNTYuMCBMIDEzNzkuNyAyNzguMCBMIDE1ODEuMiAyNzguMCBMIDE1ODEuMiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDIwOTcuMSAxNzQuMCBMIDIwOTcuMSAxOTYuMCBMIDE5MDQuNyAxOTYuMCBMIDE5MDQuNyAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5MDQuNyAyNTYuMCBMIDE5MDQuNyAyNzguMCBMIDE3MDYuOSAyNzguMCBMIDE3MDYuOSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5MDQuNyAyNTYuMCBMIDE5MDQuNyAyNzguMCBMIDE4NTQuOCAyNzguMCBMIDE4NTQuOCAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5MDQuNyAyNTYuMCBMIDE5MDQuNyAyNzguMCBMIDE5OTEuNiAyNzguMCBMIDE5OTEuNiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDE5MDQuNyAyNTYuMCBMIDE5MDQuNyAyNzguMCBMIDIxMDYuMiAyNzguMCBMIDIxMDYuMiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDIwOTcuMSAxNzQuMCBMIDIwOTcuMSAxOTYuMCBMIDI1MjUuOSAxOTYuMCBMIDI1MjUuOSAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI1MjUuOSAyNTYuMCBMIDI1MjUuOSAyNzguMCBMIDIyNjUuMiAyNzguMCBMIDIyNjUuMiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI1MjUuOSAyNTYuMCBMIDI1MjUuOSAyNzguMCBMIDI0NTAuMSAyNzguMCBMIDI0NTAuMSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI1MjUuOSAyNTYuMCBMIDI1MjUuOSAyNzguMCBMIDI2MzguNyAyNzguMCBMIDI2MzguNyAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDI1MjUuOSAyNTYuMCBMIDI1MjUuOSAyNzguMCBMIDI4MTIuNSAyNzguMCBMIDI4MTIuNSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDIwOTcuMSAxNzQuMCBMIDIwOTcuMSAxOTYuMCBMIDMyNDMuMyAxOTYuMCBMIDMyNDMuMyAyMTguMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDMyNDMuMyAyNTYuMCBMIDMyNDMuMyAyNzguMCBMIDI5ODIuNiAyNzguMCBMIDI5ODIuNiAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDMyNDMuMyAyNTYuMCBMIDMyNDMuMyAyNzguMCBMIDMxNjcuNSAyNzguMCBMIDMxNjcuNSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDMyNDMuMyAyNTYuMCBMIDMyNDMuMyAyNzguMCBMIDMzNTYuMSAyNzguMCBMIDMzNTYuMSAzMDAuMCIvPgo8cGF0aCBjbGFzcz0iYXJlc3RhIiBkPSJNIDMyNDMuMyAyNTYuMCBMIDMyNDMuMyAyNzguMCBMIDM1MjkuOSAyNzguMCBMIDM1MjkuOSAzMDAuMCIvPgo8cmVjdCBjbGFzcz0ibm8iIHg9IjE3MzguMyIgeT0iNTQuMCIgd2lkdGg9IjE0NC40IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTgxMC41IiB5PSI3Ny4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5Fc3BlY2llOiAmcXVvdDtXYXRlciZxdW90OzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIzMC4wIiB5PSIxMzYuMCIgd2lkdGg9IjEyOS42IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iOTQuOCIgeT0iMTU5LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPnRpcG86IG1vbGVjdWxlPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9IjE4MS42IiB5PSIxMzYuMCIgd2lkdGg9IjEyOS42IiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMjQ2LjQiIHk9IjE1OS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5jYXJnYSB0b3RhbDogMDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIzMzMuMiIgeT0iMTM2LjAiIHdpZHRoPSIyNDguMCIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjQ1Ny4yIiB5PSIxNTkuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZGVzZW1wYXJlbGhhZG9zOiBuw6NvIGRlY2xhcmFkbzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyMDU0LjUiIHk9IjEzNi4wIiB3aWR0aD0iODUuMiIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjIwOTcuMSIgeT0iMTU5LjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPmNvbWFuZG9zPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9IjgwOC40IiB5PSIyMTguMCIgd2lkdGg9IjkyLjYiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSI4NTQuNyIgeT0iMjQxLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkF0b21vRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSI2MDMuMiIgeT0iMzAwLjAiIHdpZHRoPSIxMDcuNCIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjY1Ni45IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZWxlbWVudG86IE88L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iNzMyLjYiIHk9IjMwMC4wIiB3aWR0aD0iMTQ0LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSI4MDQuOCIgeT0iMzIzLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPm11bHRpcGxpY2Fkb3I6IDE8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iODk5LjAiIHk9IjMwMC4wIiB3aWR0aD0iODUuMiIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9Ijk0MS42IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Y2FyZ2E6IDA8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMTAwNi4yIiB5PSIzMDAuMCIgd2lkdGg9IjEwMC4wIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTA1Ni4yIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bm9tZTogTm9uZTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxMzMzLjQiIHk9IjIxOC4wIiB3aWR0aD0iOTIuNiIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjEzNzkuNyIgeT0iMjQxLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkF0b21vRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxMTI4LjIiIHk9IjMwMC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxMTgxLjkiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5lbGVtZW50bzogSDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxMjU3LjYiIHk9IjMwMC4wIiB3aWR0aD0iMTQ0LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxMzI5LjgiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5tdWx0aXBsaWNhZG9yOiAxPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9IjE0MjQuMCIgeT0iMzAwLjAiIHdpZHRoPSI4NS4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTQ2Ni42IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Y2FyZ2E6IDA8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMTUzMS4yIiB5PSIzMDAuMCIgd2lkdGg9IjEwMC4wIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTU4MS4yIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bm9tZTogTm9uZTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxODU4LjQiIHk9IjIxOC4wIiB3aWR0aD0iOTIuNiIgaGVpZ2h0PSIzOCIgcng9IjgiIHJ5PSI4Ii8+Cjx0ZXh0IHg9IjE5MDQuNyIgeT0iMjQxLjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkF0b21vRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxNjUzLjIiIHk9IjMwMC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxNzA2LjkiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5lbGVtZW50bzogSDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIxNzgyLjYiIHk9IjMwMC4wIiB3aWR0aD0iMTQ0LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIxODU0LjgiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5tdWx0aXBsaWNhZG9yOiAxPC90ZXh0Pgo8cmVjdCBjbGFzcz0ibm8iIHg9IjE5NDkuMCIgeT0iMzAwLjAiIHdpZHRoPSI4NS4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMTk5MS42IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Y2FyZ2E6IDA8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMjA1Ni4yIiB5PSIzMDAuMCIgd2lkdGg9IjEwMC4wIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMjEwNi4yIiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+bm9tZTogTm9uZTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyNDcyLjIiIHk9IjIxOC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNTI1LjkiIHk9IjI0MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MaWdhY2FvRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyMTc4LjIiIHk9IjMwMC4wIiB3aWR0aD0iMTc0LjAiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyMjY1LjIiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcmlnZW06IEggKGVsZW1lbnRvKTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyMzc0LjIiIHk9IjMwMC4wIiB3aWR0aD0iMTUxLjgiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNDUwLjEiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcGVyYWRvcjogU0lNUExFUzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyNTQ4LjAiIHk9IjMwMC4wIiB3aWR0aD0iMTgxLjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyNjM4LjciIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5kZXN0aW5vOiBPIChlbGVtZW50byk8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMjc1MS40IiB5PSIzMDAuMCIgd2lkdGg9IjEyMi4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMjgxMi41IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+cmVwZXRpY29lczogMTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIzMTg5LjYiIHk9IjIxOC4wIiB3aWR0aD0iMTA3LjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIzMjQzLjMiIHk9IjI0MS4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5MaWdhY2FvRGVjbDwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIyODk1LjYiIHk9IjMwMC4wIiB3aWR0aD0iMTc0LjAiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIyOTgyLjYiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcmlnZW06IE8gKGVsZW1lbnRvKTwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIzMDkxLjYiIHk9IjMwMC4wIiB3aWR0aD0iMTUxLjgiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIzMTY3LjUiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5vcGVyYWRvcjogU0lNUExFUzwvdGV4dD4KPHJlY3QgY2xhc3M9Im5vIiB4PSIzMjY1LjQiIHk9IjMwMC4wIiB3aWR0aD0iMTgxLjQiIGhlaWdodD0iMzgiIHJ4PSI4IiByeT0iOCIvPgo8dGV4dCB4PSIzMzU2LjEiIHk9IjMyMy4wIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5kZXN0aW5vOiBIIChlbGVtZW50byk8L3RleHQ+CjxyZWN0IGNsYXNzPSJubyIgeD0iMzQ2OC44IiB5PSIzMDAuMCIgd2lkdGg9IjEyMi4yIiBoZWlnaHQ9IjM4IiByeD0iOCIgcnk9IjgiLz4KPHRleHQgeD0iMzUyOS45IiB5PSIzMjMuMCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+cmVwZXRpY29lczogMTwvdGV4dD4KPC9zdmc+"></div>
       </article>
 
@@ -669,6 +778,13 @@ python3 src/main.py --tokens --ast --modelo exemplos/agua.mol
 python3 src/main.py --estereo exemplos/acido_tartarico_meso.mol</pre></div>
         <div class="placa c6"><div class="icone"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><h3>4. Rodar os testes</h3><pre>python3 testar.py
 python3 tests/benchmark_solver.py --backend=ambos</pre></div>
+        <div class="placa c12"><h3>Veja a tradução de um exemplo</h3><p>Cada etapa (tokens, árvore sintática, AST, modelo e semântica) explicada pela computação e pela química.</p>
+          <div class="acoes" style="justify-content:flex-start;margin-top:1rem">
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/agua.mol">Água</button>
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/etanol.mol">Etanol</button>
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/benzeno.mol">Benzeno</button>
+            <button type="button" class="botao pequeno" data-demonstrar="exemplos/amonio_por_ligacao_coordenada.mol">Amônio (coordenada)</button>
+          </div></div>
         <div class="placa c8"><h3>Opções de linha de comando</h3><p class="nota">Texto real de <code>python3 src/main.py</code> sem argumentos:</p><pre>Uso: python src/main.py [--tokens] [--ast] [--modelo] [--resolver|--resolver-todas] &lt;arquivo&gt;
   --tokens  mostra os tokens reconhecidos
   --ast     mostra a AST construída
@@ -712,6 +828,7 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
           <a href="#/doc/comandos" data-topico="comandos">Comandos</a>
           <a href="#/doc/referencias" data-topico="referencias">Referências e nomes</a>
           <a href="#/doc/estereo" data-topico="estereo">Configuração (stereo)</a>
+          <a href="#/doc/traducao" data-topico="traducao">Árvore de tradução</a>
           <a href="#/doc/gramatica" data-topico="gramatica">Gramática ANTLR</a>
           <a href="#/doc/erros" data-topico="erros">Erros</a>
           <a href="#/doc/relatorios" data-topico="relatorios">Relatórios e solver</a>
@@ -767,6 +884,19 @@ charge unpaired atom bond as ring stereo</pre>
               <tr><td>STEREO-004</td><td>r/s sem a configuração dos ramos</td></tr>
               <tr><td>STEREO-005</td><td>eixo de biarila sem verificação da barreira (aviso)</td></tr>
             </table></div>
+          </article>
+          <article class="topico" data-topico="traducao">
+            <h3>Árvore de tradução</h3>
+            <p>Um programa passa por cinco etapas. Cada uma tem um papel na computação e um sentido na química.</p>
+            <div class="tabela"><table>
+              <tr><th>Etapa</th><th>Computação</th><th>Química</th></tr>
+              <tr><td>1 · Tokens</td><td>lexer por expressões regulares</td><td>símbolos de elementos, ligações e quantidades</td></tr>
+              <tr><td>2 · Árvore sintática</td><td>parser LL do ANTLR, uma regra por nó</td><td>a frase química está bem formada?</td></tr>
+              <tr><td>3 · AST</td><td>visitor: só conceitos, com posição</td><td>átomos declarados e ligações entre eles</td></tr>
+              <tr><td>4 · Modelo</td><td>grafo com vértices e arestas com peso</td><td>fórmula estrutural</td></tr>
+              <tr><td>5 · Semântica</td><td>verificações em etapas, códigos de erro</td><td>valência, carga e integridade</td></tr>
+            </table></div>
+            <div class="acoes" style="justify-content:flex-start;margin-top:1.2rem"><button type="button" class="botao pequeno" data-demonstrar="exemplos/agua.mol">Demonstrar com a água</button><button type="button" class="botao pequeno" data-demonstrar="exemplos/acido_tartarico_meso.mol">Demonstrar com stereo</button></div>
           </article>
           <article class="topico" data-topico="gramatica">
             <h3>Gramática ANTLR</h3>
@@ -1004,6 +1134,7 @@ ESPACO
           <div class="barra-ferramentas">
             <select id="exemplo" aria-label="Carregar exemplo"></select>
             <button class="botao pequeno" type="button" id="limpar">Começar do zero</button>
+            <button class="botao pequeno" type="button" id="demonstrar-atual">Demonstrar tradução</button>
           </div>
           <div class="editor">
             <div class="numeros" id="numeros" aria-hidden="true">1</div>
@@ -1022,21 +1153,88 @@ ESPACO
           <div class="resumo-mol" id="resumo"></div>
           <div class="abas" role="tablist" data-grupo="play">
             <button class="aba" role="tab" aria-selected="true" data-painel="p-diag">Diagnóstico</button>
+            <button class="aba" role="tab" aria-selected="false" data-painel="p-trad">Tradução</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-modelo">Modelo</button>
             <button class="aba" role="tab" aria-selected="false" data-painel="p-real">Compilador real</button>
           </div>
           <div class="painel diagnosticos" id="p-diag" role="tabpanel" aria-live="polite"></div>
+          <div class="painel traducao" id="p-trad" role="tabpanel" hidden></div>
           <div class="painel" id="p-modelo" role="tabpanel" hidden><pre></pre></div>
           <div class="painel" id="p-real" role="tabpanel" hidden><pre></pre></div>
           <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve quais átomos se ligam, não coordenadas. A verificação do navegador cobre sintaxe, nomes, anéis e valências; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
         </div>
       </div>
     </section>
+    <!-- ================= LABORATÓRIO ================= -->
+    <section class="pagina" id="pg-laboratorio" aria-label="Laboratório">
+      <div class="cabeca">
+        <span class="rotulo">05 — laboratório</span>
+        <h2>Misturas e reações</h2>
+        <p class="lead">Cada espécie é um programa MoleculeDSL. Aqui elas se juntam numa mistura ou se transformam numa reação.</p>
+      </div>
+      <div class="abas abas-centro" role="tablist">
+        <button class="aba" role="tab" aria-selected="true" data-painel="lab-reacao">Reação química</button>
+        <button class="aba" role="tab" aria-selected="false" data-painel="lab-mistura">Mistura</button>
+      </div>
+      <div id="lab-reacao" role="tabpanel" class="play" style="margin-top:1.4rem">
+        <div class="placa">
+          <div class="barra-ferramentas">
+            <select id="reacao" aria-label="Escolher reação"></select>
+            <button class="botao pequeno" type="button" id="tocar-reacao">❚❚ Pausar</button>
+            <button class="botao pequeno" type="button" id="reiniciar-reacao">Reiniciar</button>
+          </div>
+          <div class="cena"><canvas id="cena-reacao" aria-label="Animação da reação"></canvas><span class="fase-reacao" id="fase-reacao">Reagentes</span><span class="dica">arraste para girar</span></div>
+          <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+        </div>
+        <div class="placa" id="info-reacao"></div>
+      </div>
+      <div id="lab-mistura" role="tabpanel" class="play" style="margin-top:1.4rem" hidden>
+        <div class="placa">
+          <div class="cena"><canvas id="cena-mistura" aria-label="Mistura de moléculas"></canvas><span class="dica">arraste para girar</span></div>
+          <label class="alternar" style="margin-top:0.9rem">agitação (temperatura) <input type="range" id="agitacao" min="0" max="3" step="0.1" value="1"></label>
+        </div>
+        <div class="placa">
+          <h3>Componentes</h3>
+          <div id="lista-mistura" class="lista-mistura"></div>
+          <div id="info-mistura" style="margin-top:1rem"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TABELA ================= -->
+    <section class="pagina" id="pg-tabela" aria-label="Tabela periódica">
+      <div class="cabeca">
+        <span class="rotulo">06 — tabela periódica</span>
+        <h2>Elementos para a química e para o compilador</h2>
+        <p class="lead">Clique num elemento: veja o modelo atômico, os dados da fonte e o que acontece com ele em cada etapa da tradução.</p>
+      </div>
+      <div class="placa"><div class="tabela-periodica" id="tabela-periodica"></div><div class="legenda-tabela" id="legenda-tabela"></div></div>
+      <div class="play" style="margin-top:1.1rem">
+        <div class="placa"><h3>Modelo atômico (Bohr)</h3><div class="cena cena-bohr"><canvas id="bohr" aria-label="Modelo de Bohr do elemento"></canvas></div><p class="nota">Camadas tiradas da configuração eletrônica de <code>regras/elementos.json</code>. O modelo de Bohr é didático: os elétrons não giram em órbitas fixas.</p></div>
+        <div class="placa" id="ficha-elemento"></div>
+      </div>
+    </section>
   </main>
+
+  <dialog id="demo" class="demo" aria-label="Demonstração da tradução">
+    <div class="demo-cabeca">
+      <div><span class="rotulo">demonstração da tradução</span><h3 class="demo-titulo"></h3></div>
+      <button type="button" class="botao pequeno" data-demo="fechar">Fechar</button>
+    </div>
+    <div class="demo-corpo">
+      <div><p class="nota" style="margin:0 0 0.4rem">Programa de entrada</p><pre class="demo-fonte"></pre></div>
+      <div class="demo-traducao"></div>
+    </div>
+    <div class="demo-controles">
+      <button type="button" class="botao pequeno" data-demo="anterior">← Etapa anterior</button>
+      <button type="button" class="botao pequeno primario" data-demo="tocar">▶ Reproduzir</button>
+      <button type="button" class="botao pequeno" data-demo="proximo">Próxima etapa →</button>
+    </div>
+  </dialog>
 
   <footer>Molecule<b>DSL</b> · linguagem química · Linguagens Formais e Compiladores · Geisbelly Victoria, Murilo e Maria Antonia · 2026</footer>
 
-  <script type="application/json" id="dados">{"exemplos": [{"titulo": "Water", "arquivo": "exemplos/agua.mol", "codigo": "species molecule \"Water\" {\n    atom O\n    atom H\n    atom H\n\n    bond H-O\n    bond O-H\n}", "saida": "Modelo 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado\n  Átomos (3)\n    O#1 carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [4:4]\n  Ligações (2)\n    H#1 SIMPLES O#1 classificação=covalente polar Δχ=1.24 [6:4]\n    O#1 SIMPLES H#2 classificação=covalente polar Δχ=1.24 [7:4]\nEspécie 'Water': análise concluída sem erros"}, {"titulo": "Methane", "arquivo": "exemplos/metano.mol", "codigo": "molecule \"Methane\" {\n    atom C\n    4x atom H\n\n    bond C-H x4\n}", "saida": "Modelo 'Methane' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (5)\n    C#1 carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n    H#3 carga=+0 [3:4]\n    H#4 carga=+0 [3:4]\n  Ligações (4)\n    C#1 SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [5:4]\n    C#1 SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [5:4]\n    C#1 SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [5:4]\n    C#1 SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [5:4]\nEspécie 'Methane': análise concluída sem erros"}, {"titulo": "Ammonia", "arquivo": "exemplos/amonia.mol", "codigo": "molecule \"Ammonia\" {\n    atom N\n    3x atom H\n\n    bond N-H x3\n}", "saida": "Modelo 'Ammonia' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (4)\n    N#1 carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n    H#3 carga=+0 [3:4]\n  Ligações (3)\n    N#1 SIMPLES H#1 classificação=covalente polar Δχ=0.84 [5:4]\n    N#1 SIMPLES H#2 classificação=covalente polar Δχ=0.84 [5:4]\n    N#1 SIMPLES H#3 classificação=covalente polar Δχ=0.84 [5:4]\nEspécie 'Ammonia': análise concluída sem erros"}, {"titulo": "Ethanol", "arquivo": "exemplos/etanol.mol", "codigo": "// Átomos com nome\nmolecule \"Ethanol\" {\n    atom C as c1\n    atom C as c2\n    atom O as o1\n    6x atom H as h\n\n    bond c1-c2\n    bond c2-o1\n    bond c1-h1\n    bond c1-h2\n    bond c1-h3\n    bond c2-h4\n    bond c2-h5\n    bond o1-h6\n}\n", "saida": "Modelo 'Ethanol' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (9)\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [4:4]\n    o1 (O#1) carga=+0 [5:4]\n    h1 (H#1) carga=+0 [6:4]\n    h2 (H#2) carga=+0 [6:4]\n    h3 (H#3) carga=+0 [6:4]\n    h4 (H#4) carga=+0 [6:4]\n    h5 (H#5) carga=+0 [6:4]\n    h6 (H#6) carga=+0 [6:4]\n  Ligações (8)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c2 (C#2) SIMPLES o1 (O#1) classificação=covalente polar Δχ=0.89 [9:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [10:4]\n    c1 (C#1) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [11:4]\n    c1 (C#1) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [12:4]\n    c2 (C#2) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [14:4]\n    o1 (O#1) SIMPLES h6 (H#6) classificação=covalente polar Δχ=1.24 [15:4]\nEspécie 'Ethanol': análise concluída sem erros"}, {"titulo": "Acetone", "arquivo": "exemplos/acetona.mol", "codigo": "molecule \"Acetone\" {\n    3x atom C as c\n    atom O\n    6x atom H\n\n    bond c1-c2\n    bond c2-c3\n    bond c2=O\n    bond c1-H x3\n    bond c3-H x3\n}\n", "saida": "Modelo 'Acetone' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (10)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [2:4]\n    c3 (C#3) carga=+0 [2:4]\n    O#1 carga=+0 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    H#4 carga=+0 [4:4]\n    H#5 carga=+0 [4:4]\n    H#6 carga=+0 [4:4]\n  Ligações (9)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [7:4]\n    c2 (C#2) DUPLA O#1 classificação=covalente polar Δχ=0.89 [8:4]\n    c1 (C#1) SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [9:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [9:4]\n    c1 (C#1) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [9:4]\n    c3 (C#3) SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [10:4]\n    c3 (C#3) SIMPLES H#5 classificação=covalente apolar Δχ=0.35 [10:4]\n    c3 (C#3) SIMPLES H#6 classificação=covalente apolar Δχ=0.35 [10:4]\nEspécie 'Acetone': análise concluída sem erros"}, {"titulo": "Ácido acético - CH3COOH (vinagre)", "arquivo": "exemplos/acido_acetico.mol", "codigo": "molecule \"Ácido acético - CH3COOH (vinagre)\" {\n    atom C as c1\n    atom C as c2\n    atom O as o1\n    atom O as o2\n    4x atom H\n\n    bond c1-c2\n    bond c2=o1\n    bond c2-o2\n    bond c1-H x3\n    bond o2-H\n}\n", "saida": "Modelo 'Ácido acético - CH3COOH (vinagre)' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (8)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    o1 (O#1) carga=+0 [4:4]\n    o2 (O#2) carga=+0 [5:4]\n    H#1 carga=+0 [6:4]\n    H#2 carga=+0 [6:4]\n    H#3 carga=+0 [6:4]\n    H#4 carga=+0 [6:4]\n  Ligações (7)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c2 (C#2) DUPLA o1 (O#1) classificação=covalente polar Δχ=0.89 [9:4]\n    c2 (C#2) SIMPLES o2 (O#2) classificação=covalente polar Δχ=0.89 [10:4]\n    c1 (C#1) SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [11:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [11:4]\n    c1 (C#1) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [11:4]\n    o2 (O#2) SIMPLES H#4 classificação=covalente polar Δχ=1.24 [12:4]\nEspécie 'Ácido acético - CH3COOH (vinagre)': análise concluída sem erros"}, {"titulo": "Urea", "arquivo": "exemplos/ureia.mol", "codigo": "molecule \"Urea\" {\n    atom C\n    atom O\n    2x atom N as n\n    4x atom H\n\n    bond C=O\n    bond C-n1\n    bond C-n2\n    bond n1-H x2\n    bond n2-H x2\n}\n", "saida": "Modelo 'Urea' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (8)\n    C#1 carga=+0 [2:4]\n    O#1 carga=+0 [3:4]\n    n1 (N#1) carga=+0 [4:4]\n    n2 (N#2) carga=+0 [4:4]\n    H#1 carga=+0 [5:4]\n    H#2 carga=+0 [5:4]\n    H#3 carga=+0 [5:4]\n    H#4 carga=+0 [5:4]\n  Ligações (7)\n    C#1 DUPLA O#1 classificação=covalente polar Δχ=0.89 [7:4]\n    C#1 SIMPLES n1 (N#1) classificação=covalente polar Δχ=0.49 [8:4]\n    C#1 SIMPLES n2 (N#2) classificação=covalente polar Δχ=0.49 [9:4]\n    n1 (N#1) SIMPLES H#1 classificação=covalente polar Δχ=0.84 [10:4]\n    n1 (N#1) SIMPLES H#2 classificação=covalente polar Δχ=0.84 [10:4]\n    n2 (N#2) SIMPLES H#3 classificação=covalente polar Δχ=0.84 [11:4]\n    n2 (N#2) SIMPLES H#4 classificação=covalente polar Δχ=0.84 [11:4]\nEspécie 'Urea': análise concluída sem erros"}, {"titulo": "Carbon dioxide", "arquivo": "exemplos/dioxido_carbono.mol", "codigo": "// Ligação dupla (=)\nmolecule \"Carbon dioxide\" {\n    atom C\n    2x atom O\n\n    bond C=O x2\n}\n", "saida": "Modelo 'Carbon dioxide' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (3)\n    C#1 carga=+0 [3:4]\n    O#1 carga=+0 [4:4]\n    O#2 carga=+0 [4:4]\n  Ligações (2)\n    C#1 DUPLA O#1 classificação=covalente polar Δχ=0.89 [6:4]\n    C#1 DUPLA O#2 classificação=covalente polar Δχ=0.89 [6:4]\nEspécie 'Carbon dioxide': análise concluída sem erros"}, {"titulo": "Benzene", "arquivo": "exemplos/benzeno.mol", "codigo": "// Anel de 6 com ligações simples e duplas alternadas\nmolecule \"Benzene\" {\n    6x atom C as c\n    6x atom H as h\n\n    bond c1=c2\n    bond c2-c3\n    bond c3=c4\n    bond c4-c5\n    bond c5=c6\n    bond c6-c1\n\n    bond c1-h1\n    bond c2-h2\n    bond c3-h3\n    bond c4-h4\n    bond c5-h5\n    bond c6-h6\n\n    ring c1 c2 c3 c4 c5 c6\n}\n", "saida": "Modelo 'Benzene' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (12)\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [3:4]\n    c4 (C#4) carga=+0 [3:4]\n    c5 (C#5) carga=+0 [3:4]\n    c6 (C#6) carga=+0 [3:4]\n    h1 (H#1) carga=+0 [4:4]\n    h2 (H#2) carga=+0 [4:4]\n    h3 (H#3) carga=+0 [4:4]\n    h4 (H#4) carga=+0 [4:4]\n    h5 (H#5) carga=+0 [4:4]\n    h6 (H#6) carga=+0 [4:4]\n  Ligações (12)\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [7:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [8:4]\n    c4 (C#4) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [9:4]\n    c5 (C#5) DUPLA c6 (C#6) classificação=covalente apolar Δχ=0.00 [10:4]\n    c6 (C#6) SIMPLES c1 (C#1) classificação=covalente apolar Δχ=0.00 [11:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [14:4]\n    c3 (C#3) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [16:4]\n    c5 (C#5) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [17:4]\n    c6 (C#6) SIMPLES h6 (H#6) classificação=covalente apolar Δχ=0.35 [18:4]\n  Anéis (1)\n    c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4) c5 (C#5) c6 (C#6)\nEspécie 'Benzene': análise concluída sem erros"}, {"titulo": "Naphthalene", "arquivo": "exemplos/naftaleno.mol", "codigo": "// Dois anéis de 6 que dividem a ligação c9=c10\nmolecule \"Naphthalene\" {\n    10x atom C as c\n    8x atom H as h\n\n    bond c1=c2\n    bond c2-c3\n    bond c3=c4\n    bond c4-c10\n    bond c10=c9\n    bond c9-c1\n\n    bond c5=c6\n    bond c6-c7\n    bond c7=c8\n    bond c8-c9\n    bond c10-c5\n\n    bond c1-h1\n    bond c2-h2\n    bond c3-h3\n    bond c4-h4\n    bond c5-h5\n    bond c6-h6\n    bond c7-h7\n    bond c8-h8\n\n    ring c1 c2 c3 c4 c10 c9\n    ring c5 c6 c7 c8 c9 c10\n}\n", "saida": "Modelo 'Naphthalene' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (18)\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [3:4]\n    c4 (C#4) carga=+0 [3:4]\n    c5 (C#5) carga=+0 [3:4]\n    c6 (C#6) carga=+0 [3:4]\n    c7 (C#7) carga=+0 [3:4]\n    c8 (C#8) carga=+0 [3:4]\n    c9 (C#9) carga=+0 [3:4]\n    c10 (C#10) carga=+0 [3:4]\n    h1 (H#1) carga=+0 [4:4]\n    h2 (H#2) carga=+0 [4:4]\n    h3 (H#3) carga=+0 [4:4]\n    h4 (H#4) carga=+0 [4:4]\n    h5 (H#5) carga=+0 [4:4]\n    h6 (H#6) carga=+0 [4:4]\n    h7 (H#7) carga=+0 [4:4]\n    h8 (H#8) carga=+0 [4:4]\n  Ligações (19)\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [7:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [8:4]\n    c4 (C#4) SIMPLES c10 (C#10) classificação=covalente apolar Δχ=0.00 [9:4]\n    c10 (C#10) DUPLA c9 (C#9) classificação=covalente apolar Δχ=0.00 [10:4]\n    c9 (C#9) SIMPLES c1 (C#1) classificação=covalente apolar Δχ=0.00 [11:4]\n    c5 (C#5) DUPLA c6 (C#6) classificação=covalente apolar Δχ=0.00 [13:4]\n    c6 (C#6) SIMPLES c7 (C#7) classificação=covalente apolar Δχ=0.00 [14:4]\n    c7 (C#7) DUPLA c8 (C#8) classificação=covalente apolar Δχ=0.00 [15:4]\n    c8 (C#8) SIMPLES c9 (C#9) classificação=covalente apolar Δχ=0.00 [16:4]\n    c10 (C#10) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [17:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [19:4]\n    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [20:4]\n    c3 (C#3) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [21:4]\n    c4 (C#4) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [22:4]\n    c5 (C#5) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [23:4]\n    c6 (C#6) SIMPLES h6 (H#6) classificação=covalente apolar Δχ=0.35 [24:4]\n    c7 (C#7) SIMPLES h7 (H#7) classificação=covalente apolar Δχ=0.35 [25:4]\n    c8 (C#8) SIMPLES h8 (H#8) classificação=covalente apolar Δχ=0.35 [26:4]\n  Anéis (2)\n    c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4) c10 (C#10) c9 (C#9)\n    c5 (C#5) c6 (C#6) c7 (C#7) c8 (C#8) c9 (C#9) c10 (C#10)\nEspécie 'Naphthalene': análise concluída sem erros"}, {"titulo": "Pyrrole", "arquivo": "exemplos/pirrol.mol", "codigo": "molecule \"Pyrrole\" {\n    atom N as n\n    4x atom C as c\n    5x atom H\n\n    bond n-c1\n    bond c1=c2\n    bond c2-c3\n    bond c3=c4\n    bond c4-n\n\n    bond n-H\n    bond c1-H\n    bond c2-H\n    bond c3-H\n    bond c4-H\n\n    ring n c1 c2 c3 c4\n}\n", "saida": "Modelo 'Pyrrole' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (10)\n    n (N#1) carga=+0 [2:4]\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [3:4]\n    c4 (C#4) carga=+0 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    H#4 carga=+0 [4:4]\n    H#5 carga=+0 [4:4]\n  Ligações (10)\n    n (N#1) SIMPLES c1 (C#1) classificação=covalente polar Δχ=0.49 [6:4]\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [7:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [8:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [9:4]\n    c4 (C#4) SIMPLES n (N#1) classificação=covalente polar Δχ=0.49 [10:4]\n    n (N#1) SIMPLES H#1 classificação=covalente polar Δχ=0.84 [12:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [14:4]\n    c3 (C#3) SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES H#5 classificação=covalente apolar Δχ=0.35 [16:4]\n  Anéis (1)\n    n (N#1) c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4)\nEspécie 'Pyrrole': análise concluída sem erros"}, {"titulo": "Cyclohexane", "arquivo": "exemplos/ciclohexano.mol", "codigo": "molecule \"Cyclohexane\" {\n    6x atom C as c\n    12x atom H\n\n    bond c1-c2\n    bond c2-c3\n    bond c3-c4\n    bond c4-c5\n    bond c5-c6\n    bond c6-c1\n\n    bond c1-H x2\n    bond c2-H x2\n    bond c3-H x2\n    bond c4-H x2\n    bond c5-H x2\n    bond c6-H x2\n\n    ring c4 c5 c6 c1 c2 c3\n}\n", "saida": "Modelo 'Cyclohexane' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (18)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [2:4]\n    c3 (C#3) carga=+0 [2:4]\n    c4 (C#4) carga=+0 [2:4]\n    c5 (C#5) carga=+0 [2:4]\n    c6 (C#6) carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n    H#3 carga=+0 [3:4]\n    H#4 carga=+0 [3:4]\n    H#5 carga=+0 [3:4]\n    H#6 carga=+0 [3:4]\n    H#7 carga=+0 [3:4]\n    H#8 carga=+0 [3:4]\n    H#9 carga=+0 [3:4]\n    H#10 carga=+0 [3:4]\n    H#11 carga=+0 [3:4]\n    H#12 carga=+0 [3:4]\n  Ligações (18)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [5:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [6:4]\n    c3 (C#3) SIMPLES c4 (C#4) classificação=covalente apolar Δχ=0.00 [7:4]\n    c4 (C#4) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [8:4]\n    c5 (C#5) SIMPLES c6 (C#6) classificação=covalente apolar Δχ=0.00 [9:4]\n    c6 (C#6) SIMPLES c1 (C#1) classificação=covalente apolar Δχ=0.00 [10:4]\n    c1 (C#1) SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [12:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [12:4]\n    c2 (C#2) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [13:4]\n    c3 (C#3) SIMPLES H#5 classificação=covalente apolar Δχ=0.35 [14:4]\n    c3 (C#3) SIMPLES H#6 classificação=covalente apolar Δχ=0.35 [14:4]\n    c4 (C#4) SIMPLES H#7 classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES H#8 classificação=covalente apolar Δχ=0.35 [15:4]\n    c5 (C#5) SIMPLES H#9 classificação=covalente apolar Δχ=0.35 [16:4]\n    c5 (C#5) SIMPLES H#10 classificação=covalente apolar Δχ=0.35 [16:4]\n    c6 (C#6) SIMPLES H#11 classificação=covalente apolar Δχ=0.35 [17:4]\n    c6 (C#6) SIMPLES H#12 classificação=covalente apolar Δχ=0.35 [17:4]\n  Anéis (1)\n    c4 (C#4) c5 (C#5) c6 (C#6) c1 (C#1) c2 (C#2) c3 (C#3)\nEspécie 'Cyclohexane': análise concluída sem erros"}, {"titulo": "meso-Tartaric acid", "arquivo": "exemplos/acido_tartarico_meso.mol", "codigo": "molecule \"meso-Tartaric acid\" {\n    atom C as c1\n    atom C as c2\n    atom C as c3\n    atom C as c4\n    atom O as o1\n    atom O as o2\n    atom O as o3\n    atom O as o4\n    atom O as o5\n    atom O as o6\n    6x atom H as h\n    bond c1-c2\n    bond c2-c3\n    bond c3-c4\n    bond c1=o1\n    bond c1-o2\n    bond c2-o3\n    bond c3-o4\n    bond c4=o5\n    bond c4-o6\n    bond c2-h1\n    bond c3-h2\n    bond o2-h3\n    bond o3-h4\n    bond o4-h5\n    bond o6-h6\n    stereo c2 R\n    stereo c3 S\n}\n", "saida": "Modelo 'meso-Tartaric acid' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (16)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [4:4]\n    c4 (C#4) carga=+0 [5:4]\n    o1 (O#1) carga=+0 [6:4]\n    o2 (O#2) carga=+0 [7:4]\n    o3 (O#3) carga=+0 [8:4]\n    o4 (O#4) carga=+0 [9:4]\n    o5 (O#5) carga=+0 [10:4]\n    o6 (O#6) carga=+0 [11:4]\n    h1 (H#1) carga=+0 [12:4]\n    h2 (H#2) carga=+0 [12:4]\n    h3 (H#3) carga=+0 [12:4]\n    h4 (H#4) carga=+0 [12:4]\n    h5 (H#5) carga=+0 [12:4]\n    h6 (H#6) carga=+0 [12:4]\n  Ligações (15)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [13:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [14:4]\n    c3 (C#3) SIMPLES c4 (C#4) classificação=covalente apolar Δχ=0.00 [15:4]\n    c1 (C#1) DUPLA o1 (O#1) classificação=covalente polar Δχ=0.89 [16:4]\n    c1 (C#1) SIMPLES o2 (O#2) classificação=covalente polar Δχ=0.89 [17:4]\n    c2 (C#2) SIMPLES o3 (O#3) classificação=covalente polar Δχ=0.89 [18:4]\n    c3 (C#3) SIMPLES o4 (O#4) classificação=covalente polar Δχ=0.89 [19:4]\n    c4 (C#4) DUPLA o5 (O#5) classificação=covalente polar Δχ=0.89 [20:4]\n    c4 (C#4) SIMPLES o6 (O#6) classificação=covalente polar Δχ=0.89 [21:4]\n    c2 (C#2) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [22:4]\n    c3 (C#3) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [23:4]\n    o2 (O#2) SIMPLES h3 (H#3) classificação=covalente polar Δχ=1.24 [24:4]\n    o3 (O#3) SIMPLES h4 (H#4) classificação=covalente polar Δχ=1.24 [25:4]\n    o4 (O#4) SIMPLES h5 (H#5) classificação=covalente polar Δχ=1.24 [26:4]\n    o6 (O#6) SIMPLES h6 (H#6) classificação=covalente polar Δχ=1.24 [27:4]\n  Configurações declaradas (2)\n    c2 (C#2) R [28:4]\n    c3 (C#3) S [29:4]\nEspécie 'meso-Tartaric acid': análise concluída sem erros"}, {"titulo": "(E)-1,2-Dichloroethene", "arquivo": "exemplos/e_1_2_dicloroeteno.mol", "codigo": "species molecule \"(E)-1,2-Dichloroethene\" {\n    atom C as c1\n    atom C as c2\n    atom Cl as cl1\n    atom Cl as cl2\n    2x atom H as h\n\n    bond c1=c2\n    bond c1-cl1\n    bond c2-cl2\n    bond c1-h1\n    bond c2-h2\n\n    stereo c1=c2 E\n}\n", "saida": "Modelo '(E)-1,2-Dichloroethene' tipo=molecule carga_total=+0 desemparelhados=não declarado\n  Átomos (6)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    cl1 (Cl#1) carga=+0 [4:4]\n    cl2 (Cl#2) carga=+0 [5:4]\n    h1 (H#1) carga=+0 [6:4]\n    h2 (H#2) carga=+0 [6:4]\n  Ligações (5)\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c1 (C#1) SIMPLES cl1 (Cl#1) classificação=covalente polar Δχ=0.61 [9:4]\n    c2 (C#2) SIMPLES cl2 (Cl#2) classificação=covalente polar Δχ=0.61 [10:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [11:4]\n    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [12:4]\n  Configurações declaradas (1)\n    c1 (C#1)=c2 (C#2) E [14:4]\nEspécie '(E)-1,2-Dichloroethene': análise concluída sem erros"}, {"titulo": "Penta-2,3-diene", "arquivo": "exemplos/penta_2_3_dieno.mol", "codigo": "molecule \"Penta-2,3-diene\" {\n    atom C as c1\n    atom C as c2\n    atom C as c3\n    atom C as c4\n    atom C as c5\n    8x atom H as h\n    bond c1-c2\n    bond c2=c3\n    bond c3=c4\n    bond c4-c5\n    bond c1-h1\n    bond c1-h2\n    bond c1-h3\n    bond c2-h4\n    bond c4-h5\n    bond c5-h6\n    bond c5-h7\n    bond c5-h8\n    stereo c3 Ra\n}\n", "saida": "Modelo 'Penta-2,3-diene' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (13)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [4:4]\n    c4 (C#4) carga=+0 [5:4]\n    c5 (C#5) carga=+0 [6:4]\n    h1 (H#1) carga=+0 [7:4]\n    h2 (H#2) carga=+0 [7:4]\n    h3 (H#3) carga=+0 [7:4]\n    h4 (H#4) carga=+0 [7:4]\n    h5 (H#5) carga=+0 [7:4]\n    h6 (H#6) carga=+0 [7:4]\n    h7 (H#7) carga=+0 [7:4]\n    h8 (H#8) carga=+0 [7:4]\n  Ligações (12)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c2 (C#2) DUPLA c3 (C#3) classificação=covalente apolar Δχ=0.00 [9:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [10:4]\n    c4 (C#4) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [11:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [12:4]\n    c1 (C#1) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [13:4]\n    c1 (C#1) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [14:4]\n    c2 (C#2) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [16:4]\n    c5 (C#5) SIMPLES h6 (H#6) classificação=covalente apolar Δχ=0.35 [17:4]\n    c5 (C#5) SIMPLES h7 (H#7) classificação=covalente apolar Δχ=0.35 [18:4]\n    c5 (C#5) SIMPLES h8 (H#8) classificação=covalente apolar Δχ=0.35 [19:4]\n  Configurações declaradas (1)\n    c3 (C#3) Ra [20:4]\nEspécie 'Penta-2,3-diene': análise concluída sem erros"}, {"titulo": "Ammonium", "arquivo": "exemplos/amonio_por_ligacao_coordenada.mol", "codigo": "// O quarto H chega por ligação coordenada, do N para o H\nmolecule \"Ammonium\" {\n    atom N(+1)\n    3x atom H\n    atom H as p\n\n    bond N-H x3\n    bond N->p\n}\n", "saida": "Modelo 'Ammonium' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (5)\n    N#1 carga=+1 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    p (H#4) carga=+0 [5:4]\n  Ligações (4)\n    N#1 SIMPLES H#1 classificação=covalente polar Δχ=0.84 [7:4]\n    N#1 SIMPLES H#2 classificação=covalente polar Δχ=0.84 [7:4]\n    N#1 SIMPLES H#3 classificação=covalente polar Δχ=0.84 [7:4]\n    N#1 COORDENADA p (H#4) classificação=covalente polar Δχ=0.84 [8:4]\nEspécie 'Ammonium': análise concluída sem erros"}], "elementos": {"H": {"valencia": 1}, "He": {"valencia": 2}, "Li": {"valencia": 1}, "Be": {"valencia": 2}, "B": {"valencia": 3}, "C": {"valencia": 4}, "N": {"valencia": 5}, "O": {"valencia": 6}, "F": {"valencia": 7}, "Ne": {"valencia": 8}, "Na": {"valencia": 1}, "Mg": {"valencia": 2}, "Al": {"valencia": 3}, "Si": {"valencia": 4}, "P": {"valencia": 5}, "S": {"valencia": 6}, "Cl": {"valencia": 7}, "Ar": {"valencia": 8}, "K": {"valencia": 1}, "Ca": {"valencia": 2}, "Sc": {"valencia": null}, "Ti": {"valencia": null}, "V": {"valencia": null}, "Cr": {"valencia": null}, "Mn": {"valencia": null}, "Fe": {"valencia": null}, "Co": {"valencia": null}, "Ni": {"valencia": null}, "Cu": {"valencia": null}, "Zn": {"valencia": null}, "Ga": {"valencia": 3}, "Ge": {"valencia": 4}, "As": {"valencia": 5}, "Se": {"valencia": 6}, "Br": {"valencia": 7}, "Kr": {"valencia": 8}, "Rb": {"valencia": 1}, "Sr": {"valencia": 2}, "Y": {"valencia": null}, "Zr": {"valencia": null}, "Nb": {"valencia": null}, "Mo": {"valencia": null}, "Tc": {"valencia": null}, "Ru": {"valencia": null}, "Rh": {"valencia": null}, "Pd": {"valencia": null}, "Ag": {"valencia": null}, "Cd": {"valencia": null}, "In": {"valencia": 3}, "Sn": {"valencia": 4}, "Sb": {"valencia": 5}, "Te": {"valencia": 6}, "I": {"valencia": 7}, "Xe": {"valencia": 8}, "Cs": {"valencia": 1}, "Ba": {"valencia": 2}, "La": {"valencia": null}, "Ce": {"valencia": null}, "Pr": {"valencia": null}, "Nd": {"valencia": null}, "Pm": {"valencia": null}, "Sm": {"valencia": null}, "Eu": {"valencia": null}, "Gd": {"valencia": null}, "Tb": {"valencia": null}, "Dy": {"valencia": null}, "Ho": {"valencia": null}, "Er": {"valencia": null}, "Tm": {"valencia": null}, "Yb": {"valencia": null}, "Lu": {"valencia": null}, "Hf": {"valencia": null}, "Ta": {"valencia": null}, "W": {"valencia": null}, "Re": {"valencia": null}, "Os": {"valencia": null}, "Ir": {"valencia": null}, "Pt": {"valencia": null}, "Au": {"valencia": null}, "Hg": {"valencia": null}, "Tl": {"valencia": 3}, "Pb": {"valencia": 4}, "Bi": {"valencia": 5}, "Po": {"valencia": 6}, "At": {"valencia": 7}, "Rn": {"valencia": 8}, "Fr": {"valencia": 1}, "Ra": {"valencia": 2}, "Ac": {"valencia": null}, "Th": {"valencia": null}, "Pa": {"valencia": null}, "U": {"valencia": null}, "Np": {"valencia": null}, "Pu": {"valencia": null}, "Am": {"valencia": null}, "Cm": {"valencia": null}, "Bk": {"valencia": null}, "Cf": {"valencia": null}, "Es": {"valencia": null}, "Fm": {"valencia": null}, "Md": {"valencia": null}, "No": {"valencia": null}, "Lr": {"valencia": null}, "Rf": {"valencia": null}, "Db": {"valencia": null}, "Sg": {"valencia": null}, "Bh": {"valencia": null}, "Hs": {"valencia": null}, "Mt": {"valencia": null}, "Ds": {"valencia": null}, "Rg": {"valencia": null}, "Cn": {"valencia": null}, "Nh": {"valencia": 3}, "Fl": {"valencia": 4}, "Mc": {"valencia": 5}, "Lv": {"valencia": 6}, "Ts": {"valencia": 7}, "Og": {"valencia": 8}}, "valencias": {"valencias": {"H": [1], "B": [3], "C": [4], "N": [3], "O": [2], "F": [1], "P": [3, 5], "S": [2, 4, 6], "Cl": [1]}, "valencias_expandidas": {"Cl": {"vizinhos": ["F", "O"], "valencias": [1, 3, 5, 7]}}, "valencias_com_carga": {"N": {"+1": [4]}, "O": {"+1": [3], "-1": [1]}, "C": {"-1": [3]}, "B": {"-1": [4]}}}}</script>
+  <script type="application/json" id="dados">{"exemplos": [{"titulo": "Water", "arquivo": "exemplos/agua.mol", "codigo": "species molecule \"Water\" {\n    atom O\n    atom H\n    atom H\n\n    bond H-O\n    bond O-H\n}", "saida": "Modelo 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado\n  Átomos (3)\n    O#1 carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [4:4]\n  Ligações (2)\n    H#1 SIMPLES O#1 classificação=covalente polar Δχ=1.24 [6:4]\n    O#1 SIMPLES H#2 classificação=covalente polar Δχ=1.24 [7:4]\nEspécie 'Water': análise concluída sem erros"}, {"titulo": "Methane", "arquivo": "exemplos/metano.mol", "codigo": "molecule \"Methane\" {\n    atom C\n    4x atom H\n\n    bond C-H x4\n}", "saida": "Modelo 'Methane' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (5)\n    C#1 carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n    H#3 carga=+0 [3:4]\n    H#4 carga=+0 [3:4]\n  Ligações (4)\n    C#1 SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [5:4]\n    C#1 SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [5:4]\n    C#1 SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [5:4]\n    C#1 SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [5:4]\nEspécie 'Methane': análise concluída sem erros"}, {"titulo": "Ammonia", "arquivo": "exemplos/amonia.mol", "codigo": "molecule \"Ammonia\" {\n    atom N\n    3x atom H\n\n    bond N-H x3\n}", "saida": "Modelo 'Ammonia' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (4)\n    N#1 carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n    H#3 carga=+0 [3:4]\n  Ligações (3)\n    N#1 SIMPLES H#1 classificação=covalente polar Δχ=0.84 [5:4]\n    N#1 SIMPLES H#2 classificação=covalente polar Δχ=0.84 [5:4]\n    N#1 SIMPLES H#3 classificação=covalente polar Δχ=0.84 [5:4]\nEspécie 'Ammonia': análise concluída sem erros"}, {"titulo": "Ethanol", "arquivo": "exemplos/etanol.mol", "codigo": "// Átomos com nome\nmolecule \"Ethanol\" {\n    atom C as c1\n    atom C as c2\n    atom O as o1\n    6x atom H as h\n\n    bond c1-c2\n    bond c2-o1\n    bond c1-h1\n    bond c1-h2\n    bond c1-h3\n    bond c2-h4\n    bond c2-h5\n    bond o1-h6\n}\n", "saida": "Modelo 'Ethanol' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (9)\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [4:4]\n    o1 (O#1) carga=+0 [5:4]\n    h1 (H#1) carga=+0 [6:4]\n    h2 (H#2) carga=+0 [6:4]\n    h3 (H#3) carga=+0 [6:4]\n    h4 (H#4) carga=+0 [6:4]\n    h5 (H#5) carga=+0 [6:4]\n    h6 (H#6) carga=+0 [6:4]\n  Ligações (8)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c2 (C#2) SIMPLES o1 (O#1) classificação=covalente polar Δχ=0.89 [9:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [10:4]\n    c1 (C#1) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [11:4]\n    c1 (C#1) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [12:4]\n    c2 (C#2) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [14:4]\n    o1 (O#1) SIMPLES h6 (H#6) classificação=covalente polar Δχ=1.24 [15:4]\nEspécie 'Ethanol': análise concluída sem erros"}, {"titulo": "Acetone", "arquivo": "exemplos/acetona.mol", "codigo": "molecule \"Acetone\" {\n    3x atom C as c\n    atom O\n    6x atom H\n\n    bond c1-c2\n    bond c2-c3\n    bond c2=O\n    bond c1-H x3\n    bond c3-H x3\n}\n", "saida": "Modelo 'Acetone' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (10)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [2:4]\n    c3 (C#3) carga=+0 [2:4]\n    O#1 carga=+0 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    H#4 carga=+0 [4:4]\n    H#5 carga=+0 [4:4]\n    H#6 carga=+0 [4:4]\n  Ligações (9)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [7:4]\n    c2 (C#2) DUPLA O#1 classificação=covalente polar Δχ=0.89 [8:4]\n    c1 (C#1) SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [9:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [9:4]\n    c1 (C#1) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [9:4]\n    c3 (C#3) SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [10:4]\n    c3 (C#3) SIMPLES H#5 classificação=covalente apolar Δχ=0.35 [10:4]\n    c3 (C#3) SIMPLES H#6 classificação=covalente apolar Δχ=0.35 [10:4]\nEspécie 'Acetone': análise concluída sem erros"}, {"titulo": "Ácido acético - CH3COOH (vinagre)", "arquivo": "exemplos/acido_acetico.mol", "codigo": "molecule \"Ácido acético - CH3COOH (vinagre)\" {\n    atom C as c1\n    atom C as c2\n    atom O as o1\n    atom O as o2\n    4x atom H\n\n    bond c1-c2\n    bond c2=o1\n    bond c2-o2\n    bond c1-H x3\n    bond o2-H\n}\n", "saida": "Modelo 'Ácido acético - CH3COOH (vinagre)' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (8)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    o1 (O#1) carga=+0 [4:4]\n    o2 (O#2) carga=+0 [5:4]\n    H#1 carga=+0 [6:4]\n    H#2 carga=+0 [6:4]\n    H#3 carga=+0 [6:4]\n    H#4 carga=+0 [6:4]\n  Ligações (7)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c2 (C#2) DUPLA o1 (O#1) classificação=covalente polar Δχ=0.89 [9:4]\n    c2 (C#2) SIMPLES o2 (O#2) classificação=covalente polar Δχ=0.89 [10:4]\n    c1 (C#1) SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [11:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [11:4]\n    c1 (C#1) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [11:4]\n    o2 (O#2) SIMPLES H#4 classificação=covalente polar Δχ=1.24 [12:4]\nEspécie 'Ácido acético - CH3COOH (vinagre)': análise concluída sem erros"}, {"titulo": "Urea", "arquivo": "exemplos/ureia.mol", "codigo": "molecule \"Urea\" {\n    atom C\n    atom O\n    2x atom N as n\n    4x atom H\n\n    bond C=O\n    bond C-n1\n    bond C-n2\n    bond n1-H x2\n    bond n2-H x2\n}\n", "saida": "Modelo 'Urea' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (8)\n    C#1 carga=+0 [2:4]\n    O#1 carga=+0 [3:4]\n    n1 (N#1) carga=+0 [4:4]\n    n2 (N#2) carga=+0 [4:4]\n    H#1 carga=+0 [5:4]\n    H#2 carga=+0 [5:4]\n    H#3 carga=+0 [5:4]\n    H#4 carga=+0 [5:4]\n  Ligações (7)\n    C#1 DUPLA O#1 classificação=covalente polar Δχ=0.89 [7:4]\n    C#1 SIMPLES n1 (N#1) classificação=covalente polar Δχ=0.49 [8:4]\n    C#1 SIMPLES n2 (N#2) classificação=covalente polar Δχ=0.49 [9:4]\n    n1 (N#1) SIMPLES H#1 classificação=covalente polar Δχ=0.84 [10:4]\n    n1 (N#1) SIMPLES H#2 classificação=covalente polar Δχ=0.84 [10:4]\n    n2 (N#2) SIMPLES H#3 classificação=covalente polar Δχ=0.84 [11:4]\n    n2 (N#2) SIMPLES H#4 classificação=covalente polar Δχ=0.84 [11:4]\nEspécie 'Urea': análise concluída sem erros"}, {"titulo": "Carbon dioxide", "arquivo": "exemplos/dioxido_carbono.mol", "codigo": "// Ligação dupla (=)\nmolecule \"Carbon dioxide\" {\n    atom C\n    2x atom O\n\n    bond C=O x2\n}\n", "saida": "Modelo 'Carbon dioxide' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (3)\n    C#1 carga=+0 [3:4]\n    O#1 carga=+0 [4:4]\n    O#2 carga=+0 [4:4]\n  Ligações (2)\n    C#1 DUPLA O#1 classificação=covalente polar Δχ=0.89 [6:4]\n    C#1 DUPLA O#2 classificação=covalente polar Δχ=0.89 [6:4]\nEspécie 'Carbon dioxide': análise concluída sem erros"}, {"titulo": "Benzene", "arquivo": "exemplos/benzeno.mol", "codigo": "// Anel de 6 com ligações simples e duplas alternadas\nmolecule \"Benzene\" {\n    6x atom C as c\n    6x atom H as h\n\n    bond c1=c2\n    bond c2-c3\n    bond c3=c4\n    bond c4-c5\n    bond c5=c6\n    bond c6-c1\n\n    bond c1-h1\n    bond c2-h2\n    bond c3-h3\n    bond c4-h4\n    bond c5-h5\n    bond c6-h6\n\n    ring c1 c2 c3 c4 c5 c6\n}\n", "saida": "Modelo 'Benzene' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (12)\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [3:4]\n    c4 (C#4) carga=+0 [3:4]\n    c5 (C#5) carga=+0 [3:4]\n    c6 (C#6) carga=+0 [3:4]\n    h1 (H#1) carga=+0 [4:4]\n    h2 (H#2) carga=+0 [4:4]\n    h3 (H#3) carga=+0 [4:4]\n    h4 (H#4) carga=+0 [4:4]\n    h5 (H#5) carga=+0 [4:4]\n    h6 (H#6) carga=+0 [4:4]\n  Ligações (12)\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [7:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [8:4]\n    c4 (C#4) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [9:4]\n    c5 (C#5) DUPLA c6 (C#6) classificação=covalente apolar Δχ=0.00 [10:4]\n    c6 (C#6) SIMPLES c1 (C#1) classificação=covalente apolar Δχ=0.00 [11:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [14:4]\n    c3 (C#3) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [16:4]\n    c5 (C#5) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [17:4]\n    c6 (C#6) SIMPLES h6 (H#6) classificação=covalente apolar Δχ=0.35 [18:4]\n  Anéis (1)\n    c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4) c5 (C#5) c6 (C#6)\nEspécie 'Benzene': análise concluída sem erros"}, {"titulo": "Naphthalene", "arquivo": "exemplos/naftaleno.mol", "codigo": "// Dois anéis de 6 que dividem a ligação c9=c10\nmolecule \"Naphthalene\" {\n    10x atom C as c\n    8x atom H as h\n\n    bond c1=c2\n    bond c2-c3\n    bond c3=c4\n    bond c4-c10\n    bond c10=c9\n    bond c9-c1\n\n    bond c5=c6\n    bond c6-c7\n    bond c7=c8\n    bond c8-c9\n    bond c10-c5\n\n    bond c1-h1\n    bond c2-h2\n    bond c3-h3\n    bond c4-h4\n    bond c5-h5\n    bond c6-h6\n    bond c7-h7\n    bond c8-h8\n\n    ring c1 c2 c3 c4 c10 c9\n    ring c5 c6 c7 c8 c9 c10\n}\n", "saida": "Modelo 'Naphthalene' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (18)\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [3:4]\n    c4 (C#4) carga=+0 [3:4]\n    c5 (C#5) carga=+0 [3:4]\n    c6 (C#6) carga=+0 [3:4]\n    c7 (C#7) carga=+0 [3:4]\n    c8 (C#8) carga=+0 [3:4]\n    c9 (C#9) carga=+0 [3:4]\n    c10 (C#10) carga=+0 [3:4]\n    h1 (H#1) carga=+0 [4:4]\n    h2 (H#2) carga=+0 [4:4]\n    h3 (H#3) carga=+0 [4:4]\n    h4 (H#4) carga=+0 [4:4]\n    h5 (H#5) carga=+0 [4:4]\n    h6 (H#6) carga=+0 [4:4]\n    h7 (H#7) carga=+0 [4:4]\n    h8 (H#8) carga=+0 [4:4]\n  Ligações (19)\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [7:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [8:4]\n    c4 (C#4) SIMPLES c10 (C#10) classificação=covalente apolar Δχ=0.00 [9:4]\n    c10 (C#10) DUPLA c9 (C#9) classificação=covalente apolar Δχ=0.00 [10:4]\n    c9 (C#9) SIMPLES c1 (C#1) classificação=covalente apolar Δχ=0.00 [11:4]\n    c5 (C#5) DUPLA c6 (C#6) classificação=covalente apolar Δχ=0.00 [13:4]\n    c6 (C#6) SIMPLES c7 (C#7) classificação=covalente apolar Δχ=0.00 [14:4]\n    c7 (C#7) DUPLA c8 (C#8) classificação=covalente apolar Δχ=0.00 [15:4]\n    c8 (C#8) SIMPLES c9 (C#9) classificação=covalente apolar Δχ=0.00 [16:4]\n    c10 (C#10) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [17:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [19:4]\n    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [20:4]\n    c3 (C#3) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [21:4]\n    c4 (C#4) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [22:4]\n    c5 (C#5) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [23:4]\n    c6 (C#6) SIMPLES h6 (H#6) classificação=covalente apolar Δχ=0.35 [24:4]\n    c7 (C#7) SIMPLES h7 (H#7) classificação=covalente apolar Δχ=0.35 [25:4]\n    c8 (C#8) SIMPLES h8 (H#8) classificação=covalente apolar Δχ=0.35 [26:4]\n  Anéis (2)\n    c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4) c10 (C#10) c9 (C#9)\n    c5 (C#5) c6 (C#6) c7 (C#7) c8 (C#8) c9 (C#9) c10 (C#10)\nEspécie 'Naphthalene': análise concluída sem erros"}, {"titulo": "Pyrrole", "arquivo": "exemplos/pirrol.mol", "codigo": "molecule \"Pyrrole\" {\n    atom N as n\n    4x atom C as c\n    5x atom H\n\n    bond n-c1\n    bond c1=c2\n    bond c2-c3\n    bond c3=c4\n    bond c4-n\n\n    bond n-H\n    bond c1-H\n    bond c2-H\n    bond c3-H\n    bond c4-H\n\n    ring n c1 c2 c3 c4\n}\n", "saida": "Modelo 'Pyrrole' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (10)\n    n (N#1) carga=+0 [2:4]\n    c1 (C#1) carga=+0 [3:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [3:4]\n    c4 (C#4) carga=+0 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    H#4 carga=+0 [4:4]\n    H#5 carga=+0 [4:4]\n  Ligações (10)\n    n (N#1) SIMPLES c1 (C#1) classificação=covalente polar Δχ=0.49 [6:4]\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [7:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [8:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [9:4]\n    c4 (C#4) SIMPLES n (N#1) classificação=covalente polar Δχ=0.49 [10:4]\n    n (N#1) SIMPLES H#1 classificação=covalente polar Δχ=0.84 [12:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [14:4]\n    c3 (C#3) SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES H#5 classificação=covalente apolar Δχ=0.35 [16:4]\n  Anéis (1)\n    n (N#1) c1 (C#1) c2 (C#2) c3 (C#3) c4 (C#4)\nEspécie 'Pyrrole': análise concluída sem erros"}, {"titulo": "Cyclohexane", "arquivo": "exemplos/ciclohexano.mol", "codigo": "molecule \"Cyclohexane\" {\n    6x atom C as c\n    12x atom H\n\n    bond c1-c2\n    bond c2-c3\n    bond c3-c4\n    bond c4-c5\n    bond c5-c6\n    bond c6-c1\n\n    bond c1-H x2\n    bond c2-H x2\n    bond c3-H x2\n    bond c4-H x2\n    bond c5-H x2\n    bond c6-H x2\n\n    ring c4 c5 c6 c1 c2 c3\n}\n", "saida": "Modelo 'Cyclohexane' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (18)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [2:4]\n    c3 (C#3) carga=+0 [2:4]\n    c4 (C#4) carga=+0 [2:4]\n    c5 (C#5) carga=+0 [2:4]\n    c6 (C#6) carga=+0 [2:4]\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n    H#3 carga=+0 [3:4]\n    H#4 carga=+0 [3:4]\n    H#5 carga=+0 [3:4]\n    H#6 carga=+0 [3:4]\n    H#7 carga=+0 [3:4]\n    H#8 carga=+0 [3:4]\n    H#9 carga=+0 [3:4]\n    H#10 carga=+0 [3:4]\n    H#11 carga=+0 [3:4]\n    H#12 carga=+0 [3:4]\n  Ligações (18)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [5:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [6:4]\n    c3 (C#3) SIMPLES c4 (C#4) classificação=covalente apolar Δχ=0.00 [7:4]\n    c4 (C#4) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [8:4]\n    c5 (C#5) SIMPLES c6 (C#6) classificação=covalente apolar Δχ=0.00 [9:4]\n    c6 (C#6) SIMPLES c1 (C#1) classificação=covalente apolar Δχ=0.00 [10:4]\n    c1 (C#1) SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [12:4]\n    c1 (C#1) SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [12:4]\n    c2 (C#2) SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [13:4]\n    c2 (C#2) SIMPLES H#4 classificação=covalente apolar Δχ=0.35 [13:4]\n    c3 (C#3) SIMPLES H#5 classificação=covalente apolar Δχ=0.35 [14:4]\n    c3 (C#3) SIMPLES H#6 classificação=covalente apolar Δχ=0.35 [14:4]\n    c4 (C#4) SIMPLES H#7 classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES H#8 classificação=covalente apolar Δχ=0.35 [15:4]\n    c5 (C#5) SIMPLES H#9 classificação=covalente apolar Δχ=0.35 [16:4]\n    c5 (C#5) SIMPLES H#10 classificação=covalente apolar Δχ=0.35 [16:4]\n    c6 (C#6) SIMPLES H#11 classificação=covalente apolar Δχ=0.35 [17:4]\n    c6 (C#6) SIMPLES H#12 classificação=covalente apolar Δχ=0.35 [17:4]\n  Anéis (1)\n    c4 (C#4) c5 (C#5) c6 (C#6) c1 (C#1) c2 (C#2) c3 (C#3)\nEspécie 'Cyclohexane': análise concluída sem erros"}, {"titulo": "meso-Tartaric acid", "arquivo": "exemplos/acido_tartarico_meso.mol", "codigo": "molecule \"meso-Tartaric acid\" {\n    atom C as c1\n    atom C as c2\n    atom C as c3\n    atom C as c4\n    atom O as o1\n    atom O as o2\n    atom O as o3\n    atom O as o4\n    atom O as o5\n    atom O as o6\n    6x atom H as h\n    bond c1-c2\n    bond c2-c3\n    bond c3-c4\n    bond c1=o1\n    bond c1-o2\n    bond c2-o3\n    bond c3-o4\n    bond c4=o5\n    bond c4-o6\n    bond c2-h1\n    bond c3-h2\n    bond o2-h3\n    bond o3-h4\n    bond o4-h5\n    bond o6-h6\n    stereo c2 R\n    stereo c3 S\n}\n", "saida": "Modelo 'meso-Tartaric acid' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (16)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [4:4]\n    c4 (C#4) carga=+0 [5:4]\n    o1 (O#1) carga=+0 [6:4]\n    o2 (O#2) carga=+0 [7:4]\n    o3 (O#3) carga=+0 [8:4]\n    o4 (O#4) carga=+0 [9:4]\n    o5 (O#5) carga=+0 [10:4]\n    o6 (O#6) carga=+0 [11:4]\n    h1 (H#1) carga=+0 [12:4]\n    h2 (H#2) carga=+0 [12:4]\n    h3 (H#3) carga=+0 [12:4]\n    h4 (H#4) carga=+0 [12:4]\n    h5 (H#5) carga=+0 [12:4]\n    h6 (H#6) carga=+0 [12:4]\n  Ligações (15)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [13:4]\n    c2 (C#2) SIMPLES c3 (C#3) classificação=covalente apolar Δχ=0.00 [14:4]\n    c3 (C#3) SIMPLES c4 (C#4) classificação=covalente apolar Δχ=0.00 [15:4]\n    c1 (C#1) DUPLA o1 (O#1) classificação=covalente polar Δχ=0.89 [16:4]\n    c1 (C#1) SIMPLES o2 (O#2) classificação=covalente polar Δχ=0.89 [17:4]\n    c2 (C#2) SIMPLES o3 (O#3) classificação=covalente polar Δχ=0.89 [18:4]\n    c3 (C#3) SIMPLES o4 (O#4) classificação=covalente polar Δχ=0.89 [19:4]\n    c4 (C#4) DUPLA o5 (O#5) classificação=covalente polar Δχ=0.89 [20:4]\n    c4 (C#4) SIMPLES o6 (O#6) classificação=covalente polar Δχ=0.89 [21:4]\n    c2 (C#2) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [22:4]\n    c3 (C#3) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [23:4]\n    o2 (O#2) SIMPLES h3 (H#3) classificação=covalente polar Δχ=1.24 [24:4]\n    o3 (O#3) SIMPLES h4 (H#4) classificação=covalente polar Δχ=1.24 [25:4]\n    o4 (O#4) SIMPLES h5 (H#5) classificação=covalente polar Δχ=1.24 [26:4]\n    o6 (O#6) SIMPLES h6 (H#6) classificação=covalente polar Δχ=1.24 [27:4]\n  Configurações declaradas (2)\n    c2 (C#2) R [28:4]\n    c3 (C#3) S [29:4]\nEspécie 'meso-Tartaric acid': análise concluída sem erros"}, {"titulo": "(E)-1,2-Dichloroethene", "arquivo": "exemplos/e_1_2_dicloroeteno.mol", "codigo": "species molecule \"(E)-1,2-Dichloroethene\" {\n    atom C as c1\n    atom C as c2\n    atom Cl as cl1\n    atom Cl as cl2\n    2x atom H as h\n\n    bond c1=c2\n    bond c1-cl1\n    bond c2-cl2\n    bond c1-h1\n    bond c2-h2\n\n    stereo c1=c2 E\n}\n", "saida": "Modelo '(E)-1,2-Dichloroethene' tipo=molecule carga_total=+0 desemparelhados=não declarado\n  Átomos (6)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    cl1 (Cl#1) carga=+0 [4:4]\n    cl2 (Cl#2) carga=+0 [5:4]\n    h1 (H#1) carga=+0 [6:4]\n    h2 (H#2) carga=+0 [6:4]\n  Ligações (5)\n    c1 (C#1) DUPLA c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c1 (C#1) SIMPLES cl1 (Cl#1) classificação=covalente polar Δχ=0.61 [9:4]\n    c2 (C#2) SIMPLES cl2 (Cl#2) classificação=covalente polar Δχ=0.61 [10:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [11:4]\n    c2 (C#2) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [12:4]\n  Configurações declaradas (1)\n    c1 (C#1)=c2 (C#2) E [14:4]\nEspécie '(E)-1,2-Dichloroethene': análise concluída sem erros"}, {"titulo": "Penta-2,3-diene", "arquivo": "exemplos/penta_2_3_dieno.mol", "codigo": "molecule \"Penta-2,3-diene\" {\n    atom C as c1\n    atom C as c2\n    atom C as c3\n    atom C as c4\n    atom C as c5\n    8x atom H as h\n    bond c1-c2\n    bond c2=c3\n    bond c3=c4\n    bond c4-c5\n    bond c1-h1\n    bond c1-h2\n    bond c1-h3\n    bond c2-h4\n    bond c4-h5\n    bond c5-h6\n    bond c5-h7\n    bond c5-h8\n    stereo c3 Ra\n}\n", "saida": "Modelo 'Penta-2,3-diene' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (13)\n    c1 (C#1) carga=+0 [2:4]\n    c2 (C#2) carga=+0 [3:4]\n    c3 (C#3) carga=+0 [4:4]\n    c4 (C#4) carga=+0 [5:4]\n    c5 (C#5) carga=+0 [6:4]\n    h1 (H#1) carga=+0 [7:4]\n    h2 (H#2) carga=+0 [7:4]\n    h3 (H#3) carga=+0 [7:4]\n    h4 (H#4) carga=+0 [7:4]\n    h5 (H#5) carga=+0 [7:4]\n    h6 (H#6) carga=+0 [7:4]\n    h7 (H#7) carga=+0 [7:4]\n    h8 (H#8) carga=+0 [7:4]\n  Ligações (12)\n    c1 (C#1) SIMPLES c2 (C#2) classificação=covalente apolar Δχ=0.00 [8:4]\n    c2 (C#2) DUPLA c3 (C#3) classificação=covalente apolar Δχ=0.00 [9:4]\n    c3 (C#3) DUPLA c4 (C#4) classificação=covalente apolar Δχ=0.00 [10:4]\n    c4 (C#4) SIMPLES c5 (C#5) classificação=covalente apolar Δχ=0.00 [11:4]\n    c1 (C#1) SIMPLES h1 (H#1) classificação=covalente apolar Δχ=0.35 [12:4]\n    c1 (C#1) SIMPLES h2 (H#2) classificação=covalente apolar Δχ=0.35 [13:4]\n    c1 (C#1) SIMPLES h3 (H#3) classificação=covalente apolar Δχ=0.35 [14:4]\n    c2 (C#2) SIMPLES h4 (H#4) classificação=covalente apolar Δχ=0.35 [15:4]\n    c4 (C#4) SIMPLES h5 (H#5) classificação=covalente apolar Δχ=0.35 [16:4]\n    c5 (C#5) SIMPLES h6 (H#6) classificação=covalente apolar Δχ=0.35 [17:4]\n    c5 (C#5) SIMPLES h7 (H#7) classificação=covalente apolar Δχ=0.35 [18:4]\n    c5 (C#5) SIMPLES h8 (H#8) classificação=covalente apolar Δχ=0.35 [19:4]\n  Configurações declaradas (1)\n    c3 (C#3) Ra [20:4]\nEspécie 'Penta-2,3-diene': análise concluída sem erros"}, {"titulo": "Ammonium", "arquivo": "exemplos/amonio_por_ligacao_coordenada.mol", "codigo": "// O quarto H chega por ligação coordenada, do N para o H\nmolecule \"Ammonium\" {\n    atom N(+1)\n    3x atom H\n    atom H as p\n\n    bond N-H x3\n    bond N->p\n}\n", "saida": "Modelo 'Ammonium' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (5)\n    N#1 carga=+1 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    p (H#4) carga=+0 [5:4]\n  Ligações (4)\n    N#1 SIMPLES H#1 classificação=covalente polar Δχ=0.84 [7:4]\n    N#1 SIMPLES H#2 classificação=covalente polar Δχ=0.84 [7:4]\n    N#1 SIMPLES H#3 classificação=covalente polar Δχ=0.84 [7:4]\n    N#1 COORDENADA p (H#4) classificação=covalente polar Δχ=0.84 [8:4]\nEspécie 'Ammonium': análise concluída sem erros"}, {"titulo": "Hydrogen", "arquivo": "exemplos/hidrogenio.mol", "codigo": "// Com dois átomos de H, \"H-H\" liga o primeiro ao segundo\nmolecule \"Hydrogen\" {\n    2x atom H\n\n    bond H-H\n}\n", "saida": "Modelo 'Hydrogen' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (2)\n    H#1 carga=+0 [3:4]\n    H#2 carga=+0 [3:4]\n  Ligações (1)\n    H#1 SIMPLES H#2 classificação=covalente apolar Δχ=0.00 [5:4]\nEspécie 'Hydrogen': análise concluída sem erros"}, {"titulo": "Oxygen", "arquivo": "exemplos/oxigenio.mol", "codigo": "molecule \"Oxygen\" {\n    atom O as o1\n    atom O as o2\n\n    bond o1=o2\n}\n", "saida": "Modelo 'Oxygen' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (2)\n    o1 (O#1) carga=+0 [2:4]\n    o2 (O#2) carga=+0 [3:4]\n  Ligações (1)\n    o1 (O#1) DUPLA o2 (O#2) classificação=covalente apolar Δχ=0.00 [5:4]\nEspécie 'Oxygen': análise concluída sem erros"}, {"titulo": "Nitrogen", "arquivo": "exemplos/nitrogenio.mol", "codigo": "// Ligação tripla (#) entre átomos com nome\nmolecule \"Nitrogen\" {\n    atom N as n1\n    atom N as n2\n\n    bond n1#n2\n}\n", "saida": "Modelo 'Nitrogen' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (2)\n    n1 (N#1) carga=+0 [3:4]\n    n2 (N#2) carga=+0 [4:4]\n  Ligações (1)\n    n1 (N#1) TRIPLA n2 (N#2) classificação=covalente apolar Δχ=0.00 [6:4]\nEspécie 'Nitrogen': análise concluída sem erros"}, {"titulo": "Chlorine", "arquivo": "exemplos/cloro.mol", "codigo": "molecule \"Chlorine\" {\n    2x atom Cl\n\n    bond Cl-Cl\n}\n", "saida": "Modelo 'Chlorine' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (2)\n    Cl#1 carga=+0 [2:4]\n    Cl#2 carga=+0 [2:4]\n  Ligações (1)\n    Cl#1 SIMPLES Cl#2 classificação=covalente apolar Δχ=0.00 [4:4]\nEspécie 'Chlorine': análise concluída sem erros"}, {"titulo": "Hydrogen chloride", "arquivo": "exemplos/cloreto_de_hidrogenio.mol", "codigo": "molecule \"Hydrogen chloride\" {\n    atom H\n    atom Cl\n\n    bond H-Cl\n}\n", "saida": "Modelo 'Hydrogen chloride' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (2)\n    H#1 carga=+0 [2:4]\n    Cl#1 carga=+0 [3:4]\n  Ligações (1)\n    H#1 SIMPLES Cl#1 classificação=covalente polar Δχ=0.96 [5:4]\nEspécie 'Hydrogen chloride': análise concluída sem erros"}, {"titulo": "Hydrogen peroxide", "arquivo": "exemplos/peroxido_de_hidrogenio.mol", "codigo": "// Ligação entre dois oxigênios\nmolecule \"Hydrogen peroxide\" {\n    2x atom O as o\n    2x atom H\n\n    bond o1-o2\n    bond o1-H\n    bond o2-H\n}\n", "saida": "Modelo 'Hydrogen peroxide' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (4)\n    o1 (O#1) carga=+0 [3:4]\n    o2 (O#2) carga=+0 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n  Ligações (3)\n    o1 (O#1) SIMPLES o2 (O#2) classificação=covalente apolar Δχ=0.00 [6:4]\n    o1 (O#1) SIMPLES H#1 classificação=covalente polar Δχ=1.24 [7:4]\n    o2 (O#2) SIMPLES H#2 classificação=covalente polar Δχ=1.24 [8:4]\nEspécie 'Hydrogen peroxide': análise concluída sem erros"}, {"titulo": "Carbon monoxide", "arquivo": "exemplos/monoxido_de_carbono.mol", "codigo": "// Ligação tripla com carga nos dois átomos\nmolecule \"Carbon monoxide\" {\n    atom C(-1)\n    atom O(+1)\n\n    bond C#O\n}\n", "saida": "Modelo 'Carbon monoxide' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (2)\n    C#1 carga=-1 [3:4]\n    O#1 carga=+1 [4:4]\n  Ligações (1)\n    C#1 TRIPLA O#1 classificação=covalente polar Δχ=0.89 [6:4]\nEspécie 'Carbon monoxide': análise concluída sem erros"}, {"titulo": "Methanol", "arquivo": "exemplos/metanol.mol", "codigo": "molecule \"Methanol\" {\n    atom C\n    atom O\n    4x atom H\n\n    bond C-O\n    bond C-H x3\n    bond O-H\n}\n", "saida": "Modelo 'Methanol' tipo=molecule carga_total=não declarada desemparelhados=não declarado\n  Átomos (6)\n    C#1 carga=+0 [2:4]\n    O#1 carga=+0 [3:4]\n    H#1 carga=+0 [4:4]\n    H#2 carga=+0 [4:4]\n    H#3 carga=+0 [4:4]\n    H#4 carga=+0 [4:4]\n  Ligações (5)\n    C#1 SIMPLES O#1 classificação=covalente polar Δχ=0.89 [6:4]\n    C#1 SIMPLES H#1 classificação=covalente apolar Δχ=0.35 [7:4]\n    C#1 SIMPLES H#2 classificação=covalente apolar Δχ=0.35 [7:4]\n    C#1 SIMPLES H#3 classificação=covalente apolar Δχ=0.35 [7:4]\n    O#1 SIMPLES H#4 classificação=covalente polar Δχ=1.24 [8:4]\nEspécie 'Methanol': análise concluída sem erros"}], "elementos": {"H": {"nome": "Hydrogen", "numero": 1, "bloco": "Nonmetal", "config": "1s1", "valencia": 1, "eletronegatividade": 2.2, "estados": ["+1", "-1"]}, "He": {"nome": "Helium", "numero": 2, "bloco": "Noble gas", "config": "1s2", "valencia": 2, "eletronegatividade": null, "estados": ["0"]}, "Li": {"nome": "Lithium", "numero": 3, "bloco": "Alkali metal", "config": "[He]2s1", "valencia": 1, "eletronegatividade": 0.98, "estados": ["+1"]}, "Be": {"nome": "Beryllium", "numero": 4, "bloco": "Alkaline earth metal", "config": "[He]2s2", "valencia": 2, "eletronegatividade": 1.57, "estados": ["+2"]}, "B": {"nome": "Boron", "numero": 5, "bloco": "Metalloid", "config": "[He]2s2 2p1", "valencia": 3, "eletronegatividade": 2.04, "estados": ["+3"]}, "C": {"nome": "Carbon", "numero": 6, "bloco": "Nonmetal", "config": "[He]2s2 2p2", "valencia": 4, "eletronegatividade": 2.55, "estados": ["+4", "+2", "-4"]}, "N": {"nome": "Nitrogen", "numero": 7, "bloco": "Nonmetal", "config": "[He] 2s2 2p3", "valencia": 5, "eletronegatividade": 3.04, "estados": ["+5", "+4", "+3", "+2", "+1", "-1", "-2", "-3"]}, "O": {"nome": "Oxygen", "numero": 8, "bloco": "Nonmetal", "config": "[He]2s2 2p4", "valencia": 6, "eletronegatividade": 3.44, "estados": ["-2"]}, "F": {"nome": "Fluorine", "numero": 9, "bloco": "Halogen", "config": "[He]2s2 2p5", "valencia": 7, "eletronegatividade": 3.98, "estados": ["-1"]}, "Ne": {"nome": "Neon", "numero": 10, "bloco": "Noble gas", "config": "[He]2s2 2p6", "valencia": 8, "eletronegatividade": null, "estados": ["0"]}, "Na": {"nome": "Sodium", "numero": 11, "bloco": "Alkali metal", "config": "[Ne]3s1", "valencia": 1, "eletronegatividade": 0.93, "estados": ["+1"]}, "Mg": {"nome": "Magnesium", "numero": 12, "bloco": "Alkaline earth metal", "config": "[Ne]3s2", "valencia": 2, "eletronegatividade": 1.31, "estados": ["+2"]}, "Al": {"nome": "Aluminum", "numero": 13, "bloco": "Post-transition metal", "config": "[Ne]3s2 3p1", "valencia": 3, "eletronegatividade": 1.61, "estados": ["+3"]}, "Si": {"nome": "Silicon", "numero": 14, "bloco": "Metalloid", "config": "[Ne]3s2 3p2", "valencia": 4, "eletronegatividade": 1.9, "estados": ["+4", "+2", "-4"]}, "P": {"nome": "Phosphorus", "numero": 15, "bloco": "Nonmetal", "config": "[Ne]3s2 3p3", "valencia": 5, "eletronegatividade": 2.19, "estados": ["+5", "+3", "-3"]}, "S": {"nome": "Sulfur", "numero": 16, "bloco": "Nonmetal", "config": "[Ne]3s2 3p4", "valencia": 6, "eletronegatividade": 2.58, "estados": ["+6", "+4", "-2"]}, "Cl": {"nome": "Chlorine", "numero": 17, "bloco": "Halogen", "config": "[Ne]3s2 3p5", "valencia": 7, "eletronegatividade": 3.16, "estados": ["+7", "+5", "+1", "-1"]}, "Ar": {"nome": "Argon", "numero": 18, "bloco": "Noble gas", "config": "[Ne]3s2 3p6", "valencia": 8, "eletronegatividade": null, "estados": ["0"]}, "K": {"nome": "Potassium", "numero": 19, "bloco": "Alkali metal", "config": "[Ar]4s1", "valencia": 1, "eletronegatividade": 0.82, "estados": ["+1"]}, "Ca": {"nome": "Calcium", "numero": 20, "bloco": "Alkaline earth metal", "config": "[Ar]4s2", "valencia": 2, "eletronegatividade": 1.0, "estados": ["+2"]}, "Sc": {"nome": "Scandium", "numero": 21, "bloco": "Transition metal", "config": "[Ar]4s2 3d1", "valencia": null, "eletronegatividade": 1.36, "estados": ["+3"]}, "Ti": {"nome": "Titanium", "numero": 22, "bloco": "Transition metal", "config": "[Ar]4s2 3d2", "valencia": null, "eletronegatividade": 1.54, "estados": ["+4", "+3", "+2"]}, "V": {"nome": "Vanadium", "numero": 23, "bloco": "Transition metal", "config": "[Ar]4s2 3d3", "valencia": null, "eletronegatividade": 1.63, "estados": ["+5", "+4", "+3", "+2"]}, "Cr": {"nome": "Chromium", "numero": 24, "bloco": "Transition metal", "config": "[Ar]3d5 4s1", "valencia": null, "eletronegatividade": 1.66, "estados": ["+6", "+3", "+2"]}, "Mn": {"nome": "Manganese", "numero": 25, "bloco": "Transition metal", "config": "[Ar]4s2 3d5", "valencia": null, "eletronegatividade": 1.55, "estados": ["+7", "+4", "+3", "+2"]}, "Fe": {"nome": "Iron", "numero": 26, "bloco": "Transition metal", "config": "[Ar]4s2 3d6", "valencia": null, "eletronegatividade": 1.83, "estados": ["+3", "+2"]}, "Co": {"nome": "Cobalt", "numero": 27, "bloco": "Transition metal", "config": "[Ar]4s2 3d7", "valencia": null, "eletronegatividade": 1.88, "estados": ["+3", "+2"]}, "Ni": {"nome": "Nickel", "numero": 28, "bloco": "Transition metal", "config": "[Ar]4s2 3d8", "valencia": null, "eletronegatividade": 1.91, "estados": ["+3", "+2"]}, "Cu": {"nome": "Copper", "numero": 29, "bloco": "Transition metal", "config": "[Ar]4s1 3d10", "valencia": null, "eletronegatividade": 1.9, "estados": ["+2", "+1"]}, "Zn": {"nome": "Zinc", "numero": 30, "bloco": "Transition metal", "config": "[Ar]4s2 3d10", "valencia": null, "eletronegatividade": 1.65, "estados": ["+2"]}, "Ga": {"nome": "Gallium", "numero": 31, "bloco": "Post-transition metal", "config": "[Ar]4s2 3d10 4p1", "valencia": 3, "eletronegatividade": 1.81, "estados": ["+3"]}, "Ge": {"nome": "Germanium", "numero": 32, "bloco": "Metalloid", "config": "[Ar]4s2 3d10 4p2", "valencia": 4, "eletronegatividade": 2.01, "estados": ["+4", "+2"]}, "As": {"nome": "Arsenic", "numero": 33, "bloco": "Metalloid", "config": "[Ar]4s2 3d10 4p3", "valencia": 5, "eletronegatividade": 2.18, "estados": ["+5", "+3", "-3"]}, "Se": {"nome": "Selenium", "numero": 34, "bloco": "Nonmetal", "config": "[Ar]4s2 3d10 4p4", "valencia": 6, "eletronegatividade": 2.55, "estados": ["+6", "+4", "-2"]}, "Br": {"nome": "Bromine", "numero": 35, "bloco": "Halogen", "config": "[Ar]4s2 3d10 4p5", "valencia": 7, "eletronegatividade": 2.96, "estados": ["+5", "+1", "-1"]}, "Kr": {"nome": "Krypton", "numero": 36, "bloco": "Noble gas", "config": "[Ar]4s2 3d10 4p6", "valencia": 8, "eletronegatividade": 3.0, "estados": ["0"]}, "Rb": {"nome": "Rubidium", "numero": 37, "bloco": "Alkali metal", "config": "[Kr]5s1", "valencia": 1, "eletronegatividade": 0.82, "estados": ["+1"]}, "Sr": {"nome": "Strontium", "numero": 38, "bloco": "Alkaline earth metal", "config": "[Kr]5s2", "valencia": 2, "eletronegatividade": 0.95, "estados": ["+2"]}, "Y": {"nome": "Yttrium", "numero": 39, "bloco": "Transition metal", "config": "[Kr]5s2 4d1", "valencia": null, "eletronegatividade": 1.22, "estados": ["+3"]}, "Zr": {"nome": "Zirconium", "numero": 40, "bloco": "Transition metal", "config": "[Kr]5s2 4d2", "valencia": null, "eletronegatividade": 1.33, "estados": ["+4"]}, "Nb": {"nome": "Niobium", "numero": 41, "bloco": "Transition metal", "config": "[Kr]5s1 4d4", "valencia": null, "eletronegatividade": 1.6, "estados": ["+5", "+3"]}, "Mo": {"nome": "Molybdenum", "numero": 42, "bloco": "Transition metal", "config": "[Kr]5s1 4d5", "valencia": null, "eletronegatividade": 2.16, "estados": ["+6"]}, "Tc": {"nome": "Technetium", "numero": 43, "bloco": "Transition metal", "config": "[Kr]5s2 4d5", "valencia": null, "eletronegatividade": 1.9, "estados": ["+7", "+6", "+4"]}, "Ru": {"nome": "Ruthenium", "numero": 44, "bloco": "Transition metal", "config": "[Kr]5s1 4d7", "valencia": null, "eletronegatividade": 2.2, "estados": ["+3"]}, "Rh": {"nome": "Rhodium", "numero": 45, "bloco": "Transition metal", "config": "[Kr]5s1 4d8", "valencia": null, "eletronegatividade": 2.28, "estados": ["+3"]}, "Pd": {"nome": "Palladium", "numero": 46, "bloco": "Transition metal", "config": "[Kr]4d10", "valencia": null, "eletronegatividade": 2.2, "estados": ["+3", "+2"]}, "Ag": {"nome": "Silver", "numero": 47, "bloco": "Transition metal", "config": "[Kr]5s1 4d10", "valencia": null, "eletronegatividade": 1.93, "estados": ["+1"]}, "Cd": {"nome": "Cadmium", "numero": 48, "bloco": "Transition metal", "config": "[Kr]5s2 4d10", "valencia": null, "eletronegatividade": 1.69, "estados": ["+2"]}, "In": {"nome": "Indium", "numero": 49, "bloco": "Post-transition metal", "config": "[Kr]5s2 4d10 5p1", "valencia": 3, "eletronegatividade": 1.78, "estados": ["+3"]}, "Sn": {"nome": "Tin", "numero": 50, "bloco": "Post-transition metal", "config": "[Kr]5s2 4d10 5p2", "valencia": 4, "eletronegatividade": 1.96, "estados": ["+4", "+2"]}, "Sb": {"nome": "Antimony", "numero": 51, "bloco": "Metalloid", "config": "[Kr]5s2 4d10 5p3", "valencia": 5, "eletronegatividade": 2.05, "estados": ["+5", "+3", "-3"]}, "Te": {"nome": "Tellurium", "numero": 52, "bloco": "Metalloid", "config": "[Kr]5s2 4d10 5p4", "valencia": 6, "eletronegatividade": 2.1, "estados": ["+6", "+4", "-2"]}, "I": {"nome": "Iodine", "numero": 53, "bloco": "Halogen", "config": "[Kr]5s2 4d10 5p5", "valencia": 7, "eletronegatividade": 2.66, "estados": ["+7", "+5", "+1", "-1"]}, "Xe": {"nome": "Xenon", "numero": 54, "bloco": "Noble gas", "config": "[Kr]5s2 4d10 5p6", "valencia": 8, "eletronegatividade": 2.6, "estados": ["0"]}, "Cs": {"nome": "Cesium", "numero": 55, "bloco": "Alkali metal", "config": "[Xe]6s1", "valencia": 1, "eletronegatividade": 0.79, "estados": ["+1"]}, "Ba": {"nome": "Barium", "numero": 56, "bloco": "Alkaline earth metal", "config": "[Xe]6s2", "valencia": 2, "eletronegatividade": 0.89, "estados": ["+2"]}, "La": {"nome": "Lanthanum", "numero": 57, "bloco": "Lanthanide", "config": "[Xe]6s2 5d1", "valencia": null, "eletronegatividade": 1.1, "estados": ["+3"]}, "Ce": {"nome": "Cerium", "numero": 58, "bloco": "Lanthanide", "config": "[Xe]6s2 4f1 5d1", "valencia": null, "eletronegatividade": 1.12, "estados": ["+4", "+3"]}, "Pr": {"nome": "Praseodymium", "numero": 59, "bloco": "Lanthanide", "config": "[Xe]6s2 4f3", "valencia": null, "eletronegatividade": 1.13, "estados": ["+3"]}, "Nd": {"nome": "Neodymium", "numero": 60, "bloco": "Lanthanide", "config": "[Xe]6s2 4f4", "valencia": null, "eletronegatividade": 1.14, "estados": ["+3"]}, "Pm": {"nome": "Promethium", "numero": 61, "bloco": "Lanthanide", "config": "[Xe]6s2 4f5", "valencia": null, "eletronegatividade": null, "estados": ["+3"]}, "Sm": {"nome": "Samarium", "numero": 62, "bloco": "Lanthanide", "config": "[Xe]6s2 4f6", "valencia": null, "eletronegatividade": 1.17, "estados": ["+3", "+2"]}, "Eu": {"nome": "Europium", "numero": 63, "bloco": "Lanthanide", "config": "[Xe]6s2 4f7", "valencia": null, "eletronegatividade": null, "estados": ["+3", "+2"]}, "Gd": {"nome": "Gadolinium", "numero": 64, "bloco": "Lanthanide", "config": "[Xe]6s2 4f7 5d1", "valencia": null, "eletronegatividade": 1.2, "estados": ["+3"]}, "Tb": {"nome": "Terbium", "numero": 65, "bloco": "Lanthanide", "config": "[Xe]6s2 4f9", "valencia": null, "eletronegatividade": null, "estados": ["+3"]}, "Dy": {"nome": "Dysprosium", "numero": 66, "bloco": "Lanthanide", "config": "[Xe]6s2 4f10", "valencia": null, "eletronegatividade": 1.22, "estados": ["+3"]}, "Ho": {"nome": "Holmium", "numero": 67, "bloco": "Lanthanide", "config": "[Xe]6s2 4f11", "valencia": null, "eletronegatividade": 1.23, "estados": ["+3"]}, "Er": {"nome": "Erbium", "numero": 68, "bloco": "Lanthanide", "config": "[Xe]6s2 4f12", "valencia": null, "eletronegatividade": 1.24, "estados": ["+3"]}, "Tm": {"nome": "Thulium", "numero": 69, "bloco": "Lanthanide", "config": "[Xe]6s2 4f13", "valencia": null, "eletronegatividade": 1.25, "estados": ["+3"]}, "Yb": {"nome": "Ytterbium", "numero": 70, "bloco": "Lanthanide", "config": "[Xe]6s2 4f14", "valencia": null, "eletronegatividade": null, "estados": ["+3", "+2"]}, "Lu": {"nome": "Lutetium", "numero": 71, "bloco": "Lanthanide", "config": "[Xe]6s2 4f14 5d1", "valencia": null, "eletronegatividade": 1.27, "estados": ["+3"]}, "Hf": {"nome": "Hafnium", "numero": 72, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d2", "valencia": null, "eletronegatividade": 1.3, "estados": ["+4"]}, "Ta": {"nome": "Tantalum", "numero": 73, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d3", "valencia": null, "eletronegatividade": 1.5, "estados": ["+5"]}, "W": {"nome": "Tungsten", "numero": 74, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d4", "valencia": null, "eletronegatividade": 2.36, "estados": ["+6"]}, "Re": {"nome": "Rhenium", "numero": 75, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d5", "valencia": null, "eletronegatividade": 1.9, "estados": ["+7", "+6", "+4"]}, "Os": {"nome": "Osmium", "numero": 76, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d6", "valencia": null, "eletronegatividade": 2.2, "estados": ["+4", "+3"]}, "Ir": {"nome": "Iridium", "numero": 77, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d7", "valencia": null, "eletronegatividade": 2.2, "estados": ["+4", "+3"]}, "Pt": {"nome": "Platinum", "numero": 78, "bloco": "Transition metal", "config": "[Xe]6s1 4f14 5d9", "valencia": null, "eletronegatividade": 2.28, "estados": ["+4", "+2"]}, "Au": {"nome": "Gold", "numero": 79, "bloco": "Transition metal", "config": "[Xe]6s1 4f14 5d10", "valencia": null, "eletronegatividade": 2.54, "estados": ["+3", "+1"]}, "Hg": {"nome": "Mercury", "numero": 80, "bloco": "Transition metal", "config": "[Xe]6s2 4f14 5d10", "valencia": null, "eletronegatividade": 2.0, "estados": ["+2", "+1"]}, "Tl": {"nome": "Thallium", "numero": 81, "bloco": "Post-transition metal", "config": "[Xe]6s2 4f14 5d10 6p1", "valencia": 3, "eletronegatividade": 1.62, "estados": ["+3", "+1"]}, "Pb": {"nome": "Lead", "numero": 82, "bloco": "Post-transition metal", "config": "[Xe]6s2 4f14 5d10 6p2", "valencia": 4, "eletronegatividade": 2.33, "estados": ["+4", "+2"]}, "Bi": {"nome": "Bismuth", "numero": 83, "bloco": "Post-transition metal", "config": "[Xe]6s2 4f14 5d10 6p3", "valencia": 5, "eletronegatividade": 2.02, "estados": ["+5", "+3"]}, "Po": {"nome": "Polonium", "numero": 84, "bloco": "Metalloid", "config": "[Xe]6s2 4f14 5d10 6p4", "valencia": 6, "eletronegatividade": 2.0, "estados": ["+4", "+2"]}, "At": {"nome": "Astatine", "numero": 85, "bloco": "Halogen", "config": "[Xe]6s2 4f14 5d10 6p5", "valencia": 7, "eletronegatividade": 2.2, "estados": ["7", "5", "3", "1", "-1"]}, "Rn": {"nome": "Radon", "numero": 86, "bloco": "Noble gas", "config": "[Xe]6s2 4f14 5d10 6p6", "valencia": 8, "eletronegatividade": null, "estados": ["0"]}, "Fr": {"nome": "Francium", "numero": 87, "bloco": "Alkali metal", "config": "[Rn]7s1", "valencia": 1, "eletronegatividade": 0.7, "estados": ["+1"]}, "Ra": {"nome": "Radium", "numero": 88, "bloco": "Alkaline earth metal", "config": "[Rn]7s2", "valencia": 2, "eletronegatividade": 0.9, "estados": ["+2"]}, "Ac": {"nome": "Actinium", "numero": 89, "bloco": "Actinide", "config": "[Rn]7s2 6d1", "valencia": null, "eletronegatividade": 1.1, "estados": ["+3"]}, "Th": {"nome": "Thorium", "numero": 90, "bloco": "Actinide", "config": "[Rn]7s2 6d2", "valencia": null, "eletronegatividade": 1.3, "estados": ["+4"]}, "Pa": {"nome": "Protactinium", "numero": 91, "bloco": "Actinide", "config": "[Rn]7s2 5f2 6d1", "valencia": null, "eletronegatividade": 1.5, "estados": ["+5", "+4"]}, "U": {"nome": "Uranium", "numero": 92, "bloco": "Actinide", "config": "[Rn]7s2 5f3 6d1", "valencia": null, "eletronegatividade": 1.38, "estados": ["+6", "+5", "+4", "+3"]}, "Np": {"nome": "Neptunium", "numero": 93, "bloco": "Actinide", "config": "[Rn]7s2 5f4 6d1", "valencia": null, "eletronegatividade": 1.36, "estados": ["+6", "+5", "+4", "+3"]}, "Pu": {"nome": "Plutonium", "numero": 94, "bloco": "Actinide", "config": "[Rn]7s2 5f6", "valencia": null, "eletronegatividade": 1.28, "estados": ["+6", "+5", "+4", "+3"]}, "Am": {"nome": "Americium", "numero": 95, "bloco": "Actinide", "config": "[Rn]7s2 5f7", "valencia": null, "eletronegatividade": 1.3, "estados": ["+6", "+5", "+4", "+3"]}, "Cm": {"nome": "Curium", "numero": 96, "bloco": "Actinide", "config": "[Rn]7s2 5f7 6d1", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3"]}, "Bk": {"nome": "Berkelium", "numero": 97, "bloco": "Actinide", "config": "[Rn]7s2 5f9", "valencia": null, "eletronegatividade": 1.3, "estados": ["+4", "+3"]}, "Cf": {"nome": "Californium", "numero": 98, "bloco": "Actinide", "config": "[Rn]7s2 5f10", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3"]}, "Es": {"nome": "Einsteinium", "numero": 99, "bloco": "Actinide", "config": "[Rn]7s2 5f11", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3"]}, "Fm": {"nome": "Fermium", "numero": 100, "bloco": "Actinide", "config": "[Rn] 5f12 7s2", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3"]}, "Md": {"nome": "Mendelevium", "numero": 101, "bloco": "Actinide", "config": "[Rn]7s2 5f13", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3", "+2"]}, "No": {"nome": "Nobelium", "numero": 102, "bloco": "Actinide", "config": "[Rn]7s2 5f14", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3", "+2"]}, "Lr": {"nome": "Lawrencium", "numero": 103, "bloco": "Actinide", "config": "[Rn]7s2 5f14 6d1", "valencia": null, "eletronegatividade": 1.3, "estados": ["+3"]}, "Rf": {"nome": "Rutherfordium", "numero": 104, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d2", "valencia": null, "eletronegatividade": null, "estados": ["+4"]}, "Db": {"nome": "Dubnium", "numero": 105, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d3", "valencia": null, "eletronegatividade": null, "estados": ["5", "4", "3"]}, "Sg": {"nome": "Seaborgium", "numero": 106, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d4", "valencia": null, "eletronegatividade": null, "estados": ["6", "5", "4", "3", "0"]}, "Bh": {"nome": "Bohrium", "numero": 107, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d5", "valencia": null, "eletronegatividade": null, "estados": ["7", "5", "4", "3"]}, "Hs": {"nome": "Hassium", "numero": 108, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d6", "valencia": null, "eletronegatividade": null, "estados": ["8", "6", "5", "4", "3", "2"]}, "Mt": {"nome": "Meitnerium", "numero": 109, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d7 (calculated)", "valencia": null, "eletronegatividade": null, "estados": ["9", "8", "6", "4", "3", "1"]}, "Ds": {"nome": "Darmstadtium", "numero": 110, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d8 (predicted)", "valencia": null, "eletronegatividade": null, "estados": ["8", "6", "4", "2", "0"]}, "Rg": {"nome": "Roentgenium", "numero": 111, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d9 (predicted)", "valencia": null, "eletronegatividade": null, "estados": ["5", "3", "1", "-1"]}, "Cn": {"nome": "Copernicium", "numero": 112, "bloco": "Transition metal", "config": "[Rn]7s2 5f14 6d10 (predicted)", "valencia": null, "eletronegatividade": null, "estados": ["2", "1", "0"]}, "Nh": {"nome": "Nihonium", "numero": 113, "bloco": "Post-transition metal", "config": "[Rn]5f14 6d10 7s2 7p1 (predicted)", "valencia": 3, "eletronegatividade": null, "estados": []}, "Fl": {"nome": "Flerovium", "numero": 114, "bloco": "Post-transition metal", "config": "[Rn]7s2 7p2 5f14 6d10 (predicted)", "valencia": 4, "eletronegatividade": null, "estados": ["6", "4", "2", "1", "0"]}, "Mc": {"nome": "Moscovium", "numero": 115, "bloco": "Post-transition metal", "config": "[Rn]7s2 7p3 5f14 6d10 (predicted)", "valencia": 5, "eletronegatividade": null, "estados": ["3", "1"]}, "Lv": {"nome": "Livermorium", "numero": 116, "bloco": "Post-transition metal", "config": "[Rn]7s2 7p4 5f14 6d10 (predicted)", "valencia": 6, "eletronegatividade": null, "estados": ["+4", "+2", "-2"]}, "Ts": {"nome": "Tennessine", "numero": 117, "bloco": "Halogen", "config": "[Rn]7s2 7p5 5f14 6d10 (predicted)", "valencia": 7, "eletronegatividade": null, "estados": ["+5", "+3", "+1", "-1"]}, "Og": {"nome": "Oganesson", "numero": 118, "bloco": "Noble gas", "config": "[Rn]7s2 7p6 5f14 6d10 (predicted)", "valencia": 8, "eletronegatividade": null, "estados": ["+6", "+4", "+2", "+1", "0", "-1"]}}, "valencias": {"valencias": {"H": [1], "B": [3], "C": [4], "N": [3], "O": [2], "F": [1], "P": [3, 5], "S": [2, 4, 6], "Cl": [1]}, "valencias_expandidas": {"Cl": {"vizinhos": ["F", "O"], "valencias": [1, 3, 5, 7]}}, "valencias_com_carga": {"N": {"+1": [4]}, "O": {"+1": [3], "-1": [1]}, "C": {"-1": [3]}, "B": {"-1": [4]}}}}</script>
   <script>
   "use strict";
   const DADOS = JSON.parse(document.getElementById("dados").textContent);
@@ -1114,90 +1312,139 @@ ESPACO
   }
 
   function analisarSintaxe(tokens) {
+    // Além da espécie (AST), monta a árvore sintática: cada regra da
+    // gramática vira um nó, e cada token consumido, uma folha
     let p = 0;
+    const raizArvore = { regra: "programa", filhos: [] };
+    const pilha = [raizArvore];
+    const abrir = (regra) => { const no = { regra, filhos: [] }; pilha[pilha.length - 1].filhos.push(no); pilha.push(no); };
+    const fechar = () => pilha.pop();
     const atual = () => tokens[p];
+    const consumir = () => { const t = tokens[p++]; pilha[pilha.length - 1].filhos.push({ token: t }); return t; };
     const descrever = (t) => (t.tipo === "EOF" ? "fim do arquivo" : `'${t.valor}'`);
     const falhar = (esperado, codigo = "SIN-001") => {
       const t = atual();
-      throw new ErroDSL("sintático", t.tipo === "EOF" ? "SIN-004" : codigo, t.l, t.c, `esperado ${esperado}, encontrado ${descrever(t)}`);
+      const erro = new ErroDSL("sintático", t.tipo === "EOF" ? "SIN-004" : codigo, t.l, t.c, `esperado ${esperado}, encontrado ${descrever(t)}`);
+      erro.arvore = raizArvore;
+      throw erro;
     };
-    const pegar = (tipo, esperado) => { if (atual().tipo !== tipo) falhar(esperado); return tokens[p++]; };
-    const talvez = (tipo) => (atual().tipo === tipo ? tokens[p++] : null);
+    const pegar = (tipo, esperado) => { if (atual().tipo !== tipo) falhar(esperado); return consumir(); };
+    const talvez = (tipo) => (atual().tipo === tipo ? consumir() : null);
+    const sinal = (esperado) => {
+      abrir("sinal");
+      const v = atual().valor === "+" ? 1 : atual().tipo === "OP" && atual().valor === "-" ? -1 : falhar(esperado);
+      consumir();
+      fechar();
+      return v;
+    };
 
-    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [] };
+    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [], arvore: raizArvore };
+    abrir("molecula");
+    abrir("cabecalho");
     if (talvez("molecule")) {
       especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
     } else if (talvez("species")) {
       const tipo = atual().tipo;
       if (!["molecule", "molecular_ion", "ionic_solid", "covalent_network", "metallic_solid"].includes(tipo)) falhar("tipo de espécie depois de 'species'");
-      p++;
+      consumir();
       especie.tipo = tipo;
       especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
       if (tipo === "molecular_ion") {
+        abrir("cargaEspecie");
         pegar("charge", "'charge' com a carga do íon");
-        const sinal = atual().valor === "+" ? 1 : atual().valor === "-" ? -1 : falhar("sinal da carga (+ ou -)");
-        p++;
-        especie.carga = sinal * Number(pegar("INT", "número inteiro na carga").valor);
+        const s = sinal("sinal da carga (+ ou -)");
+        especie.carga = s * Number(pegar("INT", "número inteiro na carga").valor);
+        fechar();
       }
     } else {
       falhar("'molecule' ou 'species' no início do programa");
     }
-    if (talvez("unpaired")) especie.desemparelhados = Number(pegar("INT", "número depois de 'unpaired'").valor);
+    fechar();
+    if (atual().tipo === "unpaired") {
+      abrir("desemparelhados");
+      consumir();
+      especie.desemparelhados = Number(pegar("INT", "número depois de 'unpaired'").valor);
+      fechar();
+    }
     pegar("{", "'{' depois do nome da espécie");
 
     const referencia = (onde) => {
+      abrir("referencia");
       const t = atual();
       if (t.tipo !== "IDENT" && t.tipo !== "NOME") falhar(`elemento ou nome de átomo ${onde}`);
-      p++;
+      consumir();
+      fechar();
       return { texto: t.valor, porNome: t.tipo === "NOME", l: t.l, c: t.c };
+    };
+    const operador = (esperado) => {
+      abrir("operador");
+      const op = pegar("OP", esperado).valor;
+      fechar();
+      return op;
     };
 
     while (atual().tipo !== "}") {
       const t = atual();
       if (t.tipo === "EOF") falhar("'}' para fechar a molécula");
+      abrir("comando");
       if (t.tipo === "MULT" || t.tipo === "atom") {
-        const mult = t.tipo === "MULT" ? Number(tokens[p++].valor.slice(0, -1)) : 1;
+        abrir("atomo");
+        const mult = t.tipo === "MULT" ? Number(consumir().valor.slice(0, -1)) : 1;
         pegar("atom", "'atom' depois do multiplicador");
         const el = pegar("IDENT", "símbolo de elemento depois de 'atom'");
         let carga = 0;
-        if (talvez("(")) {
-          const s = atual().valor === "+" ? 1 : atual().valor === "-" ? -1 : falhar("sinal na carga, como (+1) ou (-1)");
-          p++;
+        if (atual().tipo === "(") {
+          abrir("carga");
+          consumir();
+          const s = sinal("sinal na carga, como (+1) ou (-1)");
           carga = s * Number(pegar("INT", "número inteiro na carga").valor);
           pegar(")", "')' para fechar a carga");
+          fechar();
         }
         let nome = null;
         if (talvez("as")) nome = pegar("NOME", "nome de átomo depois de 'as'").valor;
+        fechar();
         especie.comandos.push({ tipo: "atom", mult, el: el.valor, carga, nome, l: t.l, c: t.c });
       } else if (t.tipo === "bond") {
-        p++;
+        abrir("ligacao");
+        consumir();
         const origem = referencia("na ligação");
-        const op = pegar("OP", "operador de ligação (-, =, #, -> ou ~)").valor;
+        const op = operador("operador de ligação (-, =, #, -> ou ~)");
         const destino = referencia("na ligação");
         const rep = talvez("REP");
+        fechar();
         especie.comandos.push({ tipo: "bond", origem, op, destino, rep: rep ? Number(rep.valor.slice(1)) : 1, l: t.l, c: t.c });
       } else if (t.tipo === "ring") {
-        p++;
+        abrir("anel");
+        consumir();
         const nomes = [];
-        while (atual().tipo === "NOME") { const n = tokens[p++]; nomes.push({ texto: n.valor, porNome: true, l: n.l, c: n.c }); }
+        while (atual().tipo === "NOME") { const n = consumir(); nomes.push({ texto: n.valor, porNome: true, l: n.l, c: n.c }); }
         if (nomes.length < 3) falhar("pelo menos três nomes de átomos no anel");
+        fechar();
         especie.comandos.push({ tipo: "ring", nomes, l: t.l, c: t.c });
       } else if (t.tipo === "stereo") {
-        p++;
+        abrir("estereo");
+        consumir();
         const refs = [referencia("em 'stereo'")];
         let op = null;
-        if (atual().tipo === "OP") { op = tokens[p++].valor; refs.push(referencia("em 'stereo'")); }
+        if (atual().tipo === "OP") { op = operador("operador"); refs.push(referencia("em 'stereo'")); }
         else if ((atual().tipo === "NOME" || atual().tipo === "IDENT") && ["NOME", "IDENT"].includes(tokens[p + 1].tipo)) refs.push(referencia("em 'stereo'"));
+        abrir("descritor");
         const d = atual();
         if (d.tipo !== "IDENT" && d.tipo !== "NOME") falhar("descritor (R, S, r, s, E, Z, Ra, Sa, cis ou trans)");
-        p++;
+        consumir();
+        fechar();
+        fechar();
         especie.comandos.push({ tipo: "stereo", refs, op, descritor: d.valor, l: t.l, c: t.c });
       } else {
         falhar("'atom', 'bond', 'ring', 'stereo' ou '}'", "SIN-002");
       }
+      fechar();
     }
-    p++;
+    consumir();
+    fechar();
     if (atual().tipo !== "EOF") falhar("fim do arquivo depois de '}'", "SIN-002");
+    consumir();
     return especie;
   }
 
@@ -1312,11 +1559,16 @@ ESPACO
   }
 
   function compilar(texto) {
+    // Guarda o resultado de cada fase, para a demonstração da tradução
+    let tokens = null;
     try {
-      const especie = analisarSintaxe(tokenizar(texto));
-      return { especie, ...analisarSemantica(especie) };
+      tokens = tokenizar(texto);
+      const especie = analisarSintaxe(tokens);
+      return { tokens, arvore: especie.arvore, especie, ...analisarSemantica(especie) };
     } catch (e) {
-      if (e instanceof ErroDSL) return { erros: [e.diagnostico()], avisos: [], atomos: [], ligacoes: [], configuracoes: [] };
+      if (e instanceof ErroDSL) {
+        return { tokens, arvore: e.arvore || null, falhaEm: e.fase, erros: [e.diagnostico()], avisos: [], atomos: [], ligacoes: [], configuracoes: [] };
+      }
       throw e;
     }
   }
@@ -1429,6 +1681,9 @@ ESPACO
       this.rx = -0.35; this.ry = 0.5; this.zoom = 1;
       this.girar = true; this.rotulos = false; this.semH = false;
       this.arrastando = false;
+      // velocidade da rotação automática; aoQuadro(t) anima posições (misturas e reações)
+      this.velocidade = 0.006;
+      this.aoQuadro = null;
       const inicio = (x, y) => { this.arrastando = true; this.ultimo = [x, y]; canvas.style.cursor = "grabbing"; };
       const mover = (x, y) => {
         if (!this.arrastando) return;
@@ -1442,18 +1697,27 @@ ESPACO
       canvas.addEventListener("pointercancel", fim);
       canvas.addEventListener("wheel", (e) => { e.preventDefault(); this.zoom = Math.min(3, Math.max(0.4, this.zoom * (e.deltaY > 0 ? 0.92 : 1.08))); this.desenhar(); }, { passive: false });
       new ResizeObserver(() => this.desenhar()).observe(canvas);
-      const quadro = () => {
-        if (this.girar && !this.arrastando && this.atomos.length && this.visivel()) { this.ry += 0.006; this.desenhar(); }
+      const quadro = (tempo) => {
+        if (this.atomos.length && this.visivel()) {
+          let mudou = false;
+          if (this.aoQuadro) { this.aoQuadro(tempo); mudou = true; }
+          if (this.girar && !this.arrastando) { this.ry += this.velocidade; mudou = true; }
+          if (mudou) this.desenhar();
+        }
         requestAnimationFrame(quadro);
       };
       requestAnimationFrame(quadro);
     }
     visivel() { return this.canvas.offsetParent !== null; }
-    carregar(atomos, ligacoes) {
-      this.atomos = atomos; this.ligacoes = ligacoes; this.pos = layout(atomos, ligacoes);
-      const raio = Math.max(1.5, ...this.pos.map((p) => Math.hypot(...p)));
-      this.escalaBase = 1 / (raio + 0.8);
+    carregar(atomos, ligacoes, posicoes = null) {
+      this.aoQuadro = null;
+      this.atomos = atomos; this.ligacoes = ligacoes; this.pos = posicoes || layout(atomos, ligacoes);
+      this.ajustarEscala();
       this.desenhar();
+    }
+    ajustarEscala(raioMinimo = 1.5) {
+      const raio = Math.max(raioMinimo, ...this.pos.map((p) => Math.hypot(...p)));
+      this.escalaBase = 1 / (raio + 0.8);
     }
     desenhar() {
       const c = this.canvas, ctx = this.ctx;
@@ -1484,6 +1748,8 @@ ESPACO
           const { l } = item, A = proj[l.a], B = proj[l.b];
           const dx = B.x - A.x, dy = B.y - A.y, len = Math.hypot(dx, dy) || 1;
           const nx = -dy / len, ny = dx / len;
+          if (l.alfa === 0) continue;
+          ctx.globalAlpha = l.alfa == null ? 1 : l.alfa;
           const largura = Math.max(1.2, 0.09 * escala * (A.f + B.f) / 2);
           ctx.strokeStyle = l.op === "->" ? (escuro ? "#b9a3f7" : "#7a5ae0") : corLigacao;
           ctx.lineWidth = l.ordem > 1 ? largura * 0.7 : largura;
@@ -1498,6 +1764,7 @@ ESPACO
             ctx.stroke();
           }
           ctx.setLineDash([]);
+          ctx.globalAlpha = 1;
         } else {
           const a = this.atomos[item.i], P = proj[item.i];
           const r = raioDe(a.el) * escala * P.f * 0.62;
@@ -1526,6 +1793,7 @@ ESPACO
   const cena = new Cena(document.getElementById("cena-3d"));
   const vazio = document.getElementById("cena-vazia");
   let exemploAtual = null;
+  let tradPlay = null; // painel de tradução ao vivo, criado depois dos módulos
 
   DADOS.exemplos.forEach((ex, i) => {
     const op = document.createElement("option");
@@ -1538,6 +1806,7 @@ ESPACO
   function executar() {
     const r = compilar(codigo.value);
     renderizarDiagnosticos(r);
+    if (tradPlay) tradPlay.desenhar();
     const modelo = document.querySelector("#p-modelo pre");
     if (r.atomos.length && !r.erros.length) {
       const nomes = r.atomos.map(rotulo);
@@ -1638,6 +1907,7 @@ ESPACO
 
   /* vitrine do início */
   const vitrine = new Cena(document.getElementById("vitrine-3d"));
+  vitrine.velocidade = 0.0016;
   const benzeno = DADOS.exemplos.find((e) => e.arquivo.endsWith("benzeno.mol")) || DADOS.exemplos[0];
   const rb = compilar(benzeno.codigo);
   vitrine.rx = -0.9;
@@ -1695,6 +1965,635 @@ ESPACO
     quadro();
   })();
 
+  /* ================= árvore de tradução ================= */
+  // Cada etapa da tradução é explicada por duas lentes: a da computação
+  // (compiladores, gramática, estruturas de dados) e a da química.
+  const NOME_TOKEN = {
+    molecule: "MOLECULE", species: "SPECIES", molecular_ion: "MOLECULAR_ION", ionic_solid: "IONIC_SOLID",
+    covalent_network: "COVALENT_NETWORK", metallic_solid: "METALLIC_SOLID", charge: "CHARGE", unpaired: "UNPAIRED",
+    atom: "ATOM", bond: "BOND", as: "AS", ring: "RING", stereo: "STEREO", IDENT: "IDENT", NOME: "NOME",
+    MULT: "MULTIPLICADOR_ATOMO", REP: "REPETICAO_LIGACAO", INT: "INTEIRO", REAL: "REAL", TEXTO: "TEXTO",
+    "{": "ABRE_CHAVE", "}": "FECHA_CHAVE", "(": "ABRE_PAREN", ")": "FECHA_PAREN", "+": "MAIS", EOF: "EOF",
+  };
+  const NOME_OPERADOR = { "-": "LIGACAO", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
+  const LIGACAO_QUIMICA = {
+    "-": "ligação simples: 1 par de elétrons compartilhado",
+    "=": "ligação dupla: 2 pares compartilhados (σ + π)",
+    "#": "ligação tripla: 3 pares compartilhados (σ + 2π)",
+    "->": "ligação coordenada: o doador cede o par de elétrons",
+    "~": "ligação metálica: elétrons deslocalizados (motivo do sólido)",
+  };
+  const ESPECIE_QUIMICA = {
+    molecule: "molécula neutra e discreta", molecular_ion: "íon molecular (tem carga total)",
+    ionic_solid: "sólido iônico (rede de íons)", covalent_network: "rede covalente", metallic_solid: "sólido metálico",
+  };
+
+  function nomeTokenComp(t) {
+    return t.tipo === "OP" ? NOME_OPERADOR[t.valor] : NOME_TOKEN[t.tipo] || t.tipo;
+  }
+
+  function nomeElemento(simbolo) {
+    const e = DADOS.elementos[simbolo];
+    return e ? `${e.nome}, Z = ${e.numero}` : "elemento desconhecido";
+  }
+
+  function tokenQuimica(t) {
+    switch (t.tipo) {
+      case "molecule": case "species": return "abre a descrição de uma espécie química";
+      case "molecular_ion": case "ionic_solid": case "covalent_network": case "metallic_solid": return ESPECIE_QUIMICA[t.tipo];
+      case "TEXTO": return "nome da espécie";
+      case "charge": return "carga total do íon";
+      case "unpaired": return "elétrons desemparelhados (radical)";
+      case "atom": return "declara átomo(s)";
+      case "bond": return "declara uma ligação";
+      case "ring": return "marca um anel (ciclo)";
+      case "stereo": return "configuração espacial";
+      case "as": return "dá nome ao átomo";
+      case "IDENT": return DADOS.elementos[t.valor] ? `elemento: ${nomeElemento(t.valor)}` : "símbolo ou descritor";
+      case "NOME": return "nome de um átomo específico";
+      case "MULT": return `${t.valor.slice(0, -1)} átomos iguais`;
+      case "REP": return `repete a ligação ${t.valor.slice(1)} vezes`;
+      case "OP": return LIGACAO_QUIMICA[t.valor];
+      case "INT": return "valor numérico (carga ou contagem)";
+      case "+": return "sinal positivo da carga";
+      case "(": case ")": return "delimita a carga formal";
+      case "{": return "início dos átomos e ligações";
+      case "}": return "fim da espécie";
+      case "EOF": return "fim do texto";
+      default: return "";
+    }
+  }
+
+  const REGRAS = {
+    programa: ["programa : molecula EOF", "o arquivo inteiro descreve uma única espécie"],
+    molecula: ["molecula : cabecalho desemparelhados? '{' comando* '}'", "a espécie: cabeçalho e o conteúdo entre chaves"],
+    cabecalho: ["cabecalho : MOLECULE TEXTO | SPECIES tipo TEXTO cargaEspecie?", "o tipo e o nome da espécie"],
+    cargaEspecie: ["cargaEspecie : CHARGE sinal INTEIRO", "a carga total do íon"],
+    desemparelhados: ["desemparelhados : UNPAIRED INTEIRO", "quantos elétrons ficam sem par"],
+    comando: ["comando : atomo | ligacao | anel | estereo", "uma instrução sobre a estrutura"],
+    atomo: ["atomo : MULTIPLICADOR_ATOMO? ATOM IDENT carga? (AS NOME)?", "um ou mais átomos de um elemento"],
+    carga: ["carga : '(' sinal INTEIRO ')'", "a carga formal do átomo"],
+    sinal: ["sinal : MAIS | LIGACAO", "positivo ou negativo"],
+    ligacao: ["ligacao : BOND referencia operador referencia REPETICAO_LIGACAO?", "dois átomos que compartilham elétrons"],
+    referencia: ["referencia : IDENT | NOME", "qual átomo participa"],
+    operador: ["operador : LIGACAO | DUPLA | TRIPLA | COORDENADA | METALICA", "o tipo da ligação"],
+    anel: ["anel : RING NOME NOME NOME+", "átomos que formam um ciclo"],
+    estereo: ["estereo : STEREO referencia (operador? referencia)? descritor", "arranjo espacial declarado"],
+    descritor: ["descritor : IDENT | NOME", "R, S, E, Z, Ra, Sa, cis ou trans"],
+  };
+
+  function escapar(texto) {
+    return String(texto).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+
+  // Árvore genérica: { rotulo, detalhe, classe, filhos }
+  function arvoreHTML(no) {
+    const rotulo = `<span class="no-rotulo ${no.classe || ""}">${escapar(no.rotulo)}</span>${no.detalhe ? `<span class="no-detalhe">${escapar(no.detalhe)}</span>` : ""}`;
+    if (!no.filhos || !no.filhos.length) return `<li><span class="no">${rotulo}</span></li>`;
+    return `<li><details open><summary class="no">${rotulo}</summary><ul>${no.filhos.map(arvoreHTML).join("")}</ul></details></li>`;
+  }
+
+  function arvoreSintaticaNo(no, lente) {
+    if (no.token) {
+      const t = no.token;
+      return { rotulo: `${nomeTokenComp(t)} '${t.valor}'`, detalhe: lente === "comp" ? `token, linha ${t.l}, coluna ${t.c}` : tokenQuimica(t), classe: "folha" };
+    }
+    const [comp, quim] = REGRAS[no.regra] || [no.regra, ""];
+    return { rotulo: no.regra, detalhe: lente === "comp" ? comp : quim, filhos: no.filhos.map((f) => arvoreSintaticaNo(f, lente)) };
+  }
+
+  function astNo(especie, lente) {
+    const q = lente === "quim";
+    const filhos = especie.comandos.map((c) => {
+      if (c.tipo === "atom") {
+        return { rotulo: "AtomoDecl", detalhe: q ? `${c.mult > 1 ? c.mult + " átomos" : "átomo"} de ${nomeElemento(c.el)}${c.carga ? `, carga ${c.carga > 0 ? "+" : ""}${c.carga}` : ""}` : `[${c.l}:${c.c}]`,
+          filhos: [["elemento", c.el], ["multiplicador", c.mult], ["carga", c.carga], ["nome", c.nome ?? "None"]].map(([k, v]) => ({ rotulo: `${k}: ${v}`, classe: "folha" })) };
+      }
+      if (c.tipo === "bond") {
+        const op = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" }[c.op];
+        return { rotulo: "LigacaoDecl", detalhe: q ? LIGACAO_QUIMICA[c.op] : `[${c.l}:${c.c}]`,
+          filhos: [`origem: ${c.origem.texto} (${c.origem.porNome ? "nome" : "elemento"})`, `operador: ${op}`, `destino: ${c.destino.texto} (${c.destino.porNome ? "nome" : "elemento"})`, `repeticoes: ${c.rep}`].map((r) => ({ rotulo: r, classe: "folha" })) };
+      }
+      if (c.tipo === "ring") return { rotulo: "AnelDecl", detalhe: q ? `ciclo de ${c.nomes.length} átomos` : `[${c.l}:${c.c}]`, filhos: c.nomes.map((n) => ({ rotulo: `nome: ${n.texto}`, classe: "folha" })) };
+      return { rotulo: "EstereoDecl", detalhe: q ? "configuração espacial declarada" : `[${c.l}:${c.c}]`, filhos: [...c.refs.map((r) => ({ rotulo: `átomo: ${r.texto}`, classe: "folha" })), { rotulo: `descritor: ${c.descritor}`, classe: "folha" }] };
+    });
+    return { rotulo: `Molecula '${especie.nome}'`, detalhe: q ? ESPECIE_QUIMICA[especie.tipo] : `tipo=${especie.tipo}`, filhos };
+  }
+
+  const ETAPAS = [
+    { id: "tokens", titulo: "Tokens", fase: "léxico",
+      comp: "O lexer lê caractere por caractere e agrupa em tokens, usando as expressões regulares da gramática (IDENT = [A-Z][a-z]?, NOME = [a-z][a-z0-9_]*). Espaços e comentários são descartados.",
+      quim: "O texto é separado em palavras com sentido químico: símbolos de elementos, tipos de ligação, quantidades e nomes de átomos." },
+    { id: "sintaxe", titulo: "Árvore sintática", fase: "sintático",
+      comp: "O parser (LL, gerado pelo ANTLR no compilador oficial) confere a ordem dos tokens contra as regras da gramática e monta a parse tree: cada nó é uma regra, cada folha um token.",
+      quim: "Confere se a frase química está bem formada: todo átomo tem elemento, toda ligação tem dois átomos e um tipo, e a espécie abre e fecha." },
+    { id: "ast", titulo: "AST", fase: "visitor",
+      comp: "O visitor percorre a parse tree e cria a AST: só os conceitos, sem pontuação, com linha e coluna em cada nó. Quantificadores como 4x ficam no nó.",
+      quim: "Sobra o essencial: quais átomos foram declarados, com que carga, e quais ligações existem entre eles." },
+    { id: "modelo", titulo: "Modelo (grafo)", fase: "modelo",
+      comp: "A AST vira um grafo: átomos são vértices, ligações são arestas com peso (a ordem). Multiplicadores são expandidos e referências por símbolo são resolvidas para átomos concretos.",
+      quim: "É a fórmula estrutural: cada átomo individual e cada par de elétrons compartilhado entre dois átomos." },
+    { id: "quimica", titulo: "Semântica e química", fase: "semântico",
+      comp: "A análise semântica percorre o grafo em etapas (estrutura → valência → carga) e emite diagnósticos com código, linha e coluna. Sem erro, o programa sai com código 0.",
+      quim: "Confere a química: a soma das ordens das ligações de cada átomo bate com a valência do elemento? A espécie está inteira, sem partes soltas?" },
+  ];
+
+  function conteudoEtapa(etapa, r, lente) {
+    const falhou = (fases) => r.falhaEm && fases.includes(r.falhaEm);
+    const erroHTML = () => `<div class="etapa-erro"><b>${escapar(r.erros[0].codigo)}</b> linha ${r.erros[0].linha}, coluna ${r.erros[0].coluna}: ${escapar(r.erros[0].mensagem)}<p>A tradução para aqui: as fases seguintes não rodam, para não gerar erros em cascata.</p></div>`;
+    if (etapa.id === "tokens") {
+      if (!r.tokens) return erroHTML();
+      return `<div class="fichas">${r.tokens.filter((t) => t.tipo !== "EOF").map((t) =>
+        `<span class="ficha"><code>${escapar(t.valor)}</code><small>${escapar(lente === "comp" ? nomeTokenComp(t) : tokenQuimica(t))}</small></span>`).join("")}</div>`;
+    }
+    if (etapa.id === "sintaxe") {
+      if (!r.tokens) return `<p class="etapa-vazia">Sem tokens, não há o que analisar.</p>`;
+      const arvore = r.arvore ? `<ul class="arvore">${arvoreHTML(arvoreSintaticaNo(r.arvore, lente))}</ul>` : "";
+      return (falhou(["sintático"]) ? erroHTML() : "") + arvore;
+    }
+    if (etapa.id === "ast") {
+      if (!r.especie) return `<p class="etapa-vazia">A AST só existe quando a sintaxe está correta.</p>`;
+      return `<ul class="arvore">${arvoreHTML(astNo(r.especie, lente))}</ul>`;
+    }
+    if (etapa.id === "modelo") {
+      if (!r.especie) return `<p class="etapa-vazia">O modelo depende da AST.</p>`;
+      const nomes = r.atomos.map(rotulo);
+      const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
+      const vertices = { rotulo: `vértices: ${r.atomos.length} átomo(s)`, detalhe: lente === "comp" ? "lista de Atomo(id, elemento, índice, carga)" : "cada átomo individual",
+        filhos: r.atomos.map((a) => ({ rotulo: rotulo(a), detalhe: lente === "comp" ? `id ${a.id}, carga ${a.carga}` : nomeElemento(a.el), classe: "folha" })) };
+      const arestas = { rotulo: `arestas: ${r.ligacoes.length} ligação(ões)`, detalhe: lente === "comp" ? "pares (origem, destino) com ordem" : "pares de elétrons compartilhados",
+        filhos: r.ligacoes.map((l) => ({ rotulo: `${nomes[l.a]} ${l.op} ${nomes[l.b]}`, detalhe: lente === "comp" ? `${simbolo[l.op]}, ordem ${l.ordem}` : LIGACAO_QUIMICA[l.op], classe: "folha" })) };
+      return `<ul class="arvore">${arvoreHTML({ rotulo: "Modelo", detalhe: lente === "comp" ? "grafo não dirigido com pesos" : formulaHill(r.atomos), filhos: [vertices, arestas] })}</ul>`;
+    }
+    if (!r.especie) return `<p class="etapa-vazia">A semântica depende do modelo.</p>`;
+    const soma = r.atomos.map(() => 0);
+    r.ligacoes.forEach((l) => { soma[l.a] += l.ordem; soma[l.b] += l.ordem; });
+    const linhas = r.atomos.map((a, i) => {
+      const permitidas = valenciasDe(a);
+      const estado = !permitidas ? "sem regra" : permitidas.includes(soma[i]) ? "ok" : soma[i] > Math.max(...permitidas) ? "excede" : "incompleta";
+      return `<tr><td>${escapar(rotulo(a))}</td><td>${soma[i]}</td><td>${permitidas ? permitidas.join(" ou ") : "—"}</td><td class="estado-${estado}">${{ "sem regra": "não conferido", ok: "ok", excede: "excede (VAL-001)", incompleta: "incompleta (VAL-002)" }[estado]}</td></tr>`;
+    }).join("");
+    const cabecalho = lente === "comp" ? "<tr><th>Vértice</th><th>Σ pesos</th><th>Aceito</th><th>Regra</th></tr>" : "<tr><th>Átomo</th><th>Σ ordens</th><th>Valência</th><th>Situação</th></tr>";
+    const diag = [...r.erros, ...r.avisos].map((d) => `<li><b>${escapar(d.codigo)}</b> linha ${d.linha}: ${escapar(d.mensagem)}</li>`).join("");
+    return `<p class="etapa-resumo">Fórmula <b>${formulaHill(r.atomos)}</b> · ${r.erros.length ? `<span class="estado-excede">${r.erros.length} erro(s)</span>` : '<span class="estado-ok">sem erros, saída 0</span>'}</p>
+      <div class="tabela"><table>${cabecalho}${linhas}</table></div>${diag ? `<ul class="etapa-diag">${diag}</ul>` : ""}`;
+  }
+
+  /* Painel reutilizável: abas das etapas, lente e explicação */
+  function montarTraducao(alvo, obterCodigo) {
+    alvo.innerHTML = `
+      <div class="trad-topo">
+        <div class="etapas" role="tablist">${ETAPAS.map((e, i) => `<button type="button" class="etapa" role="tab" data-i="${i}"><span>${i + 1}</span>${e.titulo}</button>`).join("")}</div>
+        <div class="lentes" role="group" aria-label="Lente">
+          <button type="button" data-lente="comp">Computação</button><button type="button" data-lente="quim">Química</button>
+        </div>
+      </div>
+      <p class="trad-explica"></p>
+      <div class="trad-conteudo"></div>`;
+    const estado = { i: 0, lente: "comp", resultado: null };
+    const desenhar = () => {
+      estado.resultado = compilar(obterCodigo());
+      const etapa = ETAPAS[estado.i];
+      alvo.querySelectorAll(".etapa").forEach((b, i) => {
+        b.setAttribute("aria-selected", String(i === estado.i));
+        // Etapa onde a tradução parou e etapas que não chegaram a rodar
+        const parada = { "léxico": 0, "sintático": 1 }[estado.resultado.falhaEm];
+        b.classList.toggle("falhou", i === parada);
+        b.classList.toggle("bloqueada", parada !== undefined && i > parada);
+      });
+      alvo.querySelectorAll("[data-lente]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lente === estado.lente)));
+      alvo.querySelector(".trad-explica").innerHTML = `<b>${escapar(etapa.titulo)}</b> · fase ${escapar(etapa.fase)}. ${escapar(estado.lente === "comp" ? etapa.comp : etapa.quim)}`;
+      alvo.querySelector(".trad-conteudo").innerHTML = conteudoEtapa(etapa, estado.resultado, estado.lente);
+    };
+    alvo.querySelectorAll(".etapa").forEach((b) => b.addEventListener("click", () => { estado.i = Number(b.dataset.i); desenhar(); }));
+    alvo.querySelectorAll("[data-lente]").forEach((b) => b.addEventListener("click", () => { estado.lente = b.dataset.lente; desenhar(); }));
+    estado.desenhar = desenhar;
+    estado.irPara = (i) => { estado.i = i; desenhar(); };
+    desenhar();
+    return estado;
+  }
+
+  /* Demonstração passo a passo num diálogo, sem alterar nada da página */
+  const dialogo = document.getElementById("demo");
+  let demo = null, demoTimer = null, demoCodigo = "";
+  function pararDemo() { clearInterval(demoTimer); demoTimer = null; dialogo.querySelector("[data-demo='tocar']").textContent = "▶ Reproduzir"; }
+  function abrirDemonstracao(codigoFonte, titulo) {
+    demoCodigo = codigoFonte;
+    dialogo.querySelector(".demo-titulo").textContent = titulo || "Tradução";
+    dialogo.querySelector(".demo-fonte").textContent = codigoFonte.trim();
+    demo = montarTraducao(dialogo.querySelector(".demo-traducao"), () => demoCodigo);
+    if (typeof dialogo.showModal === "function") dialogo.showModal(); else dialogo.setAttribute("open", "");
+    pararDemo();
+    tocarDemo();
+  }
+  function tocarDemo() {
+    if (demoTimer) { pararDemo(); return; }
+    dialogo.querySelector("[data-demo='tocar']").textContent = "❚❚ Pausar";
+    demoTimer = setInterval(() => {
+      if (demo.i >= ETAPAS.length - 1) { pararDemo(); return; }
+      demo.irPara(demo.i + 1);
+    }, 4200);
+  }
+  dialogo.querySelector("[data-demo='tocar']").addEventListener("click", tocarDemo);
+  dialogo.querySelector("[data-demo='anterior']").addEventListener("click", () => { pararDemo(); demo.irPara(Math.max(0, demo.i - 1)); });
+  dialogo.querySelector("[data-demo='proximo']").addEventListener("click", () => { pararDemo(); demo.irPara(Math.min(ETAPAS.length - 1, demo.i + 1)); });
+  dialogo.querySelector("[data-demo='fechar']").addEventListener("click", () => { pararDemo(); dialogo.close ? dialogo.close() : dialogo.removeAttribute("open"); });
+  dialogo.addEventListener("close", pararDemo);
+  document.addEventListener("click", (e) => {
+    const botao = e.target.closest("[data-demonstrar]");
+    if (!botao) return;
+    const arquivo = botao.dataset.demonstrar;
+    const ex = DADOS.exemplos.find((x) => x.arquivo === arquivo);
+    if (ex) abrirDemonstracao(ex.codigo, `${ex.titulo} — ${ex.arquivo}`);
+  });
+
+  tradPlay = montarTraducao(document.getElementById("p-trad"), () => codigo.value);
+  document.getElementById("demonstrar-atual").addEventListener("click", () => {
+    abrirDemonstracao(codigo.value, exemploAtual ? `${exemploAtual.titulo} — ${exemploAtual.arquivo}` : "Código do playground");
+  });
+
+  /* ================= laboratório: misturas e reações ================= */
+  // Misturas e reações combinam programas MoleculeDSL já existentes; a
+  // linguagem continua descrevendo uma espécie por arquivo.
+  const especie = (arquivo) => DADOS.exemplos.find((e) => e.arquivo === `exemplos/${arquivo}.mol`);
+  const cacheEspecie = new Map();
+  function especieCompilada(arquivo) {
+    if (!cacheEspecie.has(arquivo)) {
+      const ex = especie(arquivo);
+      const r = compilar(ex.codigo);
+      cacheEspecie.set(arquivo, { ex, r, pos: layout(r.atomos, r.ligacoes) });
+    }
+    return cacheEspecie.get(arquivo);
+  }
+  function rotacionar(pos, a, b) {
+    const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
+    return pos.map(([x, y, z]) => { const x1 = x * ca + z * sa, z1 = -x * sa + z * ca; return [x1, y * cb - z1 * sb, y * sb + z1 * cb]; });
+  }
+  function contarElementos(atomos, fator = 1, alvo = {}) {
+    atomos.forEach((a) => (alvo[a.el] = (alvo[a.el] || 0) + fator));
+    return alvo;
+  }
+  function tiposDeLigacao(r, fator, alvo) {
+    const simbolo = { 1: "-", 2: "=", 3: "#" };
+    r.ligacoes.forEach((l) => {
+      const par = [r.atomos[l.a].el, r.atomos[l.b].el].sort().join(l.op === "->" ? "→" : simbolo[l.ordem] || "~");
+      alvo[par] = (alvo[par] || 0) + fator;
+    });
+    return alvo;
+  }
+  const textoContagem = (c) => Object.entries(c).filter(([, n]) => n).map(([k, n]) => `${n}× ${k}`).join(", ") || "nenhuma";
+
+  /* ---------- misturas ---------- */
+  const OPCOES_MISTURA = ["agua", "etanol", "metanol", "acetona", "metano", "dioxido_carbono", "oxigenio", "nitrogenio", "amonia", "acido_acetico"];
+  const quantidades = { agua: 5, etanol: 2 };
+  const cenaMistura = new Cena(document.getElementById("cena-mistura"));
+  cenaMistura.girar = false;
+  cenaMistura.zoom = 1.3;
+  let agitacao = 1;
+
+  function montarListaMistura() {
+    const lista = document.getElementById("lista-mistura");
+    lista.innerHTML = OPCOES_MISTURA.map((arq) => {
+      const { ex, r } = especieCompilada(arq);
+      return `<div class="item-mistura"><div><b>${escapar(ex.titulo)}</b><small>${formulaHill(r.atomos)}</small></div>
+        <div class="contador-mistura"><button type="button" class="botao pequeno" data-menos="${arq}" aria-label="Menos ${escapar(ex.titulo)}">−</button>
+        <span>${quantidades[arq] || 0}</span><button type="button" class="botao pequeno" data-mais="${arq}" aria-label="Mais ${escapar(ex.titulo)}">+</button>
+        <button type="button" class="botao pequeno" data-demonstrar="${ex.arquivo}">Tradução</button></div></div>`;
+    }).join("");
+  }
+  document.getElementById("lista-mistura").addEventListener("click", (e) => {
+    const mais = e.target.closest("[data-mais]"), menos = e.target.closest("[data-menos]");
+    if (!mais && !menos) return;
+    const arq = (mais || menos).dataset[mais ? "mais" : "menos"];
+    quantidades[arq] = Math.max(0, Math.min(10, (quantidades[arq] || 0) + (mais ? 1 : -1)));
+    montarListaMistura();
+    montarMistura();
+  });
+  document.getElementById("agitacao").addEventListener("input", (e) => { agitacao = Number(e.target.value); });
+
+  function montarMistura() {
+    const instancias = [];
+    Object.entries(quantidades).forEach(([arq, n]) => { for (let k = 0; k < n; k++) instancias.push(arq); });
+    const rnd = aleatorio(instancias.length * 31 + 7);
+    const lado = Math.max(1, Math.ceil(Math.cbrt(instancias.length)));
+    const passo = 4.2;
+    const atomos = [], ligacoes = [], base = [], moleculas = [];
+    instancias.forEach((arq, k) => {
+      const { r, pos } = especieCompilada(arq);
+      const centro = [(k % lado) - (lado - 1) / 2, (Math.floor(k / lado) % lado) - (lado - 1) / 2, Math.floor(k / (lado * lado)) - (lado - 1) / 2].map((v) => v * passo + (rnd() - 0.5) * 1.2);
+      const giro = rotacionar(pos, rnd() * 6.28, rnd() * 6.28);
+      const inicio = atomos.length;
+      r.atomos.forEach((a, i) => { atomos.push(a); base.push(giro[i]); });
+      r.ligacoes.forEach((l) => ligacoes.push({ ...l, a: l.a + inicio, b: l.b + inicio }));
+      moleculas.push({ inicio, fim: atomos.length, centro, vel: [rnd() - 0.5, rnd() - 0.5, rnd() - 0.5].map((v) => v * 0.02), fase: rnd() * 6.28, giro: (rnd() - 0.5) * 0.02 });
+    });
+    const limite = (lado * passo) / 2 + 1.5;
+    const pos = base.map((p) => [...p]);
+    cenaMistura.carregar(atomos, ligacoes, pos);
+    cenaMistura.ajustarEscala(limite * 1.35);
+    cenaMistura.aoQuadro = () => {
+      for (const m of moleculas) {
+        for (let c = 0; c < 3; c++) {
+          m.centro[c] += m.vel[c] * agitacao;
+          if (Math.abs(m.centro[c]) > limite) m.vel[c] *= -1;
+        }
+        m.fase += m.giro * agitacao;
+        const ca = Math.cos(m.fase), sa = Math.sin(m.fase);
+        for (let i = m.inicio; i < m.fim; i++) {
+          const [x, y, z] = base[i];
+          pos[i][0] = m.centro[0] + x * ca + z * sa;
+          pos[i][1] = m.centro[1] + y;
+          pos[i][2] = m.centro[2] - x * sa + z * ca;
+        }
+      }
+    };
+    // composição
+    const total = instancias.length;
+    const linhas = Object.entries(quantidades).filter(([, n]) => n).map(([arq, n]) => {
+      const { ex, r } = especieCompilada(arq);
+      return `<tr><td>${formulaHill(r.atomos)}</td><td>${escapar(ex.titulo)}</td><td>${n}</td><td>${((n / total) * 100).toFixed(0)}%</td></tr>`;
+    }).join("");
+    const elementos = {};
+    Object.entries(quantidades).forEach(([arq, n]) => contarElementos(especieCompilada(arq).r.atomos, n, elementos));
+    document.getElementById("info-mistura").innerHTML = total
+      ? `<div class="tabela"><table><tr><th>Fórmula</th><th>Espécie</th><th>Moléculas</th><th>Fração</th></tr>${linhas}</table></div>
+         <p class="nota">Átomos na cena: ${textoContagem(elementos)}. Numa mistura as moléculas só se movem: nenhuma ligação quebra ou se forma, e cada espécie é um programa MoleculeDSL separado.</p>`
+      : `<p class="nota">Adicione moléculas para montar a mistura.</p>`;
+  }
+
+  /* ---------- reações ---------- */
+  const REACOES = [
+    { nome: "Síntese da água", reagentes: [[2, "hidrogenio"], [1, "oxigenio"]], produtos: [[2, "agua"]] },
+    { nome: "Combustão do metano", reagentes: [[1, "metano"], [2, "oxigenio"]], produtos: [[1, "dioxido_carbono"], [2, "agua"]] },
+    { nome: "Síntese da amônia (Haber-Bosch)", reagentes: [[1, "nitrogenio"], [3, "hidrogenio"]], produtos: [[2, "amonia"]] },
+    { nome: "Combustão do etanol", reagentes: [[1, "etanol"], [3, "oxigenio"]], produtos: [[2, "dioxido_carbono"], [3, "agua"]] },
+    { nome: "Síntese do cloreto de hidrogênio", reagentes: [[1, "hidrogenio"], [1, "cloro"]], produtos: [[2, "cloreto_de_hidrogenio"]] },
+    { nome: "Decomposição da água oxigenada", reagentes: [[2, "peroxido_de_hidrogenio"]], produtos: [[2, "agua"], [1, "oxigenio"]] },
+    { nome: "Combustão do monóxido de carbono", reagentes: [[2, "monoxido_de_carbono"], [1, "oxigenio"]], produtos: [[2, "dioxido_carbono"]] },
+  ];
+  const cenaReacao = new Cena(document.getElementById("cena-reacao"));
+  // De frente e sem girar sozinha: reagentes e produtos ficam lado a lado
+  cenaReacao.girar = false;
+  cenaReacao.rx = -0.25;
+  cenaReacao.ry = 0.15;
+  cenaReacao.zoom = 1.5;
+  let reacaoAtual = null, progresso = 0, tocando = true, ultimoTempo = null;
+  const FASES = [[0, "Reagentes"], [0.22, "Ligações se rompem"], [0.42, "Átomos se rearranjam"], [0.78, "Novas ligações se formam"], [0.95, "Produtos"]];
+
+  function equacao(lado) {
+    return lado.map(([n, arq]) => `${n > 1 ? n + " " : ""}${formulaHill(especieCompilada(arq).r.atomos)}`).join(" + ");
+  }
+
+  function arranjar(lado, deslocamento) {
+    // Uma instância por coeficiente, lado a lado
+    const atomos = [], ligacoes = [], pos = [], donos = [];
+    const instancias = [];
+    lado.forEach(([n, arq]) => { for (let k = 0; k < n; k++) instancias.push(arq); });
+    const largura = 3.6;
+    instancias.forEach((arq, k) => {
+      const { r, pos: p } = especieCompilada(arq);
+      const giro = rotacionar(p, 0.4 * k, 0.3);
+      const cx = (k - (instancias.length - 1) / 2) * largura + deslocamento;
+      const inicio = atomos.length;
+      r.atomos.forEach((a, i) => { atomos.push(a); pos.push([giro[i][0] + cx, giro[i][1], giro[i][2]]); donos.push(k); });
+      r.ligacoes.forEach((l) => ligacoes.push({ ...l, a: l.a + inicio, b: l.b + inicio }));
+    });
+    return { atomos, ligacoes, pos };
+  }
+
+  function carregarReacao(indice) {
+    const reacao = REACOES[indice];
+    const R = arranjar(reacao.reagentes, 0), P = arranjar(reacao.produtos, 0);
+    const conta = (lado) => lado.reduce((c, [n, arq]) => contarElementos(especieCompilada(arq).r.atomos, n, c), {});
+    const cr = conta(reacao.reagentes), cp = conta(reacao.produtos);
+    const elementos = [...new Set([...Object.keys(cr), ...Object.keys(cp)])].sort();
+    const balanceada = elementos.every((e) => cr[e] === cp[e]);
+    // Cada átomo dos produtos herda um átomo dos reagentes do mesmo elemento,
+    // escolhendo o mais próximo ainda livre
+    const mapa = new Array(P.atomos.length).fill(-1), usados = new Set();
+    if (balanceada) {
+      P.atomos.forEach((a, j) => {
+        let melhor = -1, dist = Infinity;
+        R.atomos.forEach((b, i) => {
+          if (b.el !== a.el || usados.has(i)) return;
+          const d = Math.hypot(R.pos[i][0] - P.pos[j][0], R.pos[i][1] - P.pos[j][1]);
+          if (d < dist) { dist = d; melhor = i; }
+        });
+        mapa[j] = melhor; usados.add(melhor);
+      });
+    }
+    const destino = R.pos.map((p) => [...p]);
+    mapa.forEach((i, j) => { if (i >= 0) destino[i] = [...P.pos[j]]; });
+    const ligacoesR = R.ligacoes.map((l) => ({ ...l, lado: "r" }));
+    const ligacoesP = balanceada ? P.ligacoes.map((l) => ({ ...l, a: mapa[l.a], b: mapa[l.b], lado: "p", alfa: 0 })) : [];
+    reacaoAtual = { reacao, R, destino, ligacoes: [...ligacoesR, ...ligacoesP], balanceada };
+    progresso = 0;
+    const pos = R.pos.map((p) => [...p]);
+    cenaReacao.carregar(R.atomos, reacaoAtual.ligacoes, pos);
+    cenaReacao.ajustarEscala(Math.max(...[...R.pos, ...P.pos].map((p) => Math.hypot(...p))) + 0.5);
+    cenaReacao.aoQuadro = (tempo) => {
+      if (ultimoTempo == null) ultimoTempo = tempo;
+      const dt = Math.min(0.3, (tempo - ultimoTempo) / 1000);
+      ultimoTempo = tempo;
+      if (tocando && reacaoAtual.balanceada) {
+        progresso = Math.min(1, progresso + dt / 9);
+        document.getElementById("progresso-reacao").value = progresso;
+      }
+      aplicarProgresso(pos);
+    };
+    const quebradas = {}, formadas = {};
+    reacao.reagentes.forEach(([n, arq]) => tiposDeLigacao(especieCompilada(arq).r, n, quebradas));
+    reacao.produtos.forEach(([n, arq]) => tiposDeLigacao(especieCompilada(arq).r, n, formadas));
+    document.getElementById("info-reacao").innerHTML = `
+      <p class="equacao">${equacao(reacao.reagentes)} <span>→</span> ${equacao(reacao.produtos)}</p>
+      <p class="${balanceada ? "estado-ok" : "estado-excede"}">${balanceada ? "Balanceada" : "Não balanceada"}: ${elementos.map((e) => `${e} ${cr[e] || 0} → ${cp[e] || 0}`).join(" · ")}</p>
+      <div class="tabela"><table><tr><th>Ligações</th><th>Tipos</th></tr>
+        <tr><td>rompidas</td><td>${textoContagem(quebradas)}</td></tr>
+        <tr><td>formadas</td><td>${textoContagem(formadas)}</td></tr></table></div>
+      <div class="botoes-traducao"><span>Tradução de cada espécie:</span>${[...reacao.reagentes, ...reacao.produtos].map(([, arq]) => especieCompilada(arq).ex)
+        .filter((ex, i, todos) => todos.indexOf(ex) === i).map((ex) => `<button type="button" class="botao pequeno" data-demonstrar="${ex.arquivo}">${escapar(ex.titulo)}</button>`).join("")}</div>
+      <p class="nota">Animação ilustrativa: mostra a conservação dos átomos e quais ligações se rompem e se formam. Não representa o mecanismo, a velocidade nem a energia da reação.</p>`;
+  }
+
+  const suave = (x) => x * x * (3 - 2 * x);
+  function aplicarProgresso(pos) {
+    const { R, destino, ligacoes } = reacaoAtual;
+    const t = progresso;
+    const mover = suave(Math.min(1, Math.max(0, (t - 0.42) / 0.36)));
+    const vibra = t < 0.42 ? Math.sin(t * 90) * 0.04 * Math.min(1, t / 0.22) : 0;
+    R.pos.forEach((p, i) => {
+      for (let c = 0; c < 3; c++) pos[i][c] = p[c] + (destino[i][c] - p[c]) * mover + (c === 1 ? vibra * ((i % 2) * 2 - 1) : 0);
+    });
+    const someR = 1 - Math.min(1, Math.max(0, (t - 0.22) / 0.2));
+    const surgeP = Math.min(1, Math.max(0, (t - 0.78) / 0.17));
+    ligacoes.forEach((l) => { l.alfa = l.lado === "r" ? someR : surgeP; });
+    const fase = [...FASES].reverse().find(([inicio]) => t >= inicio)[1];
+    document.getElementById("fase-reacao").textContent = fase;
+  }
+
+  const seletorReacao = document.getElementById("reacao");
+  seletorReacao.innerHTML = REACOES.map((r, i) => `<option value="${i}">${escapar(r.nome)}</option>`).join("");
+  seletorReacao.addEventListener("change", () => { carregarReacao(Number(seletorReacao.value)); tocando = true; atualizarBotaoReacao(); });
+  const botaoTocar = document.getElementById("tocar-reacao");
+  function atualizarBotaoReacao() { botaoTocar.textContent = tocando ? "❚❚ Pausar" : "▶ Reproduzir"; }
+  botaoTocar.addEventListener("click", () => { if (progresso >= 1) progresso = 0; tocando = !tocando; atualizarBotaoReacao(); });
+  document.getElementById("reiniciar-reacao").addEventListener("click", () => { progresso = 0; tocando = true; atualizarBotaoReacao(); });
+  document.getElementById("progresso-reacao").addEventListener("input", (e) => { progresso = Number(e.target.value); tocando = false; atualizarBotaoReacao(); });
+
+  let laboratorioPronto = false;
+  function iniciarLaboratorio() {
+    if (laboratorioPronto) return;
+    laboratorioPronto = true;
+    montarListaMistura();
+    montarMistura();
+    carregarReacao(0);
+    atualizarBotaoReacao();
+  }
+
+  /* ================= tabela periódica ================= */
+  const CATEGORIA = {
+    "Alkali metal": "metal alcalino", "Alkaline earth metal": "metal alcalinoterroso", "Transition metal": "metal de transição",
+    "Post-transition metal": "metal pós-transição", Metalloid: "semimetal", Nonmetal: "não metal", Halogen: "halogênio",
+    "Noble gas": "gás nobre", Lanthanide: "lantanídeo", Actinide: "actinídeo",
+  };
+  const CLASSE_CATEGORIA = {
+    "Alkali metal": "c1", "Alkaline earth metal": "c2", "Transition metal": "c3", "Post-transition metal": "c4", Metalloid: "c5",
+    Nonmetal: "c6", Halogen: "c7", "Noble gas": "c8", Lanthanide: "c9", Actinide: "c10",
+  };
+  const NUCLEOS = { He: "1s2", Ne: "[He] 2s2 2p6", Ar: "[Ne] 3s2 3p6", Kr: "[Ar] 3d10 4s2 4p6", Xe: "[Kr] 4d10 5s2 5p6", Rn: "[Xe] 4f14 5d10 6s2 6p6" };
+
+  function posicaoNaTabela(z) {
+    // [linha, coluna]; lantanídeos e actinídeos ficam nas linhas 9 e 10
+    if (z === 1) return [1, 1];
+    if (z === 2) return [1, 18];
+    const periodos = [[3, 10, 2], [11, 18, 3], [19, 36, 4], [37, 54, 5], [55, 86, 6], [87, 118, 7]];
+    for (const [ini, fim, per] of periodos) {
+      if (z < ini || z > fim) continue;
+      const k = z - ini;
+      if (per <= 3) return [per, k < 2 ? k + 1 : k + 11];
+      if (per <= 5) return [per, k + 1];
+      if (k < 2) return [per, k + 1];
+      if (k < 17) return [per === 6 ? 9 : 10, k + 1];
+      return [per, k - 14 + 1];
+    }
+    return [1, 1];
+  }
+
+  function camadas(simbolo) {
+    // Elétrons por camada a partir da configuração eletrônica da fonte
+    let config = (DADOS.elementos[simbolo] || {}).config || "";
+    for (let i = 0; i < 6 && /\[(\w+)\]/.test(config); i++) config = config.replace(/\[(\w+)\]/, (_, g) => ` ${NUCLEOS[g] || ""} `);
+    const porCamada = [];
+    for (const [, n, , e] of config.matchAll(/(\d)([spdf])(\d+)/g)) porCamada[n - 1] = (porCamada[n - 1] || 0) + Number(e);
+    return Array.from(porCamada, (v) => v || 0);
+  }
+
+  function montarTabela() {
+    const grade = document.getElementById("tabela-periodica");
+    const celulas = Object.entries(DADOS.elementos).sort((a, b) => a[1].numero - b[1].numero).map(([simbolo, e]) => {
+      const [linha, coluna] = posicaoNaTabela(e.numero);
+      const regra = DADOS.valencias.valencias[simbolo] ? " com-regra" : "";
+      return `<button type="button" class="elemento ${CLASSE_CATEGORIA[e.bloco] || ""}${regra}" style="grid-row:${linha};grid-column:${coluna}" data-simbolo="${simbolo}" title="${escapar(e.nome)}">
+        <small>${e.numero}</small><b>${simbolo}</b></button>`;
+    });
+    grade.innerHTML = celulas.join("") +
+      `<span class="marcador-f" style="grid-row:6;grid-column:3">57–71</span><span class="marcador-f" style="grid-row:7;grid-column:3">89–103</span>`;
+    document.getElementById("legenda-tabela").innerHTML = Object.entries(CATEGORIA).map(([k, v]) =>
+      `<span><i class="${CLASSE_CATEGORIA[k]}"></i>${v}</span>`).join("") + `<span><i class="com-regra-amostra"></i>valência conferida pelo compilador</span>`;
+    grade.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-simbolo]");
+      if (b) mostrarElemento(b.dataset.simbolo);
+    });
+  }
+
+  let simboloAtual = "C";
+  function codigoDoElemento(simbolo) {
+    return `species molecule "Átomo de ${simbolo}" {\n    atom ${simbolo} as a1\n}\n`;
+  }
+  function mostrarElemento(simbolo) {
+    simboloAtual = simbolo;
+    const e = DADOS.elementos[simbolo];
+    document.querySelectorAll(".elemento").forEach((b) => b.classList.toggle("selecionado", b.dataset.simbolo === simbolo));
+    const valencias = DADOS.valencias.valencias[simbolo];
+    const comCarga = DADOS.valencias.valencias_com_carga[simbolo];
+    const cam = camadas(simbolo);
+    document.getElementById("ficha-elemento").innerHTML = `
+      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco}</p></div></div>
+      <div class="duas-lentes">
+        <div><h4>Para a química</h4><dl>
+          <dt>Configuração</dt><dd>${escapar(e.config || "—")}</dd>
+          <dt>Camadas</dt><dd>${cam.join(", ") || "—"}</dd>
+          <dt>Elétrons de valência</dt><dd>${e.valencia ?? "sem dado na fonte"}</dd>
+          <dt>Eletronegatividade</dt><dd>${e.eletronegatividade ?? "sem dado"}</dd>
+          <dt>Estados de oxidação</dt><dd>${(e.estados || []).join(", ") || "—"}</dd></dl></div>
+        <div><h4>Para o compilador</h4><dl>
+          <dt>Token</dt><dd><code>IDENT '${simbolo}'</code>, casa [A-Z][a-z]?</dd>
+          <dt>Nó da AST</dt><dd><code>AtomoDecl(elemento='${simbolo}')</code></dd>
+          <dt>Valência</dt><dd>${valencias ? `aceita soma de ordens ${valencias.join(" ou ")}${comCarga ? `; com carga: ${Object.entries(comCarga).map(([c, v]) => `${c} → ${v.join("/")}`).join(", ")}` : ""}` : "sem regra com fonte: a valência não é conferida (nunca é inventada)"}</dd>
+          <dt>Classificação</dt><dd>${e.eletronegatividade != null ? "entra no cálculo de Δχ das ligações" : "sem eletronegatividade: ligação “não classificada”"}</dd></dl></div>
+      </div>
+      <pre>${escapar(codigoDoElemento(simbolo).trim())}</pre>
+      <div class="acoes-ficha">
+        <button type="button" class="botao pequeno" id="demo-elemento">Demonstrar tradução</button>
+        <button type="button" class="botao pequeno" id="usar-elemento">Abrir no playground</button>
+      </div>`;
+    document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo de ${e.nome}`));
+    document.getElementById("usar-elemento").addEventListener("click", () => {
+      exemploAtual = null;
+      codigo.value = codigoDoElemento(simbolo);
+      location.hash = "#/playground";
+      executar();
+    });
+    bohr.camadas = cam;
+    bohr.simbolo = simbolo;
+  }
+
+  /* Modelo de Bohr: núcleo e camadas com elétrons girando */
+  const bohr = { camadas: [], simbolo: "", canvas: document.getElementById("bohr") };
+  function desenharBohr(tempo) {
+    const c = bohr.canvas;
+    if (c.offsetParent !== null) {
+      const ctx = c.getContext("2d"), dpr = window.devicePixelRatio || 1;
+      const w = c.clientWidth, h = c.clientHeight;
+      if (c.width !== Math.round(w * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      const escuro = raiz.dataset.theme !== "light";
+      const cx = w / 2, cy = h / 2, n = bohr.camadas.length;
+      const rMax = Math.min(w, h) / 2 - 12, rNucleo = Math.max(12, rMax * 0.14);
+      const acento = getComputedStyle(raiz).getPropertyValue("--acento").trim();
+      bohr.camadas.forEach((eletrons, k) => {
+        const r = rNucleo + ((k + 1) / n) * (rMax - rNucleo);
+        ctx.strokeStyle = escuro ? "rgba(255,255,255,0.12)" : "rgba(30,20,60,0.14)";
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+        const giro = (tempo / 1000) * (0.5 / (k + 1));
+        for (let i = 0; i < eletrons; i++) {
+          const ang = giro + (i / eletrons) * Math.PI * 2;
+          ctx.fillStyle = acento;
+          ctx.beginPath(); ctx.arc(cx + r * Math.cos(ang), cy + r * Math.sin(ang), Math.max(2.2, rMax * 0.022), 0, Math.PI * 2); ctx.fill();
+        }
+      });
+      ctx.fillStyle = corDe(bohr.simbolo);
+      ctx.beginPath(); ctx.arc(cx, cy, rNucleo, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = bohr.simbolo === "H" ? "#2a2830" : "#fff";
+      ctx.font = `700 ${rNucleo * 0.85}px ui-monospace, Menlo, monospace`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(bohr.simbolo, cx, cy + 1);
+    }
+    requestAnimationFrame(desenharBohr);
+  }
+
+  let tabelaPronta = false;
+  function iniciarTabela() {
+    if (tabelaPronta) return;
+    tabelaPronta = true;
+    montarTabela();
+    mostrarElemento(simboloAtual);
+    requestAnimationFrame(desenharBohr);
+  }
+
+
   /* ================= rotas e paginação ================= */
   const slides = [...document.querySelectorAll(".slide")];
   const pontinhos = document.querySelector("#pg-conteudo .pontinhos");
@@ -1748,7 +2647,7 @@ ESPACO
   let primeiraVez = true;
   function rotear() {
     const partes = location.hash.replace(/^#\/?/, "").split("/");
-    const rota = ["conteudo", "uso", "doc", "playground"].includes(partes[0]) ? partes[0] : "inicio";
+    const rota = ["conteudo", "uso", "doc", "playground", "laboratorio", "tabela"].includes(partes[0]) ? partes[0] : "inicio";
     document.querySelectorAll(".pagina").forEach((p) => p.classList.toggle("ativa", p.id === "pg-" + rota));
     document.querySelectorAll(".rotas a").forEach((a) => a.classList.toggle("ativo", a.dataset.rota === rota));
     document.body.classList.toggle("no-inicio", rota === "inicio");
@@ -1760,6 +2659,8 @@ ESPACO
       requestAnimationFrame(() => cena.desenhar());
     }
     if (rota === "inicio") requestAnimationFrame(() => vitrine.desenhar());
+    if (rota === "laboratorio") iniciarLaboratorio();
+    if (rota === "tabela") iniciarTabela();
     if (!primeiraVez) window.scrollTo({ top: 0 });
     primeiraVez = false;
   }
@@ -1772,6 +2673,7 @@ ESPACO
   });
   new MutationObserver(() => { cena.desenhar(); vitrine.desenhar(); }).observe(raiz, { attributes: true, attributeFilter: ["data-theme"] });
   rotear();
+
   </script>
 </body>
 </html>

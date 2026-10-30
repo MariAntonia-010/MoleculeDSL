@@ -490,3 +490,20 @@ Próxima Etapa" (28/10/2026).
   painel de tokens antigo que mostrava 18 tokens em vez dos 19 reais.
 - Capa com a equipe (Geisbelly Victoria, Murilo e Maria Antonia) e a
   disciplina (Linguagens Formais e Compiladores).
+
+---
+
+## 30/10/2026 — Laboratório, tabela periódica e demonstração da tradução
+
+- Laboratório: misturas (moléculas em movimento, com agitação ajustável e
+  composição) e reações animadas (síntese da água, combustões, Haber-Bosch,
+  HCl, decomposição da água oxigenada), com conferência do balanceamento e
+  das ligações rompidas e formadas. As espécies são os programas de
+  `exemplos/`; a gramática não mudou.
+- Tabela periódica com os 118 elementos de `regras/elementos.json`, modelo
+  de Bohr calculado da configuração eletrônica e, para cada elemento, a
+  leitura química e a do compilador (token, nó da AST, regra de valência).
+- Árvore de tradução em cinco etapas com duas lentes (computação e
+  química); botão "Demonstrar tradução" em todos os módulos. O parser do
+  navegador passou a montar a árvore sintática regra por regra.
+- Benzeno da capa girando mais devagar.

@@ -243,12 +243,26 @@ python3 src/construtor_ast.py exemplos/agua.mol
 ## Página de apresentação
 
 [docs/apresentacao/index.html](docs/apresentacao/index.html) abre direto no
-navegador, sem servidor nem internet, em tema claro ou escuro. Ela tem
-quatro módulos com rotas: **Conteúdo** (a apresentação em 11 páginas, com
-setas do teclado), **Uso**, **Doc** (comandos, gramática real, erros e
-relatórios) e **Playground**. No playground, o código MoleculeDSL é analisado
-no navegador enquanto se digita e a molécula é desenhada em 3D. A aba
-"Compilador real" mostra a saída de `src/main.py --modelo` para os exemplos.
+navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
+rotas próprias:
+
+- **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
+- **Uso** e **Doc:** instalação, comandos, gramática real, erros e
+  relatórios;
+- **Playground:** o código é analisado no navegador enquanto se digita, a
+  molécula é desenhada em 3D e cada erro vem com o que significa e como
+  corrigir;
+- **Laboratório:** misturas de moléculas em movimento e reações químicas
+  animadas, com balanceamento e ligações rompidas e formadas;
+- **Tabela periódica:** modelo atômico de Bohr, dados da fonte e o que o
+  compilador faz com cada elemento.
+
+Todo exemplo tem um botão **Demonstrar tradução**, que mostra as cinco
+etapas (tokens, árvore sintática, AST, modelo e semântica) pela lente da
+computação e pela da química. Misturas e reações combinam programas
+MoleculeDSL existentes, sem mudar a linguagem. A verificação do navegador é
+uma versão simplificada; a aba "Compilador real" mostra a saída de
+`src/main.py --modelo` para os exemplos.
 
 Todas as saídas exibidas vêm de execuções reais. Depois de mudar o
 compilador, gere a página de novo:
@@ -378,7 +392,7 @@ invalidos_semanticos/       casos semânticos inválidos
 avisos_semanticos/          programas válidos que geram avisos
 resolver/                   entradas e snapshots do solver
 docs/                       especificação, planos e diagramas
-docs/apresentacao/          página de apresentação offline (index.html gerado a partir de modelo.html)
+docs/apresentacao/          página de apresentação offline (index.html gerado de modelo.html, estilo.css e *.js)
 gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 ```
 

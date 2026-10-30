@@ -39,6 +39,14 @@ EXEMPLOS = [
     "e_1_2_dicloroeteno",
     "penta_2_3_dieno",
     "amonio_por_ligacao_coordenada",
+    "hidrogenio",
+    "oxigenio",
+    "nitrogenio",
+    "cloro",
+    "cloreto_de_hidrogenio",
+    "peroxido_de_hidrogenio",
+    "monoxido_de_carbono",
+    "metanol",
 ]
 
 
@@ -70,6 +78,14 @@ def esperado(caminho):
 def main():
     with open(os.path.join(PASTA, "modelo.html"), encoding="utf-8") as arquivo:
         pagina = arquivo.read()
+    # Estilo e script ficam em arquivos próprios e entram inline na página
+    def ler(nome):
+        with open(os.path.join(PASTA, nome), encoding="utf-8") as arquivo:
+            return arquivo.read()
+
+    modulos = "".join(ler(nome) for nome in ("traducao.js", "laboratorio.js", "tabela.js"))
+    pagina = pagina.replace("{{ESTILO}}", ler("estilo.css"))
+    pagina = pagina.replace("{{APP_JS}}", ler("app.js").replace("  /* @modulos */\n", modulos))
 
     with tempfile.TemporaryDirectory() as pasta:
         svg = os.path.join(pasta, "agua.svg")
@@ -106,7 +122,8 @@ def main():
         arquivo = f"exemplos/{nome}.mol"
         with open(os.path.join(RAIZ, arquivo), encoding="utf-8") as entrada:
             texto = entrada.read()
-        titulo = re.search(r'"([^"]*)"', texto).group(1)
+        # O nome vem do cabeçalho, não de aspas em comentários
+        titulo = re.search(r'(?:molecule|species\s+\w+)\s+"([^"]*)"', texto).group(1)
         lista_exemplos.append(
             {
                 "titulo": titulo,
@@ -117,7 +134,15 @@ def main():
         )
     with open(os.path.join(RAIZ, "regras", "elementos.json"), encoding="utf-8") as entrada:
         elementos = {
-            simbolo: {"valencia": dados.get("eletrons_valencia")}
+            simbolo: {
+                "nome": dados["nome"],
+                "numero": dados["numero_atomico"],
+                "bloco": dados["bloco"],
+                "config": dados.get("configuracao_eletronica"),
+                "valencia": dados.get("eletrons_valencia"),
+                "eletronegatividade": dados.get("eletronegatividade"),
+                "estados": dados.get("estados_oxidacao") or [],
+            }
             for simbolo, dados in json.load(entrada)["elementos"].items()
         }
     with open(os.path.join(RAIZ, "regras", "valencias.json"), encoding="utf-8") as entrada:
