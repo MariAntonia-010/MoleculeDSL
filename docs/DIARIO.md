@@ -851,3 +851,12 @@ Os exemplos novos (cátion alila, enolato, etanimina, 2-piridona e
   dobro em telas de 120 Hz. Agora a velocidade é medida no tempo (até
   2,5 px/s em qualquer tela), de 3 a 6 vezes mais devagar que antes.
 
+---
+
+## 30/10/2026 — Site no ar
+
+- O Pages foi ativado com a fonte "branch `main`, pasta `/docs`". A raiz
+  dava 404, porque a apresentação está em `docs/apresentacao/`;
+  `docs/index.html` redireciona para ela.
+- Endereço: https://mariantonia-010.github.io/MoleculeDSL/
+
