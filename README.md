@@ -271,7 +271,12 @@ python3 src/construtor_ast.py exemplos/agua.mol
 
 ## Página de apresentação
 
-[docs/apresentacao/index.html](docs/apresentacao/index.html) abre direto no
+Publicada em **<https://mariantonia-010.github.io/MoleculeDSL/>** pelo workflow
+`.github/workflows/pages.yml`, que envia a página a cada push na `main` que a
+altere. Para o endereço funcionar, quem administra o repositório ativa o Pages
+uma vez em *Settings → Pages → Source: GitHub Actions*.
+
+[docs/apresentacao/index.html](docs/apresentacao/index.html) também abre direto no
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
