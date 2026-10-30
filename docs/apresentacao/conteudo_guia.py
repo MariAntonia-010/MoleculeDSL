@@ -578,7 +578,7 @@ LICOES = [
             },
             {
                 "titulo": "Partes desconectadas",
-                "explicacao": "Duas moléculas de H2 no mesmo programa não formam uma entidade única.",
+                "explicacao": "Duas moléculas de H2 no mesmo bloco não formam uma entidade única.",
                 "codigo": 'species molecule "Two hydrogens" {\n    4x atom H as h\n    bond h1-h2\n    bond h3-h4\n}\n',
                 "opcoes": [],
                 "saida": 2,

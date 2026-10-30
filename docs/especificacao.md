@@ -100,8 +100,11 @@ Inicia a declaração de uma molécula, com o nome entre aspas.
 
 ```text
 species molecule "Water" {
+    // atom, bond, ring, stereo e configuration vêm aqui
 }
 ```
+
+Um bloco precisa de pelo menos um átomo: vazio, ele gera o erro STRUCT-003.
 
 ### `atom`
 

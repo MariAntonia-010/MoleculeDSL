@@ -5,11 +5,13 @@ ANTLR e o modelo semântico. Ela contém apenas os conceitos da linguagem,
 sem nós de pontuação como `{`, `(` ou `)`. A análise semântica recebe a AST
 e não acessa a parse tree do ANTLR.
 
-Cada arquivo contém uma única espécie, conforme a decisão registrada em
-`plano_sintatico.md`. A classe raiz é `Especie`, porque a espécie pode ser
-um átomo isolado, um íon, uma molécula ou o motivo de um sólido; o nome
-antigo `Molecula` continua disponível como apelido. Não há um nó `Programa`
-com uma lista de espécies.
+Um arquivo tem um ou mais blocos (`programa : molecula+ EOF`), e cada bloco
+vira uma `Especie`. `construir_programa` devolve a lista de `Especie`, na
+ordem do arquivo; `construir` devolve só a primeira, para quem trata um bloco
+só. Não há uma classe `Programa`: a lista é a raiz (o desenho da AST mostra um
+nó Programa só para agrupar os blocos). `Especie` se chama assim porque a
+espécie pode ser um átomo isolado, um íon, uma molécula ou o motivo de um
+sólido; o nome antigo `Molecula` continua disponível como apelido.
 
 ## Estrutura dos nós
 
@@ -29,7 +31,9 @@ Especie
     │   ├── carga: int
     │   ├── nome: str | None
     │   ├── nome_automatico: str      (O#1, para átomos sem `as`)
-    │   └── massa: int | None         (número de massa, como em atom 13C)
+    │   ├── massa: int | None         (número de massa, como em atom 13C)
+    │   ├── bloco: str | None         (atom "Nome": o bloco reaproveitado)
+    │   └── situacao_bloco: str | None (ok, inexistente, depois, proprio ou tipo)
     ├── LigacaoDecl
     │   ├── origem: Referencia
     │   ├── operador: Operador
@@ -71,11 +75,11 @@ modelo semântico.
 
 | Regra da gramática | Resultado na AST |
 |---|---|
-| `programa` | encaminha o único nó `Especie` |
+| `programa` | lista de `Especie`, uma por bloco |
 | `molecula` | `Especie` |
 | `cabecalho` | tipo, nome e carga total de `Especie` |
 | `desemparelhados` | `eletrons_desemparelhados` de `Especie` |
-| `comando` | encaminha `AtomoDecl`, `LigacaoDecl`, `AnelDecl` ou `EstereoDecl` |
+| `comando` | encaminha `AtomoDecl`, `LigacaoDecl`, `AnelDecl`, `EstereoDecl` ou `ConfiguracaoDecl` |
 | `atomo` | `AtomoDecl` |
 | `carga` | inteiro positivo ou negativo dentro de `AtomoDecl` |
 | `ligacao` | `LigacaoDecl` |
