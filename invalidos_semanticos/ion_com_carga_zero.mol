@@ -1,4 +1,5 @@
-// esperado: Erro semântico [SPEC-001] na linha 2, coluna 0: molecular_ion precisa declarar carga total diferente de zero
+// esperado: Erro semântico [SPEC-001] na linha 3, coluna 0: molecular_ion precisa declarar carga total diferente de zero
+// esperado: Aviso semântico [SPEC-003] na linha 3, coluna 0: uma molécula tem mais de um átomo (IUPAC); para uma espécie de um átomo só use species atom
 species molecular_ion "Íon com carga zero" charge +0 {
     atom He
 }

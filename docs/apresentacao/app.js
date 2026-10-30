@@ -27,7 +27,7 @@
 
   /* ================= compilador do navegador ================= */
   const PALAVRAS = new Set(["molecule", "species", "molecular_ion", "ionic_solid", "covalent_network",
-    "metallic_solid", "charge", "unpaired", "atom", "bond", "as", "ring", "stereo"]);
+    "metallic_solid", "monatomic_ion", "charge", "unpaired", "atom", "bond", "as", "ring", "stereo"]);
   const OPERADORES = { "-": 1, "=": 2, "#": 3, "->": 1, "~": 0 };
 
   class ErroDSL extends Error {
@@ -100,18 +100,19 @@
       return v;
     };
 
-    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [], arvore: raizArvore };
+    const especie = { tipo: "molecule", nome: "", carga: null, desemparelhados: null, comandos: [], arvore: raizArvore, legado: false };
     abrir("molecula");
     abrir("cabecalho");
     if (talvez("molecule")) {
+      especie.legado = true;
       especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
     } else if (talvez("species")) {
       const tipo = atual().tipo;
-      if (!["molecule", "molecular_ion", "ionic_solid", "covalent_network", "metallic_solid"].includes(tipo)) falhar("tipo de espécie depois de 'species'");
+      if (!["molecule", "molecular_ion", "atom", "monatomic_ion", "ionic_solid", "covalent_network", "metallic_solid"].includes(tipo)) falhar("tipo de espécie depois de 'species'");
       consumir();
       especie.tipo = tipo;
       especie.nome = pegar("TEXTO", "nome da espécie entre aspas").valor.slice(1, -1);
-      if (tipo === "molecular_ion") {
+      if (tipo === "molecular_ion" || tipo === "monatomic_ion") {
         abrir("cargaEspecie");
         pegar("charge", "'charge' com a carga do íon");
         const s = sinal("sinal da carga (+ ou -)");
@@ -270,7 +271,34 @@
       const lista = cmd.refs.map((r) => resolver(r, true));
       if (!lista.includes(null)) configuracoes.push({ atomos: lista, op: cmd.op, descritor: cmd.descritor });
     }
+    // Tipo da espécie (IUPAC: molécula tem mais de um átomo)
+    const atomica = especie.tipo === "atom" || especie.tipo === "monatomic_ion";
+    const somaCargas = atomos.reduce((t, a) => t + a.carga, 0);
+    const cabecalho = { l: 1, c: 0 };
     if (!erros.length) {
+      if (!especie.legado && especie.carga != null && somaCargas !== especie.carga) {
+        erro(cabecalho, "CARGA-002", `a soma das cargas formais é ${somaCargas >= 0 ? "+" : ""}${somaCargas}, mas a espécie declara carga total ${especie.carga >= 0 ? "+" : ""}${especie.carga}`);
+      }
+      if (!especie.legado && especie.carga == null && somaCargas !== 0 && !["ionic_solid", "covalent_network", "metallic_solid"].includes(especie.tipo)) {
+        erro(cabecalho, "CARGA-002", `a soma das cargas formais é ${somaCargas >= 0 ? "+" : ""}${somaCargas}, mas a espécie declara carga total +0`);
+      }
+      if (atomica && (atomos.length !== 1 || ligacoes.length)) {
+        erro(cabecalho, "SPEC-001", `${especie.tipo} descreve um único átomo, sem ligações; foram declarados ${atomos.length} átomo(s) e ${ligacoes.length} ligação(ões)`);
+      } else if (especie.tipo === "atom" && somaCargas) {
+        erro(cabecalho, "SPEC-001", "atom descreve um átomo neutro; para um átomo com carga use species monatomic_ion com charge");
+      } else if (!atomica && atomos.length === 1 && (especie.tipo === "molecule" || especie.tipo === "molecular_ion")) {
+        aviso(cabecalho, "SPEC-003", `uma molécula tem mais de um átomo (IUPAC); para uma espécie de um átomo só use species ${somaCargas ? "monatomic_ion" : "atom"}`, [0]);
+      }
+    }
+    if (!erros.length && (especie.tipo === "ionic_solid" || especie.tipo === "covalent_network")) {
+      aviso(cabecalho, "SPEC-002", `${especie.tipo} é uma estrutura estendida; o grafo representa apenas um motivo finito`);
+    }
+    if (!erros.length) {
+      especie.comandos.filter((c) => c.tipo === "bond" && c.op === "~").forEach((c) => {
+        aviso(c, "METAL-002", "ligação metálica é coletiva; uma aresta do grafo molecular não valida um sólido metálico");
+      });
+    }
+    if (!erros.length && !atomica) {
       const soma = atomos.map(() => 0);
       for (const lig of ligacoes) { soma[lig.a] += lig.ordem; soma[lig.b] += lig.ordem; }
       const linhaAtomo = new Map();
@@ -281,9 +309,9 @@
         const maximo = Math.max(...permitidas);
         const no = linhaAtomo.get(a.id) || { l: 1, c: 0 };
         if (soma[a.id] > maximo) erro(no, "VAL-001", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o máximo para ${a.el}${a.carga ? `(${a.carga > 0 ? "+" : ""}${a.carga})` : ""} é ${maximo}`, [a.id]);
-        else if (!permitidas.includes(soma[a.id]) && atomos.length > 1) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`, [a.id]);
+        else if (!permitidas.includes(soma[a.id])) aviso(no, "VAL-002", `a soma das ordens de ligação de ${rotulo(a)} é ${soma[a.id]}; o esperado para ${a.el} é ${permitidas.join(" ou ")}`, [a.id]);
       }
-      if (atomos.length > 1 && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
+      if (atomos.length > 1 && !especie.legado && especie.tipo !== "ionic_solid" && especie.tipo !== "metallic_solid" && componentes(atomos, ligacoes) > 1) {
         erro({ l: 1, c: 0 }, "STRUCT-008", "a entidade tem partes desconectadas");
       }
     }
@@ -307,6 +335,18 @@
     const achar = (x) => (pai[x] === x ? x : (pai[x] = achar(pai[x])));
     ligacoes.forEach((l) => { pai[achar(l.a)] = achar(l.b); });
     return new Set(atomos.map((_, i) => achar(i))).size;
+  }
+
+  // Mesma regra do compilador: Δχ < 0,4 apolar, até 1,7 polar, acima iônica
+  // (convenção didática de Pauling, não uma fronteira rígida); ~ é metálica
+  function classificar(l, atomos) {
+    if (l.op === "~") return { classe: "metálica", dx: null };
+    const xa = (DADOS.elementos[atomos[l.a].el] || {}).eletronegatividade;
+    const xb = (DADOS.elementos[atomos[l.b].el] || {}).eletronegatividade;
+    if (xa == null || xb == null) return { classe: "não classificada", dx: null };
+    const dx = Math.abs(xa - xb);
+    const { limite_apolar, limite_ionica } = DADOS.classificacao;
+    return { classe: dx < limite_apolar ? "covalente apolar" : dx <= limite_ionica ? "covalente polar" : "iônica", dx };
   }
 
   function rotulo(a) { return a.nome ? `${a.nome} (${a.el}#${a.indice})` : `${a.el}#${a.indice}`; }
@@ -352,6 +392,11 @@
     "STRUCT-008": ["Partes desconectadas", "Algum átomo não tem caminho de ligações até os demais.", "Ligue todos os átomos, ou use species ionic_solid para um sólido iônico."],
     "RING-002": ["Anel não fecha", "Dois átomos vizinhos na lista do ring não estão ligados.", "Liste os átomos na ordem do ciclo e declare a ligação que falta."],
     "STEREO-001": ["Referência ambígua", "Em stereo cada referência precisa apontar para um único átomo.", "Use o nome do átomo em vez do símbolo do elemento."],
+    "SPEC-001": ["Tipo de espécie incompatível", "O tipo do cabeçalho não combina com o conteúdo: atom e monatomic_ion descrevem um único átomo, sem ligações.", "Use species molecule para mais de um átomo, ou species monatomic_ion com charge para um átomo com carga."],
+    "SPEC-002": ["Motivo de uma estrutura estendida", "Sólidos iônicos e redes covalentes são infinitos; o grafo descreve só uma unidade que se repete.", "Nada a corrigir: o aviso registra o limite do modelo."],
+    "METAL-002": ["Ligação metálica coletiva", "Num metal os elétrons ficam deslocalizados por todo o sólido; uma aresta ~ só indica o motivo.", "Nada a corrigir: o aviso registra o limite do modelo."],
+    "SPEC-003": ["Molécula de um átomo só", "Pela IUPAC, molécula é uma entidade neutra com mais de um átomo. Um átomo sozinho é um átomo; com carga, é um íon monoatômico.", "Troque o cabeçalho por species atom \"Nome\" ou species monatomic_ion \"Nome\" charge ±N."],
+    "CARGA-002": ["Carga total diferente", "A soma das cargas formais dos átomos não bate com a carga declarada no cabeçalho.", "Ajuste a carga de algum átomo, como atom N(+1), ou o charge do cabeçalho."],
     "VAL-001": ["Valência excedida", "A soma das ordens das ligações passa do máximo permitido para o elemento.", "Remova uma ligação, troque = por -, ou declare a carga do átomo, como atom N(+1)."],
     "VAL-002": ["Valência incompleta", "O átomo tem menos ligações que o esperado. Pode faltar hidrogênio, ou a espécie é um íon ou radical.", "Adicione os H que faltam, declare a carga (atom C(-1)) ou use unpaired para radical."],
   };
@@ -436,6 +481,69 @@
     return reais;
   }
 
+  const NUCLEOS = { He: "1s2", Ne: "[He] 2s2 2p6", Ar: "[Ne] 3s2 3p6", Kr: "[Ar] 3d10 4s2 4p6", Xe: "[Kr] 4d10 5s2 5p6", Rn: "[Xe] 4f14 5d10 6s2 6p6" };
+  function camadas(simbolo) {
+    // Elétrons por camada a partir da configuração eletrônica da fonte
+    let config = (DADOS.elementos[simbolo] || {}).config || "";
+    for (let i = 0; i < 6 && /\[(\w+)\]/.test(config); i++) config = config.replace(/\[(\w+)\]/, (_, g) => ` ${NUCLEOS[g] || ""} `);
+    const porCamada = [];
+    for (const [, n, , e] of config.matchAll(/(\d)([spdf])(\d+)/g)) porCamada[n - 1] = (porCamada[n - 1] || 0) + Number(e);
+    return Array.from(porCamada, (v) => v || 0);
+  }
+
+  // Elétrons por camada de um íon: tira da camada mais externa (cátion) ou
+  // completa a mais externa (ânion)
+  function camadasComCarga(simbolo, carga) {
+    const lista = camadas(simbolo);
+    let resto = carga;
+    while (resto > 0 && lista.length) {
+      lista[lista.length - 1]--;
+      if (!lista[lista.length - 1]) lista.pop();
+      resto--;
+    }
+    if (resto < 0) lista[Math.max(0, lista.length - 1)] = (lista[lista.length - 1] || 0) - resto;
+    return lista;
+  }
+
+  // Modelo de Bohr: núcleo com o símbolo e camadas com elétrons girando
+  function pintarBohr(ctx, w, h, simbolo, lista, tempo, carga = 0) {
+    const escuro = raiz.dataset.theme !== "light";
+    const cx = w / 2, cy = h / 2, n = Math.max(lista.length, 1);
+    const rMax = Math.min(w, h) / 2 - 14, rNucleo = Math.max(12, rMax * 0.14);
+    const acento = getComputedStyle(raiz).getPropertyValue("--acento").trim();
+    lista.forEach((eletrons, k) => {
+      const r = rNucleo + ((k + 1) / n) * (rMax - rNucleo);
+      ctx.strokeStyle = escuro ? "rgba(255,255,255,0.12)" : "rgba(30,20,60,0.14)";
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+      const giro = (tempo / 1000) * (0.5 / (k + 1));
+      for (let i = 0; i < eletrons; i++) {
+        const ang = giro + (i / eletrons) * Math.PI * 2;
+        ctx.fillStyle = acento;
+        ctx.beginPath(); ctx.arc(cx + r * Math.cos(ang), cy + r * Math.sin(ang), Math.max(2.2, rMax * 0.022), 0, Math.PI * 2); ctx.fill();
+      }
+    });
+    ctx.fillStyle = corDe(simbolo);
+    ctx.beginPath(); ctx.arc(cx, cy, rNucleo, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = simbolo === "H" ? "#2a2830" : "#fff";
+    ctx.font = `700 ${rNucleo * 0.8}px ui-monospace, Menlo, monospace`;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(simbolo, cx, cy + 1);
+    if (carga) {
+      ctx.fillStyle = acento;
+      ctx.font = `700 ${rNucleo * 0.7}px ui-monospace, Menlo, monospace`;
+      ctx.fillText(`${Math.abs(carga) > 1 ? Math.abs(carga) : ""}${carga > 0 ? "+" : "−"}`, cx + rNucleo * 1.1, cy - rNucleo * 0.9);
+    }
+  }
+
+  const COR_CLASSE = {
+    "covalente apolar": ["rgba(200, 196, 214, 0.6)", "rgba(70, 64, 88, 0.55)"],
+    "covalente polar": ["#b9a3f7", "#7a5ae0"],
+    "iônica": ["#e0bd72", "#a3700a"],
+    "metálica": ["rgba(200, 196, 214, 0.6)", "rgba(70, 64, 88, 0.55)"],
+    "não classificada": ["rgba(200, 196, 214, 0.3)", "rgba(70, 64, 88, 0.3)"],
+  };
+
   class Cena {
     constructor(canvas) {
       this.canvas = canvas;
@@ -465,6 +573,7 @@
         if (this.atomos.length && this.visivel()) {
           let mudou = false;
           if (this.aoQuadro) { this.aoQuadro(tempo); mudou = true; }
+          if (this.atomos.length === 1) mudou = true;
           if (this.girar && !this.arrastando) { this.ry += this.velocidade; mudou = true; }
           if (mudou) this.desenhar();
         }
@@ -476,6 +585,7 @@
     carregar(atomos, ligacoes, posicoes = null) {
       this.aoQuadro = null;
       this.atomos = atomos; this.ligacoes = ligacoes; this.pos = posicoes || layout(atomos, ligacoes);
+      this.classes = ligacoes.map((l) => classificar(l, atomos).classe);
       this.ajustarEscala();
       this.desenhar();
     }
@@ -493,6 +603,12 @@
       ctx.clearRect(0, 0, w, h);
       if (!this.atomos.length) return;
       const escuro = raiz.dataset.theme !== "light";
+      if (this.atomos.length === 1) {
+        // Espécie de um átomo só: modelo de Bohr com a carga do íon
+        const a = this.atomos[0];
+        pintarBohr(ctx, w, h, a.el, camadasComCarga(a.el, a.carga), performance.now(), a.carga);
+        return;
+      }
       const cy = Math.cos(this.ry), sy = Math.sin(this.ry), cx = Math.cos(this.rx), sx = Math.sin(this.rx);
       const escala = Math.min(w, h) * 0.46 * this.escalaBase * this.zoom;
       const proj = this.pos.map(([x, y, z]) => {
@@ -503,7 +619,7 @@
       });
       const oculto = (i) => this.semH && this.atomos[i].el === "H";
       const itens = [];
-      this.ligacoes.forEach((l) => { if (!oculto(l.a) && !oculto(l.b)) itens.push({ t: "l", l, z: (proj[l.a].z + proj[l.b].z) / 2 - 0.01 }); });
+      this.ligacoes.forEach((l, k) => { if (!oculto(l.a) && !oculto(l.b)) itens.push({ t: "l", l, k, z: (proj[l.a].z + proj[l.b].z) / 2 - 0.01 }); });
       this.atomos.forEach((a, i) => { if (!oculto(i)) itens.push({ t: "a", i, z: proj[i].z }); });
       itens.sort((p, q) => p.z - q.z);
       const corLigacao = escuro ? "rgba(200, 196, 214, 0.55)" : "rgba(70, 64, 88, 0.5)";
@@ -515,10 +631,12 @@
           if (l.alfa === 0) continue;
           ctx.globalAlpha = l.alfa == null ? 1 : l.alfa;
           const largura = Math.max(1.2, 0.09 * escala * (A.f + B.f) / 2);
-          ctx.strokeStyle = l.op === "->" ? (escuro ? "#b9a3f7" : "#7a5ae0") : corLigacao;
+          const classe = (this.classes || [])[item.k] || "não classificada";
+          ctx.strokeStyle = (COR_CLASSE[classe] || [corLigacao, corLigacao])[escuro ? 0 : 1];
           ctx.lineWidth = l.ordem > 1 ? largura * 0.7 : largura;
           ctx.lineCap = "round";
-          ctx.setLineDash(l.op === "->" ? [largura * 1.6, largura * 1.4] : l.op === "~" ? [1, largura * 1.8] : []);
+          // coordenada: traço longo; iônica: tracejado; metálica: pontilhado
+          ctx.setLineDash(l.op === "->" ? [largura * 2.2, largura * 1.1] : l.op === "~" ? [1, largura * 1.8] : classe === "iônica" ? [largura * 0.9, largura * 0.9] : []);
           const linhas = l.ordem <= 1 ? [0] : l.ordem === 2 ? [-0.5, 0.5] : [-1, 0, 1];
           const sep = largura * 1.35;
           for (const o of linhas) {
@@ -587,11 +705,15 @@
     renderizarDiagnosticos(r);
     if (tradPlay) tradPlay.desenhar();
     const modelo = document.querySelector("#p-modelo pre");
+    document.getElementById("legenda-ligacoes").innerHTML = legendaLigacoes(r);
     if (r.atomos.length && !r.erros.length) {
       const nomes = r.atomos.map(rotulo);
       const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
-      modelo.textContent = [`Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}`),
-        `Ligações (${r.ligacoes.length})`, ...r.ligacoes.map((l) => `  ${nomes[l.a]} ${simbolo[l.op]} ${nomes[l.b]}`),
+      modelo.textContent = [`Modelo '${r.especie.nome}' tipo=${r.especie.tipo}`, `Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}`),
+        `Ligações (${r.ligacoes.length})`, ...r.ligacoes.map((l) => {
+          const { classe, dx } = classificar(l, r.atomos);
+          return `  ${nomes[l.a]} ${simbolo[l.op]} ${nomes[l.b]} classificação=${classe}${dx != null ? ` Δχ=${dx.toFixed(2)}` : ""}`;
+        }),
         ...(r.configuracoes.length ? [`Configurações (${r.configuracoes.length})`, ...r.configuracoes.map((c) => `  ${c.atomos.map(rotulo).join(c.op || " ")} ${c.descritor}`)] : [])].join("\n");
     } else {
       modelo.textContent = "Corrija os erros para ver o modelo.";
@@ -603,12 +725,32 @@
     if (r.atomos.length) {
       const multiplas = r.ligacoes.filter((l) => l.ordem >= 2).length;
       const aneis = r.ligacoes.filter((l) => l.ordem > 0).length - r.atomos.length + componentes(r.atomos, r.ligacoes.filter((l) => l.ordem > 0));
-      resumo.innerHTML = `<span>fórmula <b>${formulaHill(r.atomos)}</b></span><span><b>${r.atomos.length}</b> átomos</span><span><b>${r.ligacoes.length}</b> ligações</span><span><b>${multiplas}</b> múltiplas</span><span><b>${Math.max(0, aneis)}</b> anéis</span>`;
+      const carga = r.atomos.reduce((t, a) => t + a.carga, 0);
+      const sobrescrito = (n) => String(n).replace(/./g, (c) => "⁰¹²³⁴⁵⁶⁷⁸⁹"[c] || c);
+      const sufixo = carga ? `${Math.abs(carga) > 1 ? sobrescrito(Math.abs(carga)) : ""}${carga > 0 ? "⁺" : "⁻"}` : "";
+      const plural = (n, um, varios) => `<b>${n}</b> ${n === 1 ? um : varios}`;
+      resumo.innerHTML = `<span>fórmula (Hill) <b>${formulaHill(r.atomos)}${sufixo}</b></span><span>${plural(r.atomos.length, "átomo", "átomos")}</span><span>${plural(r.ligacoes.length, "ligação", "ligações")}</span><span><b>${multiplas}</b> múltiplas</span><span><b>${Math.max(0, aneis)}</b> anéis</span>`;
     } else {
       resumo.innerHTML = "";
     }
     if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
     else { vazio.hidden = false; vazio.textContent = r.erros.length ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
+  }
+
+  function legendaLigacoes(r) {
+    if (!r.ligacoes.length) {
+      return r.atomos.length === 1 ? `<span class="item-legenda">${r.especie && r.especie.tipo === "monatomic_ion" ? "íon monoatômico" : "átomo isolado"}: modelo de Bohr, sem ligações</span>` : "";
+    }
+    const contagem = {};
+    r.ligacoes.forEach((l) => {
+      const { classe } = classificar(l, r.atomos);
+      const nome = l.op === "->" ? `coordenada (${classe})` : classe;
+      contagem[nome] = (contagem[nome] || 0) + 1;
+    });
+    return Object.entries(contagem).map(([nome, n]) => {
+      const base = nome.startsWith("coordenada") ? "coordenada" : nome;
+      return `<span class="item-legenda"><i class="traco ${base.replace(/\s/g, "-")}"></i>${n}× ${nome}</span>`;
+    }).join("") + `<span class="item-legenda fraco">Δχ: &lt; 0,4 apolar · até 1,7 polar · &gt; 1,7 iônica (convenção didática)</span>`;
   }
 
   function renderizarAlerta(r) {

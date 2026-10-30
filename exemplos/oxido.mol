@@ -1,0 +1,4 @@
+// Íon monoatômico O2-: óxido
+species monatomic_ion "Oxide" charge -2 {
+    atom O(-2)
+}

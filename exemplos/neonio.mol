@@ -1,0 +1,4 @@
+// Átomo isolado de gás nobre
+species atom "Neon" {
+    atom Ne
+}

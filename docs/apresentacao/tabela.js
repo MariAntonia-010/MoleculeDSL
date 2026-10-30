@@ -8,7 +8,6 @@
     "Alkali metal": "c1", "Alkaline earth metal": "c2", "Transition metal": "c3", "Post-transition metal": "c4", Metalloid: "c5",
     Nonmetal: "c6", Halogen: "c7", "Noble gas": "c8", Lanthanide: "c9", Actinide: "c10",
   };
-  const NUCLEOS = { He: "1s2", Ne: "[He] 2s2 2p6", Ar: "[Ne] 3s2 3p6", Kr: "[Ar] 3d10 4s2 4p6", Xe: "[Kr] 4d10 5s2 5p6", Rn: "[Xe] 4f14 5d10 6s2 6p6" };
 
   function posicaoNaTabela(z) {
     // [linha, coluna]; lantanídeos e actinídeos ficam nas linhas 9 e 10
@@ -27,14 +26,6 @@
     return [1, 1];
   }
 
-  function camadas(simbolo) {
-    // Elétrons por camada a partir da configuração eletrônica da fonte
-    let config = (DADOS.elementos[simbolo] || {}).config || "";
-    for (let i = 0; i < 6 && /\[(\w+)\]/.test(config); i++) config = config.replace(/\[(\w+)\]/, (_, g) => ` ${NUCLEOS[g] || ""} `);
-    const porCamada = [];
-    for (const [, n, , e] of config.matchAll(/(\d)([spdf])(\d+)/g)) porCamada[n - 1] = (porCamada[n - 1] || 0) + Number(e);
-    return Array.from(porCamada, (v) => v || 0);
-  }
 
   function montarTabela() {
     const grade = document.getElementById("tabela-periodica");
@@ -55,8 +46,9 @@
   }
 
   let simboloAtual = "C";
+  // Um átomo sozinho não é molécula (IUPAC): o exemplo usa species atom
   function codigoDoElemento(simbolo) {
-    return `species molecule "Átomo de ${simbolo}" {\n    atom ${simbolo} as a1\n}\n`;
+    return `species atom "${DADOS.elementos[simbolo].nome}" {\n    atom ${simbolo}\n}\n`;
   }
   function mostrarElemento(simbolo) {
     simboloAtual = simbolo;
@@ -66,7 +58,7 @@
     const comCarga = DADOS.valencias.valencias_com_carga[simbolo];
     const cam = camadas(simbolo);
     document.getElementById("ficha-elemento").innerHTML = `
-      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco}</p></div></div>
+      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco} · nome na fonte (PubChem): ${escapar(e.nome_fonte)}</p></div></div>
       <div class="duas-lentes">
         <div><h4>Para a química</h4><dl>
           <dt>Configuração</dt><dd>${escapar(e.config || "—")}</dd>
@@ -86,7 +78,7 @@
         <button type="button" class="botao pequeno" id="usar-elemento">Abrir no playground</button>
         <button type="button" class="botao pequeno primario" id="bancada-mais">+ adicionar à bancada</button>
       </div>`;
-    document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo de ${e.nome}`));
+    document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo isolado de ${e.nome.toLowerCase()}`));
     document.getElementById("usar-elemento").addEventListener("click", () => {
       exemploAtual = null;
       codigo.value = codigoDoElemento(simbolo);
@@ -108,28 +100,7 @@
       if (c.width !== Math.round(w * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-      const escuro = raiz.dataset.theme !== "light";
-      const cx = w / 2, cy = h / 2, n = bohr.camadas.length;
-      const rMax = Math.min(w, h) / 2 - 12, rNucleo = Math.max(12, rMax * 0.14);
-      const acento = getComputedStyle(raiz).getPropertyValue("--acento").trim();
-      bohr.camadas.forEach((eletrons, k) => {
-        const r = rNucleo + ((k + 1) / n) * (rMax - rNucleo);
-        ctx.strokeStyle = escuro ? "rgba(255,255,255,0.12)" : "rgba(30,20,60,0.14)";
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
-        const giro = (tempo / 1000) * (0.5 / (k + 1));
-        for (let i = 0; i < eletrons; i++) {
-          const ang = giro + (i / eletrons) * Math.PI * 2;
-          ctx.fillStyle = acento;
-          ctx.beginPath(); ctx.arc(cx + r * Math.cos(ang), cy + r * Math.sin(ang), Math.max(2.2, rMax * 0.022), 0, Math.PI * 2); ctx.fill();
-        }
-      });
-      ctx.fillStyle = corDe(bohr.simbolo);
-      ctx.beginPath(); ctx.arc(cx, cy, rNucleo, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = bohr.simbolo === "H" ? "#2a2830" : "#fff";
-      ctx.font = `700 ${rNucleo * 0.85}px ui-monospace, Menlo, monospace`;
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText(bohr.simbolo, cx, cy + 1);
+      pintarBohr(ctx, w, h, bohr.simbolo, bohr.camadas, tempo);
     }
     requestAnimationFrame(desenharBohr);
   }
@@ -140,6 +111,7 @@
     const contagem = {};
     bancada.forEach((s) => (contagem[s] = (contagem[s] || 0) + 1));
     const linhas = Object.entries(contagem).map(([s, n]) => (n > 1 ? `    ${n}x atom ${s} as ${s.toLowerCase()}` : `    atom ${s} as ${s.toLowerCase()}1`));
+    if (bancada.length === 1) return codigoDoElemento(bancada[0]);
     return `species molecule "Minha molécula" {\n${linhas.join("\n")}\n\n    // ligue os átomos com bond, por exemplo: bond ${bancada[0] ? bancada[0].toLowerCase() + "1" : "a1"}-...\n}\n`;
   }
   function desenharBancada() {

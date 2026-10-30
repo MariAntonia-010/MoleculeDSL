@@ -1,0 +1,4 @@
+// Íon monoatômico: cloreto
+species monatomic_ion "Chloride" charge -1 {
+    atom Cl(-1)
+}

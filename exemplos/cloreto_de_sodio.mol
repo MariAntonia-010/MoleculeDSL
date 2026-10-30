@@ -1,4 +1,5 @@
-molecule "Sodium chloride" {
+// esperado: Aviso semântico [SPEC-002] na linha 2, coluna 0: ionic_solid é uma estrutura estendida; o grafo representa apenas um motivo finito
+species ionic_solid "Sodium chloride" {
     atom Na
     atom Cl
 

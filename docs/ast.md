@@ -40,8 +40,8 @@ Molecula
         └── coluna_descritor: int
 ```
 
-`TipoEspecie` distingue molécula, íon molecular, sólido iônico, rede
-covalente e sólido metálico. `AtomoDecl`, `LigacaoDecl`, `AnelDecl`,
+`TipoEspecie` distingue átomo isolado, íon monoatômico, molécula, íon
+molecular, sólido iônico, rede covalente e sólido metálico. `AtomoDecl`, `LigacaoDecl`, `AnelDecl`,
 `EstereoDecl` e `Referencia` também guardam linha e
 coluna. `TipoReferencia` distingue `ELEMENTO` de `NOME`, sem strings livres.
 `Operador` é um enum com `SIMPLES`, `DUPLA`, `TRIPLA`, `COORDENADA` e

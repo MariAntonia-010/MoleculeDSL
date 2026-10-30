@@ -14,6 +14,8 @@ cabecalho
     : MOLECULE TEXTO
     | SPECIES MOLECULE TEXTO
     | SPECIES MOLECULAR_ION TEXTO cargaEspecie
+    | SPECIES ATOM TEXTO
+    | SPECIES MONATOMIC_ION TEXTO cargaEspecie
     | SPECIES IONIC_SOLID TEXTO
     | SPECIES COVALENT_NETWORK TEXTO
     | SPECIES METALLIC_SOLID TEXTO
@@ -91,6 +93,7 @@ descritor
 MOLECULE : 'molecule' ;
 SPECIES  : 'species' ;
 MOLECULAR_ION    : 'molecular_ion' ;
+MONATOMIC_ION    : 'monatomic_ion' ;
 IONIC_SOLID      : 'ionic_solid' ;
 COVALENT_NETWORK : 'covalent_network' ;
 METALLIC_SOLID   : 'metallic_solid' ;

@@ -1,4 +1,4 @@
-// Íon de um átomo só; carga fora da tabela C3 não é conferida
-molecule "Proton" {
+// Íon monoatômico H+: o nome IUPAC é hídron (hydron)
+species monatomic_ion "Hydron" charge +1 {
     atom H(+1)
 }

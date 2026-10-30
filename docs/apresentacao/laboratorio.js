@@ -28,7 +28,7 @@
   function tiposDeLigacao(r, fator, alvo) {
     const simbolo = { 1: "-", 2: "=", 3: "#" };
     r.ligacoes.forEach((l) => {
-      const par = [r.atomos[l.a].el, r.atomos[l.b].el].sort().join(l.op === "->" ? "→" : simbolo[l.ordem] || "~");
+      const par = [r.atomos[l.a].el, r.atomos[l.b].el].sort().join(l.op === "->" ? "→" : simbolo[l.ordem] || "~") + ` (${classificar(l, r.atomos).classe})`;
       alvo[par] = (alvo[par] || 0) + fator;
     });
     return alvo;

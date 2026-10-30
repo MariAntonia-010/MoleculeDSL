@@ -1,0 +1,6 @@
+// esperado: Erro semântico [CARGA-002] na linha 4, coluna 0: a soma das cargas formais é +1, mas a espécie declara carga total +0
+// esperado: Erro semântico [SPEC-001] na linha 4, coluna 0: atom descreve um átomo neutro; para um átomo com carga use species monatomic_ion com charge
+// Átomo com carga é íon: use species monatomic_ion
+species atom "Sodium" {
+    atom Na(+1)
+}

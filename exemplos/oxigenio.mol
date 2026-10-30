@@ -1,4 +1,4 @@
-molecule "Oxygen" {
+molecule "Dioxygen" {
     atom O as o1
     atom O as o2
 

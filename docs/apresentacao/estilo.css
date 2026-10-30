@@ -448,3 +448,14 @@
     .exemplo-corpo .nota { margin: 0 0 0.3rem; }
     .exemplo-corpo pre { margin: 0; max-height: 360px; }
     @media (max-width: 1000px) { .exemplo-corpo { grid-template-columns: minmax(0, 1fr); } }
+
+    /* legenda dos tipos de ligação */
+    .legenda-ligacoes { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 0.7rem; font-size: 0.8rem; color: var(--suave); }
+    .item-legenda { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .item-legenda.fraco { color: var(--fraco); font-size: 0.74rem; }
+    .traco { display: inline-block; width: 26px; height: 0; border-top: 3px solid var(--suave); }
+    .traco.covalente-polar { border-top-color: var(--acento); }
+    .traco.iônica { border-top: 3px dashed var(--aviso); }
+    .traco.metálica { border-top: 3px dotted var(--suave); }
+    .traco.coordenada { border-top: 3px dashed var(--acento); border-top-style: dashed; }
+    .traco.não-classificada { opacity: 0.4; }

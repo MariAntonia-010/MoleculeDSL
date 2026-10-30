@@ -246,7 +246,7 @@ python3 src/construtor_ast.py exemplos/agua.mol
 navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
-- **Guia:** 11 lições com código, saída real do compilador e variações de
+- **Guia:** 13 lições com código, saída real do compilador e variações de
   escrita; cada exemplo é compilado pelo compilador real ao gerar a página;
 - **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
 - **Uso** e **Doc:** instalação, comandos, gramática real, erros e
@@ -255,6 +255,10 @@ rotas próprias:
   molécula é desenhada em 3D. Um erro semântico aparece numa faixa vermelha
   com código, motivo e correção, a linha fica marcada e o átomo culpado é
   destacado no desenho;
+- **Tipos de ligação e espécies atômicas:** o desenho e o modelo mostram cada
+  ligação como covalente apolar, covalente polar, iônica, coordenada ou
+  metálica, com o Δχ; átomo isolado e íon monoatômico aparecem pelo modelo de
+  Bohr;
 - **Laboratório:** reações e misturas montadas pelo usuário, com espécies
   dos exemplos ou código próprio, balanceamento automático e animação das
   ligações que se rompem e se formam. Espécie com erro semântico não entra
@@ -337,6 +341,7 @@ O catálogo de códigos, causas e correções está em
 | `RAD-002` | paridade de `unpaired` incompatível | erro |
 | `SPEC-001` | declaração incompatível com o tipo da espécie | erro |
 | `SPEC-002` | grafo finito representa apenas motivo de rede | aviso |
+| `SPEC-003` | molécula com um átomo só (use `atom` ou `monatomic_ion`) | aviso |
 | `RING-001` a `RING-003` | integridade e duplicidade de anéis | erro |
 | `RING-004` | ciclo independente sem declaração `ring` | aviso |
 | `STRUCT-008` | entidade molecular tem componentes desconectados | erro |

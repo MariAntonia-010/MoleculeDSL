@@ -1,4 +1,4 @@
-molecule "Fluorine" {
+molecule "Difluorine" {
     atom F as f1
     atom F as f2
 

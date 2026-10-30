@@ -523,3 +523,28 @@ Próxima Etapa" (28/10/2026).
   Espécie inválida bloqueia a simulação com o mesmo destaque de erro.
 - Tabela periódica: bancada que monta o código de uma molécula a partir dos
   elementos escolhidos.
+
+---
+
+## 30/10/2026 — Nomenclatura alinhada à IUPAC e tipos de ligação visíveis
+
+Pesquisa: Gold Book da IUPAC (molécula é entidade neutra com mais de um
+átomo; "entidade molecular" cobre átomo, molécula, íon e radical; "dativa"
+é sinônimo obsoleto de ligação coordenada) e Red Book 2005 (O₂ dioxigênio,
+O₃ trioxigênio; cátion monoatômico "sódio(1+)", ânion "cloreto"). O limite
+Δχ = 1,7 é convenção didática de Pauling, não fronteira rígida.
+
+- Linguagem: novos tipos `species atom` e `species monatomic_ion` (com
+  `charge`). SPEC-001 para um átomo só com ligações, mais de um átomo ou
+  carga incompatível; SPEC-003 (aviso) para `molecule` com um átomo só.
+  Espécies atômicas não passam pela conferência de valência.
+- Exemplos: argônio, hélio e neônio como `atom`; H⁺ como `monatomic_ion`
+  "Hydron"; novos sódio(1+), cloreto e óxido; NaCl como `ionic_solid`;
+  substâncias elementares diatômicas renomeadas (Dihydrogen, Dioxygen,
+  Dinitrogen, Dichlorine, Difluorine, Dibromine).
+- Documentação sem o termo "dativa".
+- Página: cada ligação com cor e traço do tipo (covalente apolar, polar,
+  iônica, coordenada, metálica) e legenda com Δχ; modelo do playground com a
+  classificação igual à do compilador; espécies atômicas desenhadas pelo
+  modelo de Bohr com a carga; nomes em português (elementos e espécies, com
+  nomes estequiométricos da IUPAC); duas lições novas no guia.

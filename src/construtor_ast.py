@@ -68,6 +68,14 @@ class ConstrutorAST(MoleculeDSLVisitor):
                 self.visit(ctx.cargaEspecie()),
                 False,
             )
+        if ctx.MONATOMIC_ION() is not None:
+            return (
+                TipoEspecie.ION_MONOATOMICO,
+                self.visit(ctx.cargaEspecie()),
+                False,
+            )
+        if ctx.ATOM() is not None:
+            return TipoEspecie.ATOMO, 0, False
         if ctx.IONIC_SOLID() is not None:
             return TipoEspecie.SOLIDO_IONICO, 0, False
         if ctx.COVALENT_NETWORK() is not None:

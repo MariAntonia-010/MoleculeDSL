@@ -10,7 +10,7 @@ Base das regras: separar a gramática (a estrutura é válida?) da semântica (a
 | Recurso | Sintaxe |
 |---|---|
 | Ligação simples, dupla, tripla | `-`, `=`, `#` |
-| Ligação coordenada (dativa) | `->` (do doador para o receptor) |
+| Ligação coordenada | `->` (do doador para o receptor) |
 | Ligação metálica | `~` (o bloco `metal { ... }` ficou de fora, ver decisão 3 do `plano_sintatico.md`) |
 | Carga formal | `atom N(+1)`, `atom O(-1)` |
 | Átomos com nome | `atom O as o1` |
@@ -110,6 +110,19 @@ Implementado em parte:
 - O doador de uma ligação coordenada é conferido pela contagem de elétrons derivada de C4. A falta de par livre gera COORD-001; a falta de dados, COORD-002.
 - Para H, He e elementos do segundo período, o receptor é conferido pela capacidade de dueto/octeto antes da doação. Falta de espaço gera COORD-003. Períodos posteriores geram COORD-004, pois expansão de valência e orbitais disponíveis exigem dados que a base não possui.
 - Ligações metálicas são identificadas no modelo e mantidas como informação de referência. Todo `~` gera METAL-002, pois uma aresta não valida o comportamento coletivo do sólido; METAL-001 acrescenta o aviso de participante não metálico. A aresta não soma ordem, mas outras ligações do mesmo átomo continuam sendo verificadas.
+
+### M5b: Espécies de um átomo só
+
+Pelo Gold Book da IUPAC, molécula é uma entidade neutra com mais de um átomo.
+Os tipos `atom` e `monatomic_ion` descrevem átomo isolado e íon monoatômico.
+
+| ID | Regra | Severidade |
+|---|---|---|
+| SPEC-001 | `atom` ou `monatomic_ion` com mais de um átomo ou com ligações; `atom` com carga; `monatomic_ion` com carga zero | erro |
+| SPEC-003 | `molecule` ou `molecular_ion` com um átomo só | aviso |
+
+Átomo isolado e íon monoatômico não passam pela conferência de valência: não
+têm ligações por definição.
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.

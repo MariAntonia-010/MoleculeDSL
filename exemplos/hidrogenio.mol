@@ -1,5 +1,5 @@
 // Com dois átomos de H, "H-H" liga o primeiro ao segundo
-molecule "Hydrogen" {
+molecule "Dihydrogen" {
     2x atom H
 
     bond H-H

@@ -473,6 +473,43 @@ class AnalisadorSemantico:
                 "molecular_ion precisa declarar carga total diferente de zero",
             )
 
+        # Espécies de um átomo só (IUPAC: uma molécula tem mais de um átomo)
+        quantidade = len(self.modelo.atomos)
+        if self.molecula.tipo in (TipoEspecie.ATOMO, TipoEspecie.ION_MONOATOMICO):
+            nome = self.molecula.tipo.value
+            if quantidade != 1 or self.modelo.ligacoes:
+                self.erro(
+                    "SPEC-001",
+                    self.molecula,
+                    f"{nome} descreve um único átomo, sem ligações; "
+                    f"foram declarados {quantidade} átomo(s) e "
+                    f"{len(self.modelo.ligacoes)} ligação(ões)",
+                )
+            elif self.molecula.tipo is TipoEspecie.ATOMO and soma_cargas:
+                self.erro(
+                    "SPEC-001",
+                    self.molecula,
+                    "atom descreve um átomo neutro; para um átomo com carga "
+                    "use species monatomic_ion com charge",
+                )
+            elif self.molecula.tipo is TipoEspecie.ION_MONOATOMICO and carga_total == 0:
+                self.erro(
+                    "SPEC-001",
+                    self.molecula,
+                    "monatomic_ion precisa declarar carga total diferente de zero",
+                )
+        elif quantidade == 1 and self.molecula.tipo in (
+            TipoEspecie.MOLECULA,
+            TipoEspecie.ION_MOLECULAR,
+        ):
+            sugestao = "species monatomic_ion" if soma_cargas else "species atom"
+            self.aviso(
+                "SPEC-003",
+                self.molecula,
+                "uma molécula tem mais de um átomo (IUPAC); para uma espécie "
+                f"de um átomo só use {sugestao}",
+            )
+
         if self.molecula.tipo is TipoEspecie.SOLIDO_METALICO and not any(
             ligacao.operador is Operador.METALICA
             for ligacao in self.modelo.ligacoes
@@ -781,7 +818,10 @@ class AnalisadorSemantico:
 
     def conferir_valencias(self):
         # Só usa os dados de regras/valencias.json: elemento ou carga sem
-        # dado não é conferido
+        # dado não é conferido. Átomo isolado e íon monoatômico não têm
+        # ligações por definição, então não há soma de ordens a conferir.
+        if self.molecula.tipo in (TipoEspecie.ATOMO, TipoEspecie.ION_MONOATOMICO):
+            return
         regras = self.valencias
         ordem = regras["ordem_ligacao"]
         por_id = {a.id: a for a in self.modelo.atomos}

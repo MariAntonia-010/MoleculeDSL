@@ -1,0 +1,4 @@
+// Íon monoatômico: sódio(1+)
+species monatomic_ion "Sodium(1+)" charge +1 {
+    atom Na(+1)
+}

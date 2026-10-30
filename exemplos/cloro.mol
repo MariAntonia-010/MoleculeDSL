@@ -1,4 +1,4 @@
-molecule "Chlorine" {
+molecule "Dichlorine" {
     2x atom Cl
 
     bond Cl-Cl

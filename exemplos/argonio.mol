@@ -1,3 +1,4 @@
-molecule "Argon" {
+// Átomo isolado: um único átomo não forma molécula (IUPAC)
+species atom "Argon" {
     atom Ar
 }

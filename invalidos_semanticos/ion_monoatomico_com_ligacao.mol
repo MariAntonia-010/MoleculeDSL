@@ -1,0 +1,7 @@
+// esperado: Erro semântico [SPEC-001] na linha 3, coluna 0: monatomic_ion descreve um único átomo, sem ligações; foram declarados 2 átomo(s) e 1 ligação(ões)
+// Íon monoatômico não tem ligações
+species monatomic_ion "Hydroxide" charge -1 {
+    atom O(-1)
+    atom H
+    bond O-H
+}

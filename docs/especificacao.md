@@ -72,8 +72,23 @@ species <tipo> "Nome" [charge +N|-N] [unpaired N] {
 }
 ```
 
-`charge` é obrigatório apenas para `molecular_ion`. Os tipos são `molecule`,
-`molecular_ion`, `ionic_solid`, `covalent_network` e `metallic_solid`.
+`charge` é obrigatório para `molecular_ion` e `monatomic_ion`. Os tipos
+seguem a terminologia da IUPAC:
+
+| Tipo | Entidade | Exemplo |
+|---|---|---|
+| `atom` | átomo isolado, neutro, sem ligações | `species atom "Argon" { atom Ar }` |
+| `monatomic_ion` | íon de um átomo só | `species monatomic_ion "Chloride" charge -1 { atom Cl(-1) }` |
+| `molecule` | molécula: entidade neutra com mais de um átomo | água, metano |
+| `molecular_ion` | íon com mais de um átomo | amônio, hidróxido |
+| `ionic_solid` | motivo de um sólido iônico | cloreto de sódio |
+| `covalent_network` | motivo de uma rede covalente | diamante |
+| `metallic_solid` | motivo de um sólido metálico, com `~` | sódio metálico |
+
+Pelo Gold Book da IUPAC, molécula é uma entidade eletricamente neutra com
+mais de um átomo. Por isso `molecule` ou `molecular_ion` com um átomo só
+gera o aviso SPEC-003, e `atom` ou `monatomic_ion` com mais de um átomo ou
+com ligações é erro (SPEC-001).
 `unpaired` declara elétrons desemparelhados e permite validar a paridade da
 contagem eletrônica. O cabeçalho antigo `molecule "Nome"` permanece como
 compatibilidade e não ativa a conferência de carga total.
@@ -174,7 +189,7 @@ Operadores de ligação:
 | `-` | simples | `bond H-O` |
 | `=` | dupla | `bond C=O` |
 | `#` | tripla | `bond n1#n2` |
-| `->` | coordenada (dativa), do doador para o receptor | `bond N->B` |
+| `->` | coordenada, do doador para o receptor (a IUPAC considera “dativa” um sinônimo obsoleto) | `bond N->B` |
 | `~` | metálica | `bond na1~na2` |
 
 Quantificadores:
@@ -202,7 +217,7 @@ atom O // átomo de oxigênio
 
 ## 7. Palavras reservadas
 
-As palavras `molecule`, `species`, `atom`, `bond`, `as`, `ring` e `stereo` são reservadas e não podem ser usadas como nome de átomo.
+As palavras `molecule`, `species`, `molecular_ion`, `monatomic_ion`, `ionic_solid`, `covalent_network`, `metallic_solid`, `charge`, `unpaired`, `atom`, `bond`, `as`, `ring` e `stereo` são reservadas e não podem ser usadas como nome de átomo.
 
 Também ficam reservados os nomes formados por `x` seguido só de dígitos, como `x4`, porque são lidos como repetição de ligação.
 
@@ -219,6 +234,8 @@ molecula      = cabecalho , [ desemparelhados ] , "{" , { comando } , "}" ;
 cabecalho     = "molecule" , texto
               | "species" , "molecule" , texto
               | "species" , "molecular_ion" , texto , carga_especie
+              | "species" , "atom" , texto
+              | "species" , "monatomic_ion" , texto , carga_especie
               | "species" , "ionic_solid" , texto
               | "species" , "covalent_network" , texto
               | "species" , "metallic_solid" , texto ;

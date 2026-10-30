@@ -1,0 +1,6 @@
+// esperado: Erro semântico [SPEC-001] na linha 3, coluna 0: atom descreve um único átomo, sem ligações; foram declarados 2 átomo(s) e 1 ligação(ões)
+// species atom descreve um único átomo
+species atom "Dihydrogen" {
+    2x atom H
+    bond H-H
+}

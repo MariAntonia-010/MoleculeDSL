@@ -1141,8 +1141,14 @@ def testar_ast_de_todos_os_exemplos():
             problemas.append(f"{nome}: não passou da sintaxe")
             continue
         molecula = construir(arvore)
+        # Só os tokens depois do '{': o cabeçalho pode usar 'atom' como tipo
+        inicio = next(
+            i for i, token in enumerate(fluxo.tokens) if token.type == P.ABRE_CHAVE
+        )
         esperados = [
-            tipos[token.type] for token in fluxo.tokens if token.type in tipos
+            tipos[token.type]
+            for token in fluxo.tokens[inicio:]
+            if token.type in tipos
         ]
         obtidos = [type(comando) for comando in molecula.comandos]
         if obtidos != esperados:

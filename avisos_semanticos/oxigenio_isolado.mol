@@ -1,4 +1,5 @@
-// esperado: Aviso semântico [VAL-002] na linha 4, coluna 4: a soma das ordens de ligação de O#1 é 0; o esperado para O é 2
+// esperado: Aviso semântico [SPEC-003] na linha 4, coluna 0: uma molécula tem mais de um átomo (IUPAC); para uma espécie de um átomo só use species atom
+// esperado: Aviso semântico [VAL-002] na linha 5, coluna 4: a soma das ordens de ligação de O#1 é 0; o esperado para O é 2
 // Um átomo só não precisa de ligação, mas a valência ainda é conferida
 molecule "Oxygen atom" {
     atom O

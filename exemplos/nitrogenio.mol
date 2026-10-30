@@ -1,5 +1,5 @@
 // Ligação tripla (#) entre átomos com nome
-molecule "Nitrogen" {
+molecule "Dinitrogen" {
     atom N as n1
     atom N as n2
 

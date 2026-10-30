@@ -24,6 +24,8 @@ class TipoReferencia(Enum):
 
 class TipoEspecie(Enum):
     MOLECULA = "molecule"
+    ATOMO = "atom"
+    ION_MONOATOMICO = "monatomic_ion"
     ION_MOLECULAR = "molecular_ion"
     SOLIDO_IONICO = "ionic_solid"
     REDE_COVALENTE = "covalent_network"

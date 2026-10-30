@@ -1,4 +1,4 @@
-// Molécula de um átomo só: não precisa de ligação
-molecule "Helium" {
+// Átomo isolado: gases nobres existem como átomos, não como moléculas
+species atom "Helium" {
     atom He
 }

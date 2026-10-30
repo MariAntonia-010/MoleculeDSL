@@ -1,5 +1,5 @@
 // esperado: Erro semântico [VAL-001] na linha 3, coluna 4: a soma das ordens de ligação de O#1 é 4; o máximo para O é 2
-molecule "Oxygen" {
+molecule "OH4 (invalid)" {
     atom O
     4x atom H
     bond O-H x4

@@ -19,6 +19,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from conteudo_guia import LICOES  # noqa: E402
+from nomes_pt import ELEMENTOS as NOMES_ELEMENTOS, ESPECIES as NOMES_ESPECIES  # noqa: E402
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(os.path.dirname(PASTA))
@@ -50,6 +51,14 @@ EXEMPLOS = [
     "peroxido_de_hidrogenio",
     "monoxido_de_carbono",
     "metanol",
+    "argonio",
+    "neonio",
+    "sodio_1mais",
+    "cloreto",
+    "oxido",
+    "proton",
+    "cloreto_de_sodio",
+    "sodio_metalico",
 ]
 
 
@@ -125,8 +134,8 @@ def main():
         arquivo = f"exemplos/{nome}.mol"
         with open(os.path.join(RAIZ, arquivo), encoding="utf-8") as entrada:
             texto = entrada.read()
-        # O nome vem do cabeçalho, não de aspas em comentários
-        titulo = re.search(r'(?:molecule|species\s+\w+)\s+"([^"]*)"', texto).group(1)
+        # Nome em português; sem tradução, o nome do cabeçalho do arquivo
+        titulo = NOMES_ESPECIES.get(nome) or re.search(r'(?:molecule|species\s+\w+)\s+"([^"]*)"', texto).group(1)
         lista_exemplos.append(
             {
                 "titulo": titulo,
@@ -138,7 +147,8 @@ def main():
     with open(os.path.join(RAIZ, "regras", "elementos.json"), encoding="utf-8") as entrada:
         elementos = {
             simbolo: {
-                "nome": dados["nome"],
+                "nome": NOMES_ELEMENTOS[dados["numero_atomico"] - 1],
+                "nome_fonte": dados["nome"],
                 "numero": dados["numero_atomico"],
                 "bloco": dados["bloco"],
                 "config": dados.get("configuracao_eletronica"),
@@ -181,6 +191,7 @@ def main():
         "guia": guia,
         "exemplos": lista_exemplos,
         "elementos": elementos,
+        "classificacao": json.load(open(os.path.join(RAIZ, "regras", "classificacao_ligacoes.json"), encoding="utf-8")),
         "valencias": {
             chave: regras[chave]
             for chave in ("valencias", "valencias_expandidas", "valencias_com_carga")

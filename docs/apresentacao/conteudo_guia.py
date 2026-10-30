@@ -92,6 +92,89 @@ LICOES = [
         ],
     },
     {
+        "id": "atomicas",
+        "titulo": "Átomos isolados e íons monoatômicos",
+        "texto": [
+            "Pela IUPAC, molécula é uma entidade eletricamente neutra com mais de um átomo. "
+            "Um átomo sozinho é um átomo; com carga, é um íon monoatômico.",
+            "Para isso há dois tipos de espécie: species atom (um átomo neutro, sem ligações) e "
+            "species monatomic_ion, que exige charge. Declarar um átomo só como molecule gera o aviso SPEC-003.",
+        ],
+        "exemplos": [
+            {
+                "titulo": "Átomo isolado de argônio",
+                "explicacao": "Gases nobres existem como átomos isolados. No playground, uma espécie de um átomo só é desenhada pelo modelo de Bohr.",
+                "codigo": 'species atom "Argon" {\n    atom Ar\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Íon monoatômico: cloreto",
+                "explicacao": "Cl com um elétron a mais: carga -1 no átomo e no cabeçalho.",
+                "codigo": 'species monatomic_ion "Chloride" charge -1 {\n    atom Cl(-1)\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Aviso: um átomo só declarado como molécula",
+                "explicacao": "Compila, mas o compilador lembra a definição da IUPAC e sugere species atom.",
+                "codigo": 'species molecule "Neon" {\n    atom Ne\n}\n',
+                "opcoes": [],
+                "saida": 0,
+            },
+            {
+                "titulo": "Erro: species atom com dois átomos",
+                "explicacao": "Dois átomos ligados formam uma molécula (di-hidrogênio), não um átomo.",
+                "codigo": 'species atom "Dihydrogen" {\n    2x atom H\n    bond H-H\n}\n',
+                "opcoes": [],
+                "saida": 2,
+            },
+        ],
+    },
+    {
+        "id": "tipos_ligacao",
+        "titulo": "Tipos de ligação: covalente, iônica, coordenada e metálica",
+        "texto": [
+            "O operador descreve a ordem da ligação (- = #), a coordenação (->) ou a ligação metálica (~). "
+            "O tipo químico — covalente apolar, covalente polar ou iônica — o compilador deduz pela diferença de "
+            "eletronegatividade (Δχ) entre os dois átomos e mostra em --modelo.",
+            "Os limites são os da convenção didática de Pauling: Δχ < 0,4 apolar, até 1,7 polar, acima de 1,7 iônica. "
+            "É uma escala contínua, não uma fronteira rígida, e os limites ficam em regras/classificacao_ligacoes.json.",
+            "Na ligação coordenada o par vem de um só átomo; a IUPAC considera “dativa” um sinônimo obsoleto. "
+            "Ela também recebe a classificação por Δχ.",
+        ],
+        "exemplos": [
+            {
+                "titulo": "Covalente apolar: di-hidrogênio",
+                "explicacao": "Átomos iguais: Δχ = 0.",
+                "codigo": 'species molecule "Dihydrogen" {\n    2x atom H\n    bond H-H\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Covalente polar: cloreto de hidrogênio",
+                "explicacao": "Δχ = 0,96: o Cl atrai mais o par compartilhado.",
+                "codigo": 'species molecule "Hydrogen chloride" {\n    atom H\n    atom Cl\n    bond H-Cl\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Iônica: cloreto de sódio",
+                "explicacao": "Δχ = 2,23, acima de 1,7: caráter predominantemente iônico. O tipo ionic_solid indica que o grafo é o motivo de um cristal.",
+                "codigo": 'species ionic_solid "Sodium chloride" {\n    atom Na\n    atom Cl\n    bond Na-Cl\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+            {
+                "titulo": "Metálica: sódio metálico",
+                "explicacao": "~ marca a ligação metálica, sempre com o aviso METAL-002.",
+                "codigo": 'species metallic_solid "Sodium" {\n    atom Na as na1\n    atom Na as na2\n    bond na1~na2\n}\n',
+                "opcoes": ["--modelo"],
+                "saida": 0,
+            },
+        ],
+    },
+    {
         "id": "cargas",
         "titulo": "Cargas e íons",
         "texto": [
@@ -241,8 +324,8 @@ LICOES = [
         "exemplos": [
             {
                 "titulo": "Cloreto de sódio",
-                "explicacao": "Na(+1) e Cl(-1) unidos por uma ligação classificada como iônica pela diferença de eletronegatividade. O aviso SPEC-002 lembra que o grafo é só um motivo do cristal.",
-                "codigo": 'species ionic_solid "Sodium chloride" {\n    atom Na(+1)\n    atom Cl(-1)\n    bond Na-Cl\n}\n',
+                "explicacao": "A ligação Na-Cl é classificada como iônica pela diferença de eletronegatividade (Δχ = 2,23, acima da convenção de 1,7). O aviso SPEC-002 lembra que o grafo é só um motivo do cristal.",
+                "codigo": 'species ionic_solid "Sodium chloride" {\n    atom Na\n    atom Cl\n    bond Na-Cl\n}\n',
                 "opcoes": ["--modelo"],
                 "saida": 0,
             },

@@ -13,11 +13,12 @@
     "-": "ligação simples: 1 par de elétrons compartilhado",
     "=": "ligação dupla: 2 pares compartilhados (σ + π)",
     "#": "ligação tripla: 3 pares compartilhados (σ + 2π)",
-    "->": "ligação coordenada: o doador cede o par de elétrons",
-    "~": "ligação metálica: elétrons deslocalizados (motivo do sólido)",
+    "->": "ligação coordenada: o par de elétrons vem do doador (“dativa” é termo obsoleto na IUPAC)",
+    "~": "ligação metálica: elétrons deslocalizados no sólido",
   };
   const ESPECIE_QUIMICA = {
-    molecule: "molécula neutra e discreta", molecular_ion: "íon molecular (tem carga total)",
+    molecule: "molécula: entidade neutra com mais de um átomo", molecular_ion: "íon molecular (mais de um átomo, com carga)",
+    atom: "átomo isolado, neutro", monatomic_ion: "íon monoatômico (um átomo com carga)",
     ionic_solid: "sólido iônico (rede de íons)", covalent_network: "rede covalente", metallic_solid: "sólido metálico",
   };
 
@@ -33,7 +34,7 @@
   function tokenQuimica(t) {
     switch (t.tipo) {
       case "molecule": case "species": return "abre a descrição de uma espécie química";
-      case "molecular_ion": case "ionic_solid": case "covalent_network": case "metallic_solid": return ESPECIE_QUIMICA[t.tipo];
+      case "molecular_ion": case "monatomic_ion": case "ionic_solid": case "covalent_network": case "metallic_solid": return ESPECIE_QUIMICA[t.tipo];
       case "TEXTO": return "nome da espécie";
       case "charge": return "carga total do íon";
       case "unpaired": return "elétrons desemparelhados (radical)";
@@ -125,7 +126,7 @@
       quim: "Sobra o essencial: quais átomos foram declarados, com que carga, e quais ligações existem entre eles." },
     { id: "modelo", titulo: "Modelo (grafo)", fase: "modelo",
       comp: "A AST vira um grafo: átomos são vértices, ligações são arestas com peso (a ordem). Multiplicadores são expandidos e referências por símbolo são resolvidas para átomos concretos.",
-      quim: "É a fórmula estrutural: cada átomo individual e cada par de elétrons compartilhado entre dois átomos." },
+      quim: "É a fórmula estrutural: cada átomo individual e cada ligação, já com o tipo (covalente apolar, polar ou iônica) deduzido pela diferença de eletronegatividade." },
     { id: "quimica", titulo: "Semântica e química", fase: "semântico",
       comp: "A análise semântica percorre o grafo em etapas (estrutura → valência → carga) e emite diagnósticos com código, linha e coluna. Sem erro, o programa sai com código 0.",
       quim: "Confere a química: a soma das ordens das ligações de cada átomo bate com a valência do elemento? A espécie está inteira, sem partes soltas?" },
@@ -155,7 +156,11 @@
       const vertices = { rotulo: `vértices: ${r.atomos.length} átomo(s)`, detalhe: lente === "comp" ? "lista de Atomo(id, elemento, índice, carga)" : "cada átomo individual",
         filhos: r.atomos.map((a) => ({ rotulo: rotulo(a), detalhe: lente === "comp" ? `id ${a.id}, carga ${a.carga}` : nomeElemento(a.el), classe: "folha" })) };
       const arestas = { rotulo: `arestas: ${r.ligacoes.length} ligação(ões)`, detalhe: lente === "comp" ? "pares (origem, destino) com ordem" : "pares de elétrons compartilhados",
-        filhos: r.ligacoes.map((l) => ({ rotulo: `${nomes[l.a]} ${l.op} ${nomes[l.b]}`, detalhe: lente === "comp" ? `${simbolo[l.op]}, ordem ${l.ordem}` : LIGACAO_QUIMICA[l.op], classe: "folha" })) };
+        filhos: r.ligacoes.map((l) => {
+          const { classe, dx } = classificar(l, r.atomos);
+          const tipo = `${classe}${dx != null ? `, Δχ = ${dx.toFixed(2)}` : ""}`;
+          return { rotulo: `${nomes[l.a]} ${l.op} ${nomes[l.b]}`, detalhe: lente === "comp" ? `${simbolo[l.op]}, ordem ${l.ordem}, classificação=${classe}` : `${LIGACAO_QUIMICA[l.op]} · ${tipo}`, classe: "folha" };
+        }) };
       return `<ul class="arvore">${arvoreHTML({ rotulo: "Modelo", detalhe: lente === "comp" ? "grafo não dirigido com pesos" : formulaHill(r.atomos), filhos: [vertices, arestas] })}</ul>`;
     }
     if (!r.especie) return `<p class="etapa-vazia">A semântica depende do modelo.</p>`;
