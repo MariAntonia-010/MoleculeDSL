@@ -43,6 +43,38 @@
       --ok: #2d7546;
     }
     * { box-sizing: border-box; }
+    /* Estilização elegante de barras com tons de roxo harmonizados com o site */
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--acento-forte) var(--bg);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: color-mix(in srgb, var(--bg) 95%, var(--acento));
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--acento-forte);
+      border-radius: 4px;
+      border: 1px solid color-mix(in srgb, var(--acento) 40%, transparent);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--acento);
+      border-color: var(--acento);
+    }
+    ::-webkit-scrollbar-corner {
+      background: var(--bg);
+    }
+    hr {
+      border: 0;
+      height: 1px;
+      background: color-mix(in srgb, var(--acento) 30%, var(--borda));
+      margin: 1.5rem 0;
+    }
     [hidden] { display: none !important; }
     html { scroll-behavior: smooth; }
     body {
@@ -354,7 +386,63 @@
     /* laboratório */
     .abas-centro { justify-content: center; }
     .fase-reacao { position: absolute; left: 0.9rem; top: 0.7rem; font: 600 0.78rem var(--mono); color: var(--acento); padding: 0.25rem 0.6rem; border: 1px solid color-mix(in srgb, var(--acento) 40%, transparent); border-radius: 999px; background: var(--superficie); }
-    input[type="range"] { width: 100%; accent-color: var(--acento-forte); margin-top: 0.8rem; }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 8px;
+      background: var(--acento-fundo);
+      border: 1px solid color-mix(in srgb, var(--acento) 35%, var(--borda));
+      border-radius: 999px;
+      outline: none;
+      margin-top: 0.8rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="range"]:hover {
+      border-color: var(--acento);
+      box-shadow: 0 0 6px color-mix(in srgb, var(--acento) 25%, transparent);
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      background: var(--acento-fundo);
+      border: 1px solid color-mix(in srgb, var(--acento) 35%, var(--borda));
+      border-radius: 999px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--acento-forte);
+      border: 2px solid var(--acento);
+      cursor: pointer;
+      margin-top: -5px;
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--acento) 40%, transparent);
+      transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: var(--acento);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--acento) 60%, transparent);
+    }
+    input[type="range"]::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      background: var(--acento-fundo);
+      border: 1px solid color-mix(in srgb, var(--acento) 35%, var(--borda));
+      border-radius: 999px;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--acento-forte);
+      border: 2px solid var(--acento);
+      cursor: pointer;
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--acento) 40%, transparent);
+    }
     .equacao { font: 600 clamp(1.1rem, 2.2vw, 1.5rem) var(--mono); margin: 0 0 0.5rem; }
     .equacao span { color: var(--acento); margin: 0 0.4rem; }
     .botoes-traducao { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin-top: 1rem; }
