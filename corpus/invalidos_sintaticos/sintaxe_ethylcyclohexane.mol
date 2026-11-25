@@ -1,4 +1,4 @@
-// esperado: Erro sintático [SIN-002] na linha 14, coluna 4: comando inválido 'bnd': esperado 'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'
+// esperado: Erro sintático [SIN-002] na linha 14, coluna 4: comando inválido 'bnd': esperado 'atom', 'bond', 'ring', 'stereo', 'configuration', 'collapse' ou '}'
 // Erro: 'bnd' não é palavra-chave da linguagem
 species molecule "Ethylcyclohexane" {
     atom C as c1

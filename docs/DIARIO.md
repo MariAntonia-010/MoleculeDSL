@@ -920,3 +920,29 @@ código, declarando átomos e depois moléculas, sem estruturas de controle
 - O `corpus/` gerado por script continua no repositório, ao lado dos
   exemplos escritos à mão em `exemplos/`.
 - O diário continua em `docs/DIARIO.md`.
+
+---
+
+## 25/11/2026 — Buraco negro na linguagem
+
+- Novo tipo `species black_hole` com um comando só,
+  `collapse N mol of "Bloco"`, que cita uma espécie declarada antes no
+  mesmo arquivo. A gramática ganhou `black_hole`, `collapse`, `mol`, `of` e
+  a notação científica (`1.1e32`), usada na quantidade.
+- A semântica decide se a matéria vira buraco negro: o bloco citado precisa
+  passar sem erro (HOLE-002), a quantidade ser positiva (HOLE-003), a
+  espécie ser neutra (HOLE-004, limite de Reissner-Nordström) e a massa
+  passar de Chandrasekhar (HOLE-005, anã branca) e de
+  Tolman-Oppenheimer-Volkoff (HOLE-006, estrela de nêutrons). `collapse`
+  em outro tipo é HOLE-001. Constantes e limites em
+  `regras/buraco_negro.json`.
+- O modelo mostra massa em M☉, raio de Schwarzschild, esfera de fótons,
+  sombra, temperatura de Hawking e tempo de evaporação. Exemplos novos:
+  `buraco_negro_de_ferro.mol` (3,10 M☉, horizonte de 9,15 km) e
+  `buraco_negro_de_agua.mol`.
+- No playground, um `black_hole` válido aparece na cena traçado por raios na
+  métrica de Schwarzschild e, sozinho, devora a tela. A primeira tentativa
+  foi uma aba no Laboratório que comprimia qualquer espécie; ela saiu porque
+  o pedido era construir o buraco negro pela química da própria linguagem.
+- Física, decisões e o que é licença didática em
+  `docs/plano_buraco_negro.md`.

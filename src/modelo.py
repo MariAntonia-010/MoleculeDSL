@@ -61,6 +61,22 @@ class Estereo:
 
 
 @dataclass
+class BuracoNegro:
+    # Resultado de 'collapse' numa species black_hole: a matéria que entrou
+    # e o que sobra dela pelo teorema da calvície (massa e carga)
+    bloco: str
+    formula: str
+    quantidade_mol: float
+    massa_particula_u: float
+    massa_kg: float
+    massa_solar: float
+    raio_schwarzschild_m: float
+    temperatura_hawking_k: float
+    evaporacao_anos: float
+    limite_tov: float
+
+
+@dataclass
 class Modelo:
     nome: str
     tipo: TipoEspecie = TipoEspecie.MOLECULA
@@ -71,6 +87,56 @@ class Modelo:
     # Cada anel é a lista de ids dos átomos, na ordem citada
     aneis: list[list[int]] = field(default_factory=list)
     estereo: list[Estereo] = field(default_factory=list)
+    buraco_negro: BuracoNegro | None = None
+
+
+SOBRESCRITO = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
+def cientifico(valor, casas=3):
+    # 6.16e30 vira "6,16 × 10³⁰"; números entre 0,01 e 9999 ficam por extenso
+    if valor == 0:
+        return "0"
+    from math import floor, log10
+
+    expoente = floor(log10(abs(valor)))
+    if -2 <= expoente < 4:
+        texto = f"{valor:.{max(casas - 1 - expoente, 0)}f}"
+        return texto.replace(".", ",")
+    mantissa = valor / 10**expoente
+    if round(mantissa, casas - 1) >= 10:
+        mantissa /= 10
+        expoente += 1
+    return f"{mantissa:.{casas - 1}f}".replace(".", ",") + " × 10" + str(expoente).translate(SOBRESCRITO)
+
+
+def comprimento(metros):
+    if metros >= 1e3:
+        return f"{cientifico(metros / 1e3)} km"
+    if metros >= 1:
+        return f"{cientifico(metros)} m"
+    if metros >= 1e-3:
+        return f"{cientifico(metros * 1e3)} mm"
+    return f"{cientifico(metros)} m"
+
+
+def formatar_buraco_negro(modelo):
+    b = modelo.buraco_negro
+    rs = b.raio_schwarzschild_m
+    return "\n".join([
+        f"Modelo {modelo.nome!r} tipo={modelo.tipo.value} carga_total=+0 desemparelhados=não declarado",
+        f"  Colapso: {cientifico(b.quantidade_mol)} mol de {b.bloco!r} ({b.formula}, "
+        f"{cientifico(b.massa_particula_u, 4)} u por partícula)",
+        f"  Massa: {cientifico(b.massa_kg)} kg = {cientifico(b.massa_solar)} M☉ "
+        f"(acima do limite de Tolman-Oppenheimer-Volkoff, {cientifico(b.limite_tov)} M☉)",
+        f"  Horizonte (raio de Schwarzschild, 2GM/c²): {comprimento(rs)}",
+        f"  Esfera de fótons (1,5 r_s): {comprimento(1.5 * rs)}; "
+        f"sombra vista de longe (≈2,6 r_s): {comprimento(27**0.5 / 2 * rs)}",
+        f"  Temperatura de Hawking: {cientifico(b.temperatura_hawking_k)} K; "
+        f"evaporação: {cientifico(b.evaporacao_anos)} anos",
+        f"  Teorema da calvície: o horizonte guarda só massa, carga e rotação; "
+        f"a fórmula {b.formula} não existe mais",
+    ])
 
 
 def texto_montado(a):
@@ -89,6 +155,8 @@ def texto_montado(a):
 
 def formatar(modelo):
     """Texto legível do modelo, para a opção de depuração"""
+    if modelo.buraco_negro is not None:
+        return formatar_buraco_negro(modelo)
     por_id = {a.id: a for a in modelo.atomos}
 
     carga = (

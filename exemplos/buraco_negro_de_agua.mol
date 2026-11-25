@@ -1,0 +1,12 @@
+// Qualquer matéria neutra vira buraco negro com massa suficiente:
+// 4×10³² mol de água têm 3,6 massas solares
+species molecule "Agua" {
+    atom O as o
+    2x atom H as h
+    bond o-h1
+    bond o-h2
+}
+
+species black_hole "Oceano colapsado" {
+    collapse 4e32 mol of "Agua"
+}

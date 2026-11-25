@@ -1,0 +1,15 @@
+Bloco 1/2: species atom 'Ferro-56'
+Modelo 'Ferro-56' tipo=atom carga_total=+0 desemparelhados=4
+  Átomos (1)
+    fe (Fe#1) carga=+0 A=56 p=26 n=30 (56Fe, declarado) e=26 [Ar] 3d6 4s2 [4:4]
+  Ligações (0)
+Espécie 'Ferro-56': análise concluída sem erros
+Bloco 2/2: species black_hole 'Nucleo de ferro colapsado'
+Modelo 'Nucleo de ferro colapsado' tipo=black_hole carga_total=+0 desemparelhados=não declarado
+  Colapso: 1,10 × 10³² mol de 'Ferro-56' (Fe, 56,00 u por partícula)
+  Massa: 6,16 × 10³⁰ kg = 3,10 M☉ (acima do limite de Tolman-Oppenheimer-Volkoff, 2,16 M☉)
+  Horizonte (raio de Schwarzschild, 2GM/c²): 9,15 km
+  Esfera de fótons (1,5 r_s): 13,7 km; sombra vista de longe (≈2,6 r_s): 23,8 km
+  Temperatura de Hawking: 1,99 × 10⁻⁸ K; evaporação: 6,23 × 10⁶⁸ anos
+  Teorema da calvície: o horizonte guarda só massa, carga e rotação; a fórmula Fe não existe mais
+Espécie 'Nucleo de ferro colapsado': análise concluída sem erros

@@ -1,0 +1,4 @@
+// esperado: Erro semântico [BLOCK-001] na linha 3, coluna 4: não há bloco chamado 'Estrela' neste arquivo
+species black_hole "Nada" {
+    collapse 1e33 mol of "Estrela"
+}

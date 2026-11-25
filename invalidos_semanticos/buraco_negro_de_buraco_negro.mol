@@ -1,0 +1,12 @@
+// esperado: Erro semântico [BLOCK-002] na linha 11, coluna 4: o bloco 'Primeiro' já é um buraco negro; collapse comprime matéria química (átomo, íon, molécula ou sólido)
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+}
+
+species black_hole "Primeiro" {
+    collapse 1.1e32 mol of "Ferro-56"
+}
+
+species black_hole "Segundo" {
+    collapse 1 mol of "Primeiro"
+}

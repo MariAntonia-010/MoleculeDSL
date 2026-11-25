@@ -1,0 +1,8 @@
+// esperado: Erro sintático [SIN-001] na linha 7, coluna 16: a notação científica usa e minúsculo: escreva 1.1e32, não 1.1E32
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+}
+
+species black_hole "Notacao errada" {
+    collapse 1.1E32 mol of "Ferro-56"
+}

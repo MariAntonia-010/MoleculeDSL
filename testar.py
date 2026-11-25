@@ -1126,7 +1126,7 @@ def testar_ast_de_todos_os_exemplos():
     src = os.path.join(PASTA_RAIZ, "src")
     if src not in sys.path:
         sys.path.insert(0, src)
-    from ast_nos import AnelDecl, AtomoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl, formatar
+    from ast_nos import AnelDecl, AtomoDecl, ColapsoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl, formatar
     from construtor_ast import construir_programa
     import semantico
     from sintatico import analisar_fluxo, tokenizar
@@ -1138,6 +1138,7 @@ def testar_ast_de_todos_os_exemplos():
         P.RING: AnelDecl,
         P.STEREO: EstereoDecl,
         P.CONFIGURATION: ConfiguracaoDecl,
+        P.COLLAPSE: ColapsoDecl,
     }
     problemas = []
     for caminho in arquivos("exemplos"):
@@ -1446,6 +1447,14 @@ def main():
             lambda: testar_modelo(
                 os.path.join(PASTA_RAIZ, "exemplos", "e_1_2_dicloroeteno.mol")
             ),
+        ),
+        (
+            "ast/buraco_negro_de_ferro",
+            lambda: testar_ast(os.path.join(PASTA_RAIZ, "exemplos", "buraco_negro_de_ferro.mol")),
+        ),
+        (
+            "modelo/buraco_negro_de_ferro",
+            lambda: testar_modelo(os.path.join(PASTA_RAIZ, "exemplos", "buraco_negro_de_ferro.mol")),
         ),
         ("arvores/svg_todos_exemplos", testar_svgs_das_arvores),
         ("arvores/estereo_nas_arvores", testar_estereo_nas_arvores),

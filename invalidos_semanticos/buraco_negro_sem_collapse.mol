@@ -1,0 +1,3 @@
+// esperado: Erro semântico [SPEC-001] na linha 2, coluna 0: black_hole precisa de exatamente um 'collapse', como collapse 1.1e32 mol of "Ferro-56"; nenhum foi declarado
+species black_hole "Vazio" {
+}

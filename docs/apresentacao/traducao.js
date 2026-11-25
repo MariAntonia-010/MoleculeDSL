@@ -8,6 +8,7 @@
     MULT: "MULTIPLICADOR_ATOMO", REP: "REPETICAO_LIGACAO", INT: "INTEIRO", REAL: "REAL", TEXTO: "TEXTO",
     "{": "ABRE_CHAVE", "}": "FECHA_CHAVE", "(": "ABRE_PAREN", ")": "FECHA_PAREN", "+": "MAIS", EOF: "EOF",
     configuration: "CONFIGURATION", SUBCAMADA: "SUBCAMADA", "[": "ABRE_COLCHETE", "]": "FECHA_COLCHETE",
+    black_hole: "BLACK_HOLE", collapse: "COLLAPSE", mol: "MOL", of: "OF", CIENT: "CIENTIFICO",
   };
   const NOME_OPERADOR = { "-": "LIGACAO", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
   const LIGACAO_QUIMICA = {
@@ -21,6 +22,7 @@
     molecule: "molécula: entidade neutra com mais de um átomo", molecular_ion: "íon molecular (mais de um átomo, com carga)",
     atom: "átomo isolado, neutro", monatomic_ion: "íon monoatômico (um átomo com carga)",
     ionic_solid: "sólido iônico (rede de íons)", covalent_network: "rede covalente", metallic_solid: "sólido metálico",
+    black_hole: "buraco negro: colapso gravitacional de uma espécie anterior",
   };
 
   function nomeTokenComp(t) {
@@ -35,7 +37,11 @@
   function tokenQuimica(t) {
     switch (t.tipo) {
       case "molecule": case "species": return "abre a descrição de uma espécie química";
-      case "molecular_ion": case "monatomic_ion": case "ionic_solid": case "covalent_network": case "metallic_solid": return ESPECIE_QUIMICA[t.tipo];
+      case "molecular_ion": case "monatomic_ion": case "ionic_solid": case "covalent_network": case "metallic_solid": case "black_hole": return ESPECIE_QUIMICA[t.tipo];
+      case "collapse": return "junta a matéria e deixa a gravidade decidir";
+      case "mol": return "unidade de quantidade de matéria (6,022 × 10²³ partículas)";
+      case "of": return "de qual bloco vem a matéria";
+      case "CIENT": case "REAL": return "quantidade de matéria";
       case "TEXTO": return "nome da espécie";
       case "charge": return "carga total do íon";
       case "unpaired": return "elétrons desemparelhados (radical)";
@@ -80,6 +86,8 @@
     descritor: ["descritor : IDENT | NOME", "R, S, E, Z, Ra, Sa, cis ou trans"],
     configuracao: ["configuracao : CONFIGURATION referencia nucleo? SUBCAMADA+", "como os elétrons ocupam as subcamadas"],
     nucleo: ["nucleo : '[' IDENT ']'", "elétrons internos iguais aos de um gás nobre"],
+    colapso: ["colapso : COLLAPSE quantidade MOL OF TEXTO", "quantos mols de qual bloco entram no colapso"],
+    quantidade: ["quantidade : INTEIRO | REAL | CIENTIFICO", "a quantidade de matéria, em mol"],
   };
 
   function escapar(texto) {
@@ -214,6 +222,7 @@
       }
       if (c.tipo === "configuration") return { rotulo: "ConfiguracaoDecl", detalhe: q ? "configuração eletrônica" : `[${c.l}:${c.c}]`, campos: [`átomo: ${c.ref.texto}`, ...(c.nucleo ? [`núcleo: [${c.nucleo}]`] : []), `subcamadas: ${c.subcamadas.join(" ")}`] };
       if (c.tipo === "ring") return { rotulo: "AnelDecl", detalhe: q ? `ciclo de ${c.nomes.length} átomos` : `[${c.l}:${c.c}]`, campos: [`nomes: ${c.nomes.map((n) => n.texto).join(" ")}`] };
+      if (c.tipo === "collapse") return { rotulo: "ColapsoDecl", detalhe: q ? `${c.texto} mol de "${c.bloco}" colapsados` : `[${c.l}:${c.c}]`, campos: [`quantidade: ${c.texto} mol`, `bloco: ${c.bloco}`] };
       return { rotulo: "EstereoDecl", detalhe: q ? "configuração espacial declarada" : `[${c.l}:${c.c}]`, campos: [`átomos: ${c.refs.map((r) => r.texto).join(" ")}`, `descritor: ${c.descritor}`] };
     });
     return { rotulo: `Especie '${especie.nome}'`, detalhe: q ? ESPECIE_QUIMICA[especie.tipo] : `tipo=${especie.tipo}`, filhos };

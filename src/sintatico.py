@@ -25,6 +25,7 @@ TIPOS_ESPECIE = {
     P.IONIC_SOLID,
     P.COVALENT_NETWORK,
     P.METALLIC_SOLID,
+    P.BLACK_HOLE,
 }
 
 # Descrição dos tokens nas mensagens genéricas
@@ -34,6 +35,8 @@ DESCRICAO_TOKEN = {
     P.IDENT: "símbolo de elemento",
     P.NOME: "nome de átomo",
     P.INTEIRO: "número inteiro",
+    P.REAL: "número real",
+    P.CIENTIFICO: "número em notação científica (como 1.1e32)",
     P.MULTIPLICADOR_ATOMO: "multiplicador (como '4x')",
     P.REPETICAO_LIGACAO: "repetição (como 'x4')",
 }
@@ -141,6 +144,7 @@ class RecuperacaoPorComando(DefaultErrorStrategy):
         P.RING,
         P.STEREO,
         P.CONFIGURATION,
+        P.COLLAPSE,
         P.MULTIPLICADOR_ATOMO,
         P.FECHA_CHAVE,
     }
@@ -247,7 +251,7 @@ class ErroSintatico(ColetorErrosANTLR):
                 dica = explicar_quantificador(recognizer.getTokenStream(), token)
                 if dica is not None:
                     return dica, False
-                return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}}'", False
+                return f"comando inválido {encontrado}: esperado 'atom', 'bond', 'ring', 'stereo', 'configuration', 'collapse' ou '}}'", False
 
         if regra == P.RULE_atomo:
             if P.ATOM in esperados:
@@ -331,6 +335,22 @@ class ErroSintatico(ColetorErrosANTLR):
                 return f"esperado gás nobre entre colchetes, como [Ne], encontrado {encontrado}", True
             if P.FECHA_COLCHETE in esperados:
                 return f"esperado ']' para fechar o núcleo de gás nobre, encontrado {encontrado}", True
+
+        if regra in (P.RULE_colapso, P.RULE_quantidade):
+            exemplo = "como 'collapse 1.1e32 mol of \"Ferro-56\"'"
+            if esperados & {P.INTEIRO, P.REAL, P.CIENTIFICO}:
+                return (
+                    f"esperada a quantidade de matéria em mol depois de 'collapse' "
+                    f"(inteiro, real ou notação científica com e minúsculo), {exemplo}; encontrado {encontrado}"
+                ), True
+            if P.MOL in esperados and token.type == P.IDENT and token.text == "E":
+                return "a notação científica usa e minúsculo: escreva 1.1e32, não 1.1E32", True
+            if P.MOL in esperados:
+                return f"esperada a unidade 'mol' depois da quantidade, {exemplo}; encontrado {encontrado}", True
+            if P.OF in esperados:
+                return f"esperado 'of' antes do bloco a colapsar, {exemplo}; encontrado {encontrado}", True
+            if P.TEXTO in esperados:
+                return f"esperado o nome do bloco a colapsar entre aspas, {exemplo}; encontrado {encontrado}", True
 
         if regra == P.RULE_anel and P.NOME in esperados:
             return f"um anel precisa de pelo menos três nomes de átomos, encontrado {encontrado}", True

@@ -32,6 +32,25 @@ species molecular_ion "Ammonium" charge +1 { ... }
 species ionic_solid "Sodium chloride" { ... }
 species covalent_network "Diamond motif" { ... }
 species metallic_solid "Sodium" { ... }
+species black_hole "Core" { collapse 1.1e32 mol of "Iron-56" }
+```
+
+`black_hole` é o colapso gravitacional de uma espécie declarada antes no
+mesmo arquivo. A semântica decide pela química e pela física se a matéria
+vira buraco negro: o bloco citado precisa passar sem erro, ser neutro e ter
+massa acima do limite de Tolman-Oppenheimer-Volkoff (2,16 M☉); abaixo dele
+sobra uma anã branca ou uma estrela de nêutrons. No playground, um
+`black_hole` válido devora a tela:
+
+```text
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+    configuration fe [Ar] 3d6 4s2
+}
+
+species black_hole "Nucleo de ferro colapsado" {
+    collapse 1.1e32 mol of "Ferro-56"
+}
 ```
 
 Radicais usam `unpaired`, por exemplo:
@@ -322,6 +341,10 @@ rotas próprias:
   dos exemplos ou código próprio, balanceamento automático e animação das
   ligações que se rompem e se formam. Espécie com erro semântico não entra
   na simulação;
+- **Buraco negro:** no playground, um programa com `species black_hole`
+  válido mostra o buraco negro calculado por traçado de raios na métrica de
+  Schwarzschild e, sozinho, devora a tela inteira (pesquisa e limites em
+  [`docs/plano_buraco_negro.md`](docs/plano_buraco_negro.md));
 - **Tabela periódica:** modelo atômico de Bohr, dados da fonte, o que o
   compilador faz com cada elemento e uma bancada que monta o código de uma
   molécula.
@@ -343,7 +366,8 @@ Playground, Laboratório e Tabela) mudarem junto:
 | tabela de regras semânticas | seção "Regras semânticas" deste README |
 | exemplos e saídas do guia | compilador real, sobre `docs/apresentacao/conteudo_guia.py` |
 | exemplos do playground e do laboratório | arquivos de `exemplos/` e `src/main.py --modelo` |
-| elementos e valências | `regras/elementos.json` e `regras/valencias.json` |
+| elementos, massas atômicas e valências | `regras/elementos.json` e `regras/valencias.json` |
+| constantes e limites do buraco negro | `regras/buraco_negro.json` |
 
 Ao mudar a linguagem: atualize a gramática, a semântica e a tabela de regras
 do README; descreva um tipo de espécie ou operador novo em
@@ -433,8 +457,10 @@ O catálogo de códigos, causas e correções está em
 | `ATOM-007` | `unpaired` diferente da regra de Hund | aviso |
 | `ATOM-008` | carga positiva maior que Z (o átomo não tem tantos elétrons para perder) | erro |
 | `BLOCK-001` | `atom "Nome"` cita um bloco inexistente, declarado depois ou o próprio bloco | erro |
-| `BLOCK-002` | o bloco citado não é `species atom` nem `species monatomic_ion` de um átomo | erro |
+| `BLOCK-002` | o bloco citado não serve: `atom "Nome"` pede `species atom` ou `species monatomic_ion` de um átomo, e `collapse` não aceita outro `black_hole` | erro |
 | `BLOCK-003` | dois blocos com o mesmo nome no arquivo | erro |
+| `HOLE-001` | `collapse` fora de `species black_hole` | erro |
+| `HOLE-002` a `HOLE-006` | bloco colapsado com erro, quantidade inválida, carga líquida, massa abaixo de Chandrasekhar ou de TOV | erro |
 
 As regras completas, suas fontes e as limitações estão em
 [docs/plano_semantico.md](docs/plano_semantico.md) e
@@ -561,6 +587,7 @@ gerado/                     código produzido pelo ANTLR, ignorado pelo Git
 - [Plano completo do solver](docs/plano_solver.md)
 - [Plano de eliminação dos limites](docs/plano_limites.md)
 - [Plano da estrutura do átomo](docs/plano_atomo.md)
+- [Plano do buraco negro (species black_hole)](docs/plano_buraco_negro.md)
 - [Diário do projeto](docs/DIARIO.md)
 - [Página de apresentação](docs/apresentacao/index.html)
 

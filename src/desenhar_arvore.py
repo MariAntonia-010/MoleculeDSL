@@ -51,7 +51,7 @@ def parse_tree_para_visual(no, parser) -> NoVisual:
 
 def ast_para_visual(molecula) -> NoVisual:
     """Converte os nós próprios da AST da MoleculeDSL em nós visuais."""
-    from ast_nos import AnelDecl, AtomoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl, descrever_nome
+    from ast_nos import AnelDecl, AtomoDecl, ColapsoDecl, ConfiguracaoDecl, EstereoDecl, LigacaoDecl, descrever_nome
 
     comandos = []
     for comando in molecula.comandos:
@@ -122,6 +122,16 @@ def ast_para_visual(molecula) -> NoVisual:
                             + (comando.operador.name if comando.operador else "nenhum")
                         ),
                         NoVisual(f"descritor: {comando.descritor}"),
+                    ],
+                )
+            )
+        elif isinstance(comando, ColapsoDecl):
+            comandos.append(
+                NoVisual(
+                    "ColapsoDecl",
+                    [
+                        NoVisual(f"quantidade: {comando.texto_quantidade} mol"),
+                        NoVisual(f'bloco: "{comando.bloco}"'),
                     ],
                 )
             )

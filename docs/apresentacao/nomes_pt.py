@@ -23,6 +23,8 @@ ELEMENTOS = (
 ).split()
 
 ESPECIES = {
+    "buraco_negro_de_ferro": "Buraco negro de ferro-56",
+    "buraco_negro_de_agua": "Buraco negro de água",
     "agua": "Água",
     "metano": "Metano",
     "amonia": "Amônia (azano)",

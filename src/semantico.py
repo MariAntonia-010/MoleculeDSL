@@ -7,6 +7,7 @@ import eletronico
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
+    ColapsoDecl,
     ConfiguracaoDecl,
     EstereoDecl,
     LigacaoDecl,
@@ -14,7 +15,7 @@ from ast_nos import (
     TipoEspecie,
     TipoReferencia,
 )
-from modelo import Atomo, Estereo, Ligacao, Modelo
+from modelo import Atomo, BuracoNegro, Estereo, Ligacao, Modelo, cientifico
 
 
 PASTA_RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,6 +28,7 @@ ARQUIVO_LIGACOES_METALICAS = os.path.join(
     PASTA_RAIZ, "regras", "ligacoes_metalicas.json"
 )
 ARQUIVO_ISOTOPOS = os.path.join(PASTA_RAIZ, "regras", "isotopos.json")
+ARQUIVO_BURACO_NEGRO = os.path.join(PASTA_RAIZ, "regras", "buraco_negro.json")
 
 ERRO = "erro"
 AVISO = "aviso"
@@ -35,6 +37,23 @@ AVISO = "aviso"
 # simples, e cada átomo vira um objeto no modelo: sem limite, um número
 # muito grande faria o programa travar.
 LIMITE_QUANTIDADE = 1000
+
+
+def carregar_buraco_negro():
+    with open(ARQUIVO_BURACO_NEGRO, encoding="utf-8") as arquivo:
+        return json.load(arquivo)
+
+
+def formula_hill(elementos):
+    # Notação de Hill: C, depois H, depois os outros em ordem alfabética;
+    # sem carbono, todos em ordem alfabética
+    contagem = {}
+    for elemento in elementos:
+        contagem[elemento] = contagem.get(elemento, 0) + 1
+    ordem = sorted(contagem)
+    if "C" in contagem:
+        ordem = ["C"] + (["H"] if "H" in contagem else []) + [e for e in ordem if e not in ("C", "H")]
+    return "".join(f"{e}{contagem[e] if contagem[e] > 1 else ''}" for e in ordem)
 
 
 def carregar_elementos():
@@ -154,6 +173,20 @@ class AnalisadorSemantico:
         # comandos dentro da molécula não importa
         comandos = self.molecula.comandos
 
+        if self.molecula.tipo is TipoEspecie.BURACO_NEGRO:
+            self.analisar_buraco_negro()
+            self.mensagens.sort(key=lambda m: (m.linha, m.coluna))
+            return self.modelo, self.mensagens
+
+        for c in comandos:
+            if isinstance(c, ColapsoDecl):
+                self.erro(
+                    "HOLE-001",
+                    c,
+                    "'collapse' só vale em species black_hole: o colapso gravitacional "
+                    "não faz parte de uma espécie química, ele a comprime num bloco próprio",
+                )
+
         for c in comandos:
             if isinstance(c, AtomoDecl):
                 self.declarar_atomo(c)
@@ -204,6 +237,157 @@ class AnalisadorSemantico:
 
         self.mensagens.sort(key=lambda m: (m.linha, m.coluna))
         return self.modelo, self.mensagens
+
+    # ---------- buraco negro ----------
+
+    def analisar_buraco_negro(self):
+        # species black_hole { collapse N mol of "Bloco" }: a química do
+        # bloco citado vem primeiro; depois, carga e massa decidem se a
+        # matéria vira buraco negro. Regras HOLE-001 a HOLE-006.
+        molecula = self.molecula
+        colapsos = [c for c in molecula.comandos if isinstance(c, ColapsoDecl)]
+        outros = [c for c in molecula.comandos if not isinstance(c, ColapsoDecl)]
+        for c in outros:
+            self.erro(
+                "SPEC-001",
+                c,
+                "black_hole não declara átomos, ligações, anéis nem configurações: a matéria "
+                "vem de um bloco químico anterior, por 'collapse'",
+            )
+        if len(colapsos) != 1:
+            self.erro(
+                "SPEC-001",
+                colapsos[1] if len(colapsos) > 1 else molecula,
+                "black_hole precisa de exatamente um 'collapse', como "
+                "collapse 1.1e32 mol of \"Ferro-56\"; "
+                f"{'foram declarados ' + str(len(colapsos)) if colapsos else 'nenhum foi declarado'}",
+            )
+        if molecula.eletrons_desemparelhados is not None:
+            self.erro(
+                "SPEC-001",
+                molecula,
+                "black_hole não tem elétrons desemparelhados: o horizonte guarda só massa, "
+                "carga e rotação",
+            )
+        if self.tem_erro():
+            return
+        decl = colapsos[0]
+
+        if decl.situacao_bloco != "ok":
+            if decl.situacao_bloco == "tipo":
+                self.erro(
+                    "BLOCK-002",
+                    decl,
+                    f"o bloco '{decl.bloco}' já é um buraco negro; collapse comprime matéria "
+                    "química (átomo, íon, molécula ou sólido)",
+                )
+            elif decl.situacao_bloco == "proprio":
+                self.erro("BLOCK-001", decl, f"o bloco '{decl.bloco}' não pode colapsar a si mesmo; cite um bloco químico declarado antes")
+            elif decl.situacao_bloco == "depois":
+                self.erro(
+                    "BLOCK-001",
+                    decl,
+                    f"o bloco '{decl.bloco}' é declarado depois; declare a espécie antes do "
+                    "buraco negro que a colapsa",
+                )
+            else:
+                self.erro("BLOCK-001", decl, f"não há bloco chamado '{decl.bloco}' neste arquivo")
+            return
+
+        if not decl.quantidade > 0 or decl.quantidade == float("inf"):
+            self.erro(
+                "HOLE-003",
+                decl,
+                f"a quantidade de matéria precisa ser um número positivo e finito de mol; "
+                f"foi escrito {decl.texto_quantidade}",
+            )
+            return
+
+        # A química vem antes da gravidade: o bloco citado passa pela
+        # semântica inteira; um erro nele impede o colapso
+        citado, mensagens = AnalisadorSemantico(
+            decl.especie,
+            self.dados_elementos,
+            self.valencias,
+            self.classificacao,
+            {"blocos_metalicos": list(self.blocos_metalicos)},
+        ).analisar()
+        erros = sorted({m.id for m in mensagens if m.severidade == ERRO})
+        if erros:
+            self.erro(
+                "HOLE-002",
+                decl,
+                f"o bloco '{decl.bloco}' tem erro semântico ({', '.join(erros)}); a química "
+                "vem antes da gravidade: corrija a espécie antes de colapsá-la",
+            )
+            return
+
+        k = carregar_buraco_negro()
+        massa_u = sum(
+            a.massa if a.massa is not None else self.dados_elementos[a.elemento]["massa_atomica"]
+            for a in citado.atomos
+        )
+        carga = sum(a.carga for a in citado.atomos)
+        massa_particula = massa_u * k["unidade_massa_atomica"]
+        formula = formula_hill(a.elemento for a in citado.atomos)
+
+        if carga != 0:
+            # Reissner-Nordström: só há horizonte com Q ≤ M·√(4πε₀G)
+            razao = abs(carga) * k["carga_elementar"] / (
+                massa_particula * (4 * 3.141592653589793 * k["epsilon0"] * k["G"]) ** 0.5
+            )
+            self.erro(
+                "HOLE-004",
+                decl,
+                f"cada partícula de '{decl.bloco}' ({formula}) tem carga {carga:+d}: a carga do "
+                f"colapso seria {cientifico(razao, 2)} vezes o máximo que um horizonte suporta "
+                "(Reissner-Nordström exige Q ≤ M·√(4πε₀G)); a repulsão elétrica vence a "
+                "gravidade, então colapse uma espécie neutra",
+            )
+            return
+
+        massa_kg = decl.quantidade * k["avogadro"] * massa_particula
+        massa_solar = massa_kg / k["massa_solar"]
+        minimo_mol = k["limite_tov"] * k["massa_solar"] / (k["avogadro"] * massa_particula)
+        quanto = (
+            f"{decl.texto_quantidade} mol de '{decl.bloco}' ({formula}) têm "
+            f"{cientifico(massa_solar)} M☉"
+        )
+        if massa_solar < k["limite_chandrasekhar"]:
+            self.erro(
+                "HOLE-005",
+                decl,
+                f"{quanto}, abaixo do limite de Chandrasekhar ({cientifico(k['limite_chandrasekhar'])} M☉): "
+                "a pressão de degenerescência dos elétrons sustenta a matéria, que vira uma anã "
+                f"branca; para um buraco negro são precisos mais de {cientifico(minimo_mol)} mol",
+            )
+            return
+        if massa_solar <= k["limite_tov"]:
+            self.erro(
+                "HOLE-006",
+                decl,
+                f"{quanto}, entre o limite de Chandrasekhar ({cientifico(k['limite_chandrasekhar'])} M☉) "
+                f"e o de Tolman-Oppenheimer-Volkoff ({cientifico(k['limite_tov'])} M☉): a pressão dos "
+                "nêutrons segura o colapso e sobra uma estrela de nêutrons; para um buraco negro "
+                f"são precisos mais de {cientifico(minimo_mol)} mol",
+            )
+            return
+
+        G, c, hbar = k["G"], k["c"], k["hbar"]
+        ano = 365.25 * 86400
+        self.modelo.carga_total = 0
+        self.modelo.buraco_negro = BuracoNegro(
+            bloco=decl.bloco,
+            formula=formula,
+            quantidade_mol=decl.quantidade,
+            massa_particula_u=massa_u,
+            massa_kg=massa_kg,
+            massa_solar=massa_solar,
+            raio_schwarzschild_m=2 * G * massa_kg / c**2,
+            temperatura_hawking_k=hbar * c**3 / (8 * 3.141592653589793 * G * massa_kg * k["kB"]),
+            evaporacao_anos=5120 * 3.141592653589793 * G**2 * massa_kg**3 / (hbar * c**4) / ano,
+            limite_tov=k["limite_tov"],
+        )
 
     # ---------- átomos ----------
 

@@ -1,0 +1,10 @@
+// Núcleo de ferro de uma estrela massiva: o ferro-56 é o fim da fusão, e
+// acima do limite de Tolman-Oppenheimer-Volkoff nada segura o colapso
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+    configuration fe [Ar] 3d6 4s2
+}
+
+species black_hole "Nucleo de ferro colapsado" {
+    collapse 1.1e32 mol of "Ferro-56"
+}

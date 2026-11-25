@@ -54,7 +54,7 @@ A MoleculeDSL trabalha com os seguintes tipos de dados:
 
 - **Texto:** utilizado para o nome de uma espécie e, em `atom "Nome"`, para citar um bloco anterior. Os textos são escritos entre aspas duplas, como `"Water"`, e não podem ter quebra de linha.
 - **Número inteiro:** utilizado em quantidades, repetições e cargas, como `4` em `4x atom H` e `1` em `atom N(+1)`.
-- **Número real:** reconhecido pela linguagem para representar valores numéricos com parte decimal, embora ainda não seja utilizado por nenhum comando.
+- **Número real e notação científica:** usados na quantidade de matéria de `collapse`, como `0.5` ou `1.1e32` (o `e` é minúsculo e o expoente pode ter sinal, como `6e-3`).
 - **Identificador de elemento:** representa o símbolo de um elemento químico, com uma letra maiúscula e, opcionalmente, uma minúscula, como `H`, `O`, `C`, `Na` ou `Cl`.
 - **Nome de átomo:** identifica um átomo específico. Começa com letra minúscula e pode ter letras minúsculas, dígitos e `_`, como `c1`, `o1` ou `c_3`.
 
@@ -65,6 +65,7 @@ A MoleculeDSL trabalha com os seguintes tipos de dados:
 Um programa contém uma ou mais espécies, cada uma num bloco (ver "Vários
 blocos e `atom "Nome"`" abaixo). Dentro de cada bloco, os comandos `atom`,
 `bond`, `ring`, `stereo` e `configuration` podem aparecer em qualquer ordem.
+O bloco `black_hole` aceita só um comando, `collapse`.
 
 O cabeçalho recomendado é:
 
@@ -85,6 +86,7 @@ seguem a terminologia da IUPAC:
 | `ionic_solid` | motivo de um sólido iônico | cloreto de sódio |
 | `covalent_network` | motivo de uma rede covalente | diamante |
 | `metallic_solid` | motivo de um sólido metálico, com `~` | sódio metálico |
+| `black_hole` | colapso gravitacional de uma espécie neutra acima de 2,16 M☉ | `species black_hole "Core" { collapse 1.1e32 mol of "Iron-56" }` |
 
 Pelo Gold Book da IUPAC, molécula é uma entidade eletricamente neutra com
 mais de um átomo. Por isso `molecule` ou `molecular_ion` com um átomo só
@@ -216,6 +218,46 @@ construção da AST (o `AtomoDecl` guarda `bloco`), e a semântica acusa
 BLOCK-001 (bloco inexistente, declarado depois ou o próprio), BLOCK-002
 (bloco que não é de um átomo) e BLOCK-003 (nome repetido).
 
+### `species black_hole` e `collapse`
+
+```text
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+    configuration fe [Ar] 3d6 4s2
+}
+
+species black_hole "Nucleo de ferro colapsado" {
+    collapse 1.1e32 mol of "Ferro-56"
+}
+```
+
+`collapse N mol of "Bloco"` junta `N` mols da espécie de um bloco anterior
+e deixa a gravidade decidir. A citação segue a de `atom "Nome"` (BLOCK-001
+para bloco inexistente, declarado depois ou o próprio), mas aceita qualquer
+espécie, menos outro buraco negro (BLOCK-002). O bloco `black_hole` não tem
+`charge` nem átomos e tem exatamente um `collapse` (SPEC-001).
+
+A semântica analisa primeiro o bloco citado: se ele tem erro, a química não
+fecha e não há o que colapsar (HOLE-002). Depois calcula a massa,
+`M = N · N_A · m_partícula`, com a massa atômica de `regras/elementos.json`
+(ou o número de massa, quando o átomo declara isótopo), e confere o
+desfecho do colapso:
+
+| Situação | Resultado | Regra |
+|---|---|---|
+| quantidade zero, negativa ou infinita | não há matéria | HOLE-003 |
+| espécie com carga líquida | a repulsão elétrica passa do limite de Reissner-Nordström (`Q ≤ M` em unidades geométricas) por muitas ordens de grandeza | HOLE-004 |
+| `M` < 1,44 M☉ (Chandrasekhar) | a degenerescência dos elétrons segura: anã branca | HOLE-005 |
+| `M` ≤ 2,16 M☉ (Tolman-Oppenheimer-Volkoff) | a degenerescência dos nêutrons segura: estrela de nêutrons | HOLE-006 |
+| acima disso | buraco negro de Schwarzschild | modelo |
+
+`collapse` em qualquer outro tipo de espécie é HOLE-001. O modelo mostra a
+massa em massas solares, o raio de Schwarzschild `r_s = 2GM/c²`, a esfera
+de fótons, a sombra, a temperatura de Hawking e o tempo de evaporação. Pelo
+teorema da calvície, o buraco não guarda qual espécie o formou: só massa,
+carga e rotação. Constantes e limites estão em `regras/buraco_negro.json`;
+física e fontes em `plano_buraco_negro.md`.
+
 ### `stereo`
 
 Declara a configuração de um elemento estereogênico. Os átomos são citados
@@ -298,7 +340,7 @@ A versão atual da MoleculeDSL possui um escopo reduzido de propósito. Ela deli
 
 ## 8. Palavras reservadas
 
-As palavras `molecule`, `species`, `molecular_ion`, `monatomic_ion`, `ionic_solid`, `covalent_network`, `metallic_solid`, `charge`, `unpaired`, `atom`, `bond`, `as`, `ring`, `stereo` e `configuration` são reservadas e não podem ser usadas como nome de átomo.
+As palavras `molecule`, `species`, `molecular_ion`, `monatomic_ion`, `ionic_solid`, `covalent_network`, `metallic_solid`, `charge`, `unpaired`, `atom`, `bond`, `as`, `ring`, `stereo`, `configuration`, `black_hole`, `collapse`, `mol` e `of` são reservadas e não podem ser usadas como nome de átomo.
 
 Também ficam reservados os nomes formados por `x` seguido só de dígitos, como `x4`, porque são lidos como repetição de ligação.
 
@@ -319,10 +361,11 @@ cabecalho     = "molecule" , texto
               | "species" , "monatomic_ion" , texto , carga_especie
               | "species" , "ionic_solid" , texto
               | "species" , "covalent_network" , texto
-              | "species" , "metallic_solid" , texto ;
+              | "species" , "metallic_solid" , texto
+              | "species" , "black_hole" , texto ;
 carga_especie = "charge" , ( "+" | "-" ) , inteiro ;
 desemparelhados = "unpaired" , inteiro ;
-comando       = atomo | ligacao | anel | estereo | configuracao ;
+comando       = atomo | ligacao | anel | estereo | configuracao | colapso ;
 atomo         = [ multiplicador ] , "atom" ,
                 ( [ inteiro ] , elemento , [ carga ]   (* atom O, atom 13C, atom N(+1) *)
                 | texto ) ,                            (* atom "Nome": átomo de um bloco anterior *)
@@ -338,6 +381,8 @@ configuracao  = "configuration" , referencia ,
 nucleo        = "[" , elemento , "]" ;
 estereo       = "stereo" , referencia , [ [ operador ] , referencia ] , descritor ;
 descritor     = elemento | nome ;  (* R, S, E, Z, Ra, Sa, r, s, cis ou trans *)
+colapso       = "collapse" , quantidade , "mol" , "of" , texto ;
+quantidade    = inteiro | real | cientifico ;
 
 (* Regras léxicas *)
 multiplicador = digito , { digito } , "x" ;
@@ -345,6 +390,7 @@ repeticao     = "x" , digito , { digito } ;
 subcamada     = ( "1" | ... | "7" ) , ( "s" | "p" | "d" | "f" ) , digito , { digito } ;
 inteiro       = digito , { digito } ;
 real          = inteiro , "." , inteiro ;
+cientifico    = inteiro , [ "." , inteiro ] , "e" , [ "+" | "-" ] , inteiro ;
 texto         = '"' , { ? qualquer caractere exceto aspas e quebra de linha ? } , '"' ;
 elemento      = maiuscula , [ minuscula ] ;
 nome          = minuscula , { minuscula | digito | "_" } ;  (* exceto as palavras reservadas *)

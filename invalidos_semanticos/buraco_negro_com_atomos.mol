@@ -1,0 +1,6 @@
+// esperado: Erro semântico [SPEC-001] na linha 4, coluna 0: black_hole precisa de exatamente um 'collapse', como collapse 1.1e32 mol of "Ferro-56"; nenhum foi declarado
+// esperado: Erro semântico [SPEC-001] na linha 5, coluna 4: black_hole não declara átomos, ligações, anéis nem configurações: a matéria vem de um bloco químico anterior, por 'collapse'
+// Os átomos ficam no bloco químico; o buraco negro só colapsa
+species black_hole "Ferro solto" {
+    atom Fe
+}

@@ -20,6 +20,7 @@ DESCRICAO_TIPOS = {
     "ionic_solid": ("motivo de um sólido iônico", 'species ionic_solid "Sodium chloride" { … }'),
     "covalent_network": ("motivo de uma rede covalente", 'species covalent_network "Diamond" { … }'),
     "metallic_solid": ("motivo de um sólido metálico, com ~", 'species metallic_solid "Sodium" { … }'),
+    "black_hole": ("colapso gravitacional de uma espécie neutra acima de 2,16 M☉", 'species black_hole "Core" { collapse 1.1e32 mol of "Iron-56" }'),
 }
 
 DESCRICAO_OPERADORES = {
