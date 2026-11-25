@@ -297,6 +297,11 @@
     .diag dt { color: var(--fraco); font-weight: 600; }
     .diag dd { margin: 0; color: var(--suave); }
     .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.8rem; }
+    .arquivo-botoes { display: inline-flex; gap: 0.6rem; flex-wrap: wrap; margin-left: auto; }
+    .arquivo-status { margin: -0.3rem 0 0.8rem; color: var(--suave); }
+    .arquivo-status.erro { color: var(--erro); }
+    .editor.soltar { border-color: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 30%, transparent); }
+    @media (max-width: 640px) { .arquivo-botoes { margin-left: 0; } }
     .alternar { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
     .alternar input { accent-color: var(--acento-forte); }
     /* no celular, o seletor de reação encolhe em vez de passar da tela */

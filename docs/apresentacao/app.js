@@ -1158,7 +1158,7 @@
     desenharAtomosMontados(r);
     const real = document.querySelector("#p-real pre");
     const intacto = exemploAtual && codigo.value === exemploAtual.codigo;
-    real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo. Para a análise oficial, salve num arquivo .mol e rode python3 src/main.py --modelo arquivo.mol.";
+    real.textContent = intacto ? exemploAtual.saida : "O código foi editado ou não veio de um exemplo. Para a análise oficial, use Baixar .mol e rode python3 src/main.py --modelo arquivo.mol.";
     const resumo = document.getElementById("resumo");
     if (r.atomos.length) {
       const multiplas = r.ligacoes.filter((l) => l.ordem >= 2).length;
@@ -1297,6 +1297,8 @@
 
   document.querySelectorAll("[data-erro]").forEach((botao) => botao.addEventListener("click", () => {
     exemploAtual = null;
+    arquivoAberto = null;
+    statusArquivo.hidden = true;
     codigo.value = EXEMPLOS_DE_ERRO[botao.dataset.erro];
     seletor.value = "";
     executar();
@@ -1318,8 +1320,81 @@
     }
   });
   seletor.addEventListener("change", () => carregarExemplo(Number(seletor.value)));
+
+  /* ---------------- arquivos .mol: baixar e abrir ---------------- */
+  const statusArquivo = document.getElementById("arquivo-status");
+  const entradaArquivo = document.getElementById("arquivo-mol");
+  const LIMITE_ARQUIVO = 512 * 1024;
+  let arquivoAberto = null; // nome do último .mol aberto, reaproveitado ao baixar
+  function avisarArquivo(texto, erro = false) {
+    statusArquivo.textContent = texto;
+    statusArquivo.classList.toggle("erro", erro);
+    statusArquivo.hidden = false;
+  }
+  // Nome do arquivo baixado: o do exemplo intacto, o do arquivo aberto ou
+  // o nome da primeira espécie, sem acentos ("Água" vira agua.mol)
+  function nomeParaBaixar(texto) {
+    if (exemploAtual && texto === exemploAtual.codigo) return exemploAtual.arquivo.split("/").pop();
+    if (arquivoAberto) return arquivoAberto;
+    const cabecalho = texto.match(/(?:species\s+\w+|molecule)\s+"([^"]*)"/);
+    const base = (cabecalho ? cabecalho[1] : "").normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+    return (base || "especie") + ".mol";
+  }
+  document.getElementById("baixar-mol").addEventListener("click", () => {
+    const texto = codigo.value;
+    if (!texto.trim()) { avisarArquivo("O editor está vazio: não há o que baixar.", true); return; }
+    const nome = nomeParaBaixar(texto);
+    try {
+      const url = URL.createObjectURL(new Blob([texto.endsWith("\n") ? texto : texto + "\n"], { type: "text/plain;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = url; link.download = nome;
+      document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      avisarArquivo(`Arquivo ${nome} baixado. Rode python3 src/main.py ${nome} para a análise completa.`);
+    } catch (e) {
+      avisarArquivo("O navegador não deixou baixar o arquivo. Copie o código do editor e salve como .mol.", true);
+    }
+  });
+  async function abrirArquivo(arquivo) {
+    if (!arquivo) return;
+    if (!/\.(mol|txt)$/i.test(arquivo.name)) { avisarArquivo(`${arquivo.name} não é um arquivo .mol.`, true); return; }
+    if (arquivo.size > LIMITE_ARQUIVO) { avisarArquivo(`${arquivo.name} tem ${Math.round(arquivo.size / 1024)} KB; o limite do playground é 512 KB.`, true); return; }
+    let texto;
+    try {
+      texto = new TextDecoder("utf-8", { fatal: true }).decode(await arquivo.arrayBuffer());
+    } catch (e) {
+      avisarArquivo(`${arquivo.name} não está em UTF-8 ou não pôde ser lido.`, true); return;
+    }
+    if (texto.includes("\u0000")) { avisarArquivo(`${arquivo.name} parece binário, não código MoleculeDSL.`, true); return; }
+    texto = texto.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
+    exemploAtual = null;
+    arquivoAberto = arquivo.name.replace(/\.txt$/i, ".mol");
+    seletor.value = "";
+    codigo.value = texto;
+    blocoEscolhido = null;
+    codigo.scrollTop = 0;
+    executar();
+    const linhas = texto.split("\n").length - (texto.endsWith("\n") ? 1 : 0);
+    avisarArquivo(`${arquivo.name} aberto no editor (${linhas} linha${linhas === 1 ? "" : "s"}).`);
+  }
+  document.getElementById("abrir-mol").addEventListener("click", () => entradaArquivo.click());
+  entradaArquivo.addEventListener("change", () => { abrirArquivo(entradaArquivo.files[0]); entradaArquivo.value = ""; });
+  const editorArquivo = codigo.closest(".editor");
+  editorArquivo.addEventListener("dragover", (e) => {
+    if (![...e.dataTransfer.types].includes("Files")) return;
+    e.preventDefault(); editorArquivo.classList.add("soltar");
+  });
+  editorArquivo.addEventListener("dragleave", () => editorArquivo.classList.remove("soltar"));
+  editorArquivo.addEventListener("drop", (e) => {
+    if (!e.dataTransfer.files.length) return;
+    e.preventDefault(); editorArquivo.classList.remove("soltar");
+    abrirArquivo(e.dataTransfer.files[0]);
+  });
   document.getElementById("limpar").addEventListener("click", () => {
     exemploAtual = null;
+    arquivoAberto = null;
+    statusArquivo.hidden = true;
     seletor.value = "";
     codigo.value = 'species molecule "Nova" {\n    \n}\n';
     executar(); codigo.focus();
@@ -1331,6 +1406,8 @@
 
   function carregarExemplo(i) {
     exemploAtual = DADOS.exemplos[i];
+    arquivoAberto = null;
+    statusArquivo.hidden = true;
     seletor.value = i;
     codigo.value = exemploAtual.codigo;
     blocoEscolhido = null;
