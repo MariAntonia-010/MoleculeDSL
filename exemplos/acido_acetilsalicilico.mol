@@ -1,0 +1,36 @@
+// Ácido acetilsalicílico (aspirina): ácido salicílico com a hidroxila acetilada
+species molecule "Acetylsalicylic acid" {
+    9x atom C as c
+    atom O as o1
+    atom O as o2
+    atom O as o3
+    atom O as o4
+    8x atom H as h
+
+    bond c1=c2
+    bond c2-c3
+    bond c3=c4
+    bond c4-c5
+    bond c5=c6
+    bond c6-c1
+
+    bond c1-c7
+    bond c7=o1
+    bond c7-o2
+    bond o2-h1
+
+    bond c2-o3
+    bond o3-c8
+    bond c8=o4
+    bond c8-c9
+
+    bond c3-h2
+    bond c4-h3
+    bond c5-h4
+    bond c6-h5
+    bond c9-h6
+    bond c9-h7
+    bond c9-h8
+
+    ring c1 c2 c3 c4 c5 c6
+}

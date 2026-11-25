@@ -76,6 +76,52 @@
     { nome: "Autoionização da água", reagentes: [[2, "agua"]], produtos: [[1, "hidronio"], [1, "hidroxido"]] },
     { nome: "Protonação da amônia (ligação coordenada)", reagentes: [[1, "amonia"], [1, "proton"]], produtos: [[1, "amonio_por_ligacao_coordenada"]] },
     { nome: "Íons Na⁺ e Cl⁻ formando o cloreto de sódio", reagentes: [[1, "sodio_1mais"], [1, "cloreto"]], produtos: [[1, "cloreto_de_sodio"]] },
+    // Combustíveis
+    { nome: "Combustão do etano", reagentes: [[2, "etano"], [7, "oxigenio"]], produtos: [[4, "dioxido_carbono"], [6, "agua"]] },
+    { nome: "Combustão do propano", reagentes: [[1, "propano"], [5, "oxigenio"]], produtos: [[3, "dioxido_carbono"], [4, "agua"]] },
+    { nome: "Combustão do butano (gás de cozinha)", reagentes: [[2, "butano"], [13, "oxigenio"]], produtos: [[8, "dioxido_carbono"], [10, "agua"]] },
+    { nome: "Combustão do acetileno (maçarico)", reagentes: [[2, "etino"], [5, "oxigenio"]], produtos: [[4, "dioxido_carbono"], [2, "agua"]] },
+    { nome: "Combustão incompleta do metano (forma CO)", reagentes: [[2, "metano"], [3, "oxigenio"]], produtos: [[2, "monoxido_de_carbono"], [4, "agua"]] },
+    // Gás de síntese e indústria
+    { nome: "Reforma a vapor do metano", reagentes: [[1, "metano"], [1, "agua"]], produtos: [[1, "monoxido_de_carbono"], [3, "hidrogenio"]] },
+    { nome: "Deslocamento gás-água (CO + H₂O)", reagentes: [[1, "monoxido_de_carbono"], [1, "agua"]], produtos: [[1, "dioxido_carbono"], [1, "hidrogenio"]] },
+    { nome: "Síntese do metanol (CO + 2 H₂)", reagentes: [[1, "monoxido_de_carbono"], [2, "hidrogenio"]], produtos: [[1, "metanol"]] },
+    { nome: "Ostwald 1: oxidação da amônia", reagentes: [[4, "amonia"], [5, "oxigenio"]], produtos: [[4, "oxido_nitrico"], [6, "agua"]] },
+    { nome: "Ostwald 2: NO vira NO₂", reagentes: [[2, "oxido_nitrico"], [1, "oxigenio"]], produtos: [[2, "dioxido_de_nitrogenio"]] },
+    { nome: "Ostwald 3: NO₂ e água formam ácido nítrico", reagentes: [[3, "dioxido_de_nitrogenio"], [1, "agua"]], produtos: [[2, "acido_nitrico"], [1, "oxido_nitrico"]] },
+    { nome: "Processo de contato: SO₂ vira SO₃", reagentes: [[2, "dioxido_de_enxofre"], [1, "oxigenio"]], produtos: [[2, "trioxido_de_enxofre"]] },
+    { nome: "SO₃ e água formam ácido sulfúrico", reagentes: [[1, "trioxido_de_enxofre"], [1, "agua"]], produtos: [[1, "acido_sulfurico"]] },
+    { nome: "Queima do sulfeto de hidrogênio", reagentes: [[2, "sulfeto_de_hidrogenio"], [3, "oxigenio"]], produtos: [[2, "dioxido_de_enxofre"], [2, "agua"]] },
+    { nome: "Síntese da ureia (Bosch-Meiser)", reagentes: [[2, "amonia"], [1, "dioxido_carbono"]], produtos: [[1, "ureia"], [1, "agua"]] },
+    { nome: "Síntese do fluoreto de hidrogênio", reagentes: [[1, "hidrogenio"], [1, "fluor"]], produtos: [[2, "fluoreto_de_hidrogenio"]] },
+    { nome: "Queima da fosfina formando ácido fosfórico", reagentes: [[1, "fosfina"], [2, "oxigenio"]], produtos: [[1, "acido_fosforico"]] },
+    // Química orgânica
+    { nome: "Hidrogenação do eteno", reagentes: [[1, "eteno"], [1, "hidrogenio"]], produtos: [[1, "etano"]] },
+    { nome: "Hidratação do eteno (etanol industrial)", reagentes: [[1, "eteno"], [1, "agua"]], produtos: [[1, "etanol"]] },
+    { nome: "Cloração do metano (substituição por radicais)", reagentes: [[1, "metano"], [1, "cloro"]], produtos: [[1, "clorometano"], [1, "cloreto_de_hidrogenio"]] },
+    { nome: "Adição de cloro ao eteno", reagentes: [[1, "eteno"], [1, "cloro"]], produtos: [[1, "dicloroetano_1_2"]] },
+    { nome: "Craqueamento do 1,2-dicloroetano (monômero do PVC)", reagentes: [[1, "dicloroetano_1_2"]], produtos: [[1, "cloreto_de_vinila"], [1, "cloreto_de_hidrogenio"]] },
+    { nome: "HBr no propeno (regra de Markovnikov)", reagentes: [[1, "propeno"], [1, "brometo_de_hidrogenio"]], produtos: [[1, "bromopropano_2"]] },
+    { nome: "Diels-Alder: butadieno e eteno", reagentes: [[1, "butadieno"], [1, "eteno"]], produtos: [[1, "ciclohexeno"]] },
+    { nome: "Hidrogenação do benzeno", reagentes: [[1, "benzeno"], [3, "hidrogenio"]], produtos: [[1, "ciclohexano"]] },
+    { nome: "Fermentação acética (vinagre)", reagentes: [[1, "etanol"], [1, "oxigenio"]], produtos: [[1, "acido_acetico"], [1, "agua"]] },
+    { nome: "Esterificação de Fischer (acetato de metila)", reagentes: [[1, "acido_acetico"], [1, "metanol"]], produtos: [[1, "acetato_de_metila"], [1, "agua"]] },
+    { nome: "Hidrólise do cloreto de acetila", reagentes: [[1, "cloreto_de_acetila"], [1, "agua"]], produtos: [[1, "acido_acetico"], [1, "cloreto_de_hidrogenio"]] },
+    { nome: "Síntese da aspirina", reagentes: [[1, "acido_salicilico"], [1, "anidrido_acetico"]], produtos: [[1, "acido_acetilsalicilico"], [1, "acido_acetico"]] },
+    // Bioquímica
+    { nome: "Fotossíntese", reagentes: [[6, "dioxido_carbono"], [6, "agua"]], produtos: [[1, "glicose"], [6, "oxigenio"]] },
+    { nome: "Respiração celular", reagentes: [[1, "glicose"], [6, "oxigenio"]], produtos: [[6, "dioxido_carbono"], [6, "agua"]] },
+    { nome: "Fermentação alcoólica", reagentes: [[1, "glicose"]], produtos: [[2, "etanol"], [2, "dioxido_carbono"]] },
+    { nome: "Fermentação lática", reagentes: [[1, "glicose"]], produtos: [[2, "acido_lactico"]] },
+    // Ácidos e bases
+    { nome: "HCl na água: ionização", reagentes: [[1, "cloreto_de_hidrogenio"], [1, "agua"]], produtos: [[1, "hidronio"], [1, "cloreto"]] },
+    { nome: "Amônia na água", reagentes: [[1, "amonia"], [1, "agua"]], produtos: [[1, "amonio_por_ligacao_coordenada"], [1, "hidroxido"]] },
+    { nome: "CO₂ e água formam ácido carbônico", reagentes: [[1, "dioxido_carbono"], [1, "agua"]], produtos: [[1, "acido_carbonico"]] },
+    { nome: "Antiácido: bicarbonato neutraliza H₃O⁺", reagentes: [[1, "bicarbonato"], [1, "hidronio"]], produtos: [[1, "dioxido_carbono"], [2, "agua"]] },
+    { nome: "Cloro na água (desinfecção)", reagentes: [[1, "cloro"], [1, "agua"]], produtos: [[1, "cloreto_de_hidrogenio"], [1, "acido_hipocloroso"]] },
+    { nome: "Ácido de Lewis: BF₃ e NH₃", reagentes: [[1, "trifluoreto_de_boro"], [1, "amonia"]], produtos: [[1, "amonia_trifluoreto_de_boro"]] },
+    // Atmosfera
+    { nome: "Ozônio destruído pelo NO", reagentes: [[1, "oxido_nitrico"], [1, "ozonio"]], produtos: [[1, "dioxido_de_nitrogenio"], [1, "oxigenio"]] },
   ];
   const cenaReacao = new Cena(document.getElementById("cena-reacao"));
   // De frente e sem girar sozinha: reagentes e produtos ficam lado a lado
@@ -289,6 +335,16 @@
     { nome: "Salmoura (água, Na⁺ e Cl⁻)", itens: [["agua", 6], ["sodio_1mais", 2], ["cloreto", 2]] },
     { nome: "Gases nobres (He, Ne, Ar)", itens: [["helio", 4], ["neonio", 3], ["argonio", 2]] },
     { nome: "Água e água pesada (H₂O, D₂O)", itens: [["agua", 4], ["agua_pesada", 4]] },
+    { nome: "Gás natural (quase todo metano, um pouco de etano)", itens: [["metano", 9], ["etano", 1]] },
+    { nome: "Gás de cozinha, GLP (propano e butano)", itens: [["propano", 5], ["butano", 5]] },
+    { nome: "Biogás (metano e CO₂)", itens: [["metano", 6], ["dioxido_carbono", 4]] },
+    { nome: "Gás de síntese (H₂ e CO, 2 para 1)", itens: [["hidrogenio", 6], ["monoxido_de_carbono", 3]] },
+    { nome: "Ar expirado (menos O₂, mais CO₂ e vapor)", itens: [["nitrogenio", 15], ["oxigenio", 3], ["dioxido_carbono", 1], ["agua", 1]] },
+    { nome: "Água com gás (CO₂ e ácido carbônico)", itens: [["agua", 6], ["dioxido_carbono", 2], ["acido_carbonico", 1]] },
+    { nome: "Água sanitária (Na⁺ e ClO⁻ em água)", itens: [["agua", 6], ["sodio_1mais", 2], ["hipoclorito", 2]] },
+    { nome: "Vinagre (ácido acético em água)", itens: [["agua", 8], ["acido_acetico", 1]] },
+    { nome: "Anticongelante (água e etilenoglicol)", itens: [["agua", 4], ["etilenoglicol", 4]] },
+    { nome: "Chuva ácida (H₃O⁺, NO₃⁻ e SO₄²⁻ em água)", itens: [["agua", 6], ["hidronio", 3], ["nitrato", 1], ["sulfato", 1]] },
   ];
   const componentesMistura = [];
   function carregarMistura(i) {

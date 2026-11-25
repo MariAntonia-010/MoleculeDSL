@@ -946,3 +946,23 @@ código, declarando átomos e depois moléculas, sem estruturas de controle
   o pedido era construir o buraco negro pela química da própria linguagem.
 - Física, decisões e o que é licença didática em
   `docs/plano_buraco_negro.md`.
+
+## 25/11/2026 — Mais 50 exemplos no playground e 50 no laboratório
+
+- O playground ganhou 50 exemplos em seis grupos novos: hidrocarbonetos e
+  combustíveis; orgânicos halogenados, aldeídos e ésteres; ácidos e bases;
+  óxidos, hidretos e halogênios; ácidos e bases de Lewis; moléculas do dia a
+  dia. 37 já existiam em `exemplos/` sem aparecer na página; 13 são novos:
+  clorometano, 1,2-dicloroetano, cloreto de vinila, 2-bromopropano,
+  fluoreto de hidrogênio, anidrido acético, β-D-glicose (com os cinco
+  estereocentros, 2R,3R,4S,5S,6R), ácido L-lático (S), ácido cítrico, ácido
+  salicílico, aspirina, paracetamol e cafeína.
+- O laboratório ganhou 40 reações e 10 misturas. As reações cobrem
+  combustíveis, gás de síntese, os processos de Ostwald e de contato,
+  síntese da ureia, química orgânica (cloração, adição, Markovnikov,
+  Diels-Alder, esterificação, síntese da aspirina), bioquímica (fotossíntese,
+  respiração, fermentações alcoólica e lática), ácidos e bases e o ozônio.
+  As misturas trazem gás natural, GLP, biogás, gás de síntese, ar expirado,
+  água com gás, água sanitária, vinagre, anticongelante e chuva ácida.
+- Cada reação foi conferida com o compilador Python: os átomos e a carga
+  fecham dos dois lados em todas as 52.

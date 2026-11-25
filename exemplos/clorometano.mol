@@ -1,0 +1,9 @@
+// Clorometano: produto da cloração do metano por radicais (CH4 + Cl2 -> CH3Cl + HCl)
+species molecule "Chloromethane" {
+    atom C
+    atom Cl
+    3x atom H
+
+    bond C-Cl
+    bond C-H x3
+}

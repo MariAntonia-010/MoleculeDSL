@@ -1,0 +1,12 @@
+// Cloreto de vinila: monômero do PVC, sai do craqueamento do 1,2-dicloroetano
+species molecule "Vinyl chloride" {
+    2x atom C as c
+    atom Cl as cl
+    3x atom H as h
+
+    bond c1=c2
+    bond c1-cl
+    bond c1-h1
+    bond c2-h2
+    bond c2-h3
+}

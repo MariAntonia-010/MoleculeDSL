@@ -1,0 +1,48 @@
+// β-D-glicopiranose: (2R,3R,4S,5S,6R)-6-(hidroximetil)oxano-2,3,4,5-tetrol
+// (PubChem CID 64689). Os números c1 a c6 seguem a numeração do açúcar:
+// c1 é o carbono anomérico, o5 é o oxigênio do anel
+species molecule "beta-D-Glucopyranose" {
+    6x atom C as c
+    atom O as o1
+    atom O as o2
+    atom O as o3
+    atom O as o4
+    atom O as o5
+    atom O as o6
+    12x atom H as h
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c5-o5
+    bond o5-c1
+    bond c5-c6
+
+    bond c1-o1
+    bond c2-o2
+    bond c3-o3
+    bond c4-o4
+    bond c6-o6
+
+    bond c1-h1
+    bond c2-h2
+    bond c3-h3
+    bond c4-h4
+    bond c5-h5
+    bond c6-h6
+    bond c6-h7
+    bond o1-h8
+    bond o2-h9
+    bond o3-h10
+    bond o4-h11
+    bond o6-h12
+
+    ring c1 c2 c3 c4 c5 o5
+
+    stereo c1 R
+    stereo c2 R
+    stereo c3 S
+    stereo c4 S
+    stereo c5 R
+}
