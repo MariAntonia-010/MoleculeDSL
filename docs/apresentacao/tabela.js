@@ -58,7 +58,8 @@
     const comCarga = DADOS.valencias.valencias_com_carga[simbolo];
     const cam = camadas(simbolo);
     document.getElementById("ficha-elemento").innerHTML = `
-      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco} · nome na fonte (PubChem): ${escapar(e.nome_fonte)}</p></div></div>
+      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco} · nome na fonte (PubChem): ${escapar(e.nome_fonte)}</p></div>
+        <div class="grupo-icones">${botaoIcone("demonstrar", "Demonstrar tradução", 'id="demo-elemento"')}${botaoIcone("playground", "Abrir no playground", 'id="usar-elemento"')}${botaoIcone("mais", "Adicionar à bancada", 'id="bancada-mais"', "destaque")}</div></div>
       <div class="duas-lentes">
         <div><h4>Para a química</h4><dl>
           <dt>Configuração</dt><dd>${escapar(e.config || "—")}</dd>
@@ -78,12 +79,7 @@
       </div>
       <pre>${escapar(codigoDoElemento(simbolo).trim())}</pre>
       <p class="nota" style="margin:0.8rem 0 0.3rem">AST desse programa: como a linguagem entende o elemento</p>
-      <div class="ficha-arvore">${desenhoArvore(astNo(compilar(codigoDoElemento(simbolo)).especie, "quim"))}</div>
-      <div class="acoes-ficha">
-        <button type="button" class="botao pequeno" id="demo-elemento">Demonstrar tradução</button>
-        <button type="button" class="botao pequeno" id="usar-elemento">Abrir no playground</button>
-        <button type="button" class="botao pequeno primario" id="bancada-mais">+ adicionar à bancada</button>
-      </div>`;
+      <div class="ficha-arvore">${desenhoArvore(astNo(compilar(codigoDoElemento(simbolo)).especie, "quim"))}</div>`;
     requestAnimationFrame(() => ajustarDesenhos(document.getElementById("ficha-elemento")));
     document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo isolado de ${e.nome.toLowerCase()}`));
     document.getElementById("usar-elemento").addEventListener("click", () => {
@@ -123,8 +119,9 @@
   }
   function desenharBancada() {
     const caixa = document.getElementById("bancada");
+    document.getElementById("acoes-bancada").hidden = !bancada.length;
     if (!bancada.length) {
-      caixa.innerHTML = `<p class="nota" style="margin:0">Clique num elemento e em “+ adicionar à bancada” para montar uma molécula. O código MoleculeDSL aparece aqui.</p>`;
+      caixa.innerHTML = `<p class="bancada-vazia">Clique num elemento e no <b>+</b> da ficha para começar.</p>`;
       return;
     }
     const valencias = bancada.map((s) => (DADOS.valencias.valencias[s] || [null])[0]);
@@ -135,22 +132,21 @@
       : soma % 2
         ? `Soma das valências = ${soma}, ímpar: não fecha sem carga ou radical.`
         : `Soma das valências = ${soma}: cabem ${soma / 2} ordens de ligação no total. Com --resolver o compilador tenta ligar os átomos sozinho.`;
-    caixa.innerHTML = `<div class="fichas">${bancada.map((s, i) => `<button type="button" class="ficha" data-tirar-bancada="${i}" title="Remover"><code>${s}</code><small>remover</small></button>`).join("")}</div>
+    caixa.innerHTML = `<div class="fichas">${bancada.map((s, i) => `<button type="button" class="ficha ficha-bancada" data-tirar-bancada="${i}" aria-label="Remover ${s} da bancada" data-dica="Remover"><code>${s}</code>${svgIcone("fechar")}</button>`).join("")}</div>
       <p class="nota">${escapar(nota)}</p>
       <pre>${escapar(codigoDaBancada().trim())}</pre>
-      ${(() => { const r = compilar(codigoDaBancada()); return r.especie ? `<p class="nota" style="margin:0.8rem 0 0.3rem">AST da bancada (as ligações entram quando você escrever os bond no playground)</p>${desenhoArvore(astNo(r.especie, "comp"))}` : ""; })()}
-      <div class="acoes-ficha"><button type="button" class="botao pequeno primario" id="bancada-abrir">Abrir no playground</button><button type="button" class="botao pequeno" id="bancada-limpar">Limpar</button></div>`;
+      ${(() => { const r = compilar(codigoDaBancada()); return r.especie ? `<p class="nota" style="margin:0.8rem 0 0.3rem">AST da bancada (as ligações entram quando você escrever os bond no playground)</p>${desenhoArvore(astNo(r.especie, "comp"))}` : ""; })()}`;
     requestAnimationFrame(() => ajustarDesenhos(caixa));
     caixa.querySelectorAll("[data-tirar-bancada]").forEach((b) => b.addEventListener("click", () => { bancada.splice(Number(b.dataset.tirarBancada), 1); desenharBancada(); }));
-    document.getElementById("bancada-limpar").addEventListener("click", () => { bancada.length = 0; desenharBancada(); });
-    document.getElementById("bancada-abrir").addEventListener("click", () => {
-      exemploAtual = null;
-      seletor.value = "";
-      codigo.value = codigoDaBancada();
-      location.hash = "#/playground";
-      executar();
-    });
   }
+  document.getElementById("bancada-limpar").addEventListener("click", () => { bancada.length = 0; desenharBancada(); });
+  document.getElementById("bancada-abrir").addEventListener("click", () => {
+    exemploAtual = null;
+    seletor.value = "";
+    codigo.value = codigoDaBancada();
+    location.hash = "#/playground";
+    executar();
+  });
 
   let tabelaPronta = false;
   function iniciarTabela() {

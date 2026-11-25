@@ -332,10 +332,14 @@ rotas próprias:
 - **Playground:** o código é analisado no navegador enquanto se digita e a
   molécula é desenhada em 3D. Um erro semântico aparece numa faixa vermelha
   com código, motivo e correção, a linha fica marcada e o átomo culpado é
-  destacado no desenho. **Baixar .mol** salva o código do editor num arquivo
-  (com o nome do exemplo, do arquivo aberto ou da espécie, sem acentos), e
-  **Abrir .mol**, ou arrastar o arquivo para o editor, carrega um `.mol` do
-  computador. Arquivos acima de 512 KB, fora de UTF-8 ou binários são
+  destacado no desenho. A barra acima do editor tem o seletor de exemplos e,
+  embaixo dele, botões de ícone com dica: à esquerda, novo, abrir e baixar
+  `.mol`; à direita, o menu de exemplos de erro e a demonstração da
+  tradução. Os controles da cena (girar, rótulos, ocultar H e recentrar)
+  ficam sobre o desenho 3D. **Baixar .mol** salva o código do editor num
+  arquivo (com o nome do exemplo, do arquivo aberto ou da espécie, sem
+  acentos), e **Abrir .mol**, ou arrastar o arquivo para o editor, carrega
+  um `.mol` do computador. Arquivos acima de 512 KB, fora de UTF-8 ou binários são
   recusados com uma mensagem. Tudo acontece no navegador: nada é enviado a
   um servidor;
 - **Tipos de ligação e espécies atômicas:** o desenho e o modelo mostram cada
@@ -345,14 +349,17 @@ rotas próprias:
 - **Laboratório:** reações e misturas montadas pelo usuário, com espécies
   dos exemplos ou código próprio, balanceamento automático e animação das
   ligações que se rompem e se formam. Espécie com erro semântico não entra
-  na simulação;
+  na simulação. A animação tem uma barra de player (tocar/pausar, reiniciar
+  e progresso), e cada componente da mistura tem um contador e ícones para
+  a tradução e para remover;
 - **Buraco negro:** no playground, um programa com `species black_hole`
   válido mostra o buraco negro calculado por traçado de raios na métrica de
   Schwarzschild e, sozinho, devora a tela inteira (pesquisa e limites em
   [`docs/plano_buraco_negro.md`](docs/plano_buraco_negro.md));
 - **Tabela periódica:** modelo atômico de Bohr, dados da fonte, o que o
   compilador faz com cada elemento e uma bancada que monta o código de uma
-  molécula.
+  molécula. As ações da ficha (demonstrar, abrir no playground e adicionar à
+  bancada) e as da bancada (abrir e limpar) são ícones com dica.
 
 Todo exemplo tem um botão **Demonstrar tradução**, que mostra as cinco
 etapas (tokens, árvore sintática, AST, modelo e semântica) pela lente da

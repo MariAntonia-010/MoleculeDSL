@@ -220,7 +220,7 @@
       <div class="tabela"><table><tr><th>Ligações</th><th>Tipos</th></tr>
         <tr><td>rompidas</td><td>${textoContagem(quebradas)}</td></tr>
         <tr><td>formadas</td><td>${textoContagem(formadas)}</td></tr></table></div>
-      <div class="botoes-traducao"><span>Tradução de cada espécie:</span>${especiesUnicas.map((esp, i) => `<button type="button" class="botao pequeno" data-demo-codigo="${i}">${escapar(esp.titulo)}</button>`).join("")}</div>
+      <div class="botoes-traducao"><span>Tradução de cada espécie</span>${especiesUnicas.map((esp, i) => `<button type="button" class="botao pequeno" data-demo-codigo="${i}">${svgIcone("demonstrar")}${escapar(esp.titulo)}</button>`).join("")}</div>
       <p class="nota">Animação ilustrativa: mostra a conservação dos átomos e quais ligações se rompem e se formam. Não representa o mecanismo, a velocidade nem a energia.</p>`;
     info.querySelectorAll("[data-demo-codigo]").forEach((b) => b.addEventListener("click", () => {
       const esp = especiesUnicas[Number(b.dataset.demoCodigo)];
@@ -249,7 +249,7 @@
     return `<div class="item-montador">
       <input type="number" min="1" max="9" value="${item.n}" aria-label="Coeficiente" data-lado="${lado}" data-i="${i}" data-campo="n">
       <select data-lado="${lado}" data-i="${i}" data-campo="arq" aria-label="Espécie">${opcoesEspecies(item.arq)}</select>
-      <button type="button" class="botao pequeno" data-lado="${lado}" data-i="${i}" data-remover aria-label="Remover">×</button>
+      ${botaoIcone("remover", "Remover", `data-lado="${lado}" data-i="${i}" data-remover`)}
       ${item.arq === "__codigo" ? `<textarea data-lado="${lado}" data-i="${i}" data-campo="codigo" spellcheck="false" aria-label="Código MoleculeDSL da espécie">${escapar(item.codigo)}</textarea>` : ""}
     </div>`;
   }
@@ -322,7 +322,13 @@
   seletorReacao.innerHTML = REACOES.map((r, i) => `<option value="${i}">${escapar(r.nome)}</option>`).join("");
   seletorReacao.addEventListener("change", () => { carregarNoMontador(REACOES[Number(seletorReacao.value)]); simularReacao(reacaoDoMontador()); });
   const botaoTocar = document.getElementById("tocar-reacao");
-  function atualizarBotaoReacao() { botaoTocar.textContent = tocando ? "❚❚ Pausar" : "▶ Reproduzir"; }
+  function atualizarBotaoReacao() {
+    const rotulo = tocando ? "Pausar" : "Reproduzir";
+    botaoTocar.innerHTML = svgIcone(tocando ? "pausar" : "tocar");
+    botaoTocar.setAttribute("aria-label", rotulo);
+    botaoTocar.dataset.dica = rotulo;
+  }
+  atualizarBotaoReacao();
   botaoTocar.addEventListener("click", () => { if (progresso >= 1) progresso = 0; tocando = !tocando; atualizarBotaoReacao(); });
   document.getElementById("reiniciar-reacao").addEventListener("click", () => { progresso = 0; tocando = true; atualizarBotaoReacao(); });
   document.getElementById("progresso-reacao").addEventListener("input", (e) => { progresso = Number(e.target.value); tocando = false; atualizarBotaoReacao(); });
@@ -360,10 +366,8 @@
     document.getElementById("lista-mistura").innerHTML = componentesMistura.map((c, i) => {
       const { r } = compilarEspecie(c.esp);
       return `<div class="item-mistura${r.erros.length ? " invalido" : ""}"><div><b>${escapar(c.esp.titulo)}</b><small>${r.erros.length ? "erro: " + escapar(r.erros[0].codigo) : formulaHill(r.atomos) + textoCarga(cargaDe(r))}</small></div>
-        <div class="contador-mistura"><button type="button" class="botao pequeno" data-menos="${i}" aria-label="Menos">−</button><span>${c.n}</span>
-        <button type="button" class="botao pequeno" data-mais="${i}" aria-label="Mais">+</button>
-        <button type="button" class="botao pequeno" data-tradu="${i}">Tradução</button>
-        <button type="button" class="botao pequeno" data-tirar="${i}" aria-label="Remover">×</button></div></div>`;
+        <div class="contador-mistura"><span class="passo-mistura">${botaoIcone("menos", "Menos", `data-menos="${i}"`, "mini")}<span aria-label="Quantidade">${c.n}</span>${botaoIcone("mais", "Mais", `data-mais="${i}"`, "mini")}</span>
+        <span class="grupo-icones">${botaoIcone("demonstrar", "Demonstrar tradução", `data-tradu="${i}"`)}${botaoIcone("remover", "Remover", `data-tirar="${i}"`)}</span></div></div>`;
     }).join("");
   }
   document.getElementById("lista-mistura").addEventListener("click", (e) => {

@@ -267,15 +267,95 @@
     .topico p, .topico li { color: var(--suave); }
 
     /* ---------- playground ---------- */
-    .guia { margin-bottom: 1.1rem; }
+    .guia { margin-bottom: 1.1rem; padding-block: 0.85rem; }
+    .guia > summary { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; list-style: none; border-radius: 10px; }
+    .guia > summary::-webkit-details-marker { display: none; }
+    .guia > summary:focus-visible { outline: 2px solid var(--acento); outline-offset: 4px; }
+    .guia-titulo { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 600; color: var(--texto); }
+    .guia-resumo { color: var(--fraco); font-size: 0.84rem; }
+    .guia-seta { margin-left: auto; color: var(--fraco); transition: transform 0.2s; }
+    .guia[open] .guia-seta { transform: rotate(180deg); }
+    .guia[open] .passos { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--borda); }
+    .ic { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .guia-titulo .ic { color: var(--acento); }
     .passos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; counter-reset: passo; }
     .passos li { counter-increment: passo; color: var(--suave); font-size: 0.9rem; }
     .passos li::before { content: counter(passo, decimal-leading-zero); display: block; font: 600 0.72rem var(--mono); color: var(--acento); letter-spacing: 0.12em; margin-bottom: 0.3rem; }
     .passos code { color: var(--texto); font-size: 0.82em; }
-    .exemplos-erro { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--borda); }
-    .exemplos-erro span { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 0.3rem; }
     .play { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.1rem; }
     .barra-ferramentas { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.9rem; }
+    /* Barra única acima do editor e da cena: seletor à esquerda, ações à direita */
+    .barra-play { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; margin-bottom: 1.1rem; padding: 0.7rem; }
+    .linha-selecao { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .linha-selecao select { flex: 1 1 260px; min-width: 0; }
+    .linha-acoes { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+    .linha-acoes .grupo-icones { margin-left: 0; }
+    .controles-cena { position: absolute; top: 0.6rem; left: 0.6rem; right: 0.6rem; z-index: 2; display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none; }
+    .controles-cena > * { pointer-events: auto; }
+    .controles-cena .grupo-icones { margin-left: 0; }
+    .controles-cena .grupo-icones.segmentado, .controles-cena > .grupo-icones > .icone-botao {
+      background: color-mix(in srgb, var(--superficie) 78%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .controles-cena .icone-botao { width: 34px; height: 34px; }
+    .controles-cena > .grupo-icones:not(.segmentado) > .icone-botao { width: 42px; height: 42px; border-color: var(--borda); border-radius: 12px; }
+    /* Botões de ícone com dica: o rótulo vai no aria-label e no data-dica */
+    .grupo-icones { display: inline-flex; align-items: center; gap: 0.35rem; margin-left: auto; }
+    .grupo-icones.segmentado { margin-left: 0; gap: 0; padding: 3px; border: 1px solid var(--borda); border-radius: 12px; background: var(--bg); }
+    .grupo-icones.segmentado .icone-botao { border-color: transparent; background: transparent; }
+    .icone-botao {
+      position: relative; flex: none; display: inline-grid; place-items: center; width: 38px; height: 38px;
+      border-radius: 10px; border: 1px solid var(--borda-forte); background: var(--superficie); color: var(--suave);
+      cursor: pointer; list-style: none; transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .icone-botao::-webkit-details-marker { display: none; }
+    .icone-botao svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+    .icone-botao:hover { color: var(--acento); border-color: var(--acento); }
+    .icone-botao:focus-visible, .icone-botao:has(input:focus-visible) { outline: 2px solid var(--acento); outline-offset: 2px; }
+    .alternar-icone input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+    .alternar-icone:has(input:checked) { color: var(--acento); background: var(--acento-fundo); }
+    .grupo-icones.segmentado .alternar-icone:has(input:checked) { background: var(--acento-fundo); border-color: color-mix(in srgb, var(--acento) 35%, transparent); }
+    .alternar-icone .risco { opacity: 0; transition: opacity 0.15s; }
+    .alternar-icone:has(input:checked) .risco { opacity: 1; }
+    [data-dica]::after {
+      content: attr(data-dica); position: absolute; top: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+      display: none; z-index: 30; padding: 0.3rem 0.55rem; border-radius: 7px; white-space: nowrap; pointer-events: none;
+      font: 500 0.74rem var(--sans); color: var(--bg); background: var(--texto); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+    .linha-acoes > :first-child > :first-child[data-dica]::after, .segmentado > :first-child[data-dica]::after { left: 0; transform: none; }
+    .linha-acoes > :last-child > :last-child[data-dica]::after, .controles-cena > :last-child > :last-child[data-dica]::after { left: auto; right: 0; transform: none; }
+    @media (hover: hover) { [data-dica]:hover::after { display: block; } }
+    [data-dica]:focus-visible::after, [data-dica]:has(input:focus-visible)::after { display: block; }
+    .menu-erros { position: relative; }
+    .menu-erros[open] > summary { color: var(--acento); border-color: var(--acento); background: var(--acento-fundo); }
+    .menu-erros[open] > summary::after { display: none; }
+    .menu {
+      position: absolute; top: calc(100% + 6px); right: 0; z-index: 40; display: grid; min-width: 230px; padding: 0.35rem;
+      border: 1px solid var(--borda-forte); border-radius: 12px; background: var(--superficie); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+    }
+    .menu-titulo { padding: 0.45rem 0.65rem 0.35rem; font: 600 0.68rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fraco); }
+    .menu button { text-align: left; padding: 0.55rem 0.65rem; border: 0; border-radius: 8px; background: transparent; color: var(--texto); font: 500 0.86rem var(--sans); cursor: pointer; }
+    .menu button:hover, .menu button:focus-visible { background: var(--acento-fundo); color: var(--acento); outline: none; }
+    .rodape-placa { margin: 0.8rem 0 0; }
+    /* Cabeçalho de placa: título à esquerda, seletor ou ações à direita */
+    .cabeca-placa { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem 1rem; margin-bottom: 1rem; }
+    .cabeca-placa h3 { margin: 0; }
+    .cabeca-placa .nota { margin: 0.15rem 0 0; }
+    .cabeca-placa > select { flex: 1 1 220px; max-width: 360px; min-width: 0; margin-left: auto; }
+    .cabeca-placa .grupo-icones { margin-left: auto; }
+    .cabeca-placa .grupo-icones > :last-child[data-dica]::after, .ficha-topo .grupo-icones > :last-child[data-dica]::after, .contador-mistura .grupo-icones > :last-child[data-dica]::after { left: auto; right: 0; transform: none; }
+    /* Barra de player sob a cena: ícones à esquerda, faixa de progresso ocupando o resto */
+    .barra-player { display: flex; align-items: center; gap: 0.45rem; margin-top: 0.8rem; }
+    .barra-player input[type="range"] { flex: 1; min-width: 0; margin: 0 0 0 0.4rem; }
+    .icone-rotulo { position: relative; display: inline-grid; place-items: center; width: 38px; height: 38px; color: var(--suave); }
+    .icone-rotulo svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .icone-botao.mini { width: 30px; height: 30px; border-radius: 8px; }
+    .icone-botao.mini svg { width: 15px; height: 15px; }
+    .icone-botao.destaque { color: #fff; background: var(--acento-forte); border-color: var(--acento-forte); }
+    .icone-botao.destaque:hover { color: #fff; filter: brightness(1.08); }
+    .botao svg { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    .detalhe summary { cursor: pointer; width: fit-content; color: var(--suave); }
+    .detalhe summary:hover { color: var(--acento); }
+    .detalhe p { margin-top: 0.5rem; color: var(--fraco); font-size: 0.8rem; line-height: 1.55; }
     select { font: 500 0.85rem var(--sans); color: var(--texto); background: var(--superficie); border: 1px solid var(--borda-forte); border-radius: 10px; padding: 0.55rem 0.75rem; max-width: 100%; flex: 1 1 200px; }
     .editor { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); overflow: hidden; }
     .numeros { padding: 0.9rem 0.6rem; text-align: right; color: var(--fraco); font: 0.8rem/1.6 var(--mono); user-select: none; white-space: pre; border-right: 1px solid var(--borda); }
@@ -305,15 +385,14 @@
     .diag dt { color: var(--fraco); font-weight: 600; }
     .diag dd { margin: 0; color: var(--suave); }
     .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.8rem; }
-    .arquivo-botoes { display: inline-flex; gap: 0.6rem; flex-wrap: wrap; margin-left: auto; }
     .arquivo-status { margin: -0.3rem 0 0.8rem; color: var(--suave); }
     .arquivo-status.erro { color: var(--erro); }
     .editor.soltar { border-color: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 30%, transparent); }
-    @media (max-width: 640px) { .arquivo-botoes { margin-left: 0; } }
+    @media (max-width: 640px) {
+      .guia-resumo { display: none; }
+    }
     .alternar { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
     .alternar input { accent-color: var(--acento-forte); }
-    /* no celular, o seletor de reação encolhe em vez de passar da tela */
-    .montador-topo .alternar { max-width: 100%; }
     .alternar select { min-width: 0; max-width: 100%; }
 
     footer { text-align: center; padding: 2rem 16px 3rem; color: var(--fraco); font: 0.78rem var(--mono); border-top: 1px solid var(--borda); }
@@ -451,12 +530,21 @@
     .equacao { font: 600 clamp(1.1rem, 2.2vw, 1.5rem) var(--mono); margin: 0 0 0.5rem; }
     .equacao span { color: var(--acento); margin: 0 0.4rem; }
     .botoes-traducao { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; margin-top: 1rem; }
-    .botoes-traducao span { font-size: 0.84rem; color: var(--fraco); margin-right: 0.3rem; }
+    .botoes-traducao > span { flex-basis: 100%; font: 600 0.68rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fraco); }
     .lista-mistura { display: grid; gap: 0.5rem; }
     .item-mistura { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.55rem 0.7rem; border: 1px solid var(--borda); border-radius: 10px; }
     .item-mistura small { display: block; color: var(--fraco); font: 0.74rem var(--mono); }
-    .contador-mistura { display: flex; align-items: center; gap: 0.4rem; }
-    .contador-mistura span { min-width: 1.6rem; text-align: center; font: 600 0.9rem var(--mono); }
+    .contador-mistura { display: flex; align-items: center; gap: 0.6rem; margin-left: auto; }
+    .passo-mistura { display: inline-flex; align-items: center; gap: 0.15rem; padding: 3px; border: 1px solid var(--borda); border-radius: 10px; background: var(--bg); }
+    .passo-mistura .icone-botao { border-color: transparent; background: transparent; }
+    .passo-mistura > span { min-width: 1.6rem; text-align: center; font: 600 0.9rem var(--mono); }
+    .contador-mistura .grupo-icones { margin-left: 0; }
+    .adicionar-mistura select { flex: 1 1 200px; min-width: 0; }
+    .ficha-topo .grupo-icones { align-self: flex-start; }
+    .ficha-bancada { display: inline-flex; align-items: center; gap: 0.35rem; position: relative; cursor: pointer; color: var(--suave); }
+    .ficha-bancada svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+    .ficha-bancada:hover { border-color: var(--erro); color: var(--erro); }
+    .bancada-vazia { margin: 0; padding: 1.2rem; text-align: center; border: 1px dashed var(--borda-forte); border-radius: 12px; color: var(--fraco); font-size: 0.88rem; }
 
     /* tabela periódica */
     .tabela-periodica { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); grid-template-rows: repeat(7, auto) 0.6rem repeat(2, auto); gap: 3px; overflow-x: auto; min-width: 0; }
@@ -482,7 +570,8 @@
     .legenda-tabela i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--borda); display: inline-block; }
     .legenda-tabela .com-regra-amostra { border-radius: 50%; background: var(--acento); width: 7px; height: 7px; border: 0; }
     .cena-bohr { aspect-ratio: 1; max-width: 420px; margin: 0 auto; }
-    .ficha-topo { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+    .ficha-topo { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem; }
+    .ficha-topo > div:not(.grupo-icones) { flex: 1 1 180px; min-width: 0; }
     .ficha-topo h3 { margin: 0; }
     .ficha-topo p { margin: 0; color: var(--suave); }
     .simbolo-grande { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--acento) 45%, transparent); background: var(--acento-fundo); font: 700 2rem var(--mono); color: var(--acento); }
@@ -491,7 +580,6 @@
     .duas-lentes dl { margin: 0; display: grid; gap: 0.15rem 0; font-size: 0.84rem; }
     .duas-lentes dt { color: var(--fraco); font-size: 0.74rem; margin-top: 0.4rem; }
     .duas-lentes dd { margin: 0; color: var(--texto); }
-    .acoes-ficha { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.9rem; }
     @media (max-width: 1000px) {
       .demo-corpo, .duas-lentes { grid-template-columns: minmax(0, 1fr); }
       .tabela-periodica { grid-template-columns: repeat(18, 30px); }
@@ -524,7 +612,13 @@
     .realce mark.aviso { background: color-mix(in srgb, var(--aviso) 22%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--aviso) 22%, transparent); }
 
     /* montador de reações e mistura */
-    .montador-topo { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+    .adicionar-linha {
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%; padding: 0.55rem;
+      border: 1px dashed var(--borda-forte); border-radius: 10px; background: transparent; color: var(--suave);
+      font: 600 0.84rem var(--sans); cursor: pointer; transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .adicionar-linha:hover, .adicionar-linha:focus-visible { color: var(--acento); border-color: var(--acento); background: var(--acento-fundo); outline: none; }
+    .acoes-montador { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--borda); }
     .montador-lados { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 1rem; align-items: start; }
     .montador-lados h4 { margin: 0 0 0.5rem; font: 600 0.74rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--acento); }
     .seta-reacao { align-self: center; font: 700 1.8rem var(--mono); color: var(--acento); }
@@ -567,7 +661,10 @@
     /* desenho das árvores */
     .desenho-arvore { border: 1px solid var(--borda); border-radius: 12px; background: var(--bg); }
     .arv-controles { display: flex; gap: 0.4rem; align-items: center; justify-content: flex-end; padding: 0.5rem; border-bottom: 1px solid var(--borda); }
-    .arv-controles span { margin-right: auto; font: 0.74rem var(--mono); color: var(--fraco); }
+    .arv-controles > span:first-child { margin-right: auto; font: 0.74rem var(--mono); color: var(--fraco); }
+    .arv-controles .grupo-icones > :last-child[data-dica]::after { left: auto; right: 0; transform: none; }
+    /* Tabela: o modelo de Bohr acompanha a rolagem ao lado da ficha, que é mais longa */
+    @media (min-width: 1001px) { #pg-tabela .play > .placa:first-child { position: sticky; top: 88px; align-self: start; } }
     .arv-rolagem { overflow: auto; max-height: 520px; padding: 0.4rem; }
     .arv-svg { display: block; }
     .arv-aresta { fill: none; stroke: var(--borda-forte); stroke-width: 1.3; }
@@ -1505,54 +1602,94 @@ ESPACO
         <p class="lead">O código é analisado no navegador a cada tecla e desenhado em 3D. Cada erro vem com o que significa e como corrigir.</p>
       </div>
 
-      <div class="placa guia">
-        <h3>Como usar</h3>
+      <details class="placa guia">
+        <summary>
+          <span class="guia-titulo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Como usar</span>
+          <span class="guia-resumo">4 passos · espécie, átomos, ligações</span>
+          <svg class="ic guia-seta" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
         <ol class="passos">
-          <li>Escolha um exemplo no seletor ou clique em <b>Começar do zero</b>.</li>
+          <li>Escolha um exemplo no seletor ou comece do zero com <b>Novo</b>.</li>
           <li>Abra a espécie: <code>species molecule "Nome" { … }</code>.</li>
           <li>Declare os átomos: <code>atom O</code>, <code>2x atom H as h</code> (cria h1 e h2).</li>
           <li>Ligue os átomos: <code>bond O-h1</code>. Use <code>=</code> para dupla, <code>#</code> para tripla e <code>-&gt;</code> para coordenada.</li>
         </ol>
-        <div class="exemplos-erro">
-          <span>veja um erro</span>
-          <button class="botao pequeno" type="button" data-erro="valencia">Valência excedida</button>
-          <button class="botao pequeno" type="button" data-erro="nome">Nome inexistente</button>
-          <button class="botao pequeno" type="button" data-erro="caractere">Caractere inválido</button>
-          <button class="botao pequeno" type="button" data-erro="chave">Falta fechar a espécie</button>
-          <button class="botao pequeno" type="button" data-erro="repetida">Ligação repetida</button>
-          <button class="botao pequeno" type="button" data-erro="incompleta">Faltam hidrogênios</button>
-        </div>
-      </div>
+      </details>
 
       <div class="alerta" id="alerta" role="status" aria-live="assertive"></div>
+      <div class="placa barra-play">
+        <div class="linha-selecao">
+          <select id="exemplo" aria-label="Carregar exemplo"></select>
+          <select id="bloco-play" aria-label="Bloco desenhado" hidden></select>
+        </div>
+        <div class="linha-acoes">
+          <div class="grupo-icones" role="toolbar" aria-label="Arquivo">
+            <button class="icone-botao" type="button" id="limpar" aria-label="Novo: começar do zero" data-dica="Novo">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6M9 14h6"/></svg>
+            </button>
+            <button class="icone-botao" type="button" id="abrir-mol" aria-label="Abrir arquivo .mol" data-dica="Abrir .mol">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+            </button>
+            <button class="icone-botao" type="button" id="baixar-mol" aria-label="Baixar arquivo .mol" data-dica="Baixar .mol">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+            </button>
+          </div>
+          <div class="grupo-icones" role="toolbar" aria-label="Erros e demonstração">
+            <details class="menu-erros">
+              <summary class="icone-botao" aria-label="Exemplos de erro" data-dica="Exemplos de erro">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.3 4.2 2.6 17.5A2 2 0 0 0 4.3 20.5h15.4a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4M12 17h.01"/></svg>
+              </summary>
+              <div class="menu" role="menu" aria-label="Exemplos de erro">
+                <span class="menu-titulo">Veja um erro</span>
+                <button type="button" role="menuitem" data-erro="valencia">Valência excedida</button>
+                <button type="button" role="menuitem" data-erro="nome">Nome inexistente</button>
+                <button type="button" role="menuitem" data-erro="caractere">Caractere inválido</button>
+                <button type="button" role="menuitem" data-erro="chave">Falta fechar a espécie</button>
+                <button type="button" role="menuitem" data-erro="repetida">Ligação repetida</button>
+                <button type="button" role="menuitem" data-erro="incompleta">Faltam hidrogênios</button>
+              </div>
+            </details>
+            <button class="icone-botao" type="button" id="demonstrar-atual" aria-label="Demonstrar tradução etapa por etapa" data-dica="Demonstrar tradução">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/></svg>
+            </button>
+          </div>
+        </div>
+        <input type="file" id="arquivo-mol" accept=".mol,.txt,text/plain" hidden>
+      </div>
+      <p class="nota arquivo-status" id="arquivo-status" role="status" aria-live="polite" hidden></p>
       <div class="play">
         <div class="placa">
-          <div class="barra-ferramentas">
-            <select id="exemplo" aria-label="Carregar exemplo"></select>
-            <select id="bloco-play" aria-label="Bloco desenhado" hidden></select>
-            <button class="botao pequeno" type="button" id="limpar">Começar do zero</button>
-            <button class="botao pequeno" type="button" id="demonstrar-atual">Demonstrar tradução</button>
-            <span class="arquivo-botoes">
-              <button class="botao pequeno" type="button" id="baixar-mol" title="Salva o código do editor num arquivo .mol">Baixar .mol</button>
-              <button class="botao pequeno" type="button" id="abrir-mol" title="Carrega um arquivo .mol no editor">Abrir .mol</button>
-              <input type="file" id="arquivo-mol" accept=".mol,.txt,text/plain" hidden>
-            </span>
-          </div>
-          <p class="nota arquivo-status" id="arquivo-status" role="status" aria-live="polite" hidden></p>
           <div class="editor">
             <div class="numeros" id="numeros" aria-hidden="true">1</div>
             <div class="area-codigo"><pre class="realce" id="realce" aria-hidden="true"></pre><textarea id="codigo" spellcheck="false" aria-label="Código MoleculeDSL" autocapitalize="off" autocomplete="off"></textarea></div>
           </div>
-          <p class="nota">Tab insere quatro espaços. Clique num erro para ir até a linha dele. Arraste um arquivo <code>.mol</code> para o editor para abri-lo.</p>
+          <p class="nota rodape-placa">Tab insere quatro espaços · clique num erro para ir à linha · arraste um <code>.mol</code> para abrir</p>
         </div>
         <div class="placa">
-          <div class="barra-ferramentas">
-            <label class="alternar"><input type="checkbox" id="girar" checked> girar</label>
-            <label class="alternar"><input type="checkbox" id="rotulos"> rótulos</label>
-            <label class="alternar"><input type="checkbox" id="esconder-h"> ocultar H</label>
-            <button class="botao pequeno" type="button" id="recentrar">Recentrar</button>
+          <div class="cena">
+            <canvas id="cena-3d" aria-label="Molécula em 3D"></canvas><div class="vazio" id="cena-vazia" hidden></div><span class="dica">arraste · role para zoom</span>
+            <div class="controles-cena">
+              <div class="grupo-icones segmentado" role="group" aria-label="Opções da cena 3D">
+                <label class="icone-botao alternar-icone" data-dica="Girar">
+                  <input type="checkbox" id="girar" checked aria-label="Girar a molécula">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v5h-5"/></svg>
+                </label>
+                <label class="icone-botao alternar-icone" data-dica="Rótulos">
+                  <input type="checkbox" id="rotulos" aria-label="Mostrar rótulos dos átomos">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.6 3.6H4.6a1 1 0 0 0-1 1v8l9 9a1.4 1.4 0 0 0 2 0l6-6a1.4 1.4 0 0 0 0-2z"/><circle cx="8" cy="8" r="1.4"/></svg>
+                </label>
+                <label class="icone-botao alternar-icone" data-dica="Ocultar H">
+                  <input type="checkbox" id="esconder-h" aria-label="Ocultar hidrogênios">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12M8 12h8"/><path d="M4 20 20 4" class="risco"/></svg>
+                </label>
+              </div>
+              <div class="grupo-icones">
+                <button class="icone-botao" type="button" id="recentrar" aria-label="Recentrar a molécula" data-dica="Recentrar">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/><circle cx="12" cy="12" r="2.5"/></svg>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="cena"><canvas id="cena-3d" aria-label="Molécula em 3D"></canvas><div class="vazio" id="cena-vazia" hidden></div><span class="dica">arraste · role para zoom</span></div>
           <div class="resumo-mol" id="resumo"></div>
           <div class="legenda-ligacoes" id="legenda-ligacoes" aria-label="Tipos de ligação"></div>
           <div class="abas" role="tablist" data-grupo="play">
@@ -1567,7 +1704,10 @@ ESPACO
           <div class="painel" id="p-atomos" role="tabpanel" hidden></div>
           <div class="painel" id="p-modelo" role="tabpanel" hidden><pre></pre></div>
           <div class="painel" id="p-real" role="tabpanel" hidden><pre></pre></div>
-          <p class="nota">O desenho é um layout por forças, ilustrativo: a linguagem descreve quais átomos se ligam, não coordenadas. A verificação do navegador é uma versão reduzida do compilador: cobre sintaxe, nomes, valências, átomos, blocos e tipos de espécie. Carga formal (CARGA-001), ligações múltiplas com halogênio (BOND), ligação coordenada (COORD), radicais (RAD) e parte das regras de anel e de estereoquímica só aparecem no compilador em Python; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
+          <details class="nota rodape-placa detalhe">
+            <summary>Limites do desenho e da verificação</summary>
+            <p>O desenho é um layout por forças, ilustrativo: a linguagem descreve quais átomos se ligam, não coordenadas. A verificação do navegador é uma versão reduzida do compilador: cobre sintaxe, nomes, valências, átomos, blocos e tipos de espécie. Carga formal (CARGA-001), ligações múltiplas com halogênio (BOND), ligação coordenada (COORD), radicais (RAD) e parte das regras de anel e de estereoquímica só aparecem no compilador em Python; a aba “Compilador real” mostra a saída de <code>src/main.py --modelo</code> para os exemplos sem edição.</p>
+          </details>
         </div>
       </div>
       <div class="placa arvores-play" id="p-arvores">
@@ -1615,28 +1755,28 @@ ESPACO
       </div>
       <div id="lab-reacao" role="tabpanel" style="margin-top:1.4rem">
         <div class="placa montador" id="montador">
-          <div class="montador-topo">
-            <div><h3>Monte a reação</h3><p class="nota" style="margin:0">Escolha espécies dos exemplos ou escreva o código MoleculeDSL de cada uma. Ajuste os coeficientes ou peça o balanceamento.</p></div>
-            <label class="alternar">partir de <select id="reacao" aria-label="Reação pronta"></select></label>
+          <div class="cabeca-placa">
+            <div><h3>Monte a reação</h3><p class="nota">Espécies dos exemplos ou código próprio, com os coeficientes de cada uma.</p></div>
+            <select id="reacao" aria-label="Partir de uma reação pronta" title="Partir de uma reação pronta"></select>
           </div>
           <div class="montador-lados">
-            <div><h4>Reagentes</h4><div id="montador-reagentes"></div><button type="button" class="botao pequeno" id="mais-reagente">+ reagente</button></div>
+            <div><h4>Reagentes</h4><div id="montador-reagentes"></div><button type="button" class="adicionar-linha" id="mais-reagente"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Reagente</button></div>
             <div class="seta-reacao" aria-hidden="true">→</div>
-            <div><h4>Produtos</h4><div id="montador-produtos"></div><button type="button" class="botao pequeno" id="mais-produto">+ produto</button></div>
+            <div><h4>Produtos</h4><div id="montador-produtos"></div><button type="button" class="adicionar-linha" id="mais-produto"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Produto</button></div>
           </div>
-          <div class="acoes" style="justify-content:flex-start;margin-top:1rem">
-            <button type="button" class="botao primario" id="simular-reacao">Simular reação</button>
-            <button type="button" class="botao" id="balancear-reacao">Balancear e simular</button>
+          <div class="acoes-montador">
+            <button type="button" class="botao pequeno" id="balancear-reacao"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M8 20h8M5 7h14"/><path d="m5 7-2.5 6.5a3 3 0 0 0 5 0zM19 7l-2.5 6.5a3 3 0 0 0 5 0z"/></svg>Balancear e simular</button>
+            <button type="button" class="botao pequeno primario" id="simular-reacao"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Simular reação</button>
           </div>
         </div>
         <div class="play" style="margin-top:1.1rem">
           <div class="placa">
-            <div class="barra-ferramentas">
-              <button class="botao pequeno" type="button" id="tocar-reacao">❚❚ Pausar</button>
-              <button class="botao pequeno" type="button" id="reiniciar-reacao">Reiniciar</button>
-            </div>
             <div class="cena"><canvas id="cena-reacao" aria-label="Animação da reação"></canvas><span class="fase-reacao" id="fase-reacao">Reagentes</span><span class="dica">arraste para girar</span></div>
-            <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+            <div class="barra-player">
+              <button class="icone-botao" type="button" id="tocar-reacao" aria-label="Pausar" data-dica="Pausar"></button>
+              <button class="icone-botao" type="button" id="reiniciar-reacao" aria-label="Reiniciar" data-dica="Reiniciar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 4v5h5"/></svg></button>
+              <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+            </div>
           </div>
           <div class="placa" id="info-reacao"></div>
         </div>
@@ -1644,16 +1784,20 @@ ESPACO
       <div id="lab-mistura" role="tabpanel" class="play" style="margin-top:1.4rem" hidden>
         <div class="placa">
           <div class="cena"><canvas id="cena-mistura" aria-label="Mistura de átomos, íons e moléculas"></canvas><span class="dica">arraste para girar</span></div>
-          <label class="alternar" style="margin-top:0.9rem">agitação (temperatura) <input type="range" id="agitacao" min="0" max="3" step="0.1" value="1"></label>
+          <div class="barra-player">
+            <span class="icone-rotulo" data-dica="Agitação (temperatura)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 11v6"/></svg></span>
+            <input type="range" id="agitacao" min="0" max="3" step="0.1" value="1" aria-label="Agitação (temperatura)">
+          </div>
         </div>
         <div class="placa">
-          <h3>Componentes</h3>
-          <label class="nota" for="mistura-pronta" style="display:block;margin:0 0 0.3rem">Mistura pronta</label>
-          <select id="mistura-pronta" style="width:100%;max-width:100%;margin-bottom:0.9rem"></select>
+          <div class="cabeca-placa">
+            <h3>Componentes</h3>
+            <select id="mistura-pronta" aria-label="Partir de uma mistura pronta" title="Partir de uma mistura pronta"></select>
+          </div>
           <div id="lista-mistura" class="lista-mistura"></div>
           <div class="adicionar-mistura">
             <select id="nova-especie" aria-label="Espécie para adicionar"></select>
-            <button type="button" class="botao pequeno" id="adicionar-mistura">Adicionar</button>
+            <button type="button" class="icone-botao" id="adicionar-mistura" aria-label="Adicionar à mistura" data-dica="Adicionar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
           </div>
           <textarea id="codigo-mistura" class="codigo-curto" spellcheck="false" aria-label="Código MoleculeDSL do componente" hidden></textarea>
           <div id="info-mistura" style="margin-top:1rem"></div>
@@ -1673,7 +1817,16 @@ ESPACO
         <div class="placa"><h3>Modelo atômico (Bohr)</h3><div class="cena cena-bohr"><canvas id="bohr" aria-label="Modelo de Bohr do elemento"></canvas></div><p class="nota">Camadas tiradas da configuração eletrônica de <code>regras/elementos.json</code>. O modelo de Bohr é didático: os elétrons não giram em órbitas fixas.</p></div>
         <div class="placa" id="ficha-elemento"></div>
       </div>
-      <div class="placa" style="margin-top:1.1rem"><h3>Bancada</h3><div id="bancada"></div></div>
+      <div class="placa" style="margin-top:1.1rem">
+        <div class="cabeca-placa">
+          <div><h3>Bancada</h3><p class="nota">Some elementos e o código da molécula aparece aqui.</p></div>
+          <div class="grupo-icones" id="acoes-bancada" hidden>
+            <button class="icone-botao" type="button" id="bancada-abrir" aria-label="Abrir no playground" data-dica="Abrir no playground"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg></button>
+            <button class="icone-botao" type="button" id="bancada-limpar" aria-label="Limpar a bancada" data-dica="Limpar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5M14 11v5"/></svg></button>
+          </div>
+        </div>
+        <div id="bancada"></div>
+      </div>
     </section>
   </main>
 
@@ -2994,7 +3147,15 @@ ESPACO
     codigo.scrollTop = Math.max(0, (n - 4) * parseFloat(getComputedStyle(codigo).lineHeight));
   }
 
+  // Menu de exemplos de erro: fecha ao escolher, ao clicar fora ou com Esc
+  const menuErros = document.querySelector(".menu-erros");
+  document.addEventListener("click", (e) => { if (menuErros.open && !menuErros.contains(e.target)) menuErros.open = false; });
+  menuErros.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menuErros.open) { menuErros.open = false; menuErros.querySelector("summary").focus(); }
+  });
+  menuErros.addEventListener("toggle", () => { if (menuErros.open) menuErros.querySelector("[data-erro]").focus(); });
   document.querySelectorAll("[data-erro]").forEach((botao) => botao.addEventListener("click", () => {
+    menuErros.open = false;
     exemploAtual = null;
     arquivoAberto = null;
     statusArquivo.hidden = true;
@@ -3180,6 +3341,26 @@ ESPACO
     quadro();
   })();
 
+  /* Ícones dos botões gerados pelos módulos: traço 24×24, como os do modelo */
+  const ICONES = {
+    tocar: '<path d="M8 5.5v13l10.5-6.5z"/>',
+    pausar: '<path d="M9 5.5v13M15 5.5v13"/>',
+    mais: '<path d="M12 5v14M5 12h14"/>',
+    menos: '<path d="M5 12h14"/>',
+    fechar: '<path d="M7 7l10 10M17 7 7 17"/>',
+    remover: '<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5M14 11v5"/>',
+    demonstrar: '<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/>',
+    zoomMenos: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3M8 11h6"/>',
+    zoomMais: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3M8 11h6M11 8v6"/>',
+    ajustar: '<path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/>',
+    playground: '<path d="M14 4h6v6M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
+  };
+  const svgIcone = (nome) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONES[nome]}</svg>`;
+  // Botão só com ícone: o rótulo vai no aria-label (leitor de tela) e no data-dica (dica visual)
+  function botaoIcone(nome, rotulo, atributos = "", classe = "") {
+    return `<button type="button" class="icone-botao ${classe}" aria-label="${escapar(rotulo)}" data-dica="${escapar(rotulo)}" ${atributos}>${svgIcone(nome)}</button>`;
+  }
+
   /* ================= árvore de tradução ================= */
   // Cada etapa da tradução é explicada por duas lentes: a da computação
   // (compiladores, gramática, estruturas de dados) e a da química.
@@ -3337,15 +3518,13 @@ ESPACO
     const { svg, nos } = arvoreSVG(raizNo, comDetalhe);
     return `<div class="desenho-arvore">
       <div class="arv-controles"><span>${nos} nós</span>
-        <button type="button" class="botao pequeno" data-zoom="0.8" aria-label="Diminuir">−</button>
-        <button type="button" class="botao pequeno" data-zoom="1.25" aria-label="Aumentar">+</button>
-        <button type="button" class="botao pequeno" data-zoom="ajustar">Ajustar à largura</button></div>
+        <span class="grupo-icones segmentado">${botaoIcone("zoomMenos", "Diminuir", 'data-zoom="0.8"', "mini")}${botaoIcone("zoomMais", "Aumentar", 'data-zoom="1.25"', "mini")}${botaoIcone("ajustar", "Ajustar à largura", 'data-zoom="ajustar"', "mini")}</span></div>
       <div class="arv-rolagem">${svg}</div></div>`;
   }
   // Ao aparecer: reduz até caber na largura (sem passar de 45%) e centraliza a raiz
   function ajustarDesenhos(alvo) {
     alvo.querySelectorAll(".desenho-arvore").forEach((caixa) => {
-      const rolagem = caixa.querySelector(".arv-rolagem"), svg = caixa.querySelector("svg");
+      const rolagem = caixa.querySelector(".arv-rolagem"), svg = caixa.querySelector(".arv-svg");
       const larguraBase = Number(svg.dataset.largura), alturaBase = Number(svg.dataset.altura);
       const disponivel = rolagem.clientWidth - 12;
       if (!disponivel) return;
@@ -3361,7 +3540,7 @@ ESPACO
     const botao = e.target.closest("[data-zoom]");
     if (!botao) return;
     const caixa = botao.closest(".desenho-arvore");
-    const svg = caixa.querySelector("svg");
+    const svg = caixa.querySelector(".arv-svg");
     const larguraBase = Number(svg.dataset.largura), alturaBase = Number(svg.dataset.altura);
     let escala = Number(svg.dataset.escala || 1);
     escala = botao.dataset.zoom === "ajustar" ? Math.min(1.5, caixa.querySelector(".arv-rolagem").clientWidth / larguraBase) : Math.min(3, Math.max(0.2, escala * Number(botao.dataset.zoom)));
@@ -3891,7 +4070,7 @@ ESPACO
       <div class="tabela"><table><tr><th>Ligações</th><th>Tipos</th></tr>
         <tr><td>rompidas</td><td>${textoContagem(quebradas)}</td></tr>
         <tr><td>formadas</td><td>${textoContagem(formadas)}</td></tr></table></div>
-      <div class="botoes-traducao"><span>Tradução de cada espécie:</span>${especiesUnicas.map((esp, i) => `<button type="button" class="botao pequeno" data-demo-codigo="${i}">${escapar(esp.titulo)}</button>`).join("")}</div>
+      <div class="botoes-traducao"><span>Tradução de cada espécie</span>${especiesUnicas.map((esp, i) => `<button type="button" class="botao pequeno" data-demo-codigo="${i}">${svgIcone("demonstrar")}${escapar(esp.titulo)}</button>`).join("")}</div>
       <p class="nota">Animação ilustrativa: mostra a conservação dos átomos e quais ligações se rompem e se formam. Não representa o mecanismo, a velocidade nem a energia.</p>`;
     info.querySelectorAll("[data-demo-codigo]").forEach((b) => b.addEventListener("click", () => {
       const esp = especiesUnicas[Number(b.dataset.demoCodigo)];
@@ -3920,7 +4099,7 @@ ESPACO
     return `<div class="item-montador">
       <input type="number" min="1" max="9" value="${item.n}" aria-label="Coeficiente" data-lado="${lado}" data-i="${i}" data-campo="n">
       <select data-lado="${lado}" data-i="${i}" data-campo="arq" aria-label="Espécie">${opcoesEspecies(item.arq)}</select>
-      <button type="button" class="botao pequeno" data-lado="${lado}" data-i="${i}" data-remover aria-label="Remover">×</button>
+      ${botaoIcone("remover", "Remover", `data-lado="${lado}" data-i="${i}" data-remover`)}
       ${item.arq === "__codigo" ? `<textarea data-lado="${lado}" data-i="${i}" data-campo="codigo" spellcheck="false" aria-label="Código MoleculeDSL da espécie">${escapar(item.codigo)}</textarea>` : ""}
     </div>`;
   }
@@ -3993,7 +4172,13 @@ ESPACO
   seletorReacao.innerHTML = REACOES.map((r, i) => `<option value="${i}">${escapar(r.nome)}</option>`).join("");
   seletorReacao.addEventListener("change", () => { carregarNoMontador(REACOES[Number(seletorReacao.value)]); simularReacao(reacaoDoMontador()); });
   const botaoTocar = document.getElementById("tocar-reacao");
-  function atualizarBotaoReacao() { botaoTocar.textContent = tocando ? "❚❚ Pausar" : "▶ Reproduzir"; }
+  function atualizarBotaoReacao() {
+    const rotulo = tocando ? "Pausar" : "Reproduzir";
+    botaoTocar.innerHTML = svgIcone(tocando ? "pausar" : "tocar");
+    botaoTocar.setAttribute("aria-label", rotulo);
+    botaoTocar.dataset.dica = rotulo;
+  }
+  atualizarBotaoReacao();
   botaoTocar.addEventListener("click", () => { if (progresso >= 1) progresso = 0; tocando = !tocando; atualizarBotaoReacao(); });
   document.getElementById("reiniciar-reacao").addEventListener("click", () => { progresso = 0; tocando = true; atualizarBotaoReacao(); });
   document.getElementById("progresso-reacao").addEventListener("input", (e) => { progresso = Number(e.target.value); tocando = false; atualizarBotaoReacao(); });
@@ -4031,10 +4216,8 @@ ESPACO
     document.getElementById("lista-mistura").innerHTML = componentesMistura.map((c, i) => {
       const { r } = compilarEspecie(c.esp);
       return `<div class="item-mistura${r.erros.length ? " invalido" : ""}"><div><b>${escapar(c.esp.titulo)}</b><small>${r.erros.length ? "erro: " + escapar(r.erros[0].codigo) : formulaHill(r.atomos) + textoCarga(cargaDe(r))}</small></div>
-        <div class="contador-mistura"><button type="button" class="botao pequeno" data-menos="${i}" aria-label="Menos">−</button><span>${c.n}</span>
-        <button type="button" class="botao pequeno" data-mais="${i}" aria-label="Mais">+</button>
-        <button type="button" class="botao pequeno" data-tradu="${i}">Tradução</button>
-        <button type="button" class="botao pequeno" data-tirar="${i}" aria-label="Remover">×</button></div></div>`;
+        <div class="contador-mistura"><span class="passo-mistura">${botaoIcone("menos", "Menos", `data-menos="${i}"`, "mini")}<span aria-label="Quantidade">${c.n}</span>${botaoIcone("mais", "Mais", `data-mais="${i}"`, "mini")}</span>
+        <span class="grupo-icones">${botaoIcone("demonstrar", "Demonstrar tradução", `data-tradu="${i}"`)}${botaoIcone("remover", "Remover", `data-tirar="${i}"`)}</span></div></div>`;
     }).join("");
   }
   document.getElementById("lista-mistura").addEventListener("click", (e) => {
@@ -4723,7 +4906,8 @@ void main() {
     const comCarga = DADOS.valencias.valencias_com_carga[simbolo];
     const cam = camadas(simbolo);
     document.getElementById("ficha-elemento").innerHTML = `
-      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco} · nome na fonte (PubChem): ${escapar(e.nome_fonte)}</p></div></div>
+      <div class="ficha-topo"><span class="simbolo-grande">${simbolo}</span><div><h3>${escapar(e.nome)}</h3><p>Z = ${e.numero} · ${CATEGORIA[e.bloco] || e.bloco} · nome na fonte (PubChem): ${escapar(e.nome_fonte)}</p></div>
+        <div class="grupo-icones">${botaoIcone("demonstrar", "Demonstrar tradução", 'id="demo-elemento"')}${botaoIcone("playground", "Abrir no playground", 'id="usar-elemento"')}${botaoIcone("mais", "Adicionar à bancada", 'id="bancada-mais"', "destaque")}</div></div>
       <div class="duas-lentes">
         <div><h4>Para a química</h4><dl>
           <dt>Configuração</dt><dd>${escapar(e.config || "—")}</dd>
@@ -4743,12 +4927,7 @@ void main() {
       </div>
       <pre>${escapar(codigoDoElemento(simbolo).trim())}</pre>
       <p class="nota" style="margin:0.8rem 0 0.3rem">AST desse programa: como a linguagem entende o elemento</p>
-      <div class="ficha-arvore">${desenhoArvore(astNo(compilar(codigoDoElemento(simbolo)).especie, "quim"))}</div>
-      <div class="acoes-ficha">
-        <button type="button" class="botao pequeno" id="demo-elemento">Demonstrar tradução</button>
-        <button type="button" class="botao pequeno" id="usar-elemento">Abrir no playground</button>
-        <button type="button" class="botao pequeno primario" id="bancada-mais">+ adicionar à bancada</button>
-      </div>`;
+      <div class="ficha-arvore">${desenhoArvore(astNo(compilar(codigoDoElemento(simbolo)).especie, "quim"))}</div>`;
     requestAnimationFrame(() => ajustarDesenhos(document.getElementById("ficha-elemento")));
     document.getElementById("demo-elemento").addEventListener("click", () => abrirDemonstracao(codigoDoElemento(simbolo), `Átomo isolado de ${e.nome.toLowerCase()}`));
     document.getElementById("usar-elemento").addEventListener("click", () => {
@@ -4788,8 +4967,9 @@ void main() {
   }
   function desenharBancada() {
     const caixa = document.getElementById("bancada");
+    document.getElementById("acoes-bancada").hidden = !bancada.length;
     if (!bancada.length) {
-      caixa.innerHTML = `<p class="nota" style="margin:0">Clique num elemento e em “+ adicionar à bancada” para montar uma molécula. O código MoleculeDSL aparece aqui.</p>`;
+      caixa.innerHTML = `<p class="bancada-vazia">Clique num elemento e no <b>+</b> da ficha para começar.</p>`;
       return;
     }
     const valencias = bancada.map((s) => (DADOS.valencias.valencias[s] || [null])[0]);
@@ -4800,22 +4980,21 @@ void main() {
       : soma % 2
         ? `Soma das valências = ${soma}, ímpar: não fecha sem carga ou radical.`
         : `Soma das valências = ${soma}: cabem ${soma / 2} ordens de ligação no total. Com --resolver o compilador tenta ligar os átomos sozinho.`;
-    caixa.innerHTML = `<div class="fichas">${bancada.map((s, i) => `<button type="button" class="ficha" data-tirar-bancada="${i}" title="Remover"><code>${s}</code><small>remover</small></button>`).join("")}</div>
+    caixa.innerHTML = `<div class="fichas">${bancada.map((s, i) => `<button type="button" class="ficha ficha-bancada" data-tirar-bancada="${i}" aria-label="Remover ${s} da bancada" data-dica="Remover"><code>${s}</code>${svgIcone("fechar")}</button>`).join("")}</div>
       <p class="nota">${escapar(nota)}</p>
       <pre>${escapar(codigoDaBancada().trim())}</pre>
-      ${(() => { const r = compilar(codigoDaBancada()); return r.especie ? `<p class="nota" style="margin:0.8rem 0 0.3rem">AST da bancada (as ligações entram quando você escrever os bond no playground)</p>${desenhoArvore(astNo(r.especie, "comp"))}` : ""; })()}
-      <div class="acoes-ficha"><button type="button" class="botao pequeno primario" id="bancada-abrir">Abrir no playground</button><button type="button" class="botao pequeno" id="bancada-limpar">Limpar</button></div>`;
+      ${(() => { const r = compilar(codigoDaBancada()); return r.especie ? `<p class="nota" style="margin:0.8rem 0 0.3rem">AST da bancada (as ligações entram quando você escrever os bond no playground)</p>${desenhoArvore(astNo(r.especie, "comp"))}` : ""; })()}`;
     requestAnimationFrame(() => ajustarDesenhos(caixa));
     caixa.querySelectorAll("[data-tirar-bancada]").forEach((b) => b.addEventListener("click", () => { bancada.splice(Number(b.dataset.tirarBancada), 1); desenharBancada(); }));
-    document.getElementById("bancada-limpar").addEventListener("click", () => { bancada.length = 0; desenharBancada(); });
-    document.getElementById("bancada-abrir").addEventListener("click", () => {
-      exemploAtual = null;
-      seletor.value = "";
-      codigo.value = codigoDaBancada();
-      location.hash = "#/playground";
-      executar();
-    });
   }
+  document.getElementById("bancada-limpar").addEventListener("click", () => { bancada.length = 0; desenharBancada(); });
+  document.getElementById("bancada-abrir").addEventListener("click", () => {
+    exemploAtual = null;
+    seletor.value = "";
+    codigo.value = codigoDaBancada();
+    location.hash = "#/playground";
+    executar();
+  });
 
   let tabelaPronta = false;
   function iniciarTabela() {
