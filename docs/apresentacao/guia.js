@@ -2,7 +2,7 @@
   const LICOES = DADOS.guia;
   let licaoAtual = LICOES[0].id;
   document.getElementById("sumario-guia").innerHTML = LICOES.map((l, i) =>
-    `<a href="#/guia/${l.id}" data-licao="${l.id}">${String(i + 1).padStart(2, "0")} · ${escapar(l.titulo)}</a>`).join("");
+    `<a href="#/guia/${l.id}" data-licao="${l.id}"><span class="num-licao">${String(i + 1).padStart(2, "0")}</span><span>${escapar(l.titulo)}</span></a>`).join("");
 
   function mostrarLicao(id) {
     const licao = LICOES.find((l) => l.id === id) || LICOES[0];
@@ -22,7 +22,9 @@
         <dl>${licao.anatomia.partes.map(([parte, sentido], i) => `<dt><span class="parte p${i}">${escapar(parte)}</span></dt><dd>${escapar(sentido)}</dd>`).join("")}</dl></article>` : ""}
       ${licao.exemplos.map((ex, k) => `
         <article class="placa exemplo-guia">
-          <div class="exemplo-cabeca"><h4>${escapar(ex.titulo)}</h4><span class="selo-saida ${ex.saida === 0 ? "ok" : "erro"}">saída ${ex.saida}${ex.saida === 0 ? " · compila" : ex.saida === 2 ? " · erro semântico" : " · erro de sintaxe"}</span></div>
+          <div class="exemplo-cabeca"><h4>${escapar(ex.titulo)}</h4>
+            <div class="exemplo-acoes"><span class="selo-saida ${ex.saida === 0 ? "ok" : "erro"}">saída ${ex.saida}${ex.saida === 0 ? " · compila" : ex.saida === 2 ? " · erro semântico" : " · erro de sintaxe"}</span>
+              <span class="grupo-icones">${botaoIcone("demonstrar", "Demonstrar tradução", `data-guia-demo="${k}"`)}${botaoIcone("playground", "Abrir no playground", `data-guia-abrir="${k}"`)}</span></div></div>
           <p>${escapar(ex.explicacao)}</p>
           <div class="exemplo-corpo${ex.bohr ? " com-bohr" : ""}">
             <div><p class="nota">Código</p><pre>${escapar(ex.codigo.trim())}</pre>${ex.bohr ? `<p class="nota" style="margin-top:0.8rem">Modelo de Bohr</p><canvas class="bohr-guia" data-bohr="${ex.bohr}" data-carga="${ex.carga || 0}" aria-label="Modelo de Bohr de ${ex.bohr}"></canvas>` : ""}</div>
@@ -35,10 +37,6 @@
               ? `<details class="ast-guia"${licao.id === "construir_atomo" ? " open" : ""}><summary>AST desenhada: como a linguagem entendeu este código</summary>${desenhoArvore(astNo(r.especie, "comp"))}</details>`
               : "";
           })()}
-          <div class="acoes" style="justify-content:flex-start;margin-top:0.9rem">
-            <button type="button" class="botao pequeno" data-guia-abrir="${k}">Abrir no playground</button>
-            <button type="button" class="botao pequeno" data-guia-demo="${k}">Demonstrar tradução</button>
-          </div>
         </article>`).join("")}`;
     document.querySelectorAll("[data-guia-abrir]").forEach((b) => b.addEventListener("click", () => {
       const ex = licao.exemplos[Number(b.dataset.guiaAbrir)];

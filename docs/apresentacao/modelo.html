@@ -46,9 +46,9 @@
           <h1>Molecule<b>DSL</b><span class="cursor" aria-hidden="true"></span></h1>
           <p class="lema">a química das moléculas, <em>escrita como código</em>.<br>declare átomos e ligações — o compilador valida, resolve e explica.</p>
           <div class="acoes">
-            <a class="botao primario" href="#/playground">Abrir o playground</a>
-            <a class="botao" href="#/guia/construir_atomo">Guia de uso</a>
-            <a class="botao" href="#/conteudo/1">Ver a apresentação</a>
+            <a class="botao primario" href="#/playground"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/><circle cx="12" cy="12" r="2.5"/></svg>Abrir o playground</a>
+            <a class="botao" href="#/guia/construir_atomo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg>Guia de uso</a>
+            <a class="botao" href="#/conteudo/1"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg>Ver a apresentação</a>
           </div>
           <div class="terminal"><span class="prompt">user@moleculedsl:~$</span><span>python3 src/main.py --modelo exemplos/benzeno.mol</span></div>
           <ul class="chips" aria-label="Equipe e disciplina">
@@ -68,7 +68,7 @@
           <p class="lead">Entenda o compilador, aprenda a usar, consulte a referência, escreva moléculas, simule misturas e reações e explore os elementos.</p>
         </div>
         <div class="grade">
-          <a class="placa modulo c12" href="#/guia/construir_atomo"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Quinze lições com código, saída real do compilador e variações, começando por como construir um átomo passo a passo e por núcleo e eletrosfera (isótopos, Pauli, Aufbau, Hund): átomos e íons monoatômicos, tipos de ligação (covalente, iônica, coordenada, metálica), cargas, anéis, radicais, stereo, erros semânticos, sólidos e o solver.</p></a>
+          <a class="placa modulo c12" href="#/guia/construir_atomo"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Lições com código e saída real do compilador, do primeiro átomo ao solver: ligações, cargas, anéis, estereoquímica e erros.</p></a>
           <a class="placa modulo c3" href="#/conteudo/1"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg></div><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
           <a class="placa modulo c3" href="#/uso"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
           <a class="placa modulo c3" href="#/doc/comandos"><div class="icone"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
@@ -85,10 +85,10 @@
           <p class="lead">Este é um programa completo. O compilador confere nomes, valências e cargas e aponta linha e coluna de qualquer erro.</p>
         </div>
         <div class="grade">
-          <div class="placa c6"><p class="nota" style="margin:0 0 0.4rem">exemplos/agua.mol</p><pre style="margin:0">{{AGUA}}</pre></div>
-          <div class="placa c6"><p class="nota" style="margin:0 0 0.4rem">python3 src/main.py --modelo exemplos/agua.mol</p><pre style="margin:0">{{MODELO}}</pre></div>
+          <div class="placa c6 cartao-codigo"><p class="rotulo-codigo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>exemplos/agua.mol</p><pre>{{AGUA}}</pre></div>
+          <div class="placa c6 cartao-codigo"><p class="rotulo-codigo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg>python3 src/main.py --modelo exemplos/agua.mol</p><pre>{{MODELO}}</pre></div>
         </div>
-        <div class="acoes"><button type="button" class="botao" data-demonstrar="exemplos/agua.mol">Demonstrar como a linguagem traduz este exemplo</button></div>
+        <div class="acoes"><button type="button" class="botao" data-demonstrar="exemplos/agua.mol"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/></svg>Demonstrar a tradução</button></div>
       </div>
 
       <div class="chamada" id="s-comecar">
@@ -97,7 +97,7 @@
           <h2>Pronto para escrever uma molécula?</h2>
         </div>
         <p>Abra o playground, escolha um exemplo e veja o desenho mudar enquanto você digita.</p>
-        <a class="botao primario" href="#/playground">Começar agora</a>
+        <a class="botao primario" href="#/playground">Começar agora<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </section>
 
@@ -644,9 +644,9 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
         <div>
           <div id="licao"></div>
           <nav class="paginador" aria-label="Paginação do guia">
-            <button class="botao" type="button" data-guia-passo="-1">← Lição anterior</button>
+            <button class="botao pequeno" type="button" data-guia-passo="-1"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>Lição anterior</button>
             <span class="contador"></span>
-            <button class="botao" type="button" data-guia-passo="1">Próxima lição →</button>
+            <button class="botao pequeno" type="button" data-guia-passo="1">Próxima lição<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
           </nav>
         </div>
       </div>

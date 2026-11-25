@@ -1052,3 +1052,34 @@ Os ícones dos botões gerados pelos módulos ficam num só lugar (`ICONES` e
 `botaoIcone` em `app.js`), com rótulo no `aria-label` e dica no
 `data-dica`. Ações principais, como simular e balancear, continuam com
 texto ao lado do ícone.
+
+---
+
+## 25/11/2026 — Guia e início no mesmo padrão
+
+### O que foi feito
+
+- **Guia:** "Abrir no playground" e "Demonstrar tradução" viraram ícones no
+  cabeçalho de cada exemplo, ao lado do selo de saída, no lugar da linha de
+  botões embaixo. O sumário ganhou o número da lição numa coluna própria, e
+  o paginador ganhou setas. O "AST desenhada" abre e fecha com uma seta que
+  gira.
+- **Início:** os botões da capa ganharam ícones. Os cards de módulo têm uma
+  seta no canto que indica que levam a outra página. O texto do card do
+  guia ficou mais curto. Os dois códigos da água ganharam rótulos com
+  ícone (arquivo e terminal) e o botão "Demonstrar a tradução" ficou mais
+  curto.
+
+### Dificuldades
+
+As cores das categorias da tabela periódica usavam as classes `.c1` a
+`.c10`, os mesmos nomes das larguras da grade (`.c3`, `.c4`, `.c6`, `.c8`).
+Por isso os cards do início e do conteúdo tinham fundos diferentes uns dos
+outros, cinza ou lilás sem motivo. As cores agora valem só para
+`.elemento` e para a legenda da tabela.
+
+O card do guia no início dizia "Quinze lições", mas são 16. O texto novo
+não cita o número, para não desatualizar de novo.
+
+O rótulo da seção ativa na navegação por pontos ficava sempre visível e
+cobria o canto dos cards. Agora ele aparece só no hover ou no foco.
