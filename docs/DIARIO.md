@@ -990,3 +990,30 @@ Login, biblioteca de projetos e compartilhamento por link pedem um backend
 (Supabase ou GitHub com gists), e a página é um HTML estático sem servidor.
 Por enquanto ficou só o download e o upload de arquivos: funcionam offline,
 sem custo nem conta, e o código não sai do computador de quem usa.
+
+---
+
+## 25/11/2026 — Playground mais limpo, com ícones
+
+### O que foi feito
+
+- O seletor de exemplos e as ações saíram de dentro do painel do editor e
+  foram para uma barra única acima dos dois painéis. O seletor fica na
+  primeira linha e, embaixo dele, botões de ícone em dois grupos: à
+  esquerda, arquivo (novo, abrir e baixar `.mol`); à direita, ajuda (exemplos
+  de erro e demonstração da tradução). Cada ícone tem rótulo para leitor de
+  tela e uma dica ao passar o mouse ou focar pelo teclado.
+- Os seis botões "veja um erro" viraram um menu no ícone de alerta, que
+  fecha ao escolher, ao clicar fora ou com Esc.
+- Os controles da cena 3D (girar, rótulos, ocultar H e recentrar) viraram
+  ícones sobre o próprio desenho. Os três primeiros formam um grupo de
+  alternância, e o ativo fica destacado.
+- "Como usar" virou um bloco recolhível, e a nota longa sobre os limites do
+  desenho e da verificação também.
+
+### Decisões tomadas
+
+Com a barra única, o editor e a cena começam na mesma altura, e os dois
+painéis ficam simétricos. Nenhum identificador mudou (`#limpar`, `#girar`,
+`[data-erro]`...): o JavaScript que já existia continua igual, só ganhou o
+fechamento do menu.

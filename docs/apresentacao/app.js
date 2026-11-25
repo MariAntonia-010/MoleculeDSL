@@ -1295,7 +1295,15 @@
     codigo.scrollTop = Math.max(0, (n - 4) * parseFloat(getComputedStyle(codigo).lineHeight));
   }
 
+  // Menu de exemplos de erro: fecha ao escolher, ao clicar fora ou com Esc
+  const menuErros = document.querySelector(".menu-erros");
+  document.addEventListener("click", (e) => { if (menuErros.open && !menuErros.contains(e.target)) menuErros.open = false; });
+  menuErros.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menuErros.open) { menuErros.open = false; menuErros.querySelector("summary").focus(); }
+  });
+  menuErros.addEventListener("toggle", () => { if (menuErros.open) menuErros.querySelector("[data-erro]").focus(); });
   document.querySelectorAll("[data-erro]").forEach((botao) => botao.addEventListener("click", () => {
+    menuErros.open = false;
     exemploAtual = null;
     arquivoAberto = null;
     statusArquivo.hidden = true;

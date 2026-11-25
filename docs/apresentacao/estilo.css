@@ -259,15 +259,78 @@
     .topico p, .topico li { color: var(--suave); }
 
     /* ---------- playground ---------- */
-    .guia { margin-bottom: 1.1rem; }
+    .guia { margin-bottom: 1.1rem; padding-block: 0.85rem; }
+    .guia > summary { display: flex; align-items: center; gap: 0.8rem; cursor: pointer; list-style: none; border-radius: 10px; }
+    .guia > summary::-webkit-details-marker { display: none; }
+    .guia > summary:focus-visible { outline: 2px solid var(--acento); outline-offset: 4px; }
+    .guia-titulo { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 600; color: var(--texto); }
+    .guia-resumo { color: var(--fraco); font-size: 0.84rem; }
+    .guia-seta { margin-left: auto; color: var(--fraco); transition: transform 0.2s; }
+    .guia[open] .guia-seta { transform: rotate(180deg); }
+    .guia[open] .passos { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--borda); }
+    .ic { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .guia-titulo .ic { color: var(--acento); }
     .passos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; counter-reset: passo; }
     .passos li { counter-increment: passo; color: var(--suave); font-size: 0.9rem; }
     .passos li::before { content: counter(passo, decimal-leading-zero); display: block; font: 600 0.72rem var(--mono); color: var(--acento); letter-spacing: 0.12em; margin-bottom: 0.3rem; }
     .passos code { color: var(--texto); font-size: 0.82em; }
-    .exemplos-erro { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--borda); }
-    .exemplos-erro span { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.1em; text-transform: uppercase; margin-right: 0.3rem; }
     .play { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.1rem; }
     .barra-ferramentas { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.9rem; }
+    /* Barra única acima do editor e da cena: seletor à esquerda, ações à direita */
+    .barra-play { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; margin-bottom: 1.1rem; padding: 0.7rem; }
+    .linha-selecao { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .linha-selecao select { flex: 1 1 260px; min-width: 0; }
+    .linha-acoes { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; }
+    .linha-acoes .grupo-icones { margin-left: 0; }
+    .controles-cena { position: absolute; top: 0.6rem; left: 0.6rem; right: 0.6rem; z-index: 2; display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none; }
+    .controles-cena > * { pointer-events: auto; }
+    .controles-cena .grupo-icones { margin-left: 0; }
+    .controles-cena .grupo-icones.segmentado, .controles-cena > .grupo-icones > .icone-botao {
+      background: color-mix(in srgb, var(--superficie) 78%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .controles-cena .icone-botao { width: 34px; height: 34px; }
+    .controles-cena > .grupo-icones:not(.segmentado) > .icone-botao { width: 42px; height: 42px; border-color: var(--borda); border-radius: 12px; }
+    /* Botões de ícone com dica: o rótulo vai no aria-label e no data-dica */
+    .grupo-icones { display: inline-flex; align-items: center; gap: 0.35rem; margin-left: auto; }
+    .grupo-icones.segmentado { margin-left: 0; gap: 0; padding: 3px; border: 1px solid var(--borda); border-radius: 12px; background: var(--bg); }
+    .grupo-icones.segmentado .icone-botao { border-color: transparent; background: transparent; }
+    .icone-botao {
+      position: relative; flex: none; display: inline-grid; place-items: center; width: 38px; height: 38px;
+      border-radius: 10px; border: 1px solid var(--borda-forte); background: var(--superficie); color: var(--suave);
+      cursor: pointer; list-style: none; transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .icone-botao::-webkit-details-marker { display: none; }
+    .icone-botao svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+    .icone-botao:hover { color: var(--acento); border-color: var(--acento); }
+    .icone-botao:focus-visible, .icone-botao:has(input:focus-visible) { outline: 2px solid var(--acento); outline-offset: 2px; }
+    .alternar-icone input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+    .alternar-icone:has(input:checked) { color: var(--acento); background: var(--acento-fundo); }
+    .grupo-icones.segmentado .alternar-icone:has(input:checked) { background: var(--acento-fundo); border-color: color-mix(in srgb, var(--acento) 35%, transparent); }
+    .alternar-icone .risco { opacity: 0; transition: opacity 0.15s; }
+    .alternar-icone:has(input:checked) .risco { opacity: 1; }
+    [data-dica]::after {
+      content: attr(data-dica); position: absolute; top: calc(100% + 7px); left: 50%; transform: translateX(-50%);
+      display: none; z-index: 30; padding: 0.3rem 0.55rem; border-radius: 7px; white-space: nowrap; pointer-events: none;
+      font: 500 0.74rem var(--sans); color: var(--bg); background: var(--texto); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+    .linha-acoes > :first-child > :first-child[data-dica]::after, .segmentado > :first-child[data-dica]::after { left: 0; transform: none; }
+    .linha-acoes > :last-child > :last-child[data-dica]::after, .controles-cena > :last-child > :last-child[data-dica]::after { left: auto; right: 0; transform: none; }
+    @media (hover: hover) { [data-dica]:hover::after { display: block; } }
+    [data-dica]:focus-visible::after, [data-dica]:has(input:focus-visible)::after { display: block; }
+    .menu-erros { position: relative; }
+    .menu-erros[open] > summary { color: var(--acento); border-color: var(--acento); background: var(--acento-fundo); }
+    .menu-erros[open] > summary::after { display: none; }
+    .menu {
+      position: absolute; top: calc(100% + 6px); right: 0; z-index: 40; display: grid; min-width: 230px; padding: 0.35rem;
+      border: 1px solid var(--borda-forte); border-radius: 12px; background: var(--superficie); box-shadow: 0 14px 40px rgba(0, 0, 0, 0.28);
+    }
+    .menu-titulo { padding: 0.45rem 0.65rem 0.35rem; font: 600 0.68rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fraco); }
+    .menu button { text-align: left; padding: 0.55rem 0.65rem; border: 0; border-radius: 8px; background: transparent; color: var(--texto); font: 500 0.86rem var(--sans); cursor: pointer; }
+    .menu button:hover, .menu button:focus-visible { background: var(--acento-fundo); color: var(--acento); outline: none; }
+    .rodape-placa { margin: 0.8rem 0 0; }
+    .detalhe summary { cursor: pointer; width: fit-content; color: var(--suave); }
+    .detalhe summary:hover { color: var(--acento); }
+    .detalhe p { margin-top: 0.5rem; color: var(--fraco); font-size: 0.8rem; line-height: 1.55; }
     select { font: 500 0.85rem var(--sans); color: var(--texto); background: var(--superficie); border: 1px solid var(--borda-forte); border-radius: 10px; padding: 0.55rem 0.75rem; max-width: 100%; flex: 1 1 200px; }
     .editor { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); overflow: hidden; }
     .numeros { padding: 0.9rem 0.6rem; text-align: right; color: var(--fraco); font: 0.8rem/1.6 var(--mono); user-select: none; white-space: pre; border-right: 1px solid var(--borda); }
@@ -297,11 +360,12 @@
     .diag dt { color: var(--fraco); font-weight: 600; }
     .diag dd { margin: 0; color: var(--suave); }
     .nota { font-size: 0.8rem; color: var(--fraco); margin-top: 0.8rem; }
-    .arquivo-botoes { display: inline-flex; gap: 0.6rem; flex-wrap: wrap; margin-left: auto; }
     .arquivo-status { margin: -0.3rem 0 0.8rem; color: var(--suave); }
     .arquivo-status.erro { color: var(--erro); }
     .editor.soltar { border-color: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 30%, transparent); }
-    @media (max-width: 640px) { .arquivo-botoes { margin-left: 0; } }
+    @media (max-width: 640px) {
+      .guia-resumo { display: none; }
+    }
     .alternar { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; color: var(--suave); cursor: pointer; }
     .alternar input { accent-color: var(--acento-forte); }
     /* no celular, o seletor de reação encolhe em vez de passar da tela */
