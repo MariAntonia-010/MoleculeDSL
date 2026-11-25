@@ -207,7 +207,19 @@
     .rolar i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; border-radius: 2px; background: var(--acento); transform: translateX(-50%); animation: descer 1.8s ease-in-out infinite; }
     @keyframes descer { 60% { top: 18px; opacity: 0; } 100% { top: 7px; opacity: 0; } }
     .bloco-inicio { padding: clamp(3rem, 8vw, 6rem) 0 0; }
-    .modulo { text-decoration: none; color: inherit; }
+    .modulo { position: relative; text-decoration: none; color: inherit; }
+    /* Seta no canto do card de módulo: indica que ele leva a outra página */
+    .modulo::after {
+      content: ""; position: absolute; top: clamp(1.1rem, 2.2vw, 1.6rem); right: clamp(1.1rem, 2.2vw, 1.6rem); width: 18px; height: 18px;
+      background: var(--fraco); transition: transform 0.2s, background 0.2s;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E") center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+    .modulo:hover::after, .modulo:focus-visible::after { background: var(--acento); transform: translate(2px, -2px); }
+    .cartao-codigo { display: flex; flex-direction: column; }
+    .cartao-codigo pre { margin: 0; flex: 1; }
+    .placa .rotulo-codigo { display: flex; align-items: center; gap: 0.45rem; margin: 0 0 0.6rem; font: 0.78rem var(--mono); color: var(--fraco); min-width: 0; overflow-wrap: anywhere; }
+    .rotulo-codigo .ic { width: 15px; height: 15px; color: var(--acento); }
     .modulo .numero { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.15em; }
     .chamada { text-align: center; padding: clamp(3rem, 8vw, 6rem) 0 1rem; }
     .chamada p { color: var(--suave); font-family: var(--serif); margin: 0 0 1.6rem; }
@@ -215,7 +227,7 @@
     body.no-inicio .pontos { display: flex; }
     .pontos a { display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem; text-decoration: none; color: var(--fraco); font: 500 0.64rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; }
     .pontos a span { opacity: 0; transition: opacity 0.2s; }
-    .pontos a:hover span, .pontos a.ativo span { opacity: 1; }
+    .pontos a:hover span, .pontos a:focus-visible span { opacity: 1; }
     .pontos a.ativo { color: var(--acento); }
     .pontos i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid currentColor; transition: all 0.2s; }
     .pontos a.ativo i { background: var(--acento); transform: scale(1.25); }
@@ -250,7 +262,10 @@
     /* ---------- documentação ---------- */
     .doc { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.4rem; align-items: start; }
     .sumario { position: sticky; top: 90px; display: grid; gap: 0.2rem; }
-    .sumario a { padding: 0.55rem 0.8rem; border-radius: 10px; text-decoration: none; color: var(--suave); font-size: 0.9rem; }
+    .sumario a { display: grid; grid-template-columns: 2rem minmax(0, 1fr); align-items: baseline; padding: 0.5rem 0.7rem; border-radius: 10px; text-decoration: none; color: var(--suave); font-size: 0.88rem; line-height: 1.35; }
+    .sumario a:hover { color: var(--texto); }
+    .num-licao { font: 600 0.72rem var(--mono); color: var(--fraco); }
+    .sumario a.ativo .num-licao { color: var(--acento); }
     .sumario a.ativo { color: var(--acento); background: var(--acento-fundo); }
     .topico { display: none; }
     .topico.ativo { display: block; animation: surgir 0.3s ease; }
@@ -547,16 +562,16 @@
     .elemento.selecionado { outline: 2px solid var(--acento); outline-offset: 1px; }
     .elemento.com-regra::after { content: ""; position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--acento); }
     .marcador-f { display: grid; place-items: center; font: 0.55rem var(--mono); color: var(--fraco); border: 1px dashed var(--borda); border-radius: 6px; }
-    .c1, .legenda-tabela .c1 { background: color-mix(in srgb, var(--acento) 22%, var(--superficie)); }
-    .c2, .legenda-tabela .c2 { background: color-mix(in srgb, var(--acento) 15%, var(--superficie)); }
-    .c3, .legenda-tabela .c3 { background: color-mix(in srgb, var(--texto) 8%, var(--superficie)); }
-    .c4, .legenda-tabela .c4 { background: color-mix(in srgb, var(--texto) 4%, var(--superficie)); }
-    .c5, .legenda-tabela .c5 { background: color-mix(in srgb, var(--ok) 12%, var(--superficie)); }
-    .c6, .legenda-tabela .c6 { background: color-mix(in srgb, var(--acento) 8%, var(--superficie)); }
-    .c7, .legenda-tabela .c7 { background: color-mix(in srgb, var(--aviso) 14%, var(--superficie)); }
-    .c8, .legenda-tabela .c8 { background: color-mix(in srgb, var(--acento-forte) 28%, var(--superficie)); }
-    .c9, .legenda-tabela .c9 { background: color-mix(in srgb, var(--erro) 9%, var(--superficie)); }
-    .c10, .legenda-tabela .c10 { background: color-mix(in srgb, var(--erro) 15%, var(--superficie)); }
+    .elemento.c1, .legenda-tabela .c1 { background: color-mix(in srgb, var(--acento) 22%, var(--superficie)); }
+    .elemento.c2, .legenda-tabela .c2 { background: color-mix(in srgb, var(--acento) 15%, var(--superficie)); }
+    .elemento.c3, .legenda-tabela .c3 { background: color-mix(in srgb, var(--texto) 8%, var(--superficie)); }
+    .elemento.c4, .legenda-tabela .c4 { background: color-mix(in srgb, var(--texto) 4%, var(--superficie)); }
+    .elemento.c5, .legenda-tabela .c5 { background: color-mix(in srgb, var(--ok) 12%, var(--superficie)); }
+    .elemento.c6, .legenda-tabela .c6 { background: color-mix(in srgb, var(--acento) 8%, var(--superficie)); }
+    .elemento.c7, .legenda-tabela .c7 { background: color-mix(in srgb, var(--aviso) 14%, var(--superficie)); }
+    .elemento.c8, .legenda-tabela .c8 { background: color-mix(in srgb, var(--acento-forte) 28%, var(--superficie)); }
+    .elemento.c9, .legenda-tabela .c9 { background: color-mix(in srgb, var(--erro) 9%, var(--superficie)); }
+    .elemento.c10, .legenda-tabela .c10 { background: color-mix(in srgb, var(--erro) 15%, var(--superficie)); }
     .legenda-tabela { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 1rem; font-size: 0.78rem; color: var(--suave); justify-content: center; }
     .legenda-tabela span { display: inline-flex; align-items: center; gap: 0.35rem; }
     .legenda-tabela i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--borda); display: inline-block; }
@@ -630,6 +645,8 @@
     .exemplo-guia { margin-top: 1rem; }
     .exemplo-cabeca { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between; align-items: center; }
     .exemplo-cabeca h4 { margin: 0; font-size: 1.05rem; }
+    .exemplo-acoes { display: flex; align-items: center; gap: 0.7rem; margin-left: auto; }
+    .exemplo-acoes .grupo-icones > :last-child[data-dica]::after { left: auto; right: 0; transform: none; }
     .selo-saida { font: 700 0.72rem var(--mono); padding: 0.25rem 0.6rem; border-radius: 6px; }
     .selo-saida.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
     .selo-saida.erro { color: #fff; background: var(--erro); }
@@ -696,7 +713,13 @@
     .anatomia dd { margin: 0; color: var(--suave); }
     .bohr-guia { width: 100%; max-width: 260px; aspect-ratio: 1; display: block; border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); }
     .ast-guia { margin-top: 0.9rem; }
-    .ast-guia summary { cursor: pointer; font-size: 0.86rem; color: var(--suave); margin-bottom: 0.5rem; }
+    .ast-guia summary { display: flex; align-items: center; gap: 0.4rem; width: fit-content; cursor: pointer; list-style: none; font-size: 0.86rem; color: var(--suave); margin-bottom: 0.5rem; }
+    .ast-guia summary::-webkit-details-marker { display: none; }
+    .ast-guia summary::before { content: ""; width: 14px; height: 14px; background: currentColor; transform: rotate(-90deg); transition: transform 0.2s;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat; }
+    .ast-guia[open] summary::before { transform: none; }
+    .ast-guia summary:hover { color: var(--acento); }
 
     /* ---------- buraco negro (species black_hole) ---------- */
     .cena canvas.cena-bn { position: absolute; inset: 0; width: 100%; height: 100%; cursor: default; background: #000; }

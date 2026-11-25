@@ -325,7 +325,9 @@ navegador, sem servidor nem internet, em tema claro ou escuro. Os módulos têm
 rotas próprias:
 
 - **Guia:** 16 lições, começando pela construção de um átomo passo a passo e por núcleo e eletrosfera, com código, saída real do compilador e variações de
-  escrita; cada exemplo é compilado pelo compilador real ao gerar a página;
+  escrita; cada exemplo é compilado pelo compilador real ao gerar a página.
+  No cabeçalho de cada exemplo, ícones abrem o código no playground ou
+  demonstram a tradução;
 - **Conteúdo:** a apresentação em 11 páginas, com setas do teclado;
 - **Uso** e **Doc:** instalação, comandos, gramática real, erros e
   relatórios;

@@ -215,7 +215,19 @@
     .rolar i::after { content: ""; position: absolute; left: 50%; top: 7px; width: 3px; height: 7px; border-radius: 2px; background: var(--acento); transform: translateX(-50%); animation: descer 1.8s ease-in-out infinite; }
     @keyframes descer { 60% { top: 18px; opacity: 0; } 100% { top: 7px; opacity: 0; } }
     .bloco-inicio { padding: clamp(3rem, 8vw, 6rem) 0 0; }
-    .modulo { text-decoration: none; color: inherit; }
+    .modulo { position: relative; text-decoration: none; color: inherit; }
+    /* Seta no canto do card de módulo: indica que ele leva a outra página */
+    .modulo::after {
+      content: ""; position: absolute; top: clamp(1.1rem, 2.2vw, 1.6rem); right: clamp(1.1rem, 2.2vw, 1.6rem); width: 18px; height: 18px;
+      background: var(--fraco); transition: transform 0.2s, background 0.2s;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E") center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M8 7h9v9'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+    .modulo:hover::after, .modulo:focus-visible::after { background: var(--acento); transform: translate(2px, -2px); }
+    .cartao-codigo { display: flex; flex-direction: column; }
+    .cartao-codigo pre { margin: 0; flex: 1; }
+    .placa .rotulo-codigo { display: flex; align-items: center; gap: 0.45rem; margin: 0 0 0.6rem; font: 0.78rem var(--mono); color: var(--fraco); min-width: 0; overflow-wrap: anywhere; }
+    .rotulo-codigo .ic { width: 15px; height: 15px; color: var(--acento); }
     .modulo .numero { font: 600 0.72rem var(--mono); color: var(--fraco); letter-spacing: 0.15em; }
     .chamada { text-align: center; padding: clamp(3rem, 8vw, 6rem) 0 1rem; }
     .chamada p { color: var(--suave); font-family: var(--serif); margin: 0 0 1.6rem; }
@@ -223,7 +235,7 @@
     body.no-inicio .pontos { display: flex; }
     .pontos a { display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem; text-decoration: none; color: var(--fraco); font: 500 0.64rem var(--mono); letter-spacing: 0.16em; text-transform: uppercase; }
     .pontos a span { opacity: 0; transition: opacity 0.2s; }
-    .pontos a:hover span, .pontos a.ativo span { opacity: 1; }
+    .pontos a:hover span, .pontos a:focus-visible span { opacity: 1; }
     .pontos a.ativo { color: var(--acento); }
     .pontos i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid currentColor; transition: all 0.2s; }
     .pontos a.ativo i { background: var(--acento); transform: scale(1.25); }
@@ -258,7 +270,10 @@
     /* ---------- documentação ---------- */
     .doc { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 1.4rem; align-items: start; }
     .sumario { position: sticky; top: 90px; display: grid; gap: 0.2rem; }
-    .sumario a { padding: 0.55rem 0.8rem; border-radius: 10px; text-decoration: none; color: var(--suave); font-size: 0.9rem; }
+    .sumario a { display: grid; grid-template-columns: 2rem minmax(0, 1fr); align-items: baseline; padding: 0.5rem 0.7rem; border-radius: 10px; text-decoration: none; color: var(--suave); font-size: 0.88rem; line-height: 1.35; }
+    .sumario a:hover { color: var(--texto); }
+    .num-licao { font: 600 0.72rem var(--mono); color: var(--fraco); }
+    .sumario a.ativo .num-licao { color: var(--acento); }
     .sumario a.ativo { color: var(--acento); background: var(--acento-fundo); }
     .topico { display: none; }
     .topico.ativo { display: block; animation: surgir 0.3s ease; }
@@ -555,16 +570,16 @@
     .elemento.selecionado { outline: 2px solid var(--acento); outline-offset: 1px; }
     .elemento.com-regra::after { content: ""; position: absolute; top: 3px; right: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--acento); }
     .marcador-f { display: grid; place-items: center; font: 0.55rem var(--mono); color: var(--fraco); border: 1px dashed var(--borda); border-radius: 6px; }
-    .c1, .legenda-tabela .c1 { background: color-mix(in srgb, var(--acento) 22%, var(--superficie)); }
-    .c2, .legenda-tabela .c2 { background: color-mix(in srgb, var(--acento) 15%, var(--superficie)); }
-    .c3, .legenda-tabela .c3 { background: color-mix(in srgb, var(--texto) 8%, var(--superficie)); }
-    .c4, .legenda-tabela .c4 { background: color-mix(in srgb, var(--texto) 4%, var(--superficie)); }
-    .c5, .legenda-tabela .c5 { background: color-mix(in srgb, var(--ok) 12%, var(--superficie)); }
-    .c6, .legenda-tabela .c6 { background: color-mix(in srgb, var(--acento) 8%, var(--superficie)); }
-    .c7, .legenda-tabela .c7 { background: color-mix(in srgb, var(--aviso) 14%, var(--superficie)); }
-    .c8, .legenda-tabela .c8 { background: color-mix(in srgb, var(--acento-forte) 28%, var(--superficie)); }
-    .c9, .legenda-tabela .c9 { background: color-mix(in srgb, var(--erro) 9%, var(--superficie)); }
-    .c10, .legenda-tabela .c10 { background: color-mix(in srgb, var(--erro) 15%, var(--superficie)); }
+    .elemento.c1, .legenda-tabela .c1 { background: color-mix(in srgb, var(--acento) 22%, var(--superficie)); }
+    .elemento.c2, .legenda-tabela .c2 { background: color-mix(in srgb, var(--acento) 15%, var(--superficie)); }
+    .elemento.c3, .legenda-tabela .c3 { background: color-mix(in srgb, var(--texto) 8%, var(--superficie)); }
+    .elemento.c4, .legenda-tabela .c4 { background: color-mix(in srgb, var(--texto) 4%, var(--superficie)); }
+    .elemento.c5, .legenda-tabela .c5 { background: color-mix(in srgb, var(--ok) 12%, var(--superficie)); }
+    .elemento.c6, .legenda-tabela .c6 { background: color-mix(in srgb, var(--acento) 8%, var(--superficie)); }
+    .elemento.c7, .legenda-tabela .c7 { background: color-mix(in srgb, var(--aviso) 14%, var(--superficie)); }
+    .elemento.c8, .legenda-tabela .c8 { background: color-mix(in srgb, var(--acento-forte) 28%, var(--superficie)); }
+    .elemento.c9, .legenda-tabela .c9 { background: color-mix(in srgb, var(--erro) 9%, var(--superficie)); }
+    .elemento.c10, .legenda-tabela .c10 { background: color-mix(in srgb, var(--erro) 15%, var(--superficie)); }
     .legenda-tabela { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 1rem; font-size: 0.78rem; color: var(--suave); justify-content: center; }
     .legenda-tabela span { display: inline-flex; align-items: center; gap: 0.35rem; }
     .legenda-tabela i { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--borda); display: inline-block; }
@@ -638,6 +653,8 @@
     .exemplo-guia { margin-top: 1rem; }
     .exemplo-cabeca { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: space-between; align-items: center; }
     .exemplo-cabeca h4 { margin: 0; font-size: 1.05rem; }
+    .exemplo-acoes { display: flex; align-items: center; gap: 0.7rem; margin-left: auto; }
+    .exemplo-acoes .grupo-icones > :last-child[data-dica]::after { left: auto; right: 0; transform: none; }
     .selo-saida { font: 700 0.72rem var(--mono); padding: 0.25rem 0.6rem; border-radius: 6px; }
     .selo-saida.ok { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
     .selo-saida.erro { color: #fff; background: var(--erro); }
@@ -704,7 +721,13 @@
     .anatomia dd { margin: 0; color: var(--suave); }
     .bohr-guia { width: 100%; max-width: 260px; aspect-ratio: 1; display: block; border-radius: 12px; border: 1px solid var(--borda); background: var(--bg); }
     .ast-guia { margin-top: 0.9rem; }
-    .ast-guia summary { cursor: pointer; font-size: 0.86rem; color: var(--suave); margin-bottom: 0.5rem; }
+    .ast-guia summary { display: flex; align-items: center; gap: 0.4rem; width: fit-content; cursor: pointer; list-style: none; font-size: 0.86rem; color: var(--suave); margin-bottom: 0.5rem; }
+    .ast-guia summary::-webkit-details-marker { display: none; }
+    .ast-guia summary::before { content: ""; width: 14px; height: 14px; background: currentColor; transform: rotate(-90deg); transition: transform 0.2s;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat; }
+    .ast-guia[open] summary::before { transform: none; }
+    .ast-guia summary:hover { color: var(--acento); }
 
     /* ---------- buraco negro (species black_hole) ---------- */
     .cena canvas.cena-bn { position: absolute; inset: 0; width: 100%; height: 100%; cursor: default; background: #000; }
@@ -765,9 +788,9 @@
           <h1>Molecule<b>DSL</b><span class="cursor" aria-hidden="true"></span></h1>
           <p class="lema">a química das moléculas, <em>escrita como código</em>.<br>declare átomos e ligações — o compilador valida, resolve e explica.</p>
           <div class="acoes">
-            <a class="botao primario" href="#/playground">Abrir o playground</a>
-            <a class="botao" href="#/guia/construir_atomo">Guia de uso</a>
-            <a class="botao" href="#/conteudo/1">Ver a apresentação</a>
+            <a class="botao primario" href="#/playground"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,3 20,7.5 20,16.5 12,21 4,16.5 4,7.5"/><circle cx="12" cy="12" r="2.5"/></svg>Abrir o playground</a>
+            <a class="botao" href="#/guia/construir_atomo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg>Guia de uso</a>
+            <a class="botao" href="#/conteudo/1"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg>Ver a apresentação</a>
           </div>
           <div class="terminal"><span class="prompt">user@moleculedsl:~$</span><span>python3 src/main.py --modelo exemplos/benzeno.mol</span></div>
           <ul class="chips" aria-label="Equipe e disciplina">
@@ -787,7 +810,7 @@
           <p class="lead">Entenda o compilador, aprenda a usar, consulte a referência, escreva moléculas, simule misturas e reações e explore os elementos.</p>
         </div>
         <div class="grade">
-          <a class="placa modulo c12" href="#/guia/construir_atomo"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Quinze lições com código, saída real do compilador e variações, começando por como construir um átomo passo a passo e por núcleo e eletrosfera (isótopos, Pauli, Aufbau, Hund): átomos e íons monoatômicos, tipos de ligação (covalente, iônica, coordenada, metálica), cargas, anéis, radicais, stereo, erros semânticos, sólidos e o solver.</p></a>
+          <a class="placa modulo c12" href="#/guia/construir_atomo"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2z"/><path d="M8 7h7M8 11h5"/></svg></div><span class="numero">00</span><h3>Guia de uso</h3><p>Lições com código e saída real do compilador, do primeiro átomo ao solver: ligações, cargas, anéis, estereoquímica e erros.</p></a>
           <a class="placa modulo c3" href="#/conteudo/1"><div class="icone"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg></div><span class="numero">01</span><h3>Conteúdo</h3><p>A apresentação: problema, pipeline, AST, semântica e química.</p></a>
           <a class="placa modulo c3" href="#/uso"><div class="icone"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></div><span class="numero">02</span><h3>Uso</h3><p>Instalar, gerar o parser, compilar exemplos e rodar os testes.</p></a>
           <a class="placa modulo c3" href="#/doc/comandos"><div class="icone"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg></div><span class="numero">03</span><h3>Doc</h3><p>Comandos, gramática, regras semânticas, erros e relatórios.</p></a>
@@ -804,7 +827,7 @@
           <p class="lead">Este é um programa completo. O compilador confere nomes, valências e cargas e aponta linha e coluna de qualquer erro.</p>
         </div>
         <div class="grade">
-          <div class="placa c6"><p class="nota" style="margin:0 0 0.4rem">exemplos/agua.mol</p><pre style="margin:0">species molecule "Water" {
+          <div class="placa c6 cartao-codigo"><p class="rotulo-codigo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>exemplos/agua.mol</p><pre>species molecule "Water" {
     atom O
     atom H
     atom H
@@ -812,7 +835,7 @@
     bond H-O
     bond O-H
 }</pre></div>
-          <div class="placa c6"><p class="nota" style="margin:0 0 0.4rem">python3 src/main.py --modelo exemplos/agua.mol</p><pre style="margin:0">Modelo 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado
+          <div class="placa c6 cartao-codigo"><p class="rotulo-codigo"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17l6-6-6-6M12 19h8"/></svg>python3 src/main.py --modelo exemplos/agua.mol</p><pre>Modelo 'Water' tipo=molecule carga_total=+0 desemparelhados=não declarado
   Átomos (3)
     O#1 carga=+0 p=8 n=8 (16O, mais abundante) e=8 [He] 2s2 2p4 [2:4]
     H#1 carga=+0 p=1 n=0 (1H, mais abundante) e=1 1s1 [3:4]
@@ -822,7 +845,7 @@
     O#1 SIMPLES H#2 classificação=covalente polar Δχ=1.24 [7:4]
 Espécie 'Water': análise concluída sem erros</pre></div>
         </div>
-        <div class="acoes"><button type="button" class="botao" data-demonstrar="exemplos/agua.mol">Demonstrar como a linguagem traduz este exemplo</button></div>
+        <div class="acoes"><button type="button" class="botao" data-demonstrar="exemplos/agua.mol"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/></svg>Demonstrar a tradução</button></div>
       </div>
 
       <div class="chamada" id="s-comecar">
@@ -831,7 +854,7 @@ Espécie 'Water': análise concluída sem erros</pre></div>
           <h2>Pronto para escrever uma molécula?</h2>
         </div>
         <p>Abra o playground, escolha um exemplo e veja o desenho mudar enquanto você digita.</p>
-        <a class="botao primario" href="#/playground">Começar agora</a>
+        <a class="botao primario" href="#/playground">Começar agora<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </section>
 
@@ -1734,9 +1757,9 @@ ESPACO
         <div>
           <div id="licao"></div>
           <nav class="paginador" aria-label="Paginação do guia">
-            <button class="botao" type="button" data-guia-passo="-1">← Lição anterior</button>
+            <button class="botao pequeno" type="button" data-guia-passo="-1"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>Lição anterior</button>
             <span class="contador"></span>
-            <button class="botao" type="button" data-guia-passo="1">Próxima lição →</button>
+            <button class="botao pequeno" type="button" data-guia-passo="1">Próxima lição<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button>
           </nav>
         </div>
       </div>
@@ -3770,7 +3793,7 @@ ESPACO
   const LICOES = DADOS.guia;
   let licaoAtual = LICOES[0].id;
   document.getElementById("sumario-guia").innerHTML = LICOES.map((l, i) =>
-    `<a href="#/guia/${l.id}" data-licao="${l.id}">${String(i + 1).padStart(2, "0")} · ${escapar(l.titulo)}</a>`).join("");
+    `<a href="#/guia/${l.id}" data-licao="${l.id}"><span class="num-licao">${String(i + 1).padStart(2, "0")}</span><span>${escapar(l.titulo)}</span></a>`).join("");
 
   function mostrarLicao(id) {
     const licao = LICOES.find((l) => l.id === id) || LICOES[0];
@@ -3790,7 +3813,9 @@ ESPACO
         <dl>${licao.anatomia.partes.map(([parte, sentido], i) => `<dt><span class="parte p${i}">${escapar(parte)}</span></dt><dd>${escapar(sentido)}</dd>`).join("")}</dl></article>` : ""}
       ${licao.exemplos.map((ex, k) => `
         <article class="placa exemplo-guia">
-          <div class="exemplo-cabeca"><h4>${escapar(ex.titulo)}</h4><span class="selo-saida ${ex.saida === 0 ? "ok" : "erro"}">saída ${ex.saida}${ex.saida === 0 ? " · compila" : ex.saida === 2 ? " · erro semântico" : " · erro de sintaxe"}</span></div>
+          <div class="exemplo-cabeca"><h4>${escapar(ex.titulo)}</h4>
+            <div class="exemplo-acoes"><span class="selo-saida ${ex.saida === 0 ? "ok" : "erro"}">saída ${ex.saida}${ex.saida === 0 ? " · compila" : ex.saida === 2 ? " · erro semântico" : " · erro de sintaxe"}</span>
+              <span class="grupo-icones">${botaoIcone("demonstrar", "Demonstrar tradução", `data-guia-demo="${k}"`)}${botaoIcone("playground", "Abrir no playground", `data-guia-abrir="${k}"`)}</span></div></div>
           <p>${escapar(ex.explicacao)}</p>
           <div class="exemplo-corpo${ex.bohr ? " com-bohr" : ""}">
             <div><p class="nota">Código</p><pre>${escapar(ex.codigo.trim())}</pre>${ex.bohr ? `<p class="nota" style="margin-top:0.8rem">Modelo de Bohr</p><canvas class="bohr-guia" data-bohr="${ex.bohr}" data-carga="${ex.carga || 0}" aria-label="Modelo de Bohr de ${ex.bohr}"></canvas>` : ""}</div>
@@ -3803,10 +3828,6 @@ ESPACO
               ? `<details class="ast-guia"${licao.id === "construir_atomo" ? " open" : ""}><summary>AST desenhada: como a linguagem entendeu este código</summary>${desenhoArvore(astNo(r.especie, "comp"))}</details>`
               : "";
           })()}
-          <div class="acoes" style="justify-content:flex-start;margin-top:0.9rem">
-            <button type="button" class="botao pequeno" data-guia-abrir="${k}">Abrir no playground</button>
-            <button type="button" class="botao pequeno" data-guia-demo="${k}">Demonstrar tradução</button>
-          </div>
         </article>`).join("")}`;
     document.querySelectorAll("[data-guia-abrir]").forEach((b) => b.addEventListener("click", () => {
       const ex = licao.exemplos[Number(b.dataset.guiaAbrir)];
