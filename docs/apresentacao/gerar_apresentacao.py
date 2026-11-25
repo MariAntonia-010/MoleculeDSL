@@ -47,6 +47,7 @@ GRUPOS_EXEMPLOS = [
     ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro"]),
     ("Complexos de metais", ["diaminoprata", "tetraaminocobre", "hexaaminocobalto", "ferrocianeto"]),
     ("Sólidos", ["cloreto_de_sodio", "oxido_de_magnesio", "cloreto_de_magnesio", "dioxido_de_silicio", "sodio_metalico", "cobre_metalico"]),
+    ("Buraco negro (colapso gravitacional)", ["buraco_negro_de_ferro", "buraco_negro_de_agua"]),
 ]
 EXEMPLOS = [nome for _, nomes in GRUPOS_EXEMPLOS for nome in nomes]
 GRUPO_DO_EXEMPLO = {nome: grupo for grupo, nomes in GRUPOS_EXEMPLOS for nome in nomes}
@@ -85,7 +86,7 @@ def main():
         with open(os.path.join(PASTA, nome), encoding="utf-8") as arquivo:
             return arquivo.read()
 
-    modulos = "".join(ler(nome) for nome in ("traducao.js", "guia.js", "laboratorio.js", "tabela.js"))
+    modulos = "".join(ler(nome) for nome in ("traducao.js", "guia.js", "laboratorio.js", "buraco_negro.js", "tabela.js"))
     pagina = pagina.replace("{{ESTILO}}", ler("estilo.css"))
     pagina = pagina.replace("{{APP_JS}}", ler("app.js").replace("  /* @modulos */\n", modulos))
 
@@ -146,6 +147,7 @@ def main():
                 "valencia": dados.get("eletrons_valencia"),
                 "eletronegatividade": dados.get("eletronegatividade"),
                 "estados": dados.get("estados_oxidacao") or [],
+                "massa_atomica": dados.get("massa_atomica"),
             }
             for simbolo, dados in json.load(entrada)["elementos"].items()
         }
@@ -189,6 +191,11 @@ def main():
         "isotopos": json.load(open(os.path.join(RAIZ, "regras", "isotopos.json"), encoding="utf-8"))["isotopos_naturais"],
         "mais_abundante": json.load(open(os.path.join(RAIZ, "regras", "isotopos.json"), encoding="utf-8"))["mais_abundante"],
         "classificacao": json.load(open(os.path.join(RAIZ, "regras", "classificacao_ligacoes.json"), encoding="utf-8")),
+        "buraco_negro": {
+            chave: valor
+            for chave, valor in json.load(open(os.path.join(RAIZ, "regras", "buraco_negro.json"), encoding="utf-8")).items()
+            if not chave.startswith("_")
+        },
         "valencias": {
             chave: regras[chave]
             for chave in ("valencias", "valencias_expandidas", "valencias_com_carga")

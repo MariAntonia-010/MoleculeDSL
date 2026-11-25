@@ -1,0 +1,12 @@
+// esperado: Erro semântico [HOLE-005] na linha 11, coluna 4: 1e32 mol de 'Agua' (H2O) têm 0,906 M☉, abaixo do limite de Chandrasekhar (1,44 M☉): a pressão de degenerescência dos elétrons sustenta a matéria, que vira uma anã branca; para um buraco negro são precisos mais de 2,38 × 10³² mol
+// Abaixo do limite de Chandrasekhar, os elétrons seguram o colapso
+species molecule "Agua" {
+    atom O as o
+    2x atom H as h
+    bond o-h1
+    bond o-h2
+}
+
+species black_hole "Pouca agua" {
+    collapse 1e32 mol of "Agua"
+}

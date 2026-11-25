@@ -5,7 +5,8 @@
   // entrar na simulação.
   // Todos os exemplos da página entram: átomos, íons, isótopos e sólidos
   // também podem reagir e se misturar
-  const ESPECIES_LAB = DADOS.exemplos.map((e) => e.arquivo.replace(/^exemplos\/|\.mol$/g, ""));
+  // Buracos negros não reagem nem se misturam: ficam de fora
+  const ESPECIES_LAB = DADOS.exemplos.filter((e) => !/species\s+black_hole/.test(e.codigo)).map((e) => e.arquivo.replace(/^exemplos\/|\.mol$/g, ""));
   const especieDoArquivo = (arquivo) => {
     const ex = DADOS.exemplos.find((e) => e.arquivo === `exemplos/${arquivo}.mol`);
     return { titulo: ex.titulo, codigo: ex.codigo, arquivo: ex.arquivo };

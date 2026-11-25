@@ -1,0 +1,8 @@
+// esperado: Erro semântico [HOLE-003] na linha 7, coluna 4: a quantidade de matéria precisa ser um número positivo e finito de mol; foi escrito 0
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+}
+
+species black_hole "Sem materia" {
+    collapse 0 mol of "Ferro-56"
+}

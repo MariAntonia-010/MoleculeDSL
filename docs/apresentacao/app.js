@@ -59,6 +59,7 @@
       }
       if ((m = /^[1-7][spdf][0-9]+/.exec(resto))) { empurrar("SUBCAMADA", m[0]); continue; }
       if ((m = /^[0-9]+x/.exec(resto)) && !/^[0-9]+x[a-z0-9_]/.test(resto)) { empurrar("MULT", m[0]); continue; }
+      if ((m = /^[0-9]+(\.[0-9]+)?e[+-]?[0-9]+/.exec(resto))) { empurrar("CIENT", m[0]); continue; }
       if ((m = /^[0-9]+\.[0-9]+/.exec(resto))) { empurrar("REAL", m[0]); continue; }
       if ((m = /^[0-9]+/.exec(resto))) { empurrar("INT", m[0]); continue; }
       if ((m = /^[a-z][a-z0-9_]*/.exec(resto))) {
@@ -240,6 +241,22 @@
         }
         fechar();
         especie.comandos.push({ tipo: "configuration", ref, nucleo, subcamadas, l: t.l, c: t.c });
+      } else if (t.tipo === "collapse") {
+        // collapse 1.1e32 mol of "Ferro-56": colapso gravitacional de um bloco
+        abrir("colapso");
+        consumir();
+        const exemplo = "como 'collapse 1.1e32 mol of \"Ferro-56\"'";
+        abrir("quantidade");
+        const q = atual();
+        if (!["INT", "REAL", "CIENT"].includes(q.tipo)) falhar(`a quantidade de matéria em mol depois de 'collapse' (inteiro, real ou notação científica com e minúsculo), ${exemplo}`);
+        consumir();
+        fechar();
+        if (atual().tipo === "IDENT" && atual().valor === "E") falhar("a notação científica com e minúsculo: escreva 1.1e32, não 1.1E32");
+        pegar("mol", `a unidade 'mol' depois da quantidade, ${exemplo}`);
+        pegar("of", `'of' antes do bloco a colapsar, ${exemplo}`);
+        const bloco = pegar("TEXTO", `o nome do bloco a colapsar entre aspas, ${exemplo}`).valor.slice(1, -1);
+        fechar();
+        especie.comandos.push({ tipo: "collapse", quantidade: Number(q.valor), texto: q.valor, bloco, l: t.l, c: t.c });
       } else if (t.tipo === "stereo") {
         abrir("estereo");
         consumir();
@@ -264,7 +281,7 @@
         if (atual().tipo === "[" && p > 0 && tokens[p - 1].tipo === "SUBCAMADA") {
           falhar("o núcleo de gás nobre logo depois do átomo, antes das subcamadas, como 'configuration c [He] 2s2 2p2'", "SIN-002");
         }
-        falhar("'atom', 'bond', 'ring', 'stereo', 'configuration' ou '}'", "SIN-002");
+        falhar("'atom', 'bond', 'ring', 'stereo', 'configuration', 'collapse' ou '}'", "SIN-002");
       }
       fechar();
     }
@@ -289,15 +306,119 @@
         if (!["atom", "monatomic_ion"].includes(anterior.tipo) || atomos.length !== 1 || atomos[0].el == null) { cmd.situacaoBloco = "tipo"; return; }
         Object.assign(cmd, { el: atomos[0].el, carga: atomos[0].carga, massa: atomos[0].massa, situacaoBloco: "ok" });
       });
+      // collapse ... of "Nome": guarda o bloco inteiro para a semântica
+      especie.comandos.filter((c) => c.tipo === "collapse").forEach((cmd) => {
+        if (cmd.bloco === especie.nome) { cmd.situacaoBloco = "proprio"; return; }
+        const anterior = especies.slice(0, i).find((e) => e.nome === cmd.bloco);
+        if (!anterior) { cmd.situacaoBloco = todos.includes(cmd.bloco) ? "depois" : "inexistente"; return; }
+        if (anterior.tipo === "black_hole") { cmd.situacaoBloco = "tipo"; return; }
+        cmd.especie = anterior;
+        cmd.situacaoBloco = "ok";
+      });
     });
   }
 
+  /* ---------- buraco negro: species black_hole { collapse N mol of "Bloco" } ---------- */
+  // Mesmas regras de src/semantico.py (HOLE-001 a HOLE-006), com as
+  // constantes de regras/buraco_negro.json
+  const SOBRESCRITO_CIENT = { "-": "⁻", 0: "⁰", 1: "¹", 2: "²", 3: "³", 4: "⁴", 5: "⁵", 6: "⁶", 7: "⁷", 8: "⁸", 9: "⁹" };
+  function cientificoPt(valor, casas = 3) {
+    if (valor === 0) return "0";
+    let e = Math.floor(Math.log10(Math.abs(valor)));
+    if (e >= -2 && e < 4) return valor.toFixed(Math.max(casas - 1 - e, 0)).replace(".", ",");
+    let m = valor / 10 ** e;
+    if (Number(m.toFixed(casas - 1)) >= 10) { m /= 10; e += 1; }
+    return `${m.toFixed(casas - 1).replace(".", ",")} × 10${String(e).replace(/./g, (c) => SOBRESCRITO_CIENT[c])}`;
+  }
+  function comprimentoPt(m) {
+    if (m >= 1e3) return `${cientificoPt(m / 1e3)} km`;
+    if (m >= 1) return `${cientificoPt(m)} m`;
+    if (m >= 1e-3) return `${cientificoPt(m * 1e3)} mm`;
+    return `${cientificoPt(m)} m`;
+  }
+  function analisarBuracoNegro(especie) {
+    const erros = [], avisos = [];
+    const erro = (no, codigo, msg) => erros.push({ tipo: "erro", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg, atomos: [] });
+    const vazio = () => ({ atomos: [], ligacoes: [], configuracoes: [], erros, avisos });
+    const cabecalho = { l: especie.l, c: 0 };
+    const colapsos = especie.comandos.filter((c) => c.tipo === "collapse");
+    especie.comandos.filter((c) => c.tipo !== "collapse").forEach((c) => erro(c, "SPEC-001", "black_hole não declara átomos, ligações, anéis nem configurações: a matéria vem de um bloco químico anterior, por 'collapse'"));
+    if (colapsos.length !== 1) erro(colapsos[1] || cabecalho, "SPEC-001", `black_hole precisa de exatamente um 'collapse', como collapse 1.1e32 mol of "Ferro-56"; ${colapsos.length ? `foram declarados ${colapsos.length}` : "nenhum foi declarado"}`);
+    if (especie.desemparelhados != null) erro(cabecalho, "SPEC-001", "black_hole não tem elétrons desemparelhados: o horizonte guarda só massa, carga e rotação");
+    if (erros.length) return vazio();
+    const c = colapsos[0], b = c.bloco;
+    if (c.situacaoBloco !== "ok") {
+      erro(c, c.situacaoBloco === "tipo" ? "BLOCK-002" : "BLOCK-001", {
+        tipo: `o bloco '${b}' já é um buraco negro; collapse comprime matéria química (átomo, íon, molécula ou sólido)`,
+        proprio: `o bloco '${b}' não pode colapsar a si mesmo; cite um bloco químico declarado antes`,
+        depois: `o bloco '${b}' é declarado depois; declare a espécie antes do buraco negro que a colapsa`,
+        inexistente: `não há bloco chamado '${b}' neste arquivo`,
+      }[c.situacaoBloco]);
+      return vazio();
+    }
+    if (!(c.quantidade > 0) || !isFinite(c.quantidade)) {
+      erro(c, "HOLE-003", `a quantidade de matéria precisa ser um número positivo e finito de mol; foi escrito ${c.texto}`);
+      return vazio();
+    }
+    // A química vem antes da gravidade
+    const citado = analisarSemantica(c.especie);
+    if (citado.erros.length) {
+      erro(c, "HOLE-002", `o bloco '${b}' tem erro semântico (${[...new Set(citado.erros.map((d) => d.codigo))].sort().join(", ")}); a química vem antes da gravidade: corrija a espécie antes de colapsá-la`);
+      return vazio();
+    }
+    const k = DADOS.buraco_negro;
+    const massaU = citado.atomos.reduce((t, a) => t + (a.massa || DADOS.elementos[a.el].massa_atomica), 0);
+    const carga = citado.atomos.reduce((t, a) => t + a.carga, 0);
+    const mParticula = massaU * k.unidade_massa_atomica;
+    const formula = formulaHill(citado.atomos.map((a) => ({ ...a, massa: null })));
+    if (carga !== 0) {
+      const razao = (Math.abs(carga) * k.carga_elementar) / (mParticula * Math.sqrt(4 * Math.PI * k.epsilon0 * k.G));
+      erro(c, "HOLE-004", `cada partícula de '${b}' (${formula}) tem carga ${carga > 0 ? "+" : ""}${carga}: a carga do colapso seria ${cientificoPt(razao, 2)} vezes o máximo que um horizonte suporta (Reissner-Nordström exige Q ≤ M·√(4πε₀G)); a repulsão elétrica vence a gravidade, então colapse uma espécie neutra`);
+      return vazio();
+    }
+    const massaKg = c.quantidade * k.avogadro * mParticula, massaSolar = massaKg / k.massa_solar;
+    const minimo = (k.limite_tov * k.massa_solar) / (k.avogadro * mParticula);
+    const quanto = `${c.texto} mol de '${b}' (${formula}) têm ${cientificoPt(massaSolar)} M☉`;
+    if (massaSolar < k.limite_chandrasekhar) {
+      erro(c, "HOLE-005", `${quanto}, abaixo do limite de Chandrasekhar (${cientificoPt(k.limite_chandrasekhar)} M☉): a pressão de degenerescência dos elétrons sustenta a matéria, que vira uma anã branca; para um buraco negro são precisos mais de ${cientificoPt(minimo)} mol`);
+      return vazio();
+    }
+    if (massaSolar <= k.limite_tov) {
+      erro(c, "HOLE-006", `${quanto}, entre o limite de Chandrasekhar (${cientificoPt(k.limite_chandrasekhar)} M☉) e o de Tolman-Oppenheimer-Volkoff (${cientificoPt(k.limite_tov)} M☉): a pressão dos nêutrons segura o colapso e sobra uma estrela de nêutrons; para um buraco negro são precisos mais de ${cientificoPt(minimo)} mol`);
+      return vazio();
+    }
+    const rs = (2 * k.G * massaKg) / k.c ** 2;
+    const ano = 365.25 * 86400;
+    return {
+      ...vazio(),
+      buraco: {
+        bloco: b, formula, quantidade: c.quantidade, massaU, massaKg, massaSolar, rs,
+        hawking: (k.hbar * k.c ** 3) / (8 * Math.PI * k.G * massaKg * k.kB),
+        evaporacao: (5120 * Math.PI * k.G ** 2 * massaKg ** 3) / (k.hbar * k.c ** 4) / ano,
+        limiteTov: k.limite_tov,
+      },
+    };
+  }
+  function textoBuracoNegro(nome, bn) {
+    return [
+      `Modelo '${nome}' tipo=black_hole carga_total=+0 desemparelhados=não declarado`,
+      `  Colapso: ${cientificoPt(bn.quantidade)} mol de '${bn.bloco}' (${bn.formula}, ${cientificoPt(bn.massaU, 4)} u por partícula)`,
+      `  Massa: ${cientificoPt(bn.massaKg)} kg = ${cientificoPt(bn.massaSolar)} M☉ (acima do limite de Tolman-Oppenheimer-Volkoff, ${cientificoPt(bn.limiteTov)} M☉)`,
+      `  Horizonte (raio de Schwarzschild, 2GM/c²): ${comprimentoPt(bn.rs)}`,
+      `  Esfera de fótons (1,5 r_s): ${comprimentoPt(1.5 * bn.rs)}; sombra vista de longe (≈2,6 r_s): ${comprimentoPt((Math.sqrt(27) / 2) * bn.rs)}`,
+      `  Temperatura de Hawking: ${cientificoPt(bn.hawking)} K; evaporação: ${cientificoPt(bn.evaporacao)} anos`,
+      `  Teorema da calvície: o horizonte guarda só massa, carga e rotação; a fórmula ${bn.formula} não existe mais`,
+    ].join("\n");
+  }
+
   function analisarSemantica(especie) {
+    if (especie.tipo === "black_hole") return analisarBuracoNegro(especie);
     const erros = [], avisos = [];
     // atomos: ids dos átomos envolvidos, para destacá-los no desenho 3D
     const erro = (no, codigo, msg, atomos = []) => erros.push({ tipo: "erro", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg, atomos });
     const aviso = (no, codigo, msg, atomos = []) => avisos.push({ tipo: "aviso", fase: "semântico", codigo, linha: no.l, coluna: no.c, mensagem: msg, atomos });
     const atomos = [], porNome = new Map(), porElemento = new Map(), contagem = new Map();
+    especie.comandos.filter((c) => c.tipo === "collapse").forEach((c) => erro(c, "HOLE-001", "'collapse' só vale em species black_hole: o colapso gravitacional não faz parte de uma espécie química, ele a comprime num bloco próprio"));
     for (const cmd of especie.comandos.filter((c) => c.tipo === "atom")) {
       if (cmd.bloco != null && cmd.situacaoBloco !== "ok") {
         const b = cmd.bloco;
@@ -664,7 +785,13 @@
     "ATOM-005": ["Isótopo não natural", "O número de massa não está entre os isótopos de composição natural da CIAAW: pode ser radioativo ou artificial.", "Confira o número de massa; para a composição natural, omita-o (atom C)."],
     "ATOM-006": ["Configuração fora de lugar", "A configuração eletrônica descreve um átomo isolado ou um íon monoatômico; em moléculas os elétrons ocupam orbitais moleculares.", "Use configuration só com species atom ou species monatomic_ion, uma vez por átomo."],
     "BLOCK-001": ["Bloco não encontrado", "atom \"Nome\" cita um bloco do mesmo arquivo, e não há bloco com esse nome antes deste (ou ele é o próprio bloco).", "Declare o átomo num bloco species atom antes da molécula, com o mesmo nome entre aspas."],
-    "BLOCK-002": ["Bloco não é um átomo", "Só um bloco species atom ou species monatomic_ion, com um átomo, pode ser reaproveitado por atom \"Nome\".", "Cite um bloco de um átomo, ou declare os átomos da molécula aqui mesmo."],
+    "BLOCK-002": ["Bloco do tipo errado", "atom \"Nome\" reaproveita só um bloco species atom ou species monatomic_ion, com um átomo; collapse não comprime um bloco que já é buraco negro.", "Cite um bloco de um átomo em atom \"Nome\", ou um bloco químico (átomo, íon, molécula ou sólido) em collapse."],
+    "HOLE-001": ["collapse fora do buraco negro", "O colapso gravitacional não é parte de uma espécie química: ele comprime uma espécie inteira.", "Tire o collapse daqui e escreva species black_hole \"Nome\" { collapse N mol of \"Bloco\" } depois do bloco."],
+    "HOLE-002": ["Bloco com erro não colapsa", "A química vem antes da gravidade: o bloco citado precisa passar pela semântica.", "Corrija o erro do bloco citado; o buraco negro compila em seguida."],
+    "HOLE-003": ["Quantidade de matéria inválida", "A quantidade em mol precisa ser positiva e finita.", "Escreva um número maior que zero, como 1.1e32."],
+    "HOLE-004": ["Carga demais para um horizonte", "Uma espécie com carga líquida acumula carga muito maior que a massa (Reissner-Nordström exige Q ≤ M): a repulsão elétrica vence a gravidade.", "Colapse uma espécie neutra: átomo, molécula ou sólido iônico, não um íon."],
+    "HOLE-005": ["Vira anã branca", "Abaixo do limite de Chandrasekhar (1,44 M☉), a pressão de degenerescência dos elétrons segura a matéria.", "Aumente a quantidade em mol; a mensagem diz o mínimo para um buraco negro."],
+    "HOLE-006": ["Vira estrela de nêutrons", "Entre 1,44 e 2,16 M☉, a pressão dos nêutrons segura o colapso (limite de Tolman-Oppenheimer-Volkoff).", "Aumente a quantidade em mol; a mensagem diz o mínimo para um buraco negro."],
     "BLOCK-003": ["Nome de bloco repetido", "Dois blocos do arquivo têm o mesmo nome, e a citação ficaria ambígua.", "Dê um nome diferente a cada bloco."],
     "ATOM-008": ["Elétrons a menos que zero", "Um cátion perde elétrons, e o átomo só tem Z deles (o número atômico). Carga maior que Z deixaria elétrons negativos.", "Use uma carga de no máximo +Z; +Z é o núcleo nu, como Li(+3) ou H(+1)."],
     "ATOM-007": ["Contra a regra de Hund", "Pela regra de Hund os elétrons ocupam orbitais de mesma energia um a um; isso fixa quantos ficam desemparelhados.", "Ajuste o unpaired para o valor indicado pela configuração."],
@@ -1013,7 +1140,10 @@
     if (arvoresProntas) atualizarArvores();
     const modelo = document.querySelector("#p-modelo pre");
     document.getElementById("legenda-ligacoes").innerHTML = legendaLigacoes(r);
-    if (r.atomos.length && !errosDoBloco) {
+    const buraco = r.buraco && !errosDoBloco ? r : null;
+    if (buraco) {
+      modelo.textContent = textoBuracoNegro(r.especie.nome, r.buraco);
+    } else if (r.atomos.length && !errosDoBloco) {
       const nomes = r.atomos.map(rotulo);
       const simbolo = { "-": "SIMPLES", "=": "DUPLA", "#": "TRIPLA", "->": "COORDENADA", "~": "METALICA" };
       modelo.textContent = [`Modelo '${r.especie.nome}' tipo=${r.especie.tipo}`, `Átomos (${r.atomos.length})`, ...r.atomos.map((a) => `  ${rotulo(a)} carga=${a.carga >= 0 ? "+" : ""}${a.carga}${a.massa ? ` A=${a.massa}` : ""}${textoMontado(a)}`),
@@ -1038,10 +1168,15 @@
       const sufixo = carga ? `${Math.abs(carga) > 1 ? sobrescrito(Math.abs(carga)) : ""}${carga > 0 ? "⁺" : "⁻"}` : "";
       const plural = (n, um, varios) => `<b>${n}</b> ${n === 1 ? um : varios}`;
       resumo.innerHTML = `<span>fórmula (Hill) <b>${formulaHill(r.atomos)}${sufixo}</b></span><span>${plural(r.atomos.length, "átomo", "átomos")}</span><span>${plural(r.ligacoes.length, "ligação", "ligações")}</span><span><b>${multiplas}</b> múltiplas</span><span><b>${Math.max(0, aneis)}</b> anéis</span>`;
+    } else if (buraco) {
+      resumo.innerHTML = `<span>buraco negro de <b>${escapar(r.buraco.formula)}</b></span><span><b>${cientificoPt(r.buraco.massaSolar)}</b> M☉</span><span>horizonte <b>${comprimentoPt(r.buraco.rs)}</b></span>`;
     } else {
       resumo.innerHTML = "";
     }
-    if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
+    // Buraco negro: a cena mostra a imagem calculada e a tela é devorada
+    mostrarBuracoNoPlayground(buraco, codigo.value);
+    if (buraco) { vazio.hidden = true; cena.carregar([], []); }
+    else if (r.atomos.length) { vazio.hidden = true; cena.carregar(r.atomos, r.ligacoes); }
     else { vazio.hidden = false; vazio.textContent = errosDoBloco ? "Corrija o erro para desenhar a molécula" : "Declare átomos para desenhar"; cena.carregar([], []); }
   }
 

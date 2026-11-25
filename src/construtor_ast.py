@@ -9,6 +9,7 @@ from MoleculeDSLVisitor import MoleculeDSLVisitor
 from ast_nos import (
     AnelDecl,
     AtomoDecl,
+    ColapsoDecl,
     ConfiguracaoDecl,
     EstereoDecl,
     LigacaoDecl,
@@ -62,6 +63,23 @@ class ConstrutorAST(MoleculeDSLVisitor):
         decl.elemento, decl.carga, decl.massa = origem.elemento, origem.carga, origem.massa
         decl.situacao_bloco = "ok"
 
+    def resolver_colapso(self, decl, nome_proprio):
+        # collapse ... of "Nome": guarda o bloco anterior inteiro, que a
+        # semântica analisa para saber massa e carga de cada partícula
+        if decl.bloco == nome_proprio:
+            decl.situacao_bloco = "proprio"
+            return
+        anterior = next((b for b in getattr(self, "blocos", []) if b.nome == decl.bloco), None)
+        if anterior is None:
+            todos = getattr(self, "todos_os_nomes", [])
+            decl.situacao_bloco = "depois" if decl.bloco in todos else "inexistente"
+            return
+        if anterior.tipo is TipoEspecie.BURACO_NEGRO:
+            decl.situacao_bloco = "tipo"
+            return
+        decl.especie = anterior
+        decl.situacao_bloco = "ok"
+
     def visitMolecula(self, ctx):
         cabecalho = ctx.cabecalho()
         # Tira as aspas do TEXTO
@@ -76,6 +94,8 @@ class ConstrutorAST(MoleculeDSLVisitor):
         for comando in comandos:
             if isinstance(comando, AtomoDecl) and comando.bloco is not None:
                 self.resolver_bloco(comando, nome)
+            elif isinstance(comando, ColapsoDecl):
+                self.resolver_colapso(comando, nome)
         # Nome automático: o mesmo índice por elemento que o modelo usa
         contagem = {}
         for comando in comandos:
@@ -122,6 +142,8 @@ class ConstrutorAST(MoleculeDSLVisitor):
             return TipoEspecie.REDE_COVALENTE, 0, False
         if ctx.METALLIC_SOLID() is not None:
             return TipoEspecie.SOLIDO_METALICO, 0, False
+        if ctx.BLACK_HOLE() is not None:
+            return TipoEspecie.BURACO_NEGRO, 0, False
         return TipoEspecie.MOLECULA, 0, False
 
     def visitCargaEspecie(self, ctx):
@@ -211,6 +233,16 @@ class ConstrutorAST(MoleculeDSLVisitor):
             self.visit(ctx.referencia()),
             nucleo,
             [s.getText() for s in ctx.SUBCAMADA()],
+            ctx.start.line,
+            ctx.start.column,
+        )
+
+    def visitColapso(self, ctx):
+        texto = ctx.quantidade().getText()
+        return ColapsoDecl(
+            float(texto),
+            texto,
+            ctx.TEXTO().getText()[1:-1],
             ctx.start.line,
             ctx.start.column,
         )

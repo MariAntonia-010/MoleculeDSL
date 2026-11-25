@@ -50,6 +50,11 @@ produzi-lo. A estratégia `RecuperacaoPorComando`, baseada em
 que a recuperação descarte o início do comando seguinte. Também é mantido no
 máximo um erro por linha para reduzir cascatas.
 
+Em `collapse`, as mensagens dizem qual parte faltou: a quantidade, `mol`,
+`of` ou o nome do bloco entre aspas. Uma notação científica com `E`
+maiúsculo (`1.1E32`) é lida como número seguido de elemento, e a mensagem
+avisa que o `e` é minúsculo.
+
 Os diagnósticos `reportAmbiguity`, `reportAttemptingFullContext` e
 `reportContextSensitivity` pertencem ao `DiagnosticErrorListener`. Eles não
 são erros de entrada e não são habilitados no modo normal. A gramática não
@@ -70,7 +75,8 @@ pasta é `gerado/`.
 ## Erros semânticos e avisos
 
 A análise semântica usa os prefixos `ELEM`, `STRUCT`, `BOND`, `VAL`, `CARGA`,
-`COORD`, `METAL`, `RAD`, `SPEC`, `RING`, `STEREO`, `ATOM` e `BLOCK`. A tabela
+`COORD`, `METAL`, `RAD`, `SPEC`, `RING`, `STEREO`, `ATOM`, `BLOCK` e `HOLE`
+(colapso gravitacional de `species black_hole`). A tabela
 completa, com a severidade de cada regra (erro ou aviso), está em
 [plano_semantico.md](plano_semantico.md), e o resumo está no README.
 

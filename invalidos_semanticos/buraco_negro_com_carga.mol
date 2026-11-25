@@ -1,0 +1,9 @@
+// esperado: Erro semântico [HOLE-004] na linha 8, coluna 4: cada partícula de 'Sodio(1+)' (Na) tem carga +1: a carga do colapso seria 4,9 × 10¹⁶ vezes o máximo que um horizonte suporta (Reissner-Nordström exige Q ≤ M·√(4πε₀G)); a repulsão elétrica vence a gravidade, então colapse uma espécie neutra
+// Um íon não colapsa: a repulsão elétrica vence a gravidade
+species monatomic_ion "Sodio(1+)" charge +1 {
+    atom Na(+1)
+}
+
+species black_hole "Ions de sodio" {
+    collapse 2e32 mol of "Sodio(1+)"
+}

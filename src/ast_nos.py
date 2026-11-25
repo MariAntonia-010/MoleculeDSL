@@ -30,6 +30,7 @@ class TipoEspecie(Enum):
     SOLIDO_IONICO = "ionic_solid"
     REDE_COVALENTE = "covalent_network"
     SOLIDO_METALICO = "metallic_solid"
+    BURACO_NEGRO = "black_hole"
 
 
 @dataclass
@@ -100,7 +101,22 @@ class ConfiguracaoDecl:
     coluna: int
 
 
-Comando = AtomoDecl | LigacaoDecl | AnelDecl | EstereoDecl | ConfiguracaoDecl
+@dataclass
+class ColapsoDecl:
+    # collapse 1.1e32 mol of "Ferro-56": quantidade de matéria do bloco
+    # citado. O construtor resolve o bloco como em atom "Nome": a situação
+    # é "ok", "inexistente", "depois", "proprio" ou "tipo" (bloco que já é
+    # buraco negro), e especie guarda o bloco quando a situação é "ok"
+    quantidade: float
+    texto_quantidade: str
+    bloco: str
+    linha: int
+    coluna: int
+    situacao_bloco: str | None = None
+    especie: "Especie | None" = None
+
+
+Comando = AtomoDecl | LigacaoDecl | AnelDecl | EstereoDecl | ConfiguracaoDecl | ColapsoDecl
 
 
 @dataclass
@@ -187,5 +203,9 @@ def formatar(molecula):
             )
             for r in c.referencias:
                 linhas.append(f"    {ref(r)}")
+        elif isinstance(c, ColapsoDecl):
+            linhas.append(
+                f"  ColapsoDecl quantidade={c.texto_quantidade} mol bloco={c.bloco!r} {pos(c)}"
+            )
 
     return "\n".join(linhas)

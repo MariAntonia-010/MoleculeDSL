@@ -1,0 +1,20 @@
+{
+  "_fonte": "docs/plano_buraco_negro.md, seção Fontes",
+  "_notas": [
+    "Constantes do CODATA 2018 (NIST). Massa solar nominal da IAU 2015: GM☉ = 1,3271244e20 m³/s², dividida por G.",
+    "limite_chandrasekhar: maior massa que a pressão de degenerescência dos elétrons sustenta (Chandrasekhar, 1931), para 2 núcleons por elétron.",
+    "limite_tov: maior massa de uma estrela de nêutrons não girante (Tolman-Oppenheimer-Volkoff), estimada em 2,16 (+0,17 −0,15) M☉ por Rezzolla, Most e Weih (2018). Acima dela nada conhecido segura o colapso.",
+    "A massa de cada partícula usa a massa atômica de regras/elementos.json, ou o número de massa quando o átomo declara isótopo (aproximação abaixo de 0,1%)."
+  ],
+  "G": 6.6743e-11,
+  "c": 299792458,
+  "hbar": 1.054571817e-34,
+  "kB": 1.380649e-23,
+  "unidade_massa_atomica": 1.6605390666e-27,
+  "avogadro": 6.02214076e23,
+  "carga_elementar": 1.602176634e-19,
+  "epsilon0": 8.8541878128e-12,
+  "massa_solar": 1.98841e30,
+  "limite_chandrasekhar": 1.44,
+  "limite_tov": 2.16
+}

@@ -21,6 +21,7 @@ cabecalho
     | SPECIES IONIC_SOLID TEXTO
     | SPECIES COVALENT_NETWORK TEXTO
     | SPECIES METALLIC_SOLID TEXTO
+    | SPECIES BLACK_HOLE TEXTO
     ;
 
 cargaEspecie
@@ -37,6 +38,7 @@ comando
     | anel
     | estereo
     | configuracao
+    | colapso
     ;
 
 // Ex.: atom O, 4x atom H, atom N(+1), atom C as c1, atom 13C (número de
@@ -104,6 +106,18 @@ nucleo
     : ABRE_COLCHETE IDENT FECHA_COLCHETE
     ;
 
+// Colapso gravitacional: quantidade de matéria (em mol) de um bloco
+// químico declarado antes, como collapse 1.1e32 mol of "Ferro-56"
+colapso
+    : COLLAPSE quantidade MOL OF TEXTO
+    ;
+
+quantidade
+    : INTEIRO
+    | REAL
+    | CIENTIFICO
+    ;
+
 // ---------- LEXER ----------
 
 // Palavras-chave (antes de NOME, para vencer no empate)
@@ -114,6 +128,7 @@ MONATOMIC_ION    : 'monatomic_ion' ;
 IONIC_SOLID      : 'ionic_solid' ;
 COVALENT_NETWORK : 'covalent_network' ;
 METALLIC_SOLID   : 'metallic_solid' ;
+BLACK_HOLE       : 'black_hole' ;
 CHARGE    : 'charge' ;
 UNPAIRED  : 'unpaired' ;
 ATOM     : 'atom' ;
@@ -122,6 +137,9 @@ AS       : 'as' ;
 RING     : 'ring' ;
 STEREO   : 'stereo' ;
 CONFIGURATION : 'configuration' ;
+COLLAPSE : 'collapse' ;
+MOL      : 'mol' ;
+OF       : 'of' ;
 
 // Quantificadores
 MULTIPLICADOR_ATOMO
@@ -138,7 +156,11 @@ SUBCAMADA
     : [1-7] [spdf] [0-9]+
     ;
 
-// Números
+// Números. Notação científica com e minúsculo, como 1.1e32 ou 6e-3
+CIENTIFICO
+    : [0-9]+ ('.' [0-9]+)? 'e' [+-]? [0-9]+
+    ;
+
 REAL
     : [0-9]+ '.' [0-9]+
     ;

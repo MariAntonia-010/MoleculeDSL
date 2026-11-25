@@ -139,8 +139,25 @@ Plano e fontes em `docs/plano_atomo.md`.
 | ATOM-007 | `unpaired` diferente da regra de Hund | aviso |
 | ATOM-008 | carga positiva maior que Z | erro |
 | BLOCK-001 | `atom "Nome"` cita bloco inexistente, declarado depois ou o próprio bloco | erro |
-| BLOCK-002 | bloco citado não é átomo isolado nem íon monoatômico de um átomo | erro |
+| BLOCK-002 | bloco citado não serve: `atom "Nome"` pede átomo isolado ou íon monoatômico de um átomo; `collapse` não aceita outro buraco negro | erro |
 | BLOCK-003 | nome de bloco repetido no arquivo | erro |
+
+### M5d: Colapso gravitacional (`species black_hole`)
+
+Plano, física e fontes em `docs/plano_buraco_negro.md`; constantes e limites
+em `regras/buraco_negro.json`. `collapse N mol of "Bloco"` cita um bloco
+anterior como `atom "Nome"` (BLOCK-001 para bloco inexistente, declarado
+depois ou o próprio; BLOCK-002 para um bloco que já é buraco negro), e
+`black_hole` só aceita um `collapse` (SPEC-001).
+
+| ID | Regra | Severidade |
+|---|---|---|
+| HOLE-001 | `collapse` fora de `species black_hole` | erro |
+| HOLE-002 | o bloco colapsado tem erro semântico (a química vem antes da gravidade) | erro |
+| HOLE-003 | quantidade de matéria que não é positiva e finita | erro |
+| HOLE-004 | espécie com carga líquida: a carga passaria do limite de Reissner-Nordström (Q ≤ M) | erro |
+| HOLE-005 | massa abaixo do limite de Chandrasekhar (1,44 M☉): vira anã branca | erro |
+| HOLE-006 | massa até o limite de Tolman-Oppenheimer-Volkoff (2,16 M☉): vira estrela de nêutrons | erro |
 
 ### M6: Anéis
 Detectar ciclos no grafo e validar que a lista do `ring` forma um ciclo conectado, sem átomos repetidos.

@@ -1,0 +1,9 @@
+// esperado: Erro semântico [HOLE-006] na linha 8, coluna 4: 6e31 mol de 'Ferro-56' (Fe) têm 1,69 M☉, entre o limite de Chandrasekhar (1,44 M☉) e o de Tolman-Oppenheimer-Volkoff (2,16 M☉): a pressão dos nêutrons segura o colapso e sobra uma estrela de nêutrons; para um buraco negro são precisos mais de 7,67 × 10³¹ mol
+// Entre Chandrasekhar e Tolman-Oppenheimer-Volkoff sobra uma estrela de nêutrons
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+}
+
+species black_hole "Ferro de menos" {
+    collapse 6e31 mol of "Ferro-56"
+}

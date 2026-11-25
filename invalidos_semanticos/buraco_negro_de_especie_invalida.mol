@@ -1,0 +1,12 @@
+// esperado: Erro semântico [STRUCT-006] na linha 7, coluna 4: a repetição x5 ligaria os mesmos dois átomos 5 vezes; use = ou # para ligação dupla ou tripla
+// esperado: Erro semântico [HOLE-002] na linha 11, coluna 4: o bloco 'Metano errado' tem erro semântico (STRUCT-006); a química vem antes da gravidade: corrija a espécie antes de colapsá-la
+// A química vem antes da gravidade: um bloco com erro não colapsa
+species molecule "Metano errado" {
+    atom C as c
+    5x atom H as h
+    bond c-h1 x5
+}
+
+species black_hole "Colapso impossivel" {
+    collapse 3e32 mol of "Metano errado"
+}

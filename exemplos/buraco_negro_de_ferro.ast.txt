@@ -1,0 +1,9 @@
+Bloco 1/2: species atom 'Ferro-56'
+Especie 'Ferro-56' tipo=atom carga_total=+0 desemparelhados=4 [3:0]
+  AtomoDecl elemento=Fe multiplicador=1 carga=+0 nome=fe massa=56 [4:4]
+  ConfiguracaoDecl [Ar] 3d6 4s2 [5:4]
+    átomo: fe (nome) [5:18]
+Espécie 'Ferro-56': análise concluída sem erros
+Bloco 2/2: species black_hole 'Nucleo de ferro colapsado'
+Especie 'Nucleo de ferro colapsado' tipo=black_hole carga_total=+0 desemparelhados=não declarado [8:0]
+  ColapsoDecl quantidade=1.1e32 mol bloco='Ferro-56' [9:4]

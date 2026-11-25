@@ -1,0 +1,8 @@
+// esperado: Erro sintático [SIN-001] na linha 7, coluna 20: esperada a unidade 'mol' depois da quantidade, como 'collapse 1.1e32 mol of "Ferro-56"'; encontrado 'of'
+species atom "Ferro-56" unpaired 4 {
+    atom 56Fe as fe
+}
+
+species black_hole "Sem unidade" {
+    collapse 1.1e32 of "Ferro-56"
+}

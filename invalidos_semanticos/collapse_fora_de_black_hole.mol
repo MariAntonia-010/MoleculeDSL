@@ -1,0 +1,8 @@
+// esperado: Erro semântico [HOLE-001] na linha 7, coluna 4: 'collapse' só vale em species black_hole: o colapso gravitacional não faz parte de uma espécie química, ele a comprime num bloco próprio
+species molecule "Agua" {
+    atom O as o
+    2x atom H as h
+    bond o-h1
+    bond o-h2
+    collapse 4e32 mol of "Agua"
+}
