@@ -1,0 +1,7 @@
+// Fluoreto de hidrogênio: a ligação H-F é a mais polar entre os haletos de hidrogênio
+species molecule "Hydrogen fluoride" {
+    atom H
+    atom F
+
+    bond H-F
+}

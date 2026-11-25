@@ -1,0 +1,14 @@
+// 1,2-Dicloroetano: adição de Cl2 ao eteno, primeiro passo da produção do PVC
+species molecule "1,2-Dichloroethane" {
+    2x atom C as c
+    2x atom Cl as cl
+    4x atom H as h
+
+    bond c1-c2
+    bond c1-cl1
+    bond c2-cl2
+    bond c1-h1
+    bond c1-h2
+    bond c2-h3
+    bond c2-h4
+}

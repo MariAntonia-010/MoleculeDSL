@@ -1,0 +1,22 @@
+// Ácido L-lático, (S)-2-hidroxipropanoico: produto da fermentação lática
+species molecule "L-Lactic acid" {
+    3x atom C as c
+    atom O as o1
+    atom O as o2
+    atom O as o3
+    6x atom H as h
+
+    bond c1-c2
+    bond c2-c3
+    bond c1=o1
+    bond c1-o2
+    bond c2-o3
+    bond o2-h1
+    bond o3-h2
+    bond c2-h3
+    bond c3-h4
+    bond c3-h5
+    bond c3-h6
+
+    stereo c2 S
+}

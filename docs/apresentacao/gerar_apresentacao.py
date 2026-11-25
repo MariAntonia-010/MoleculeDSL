@@ -47,6 +47,18 @@ GRUPOS_EXEMPLOS = [
     ("Radicais e ligação coordenada", ["radical_metila", "oxido_nitrico", "dioxigenio_tripleto", "metileno_tripleto", "dioxido_de_nitrogenio", "hidroperoxila", "agua_trifluoreto_de_boro"]),
     ("Complexos de metais", ["diaminoprata", "tetraaminocobre", "hexaaminocobalto", "ferrocianeto"]),
     ("Sólidos", ["cloreto_de_sodio", "oxido_de_magnesio", "cloreto_de_magnesio", "dioxido_de_silicio", "sodio_metalico", "cobre_metalico"]),
+    ("Hidrocarbonetos e combustíveis", ["etano", "eteno", "etino", "propano", "propeno", "butano", "butadieno", "ciclohexeno"]),
+    ("Orgânicos halogenados, aldeídos e ésteres", ["clorometano", "dicloroetano_1_2", "cloreto_de_vinila", "bromopropano_2",
+                                                   "formaldeido", "acetaldeido", "acetato_de_metila", "cloreto_de_acetila",
+                                                   "anidrido_acetico", "etilenoglicol"]),
+    ("Ácidos e bases", ["acido_sulfurico", "acido_nitrico", "acido_carbonico", "acido_fosforico", "acido_hipocloroso",
+                        "cianeto_de_hidrogenio", "fluoreto_de_hidrogenio", "brometo_de_hidrogenio", "metilamina",
+                        "bicarbonato", "acetato", "hipoclorito", "cianeto", "metilamonio"]),
+    ("Óxidos, hidretos e halogênios", ["dioxido_de_enxofre", "trioxido_de_enxofre", "sulfeto_de_hidrogenio", "fosfina",
+                                       "hidrazina", "fluor", "bromo"]),
+    ("Ácidos e bases de Lewis", ["trifluoreto_de_boro", "amonia_trifluoreto_de_boro", "tricloreto_de_fosforo", "pentacloreto_de_fosforo"]),
+    ("Moléculas do dia a dia", ["glicose", "acido_lactico", "acido_citrico", "acido_salicilico", "acido_acetilsalicilico",
+                                "paracetamol", "cafeina"]),
     ("Buraco negro (colapso gravitacional)", ["buraco_negro_de_ferro", "buraco_negro_de_agua"]),
 ]
 EXEMPLOS = [nome for _, nomes in GRUPOS_EXEMPLOS for nome in nomes]

@@ -1,0 +1,30 @@
+// Ácido cítrico (ácido 2-hidroxipropano-1,2,3-tricarboxílico): o carbono
+// central tem dois grupos CH2COOH iguais e por isso não é estereocentro
+species molecule "Citric acid" {
+    6x atom C as c
+    7x atom O as o
+    8x atom H as h
+
+    bond c1-c2
+    bond c2-c3
+    bond c3-c4
+    bond c4-c5
+    bond c3-c6
+
+    bond c1=o1
+    bond c1-o2
+    bond c5=o3
+    bond c5-o4
+    bond c6=o5
+    bond c6-o6
+    bond c3-o7
+
+    bond o2-h1
+    bond o4-h2
+    bond o6-h3
+    bond o7-h4
+    bond c2-h5
+    bond c2-h6
+    bond c4-h7
+    bond c4-h8
+}
