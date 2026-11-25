@@ -665,28 +665,28 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
       </div>
       <div id="lab-reacao" role="tabpanel" style="margin-top:1.4rem">
         <div class="placa montador" id="montador">
-          <div class="montador-topo">
-            <div><h3>Monte a reação</h3><p class="nota" style="margin:0">Escolha espécies dos exemplos ou escreva o código MoleculeDSL de cada uma. Ajuste os coeficientes ou peça o balanceamento.</p></div>
-            <label class="alternar">partir de <select id="reacao" aria-label="Reação pronta"></select></label>
+          <div class="cabeca-placa">
+            <div><h3>Monte a reação</h3><p class="nota">Espécies dos exemplos ou código próprio, com os coeficientes de cada uma.</p></div>
+            <select id="reacao" aria-label="Partir de uma reação pronta" title="Partir de uma reação pronta"></select>
           </div>
           <div class="montador-lados">
-            <div><h4>Reagentes</h4><div id="montador-reagentes"></div><button type="button" class="botao pequeno" id="mais-reagente">+ reagente</button></div>
+            <div><h4>Reagentes</h4><div id="montador-reagentes"></div><button type="button" class="adicionar-linha" id="mais-reagente"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Reagente</button></div>
             <div class="seta-reacao" aria-hidden="true">→</div>
-            <div><h4>Produtos</h4><div id="montador-produtos"></div><button type="button" class="botao pequeno" id="mais-produto">+ produto</button></div>
+            <div><h4>Produtos</h4><div id="montador-produtos"></div><button type="button" class="adicionar-linha" id="mais-produto"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Produto</button></div>
           </div>
-          <div class="acoes" style="justify-content:flex-start;margin-top:1rem">
-            <button type="button" class="botao primario" id="simular-reacao">Simular reação</button>
-            <button type="button" class="botao" id="balancear-reacao">Balancear e simular</button>
+          <div class="acoes-montador">
+            <button type="button" class="botao pequeno" id="balancear-reacao"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M8 20h8M5 7h14"/><path d="m5 7-2.5 6.5a3 3 0 0 0 5 0zM19 7l-2.5 6.5a3 3 0 0 0 5 0z"/></svg>Balancear e simular</button>
+            <button type="button" class="botao pequeno primario" id="simular-reacao"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Simular reação</button>
           </div>
         </div>
         <div class="play" style="margin-top:1.1rem">
           <div class="placa">
-            <div class="barra-ferramentas">
-              <button class="botao pequeno" type="button" id="tocar-reacao">❚❚ Pausar</button>
-              <button class="botao pequeno" type="button" id="reiniciar-reacao">Reiniciar</button>
-            </div>
             <div class="cena"><canvas id="cena-reacao" aria-label="Animação da reação"></canvas><span class="fase-reacao" id="fase-reacao">Reagentes</span><span class="dica">arraste para girar</span></div>
-            <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+            <div class="barra-player">
+              <button class="icone-botao" type="button" id="tocar-reacao" aria-label="Pausar" data-dica="Pausar"></button>
+              <button class="icone-botao" type="button" id="reiniciar-reacao" aria-label="Reiniciar" data-dica="Reiniciar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7"/><path d="M4 4v5h5"/></svg></button>
+              <input type="range" id="progresso-reacao" min="0" max="1" step="0.001" value="0" aria-label="Progresso da reação">
+            </div>
           </div>
           <div class="placa" id="info-reacao"></div>
         </div>
@@ -694,16 +694,20 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
       <div id="lab-mistura" role="tabpanel" class="play" style="margin-top:1.4rem" hidden>
         <div class="placa">
           <div class="cena"><canvas id="cena-mistura" aria-label="Mistura de átomos, íons e moléculas"></canvas><span class="dica">arraste para girar</span></div>
-          <label class="alternar" style="margin-top:0.9rem">agitação (temperatura) <input type="range" id="agitacao" min="0" max="3" step="0.1" value="1"></label>
+          <div class="barra-player">
+            <span class="icone-rotulo" data-dica="Agitação (temperatura)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/><path d="M12 11v6"/></svg></span>
+            <input type="range" id="agitacao" min="0" max="3" step="0.1" value="1" aria-label="Agitação (temperatura)">
+          </div>
         </div>
         <div class="placa">
-          <h3>Componentes</h3>
-          <label class="nota" for="mistura-pronta" style="display:block;margin:0 0 0.3rem">Mistura pronta</label>
-          <select id="mistura-pronta" style="width:100%;max-width:100%;margin-bottom:0.9rem"></select>
+          <div class="cabeca-placa">
+            <h3>Componentes</h3>
+            <select id="mistura-pronta" aria-label="Partir de uma mistura pronta" title="Partir de uma mistura pronta"></select>
+          </div>
           <div id="lista-mistura" class="lista-mistura"></div>
           <div class="adicionar-mistura">
             <select id="nova-especie" aria-label="Espécie para adicionar"></select>
-            <button type="button" class="botao pequeno" id="adicionar-mistura">Adicionar</button>
+            <button type="button" class="icone-botao" id="adicionar-mistura" aria-label="Adicionar à mistura" data-dica="Adicionar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
           </div>
           <textarea id="codigo-mistura" class="codigo-curto" spellcheck="false" aria-label="Código MoleculeDSL do componente" hidden></textarea>
           <div id="info-mistura" style="margin-top:1rem"></div>
@@ -723,7 +727,16 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
         <div class="placa"><h3>Modelo atômico (Bohr)</h3><div class="cena cena-bohr"><canvas id="bohr" aria-label="Modelo de Bohr do elemento"></canvas></div><p class="nota">Camadas tiradas da configuração eletrônica de <code>regras/elementos.json</code>. O modelo de Bohr é didático: os elétrons não giram em órbitas fixas.</p></div>
         <div class="placa" id="ficha-elemento"></div>
       </div>
-      <div class="placa" style="margin-top:1.1rem"><h3>Bancada</h3><div id="bancada"></div></div>
+      <div class="placa" style="margin-top:1.1rem">
+        <div class="cabeca-placa">
+          <div><h3>Bancada</h3><p class="nota">Some elementos e o código da molécula aparece aqui.</p></div>
+          <div class="grupo-icones" id="acoes-bancada" hidden>
+            <button class="icone-botao" type="button" id="bancada-abrir" aria-label="Abrir no playground" data-dica="Abrir no playground"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg></button>
+            <button class="icone-botao" type="button" id="bancada-limpar" aria-label="Limpar a bancada" data-dica="Limpar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5M14 11v5"/></svg></button>
+          </div>
+        </div>
+        <div id="bancada"></div>
+      </div>
     </section>
   </main>
 

@@ -1017,3 +1017,38 @@ Com a barra única, o editor e a cena começam na mesma altura, e os dois
 painéis ficam simétricos. Nenhum identificador mudou (`#limpar`, `#girar`,
 `[data-erro]`...): o JavaScript que já existia continua igual, só ganhou o
 fechamento do menu.
+
+---
+
+## 25/11/2026 — Laboratório e tabela no mesmo padrão do playground
+
+### O que foi feito
+
+- **Reação:** a reação pronta foi para o cabeçalho do montador, ao lado do
+  título. Os "×" viraram ícones de remover, e "+ reagente" e "+ produto"
+  viraram botões de adicionar iguais nas duas colunas. "Balancear e simular"
+  e "Simular reação" ganharam ícones e ficaram centralizados. A animação
+  ganhou uma barra de player: tocar/pausar, reiniciar e a faixa de
+  progresso na mesma linha.
+- **Mistura:** a mistura pronta foi para o cabeçalho de "Componentes". Cada
+  componente tem um contador − n + e ícones para a tradução e para remover.
+  A agitação usa a mesma barra de player, com um ícone de termômetro.
+- **Tabela:** as ações da ficha (demonstrar, abrir no playground e adicionar
+  à bancada) viraram ícones no topo dela, e as da bancada (abrir e limpar)
+  foram para o cabeçalho da bancada, que só aparece quando há elementos.
+  Cada ficha da bancada tem um × para remover. No desktop, o modelo de Bohr
+  acompanha a rolagem ao lado da ficha, que é mais longa.
+- **Árvores:** os controles de zoom (−, + e ajustar à largura) viraram
+  ícones em todas as páginas.
+
+### Dificuldades
+
+Os controles de zoom procuravam o primeiro `svg` da caixa da árvore, e com
+os ícones esse passou a ser o do botão. A busca agora mira `.arv-svg`.
+
+### Decisões tomadas
+
+Os ícones dos botões gerados pelos módulos ficam num só lugar (`ICONES` e
+`botaoIcone` em `app.js`), com rótulo no `aria-label` e dica no
+`data-dica`. Ações principais, como simular e balancear, continuam com
+texto ao lado do ícone.

@@ -349,14 +349,17 @@ rotas próprias:
 - **Laboratório:** reações e misturas montadas pelo usuário, com espécies
   dos exemplos ou código próprio, balanceamento automático e animação das
   ligações que se rompem e se formam. Espécie com erro semântico não entra
-  na simulação;
+  na simulação. A animação tem uma barra de player (tocar/pausar, reiniciar
+  e progresso), e cada componente da mistura tem um contador e ícones para
+  a tradução e para remover;
 - **Buraco negro:** no playground, um programa com `species black_hole`
   válido mostra o buraco negro calculado por traçado de raios na métrica de
   Schwarzschild e, sozinho, devora a tela inteira (pesquisa e limites em
   [`docs/plano_buraco_negro.md`](docs/plano_buraco_negro.md));
 - **Tabela periódica:** modelo atômico de Bohr, dados da fonte, o que o
   compilador faz com cada elemento e uma bancada que monta o código de uma
-  molécula.
+  molécula. As ações da ficha (demonstrar, abrir no playground e adicionar à
+  bancada) e as da bancada (abrir e limpar) são ícones com dica.
 
 Todo exemplo tem um botão **Demonstrar tradução**, que mostra as cinco
 etapas (tokens, árvore sintática, AST, modelo e semântica) pela lente da

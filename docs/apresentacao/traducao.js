@@ -155,15 +155,13 @@
     const { svg, nos } = arvoreSVG(raizNo, comDetalhe);
     return `<div class="desenho-arvore">
       <div class="arv-controles"><span>${nos} nós</span>
-        <button type="button" class="botao pequeno" data-zoom="0.8" aria-label="Diminuir">−</button>
-        <button type="button" class="botao pequeno" data-zoom="1.25" aria-label="Aumentar">+</button>
-        <button type="button" class="botao pequeno" data-zoom="ajustar">Ajustar à largura</button></div>
+        <span class="grupo-icones segmentado">${botaoIcone("zoomMenos", "Diminuir", 'data-zoom="0.8"', "mini")}${botaoIcone("zoomMais", "Aumentar", 'data-zoom="1.25"', "mini")}${botaoIcone("ajustar", "Ajustar à largura", 'data-zoom="ajustar"', "mini")}</span></div>
       <div class="arv-rolagem">${svg}</div></div>`;
   }
   // Ao aparecer: reduz até caber na largura (sem passar de 45%) e centraliza a raiz
   function ajustarDesenhos(alvo) {
     alvo.querySelectorAll(".desenho-arvore").forEach((caixa) => {
-      const rolagem = caixa.querySelector(".arv-rolagem"), svg = caixa.querySelector("svg");
+      const rolagem = caixa.querySelector(".arv-rolagem"), svg = caixa.querySelector(".arv-svg");
       const larguraBase = Number(svg.dataset.largura), alturaBase = Number(svg.dataset.altura);
       const disponivel = rolagem.clientWidth - 12;
       if (!disponivel) return;
@@ -179,7 +177,7 @@
     const botao = e.target.closest("[data-zoom]");
     if (!botao) return;
     const caixa = botao.closest(".desenho-arvore");
-    const svg = caixa.querySelector("svg");
+    const svg = caixa.querySelector(".arv-svg");
     const larguraBase = Number(svg.dataset.largura), alturaBase = Number(svg.dataset.altura);
     let escala = Number(svg.dataset.escala || 1);
     escala = botao.dataset.zoom === "ajustar" ? Math.min(1.5, caixa.querySelector(".arv-rolagem").clientWidth / larguraBase) : Math.min(3, Math.max(0.2, escala * Number(botao.dataset.zoom)));

@@ -1489,6 +1489,26 @@
     quadro();
   })();
 
+  /* Ícones dos botões gerados pelos módulos: traço 24×24, como os do modelo */
+  const ICONES = {
+    tocar: '<path d="M8 5.5v13l10.5-6.5z"/>',
+    pausar: '<path d="M9 5.5v13M15 5.5v13"/>',
+    mais: '<path d="M12 5v14M5 12h14"/>',
+    menos: '<path d="M5 12h14"/>',
+    fechar: '<path d="M7 7l10 10M17 7 7 17"/>',
+    remover: '<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5M14 11v5"/>',
+    demonstrar: '<circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/>',
+    zoomMenos: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3M8 11h6"/>',
+    zoomMais: '<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.3-4.3M8 11h6M11 8v6"/>',
+    ajustar: '<path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"/>',
+    playground: '<path d="M14 4h6v6M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
+  };
+  const svgIcone = (nome) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONES[nome]}</svg>`;
+  // Botão só com ícone: o rótulo vai no aria-label (leitor de tela) e no data-dica (dica visual)
+  function botaoIcone(nome, rotulo, atributos = "", classe = "") {
+    return `<button type="button" class="icone-botao ${classe}" aria-label="${escapar(rotulo)}" data-dica="${escapar(rotulo)}" ${atributos}>${svgIcone(nome)}</button>`;
+  }
+
   /* @modulos */
 
   /* ================= rotas e paginação ================= */
