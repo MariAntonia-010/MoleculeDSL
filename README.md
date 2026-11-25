@@ -332,10 +332,14 @@ rotas próprias:
 - **Playground:** o código é analisado no navegador enquanto se digita e a
   molécula é desenhada em 3D. Um erro semântico aparece numa faixa vermelha
   com código, motivo e correção, a linha fica marcada e o átomo culpado é
-  destacado no desenho. **Baixar .mol** salva o código do editor num arquivo
-  (com o nome do exemplo, do arquivo aberto ou da espécie, sem acentos), e
-  **Abrir .mol**, ou arrastar o arquivo para o editor, carrega um `.mol` do
-  computador. Arquivos acima de 512 KB, fora de UTF-8 ou binários são
+  destacado no desenho. A barra acima do editor tem o seletor de exemplos e,
+  embaixo dele, botões de ícone com dica: à esquerda, novo, abrir e baixar
+  `.mol`; à direita, o menu de exemplos de erro e a demonstração da
+  tradução. Os controles da cena (girar, rótulos, ocultar H e recentrar)
+  ficam sobre o desenho 3D. **Baixar .mol** salva o código do editor num
+  arquivo (com o nome do exemplo, do arquivo aberto ou da espécie, sem
+  acentos), e **Abrir .mol**, ou arrastar o arquivo para o editor, carrega
+  um `.mol` do computador. Arquivos acima de 512 KB, fora de UTF-8 ou binários são
   recusados com uma mensagem. Tudo acontece no navegador: nada é enviado a
   um servidor;
 - **Tipos de ligação e espécies atômicas:** o desenho e o modelo mostram cada
