@@ -966,3 +966,27 @@ código, declarando átomos e depois moléculas, sem estruturas de controle
   água com gás, água sanitária, vinagre, anticongelante e chuva ácida.
 - Cada reação foi conferida com o compilador Python: os átomos e a carga
   fecham dos dois lados em todas as 52.
+
+---
+
+## 25/11/2026 — Baixar e abrir arquivos .mol no playground
+
+### O que foi feito
+
+- O playground ganhou os botões **Baixar .mol** e **Abrir .mol**. Também dá
+  para arrastar um arquivo para o editor. O arquivo aberto é compilado na
+  hora, como se tivesse sido digitado.
+- O arquivo baixado leva o nome do exemplo, se o código não foi editado, ou
+  o do último arquivo aberto, ou o nome da primeira espécie sem acentos
+  (`"Água"` vira `agua.mol`). Assim o código do playground vai direto para
+  `python3 src/main.py`.
+- A leitura recusa, com uma mensagem abaixo da barra, arquivos acima de
+  512 KB, que não estejam em UTF-8 ou que pareçam binários. Quebras de
+  linha do Windows e o BOM são normalizados.
+
+### Decisões tomadas
+
+Login, biblioteca de projetos e compartilhamento por link pedem um backend
+(Supabase ou GitHub com gists), e a página é um HTML estático sem servidor.
+Por enquanto ficou só o download e o upload de arquivos: funcionam offline,
+sem custo nem conta, e o código não sai do computador de quem usa.

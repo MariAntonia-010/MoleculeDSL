@@ -539,12 +539,18 @@ python3 tests/benchmark_solver.py --backend=ambos</pre></div>
             <select id="bloco-play" aria-label="Bloco desenhado" hidden></select>
             <button class="botao pequeno" type="button" id="limpar">Começar do zero</button>
             <button class="botao pequeno" type="button" id="demonstrar-atual">Demonstrar tradução</button>
+            <span class="arquivo-botoes">
+              <button class="botao pequeno" type="button" id="baixar-mol" title="Salva o código do editor num arquivo .mol">Baixar .mol</button>
+              <button class="botao pequeno" type="button" id="abrir-mol" title="Carrega um arquivo .mol no editor">Abrir .mol</button>
+              <input type="file" id="arquivo-mol" accept=".mol,.txt,text/plain" hidden>
+            </span>
           </div>
+          <p class="nota arquivo-status" id="arquivo-status" role="status" aria-live="polite" hidden></p>
           <div class="editor">
             <div class="numeros" id="numeros" aria-hidden="true">1</div>
             <div class="area-codigo"><pre class="realce" id="realce" aria-hidden="true"></pre><textarea id="codigo" spellcheck="false" aria-label="Código MoleculeDSL" autocapitalize="off" autocomplete="off"></textarea></div>
           </div>
-          <p class="nota">Tab insere quatro espaços. Clique num erro para ir até a linha dele.</p>
+          <p class="nota">Tab insere quatro espaços. Clique num erro para ir até a linha dele. Arraste um arquivo <code>.mol</code> para o editor para abri-lo.</p>
         </div>
         <div class="placa">
           <div class="barra-ferramentas">
